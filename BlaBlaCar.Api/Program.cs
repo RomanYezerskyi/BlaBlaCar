@@ -1,9 +1,12 @@
-using BlaBlaCar.Api.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Configuration;
-
-
+using BlaBlaCar.BL.Interfaces;
+using BlaBlaCar.BL.Services;
+using BlaBlaCar.DAL;
+using BlaBlaCar.DAL.Data;
+using BlaBlaCar.DAL.Interfaces;
+using BlaBlaCar.DAL.Entities;
+using BlaBlaCar.BL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,10 +15,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<AuthorizationService>();
+//builder.Services.AddScoped<ITripService, TripService>();
 
 
 builder.Services.AddControllers();

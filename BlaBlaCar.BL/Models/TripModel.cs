@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlaBlaCar.DAL.Entities
+namespace BlaBlaCar.BL.Models
 {
-    public class Trip
+    public class TripModel
     {
         public int Id { get; set; }
         public string StartPlace { get; set; }
@@ -15,6 +15,6 @@ namespace BlaBlaCar.DAL.Entities
         public DateTime EndTime { get; set; }
         public int PricePerSeat { get; set; }
         public string Description { get; set; }
-        public ICollection<Seat> Seats { get; set; }
+        public ICollection<SeatModel> Seats { get; set; }
     }
 }

@@ -4,14 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlaBlaCar.DAL.Entities
+namespace BlaBlaCar.BL.Models
 {
-    public class UserTrip
+    public class BookedTripModel
     {
         public int Id { get; set; }
         public string UserId { get; set; }
-        public User User { get; set; }
+        public UserModel User { get; set; }
         public int TripId { get; set; }
-        public Trip Trip { get; set; }
+        public TripModel Trip { get; set; }
+        ICollection<BookedSeatModel> BookedSeats { get; set; }
+
     }
 }

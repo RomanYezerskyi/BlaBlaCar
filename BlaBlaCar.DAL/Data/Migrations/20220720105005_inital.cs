@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace BlaBlaCar.Api.Migrations
+namespace BlaBlaCar.DAL.Data.Migrations
 {
     public partial class inital : Migration
     {

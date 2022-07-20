@@ -9,6 +9,7 @@ namespace BlaBlaCar.DAL.Entities
 {
     public class User: IdentityUser
     {
-
+        public ICollection<UserTrip> UserTrips { get; set; }
+        public ICollection<BookedTrip> BookedTrips { get; set; }
     }
 }
