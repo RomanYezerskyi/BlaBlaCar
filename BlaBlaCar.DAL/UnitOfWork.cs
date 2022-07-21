@@ -10,6 +10,9 @@ namespace BlaBlaCar.DAL
         private BaseRepositoryAsync<User> _users;
         private BaseRepositoryAsync<Trip> _trips;
         private BaseRepositoryAsync<UserTrip> _userTrips;
+        private BaseRepositoryAsync<Seat> _tripSeats;
+        private BaseRepositoryAsync<BookedSeat> _bookedSeats;
+        private BaseRepositoryAsync<BookedTrip> _bookedTrips;
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -36,6 +39,30 @@ namespace BlaBlaCar.DAL
             get
             {
                 return _userTrips ??= new BaseRepositoryAsync<UserTrip>(_context);
+            }
+        }
+
+        public IRepositoryAsync<Seat> TripSeats
+        {
+            get
+            {
+                return _tripSeats ??= new BaseRepositoryAsync<Seat>(_context);
+            }
+        }
+
+        public IRepositoryAsync<BookedSeat> BookedSeats
+        {
+            get
+            {
+                return _bookedSeats ??= new BaseRepositoryAsync<BookedSeat>(_context);
+            }
+        }
+
+        public IRepositoryAsync<BookedTrip> BookedTrips
+        {
+            get
+            {
+                return _bookedTrips ??= new BaseRepositoryAsync<BookedTrip>(_context);
             }
         }
 

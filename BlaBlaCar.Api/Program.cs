@@ -21,7 +21,9 @@ builder.Services.AddIdentity<User, IdentityRole>()
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<AuthorizationService>();
-//builder.Services.AddScoped<ITripService, TripService>();
+builder.Services.AddScoped<ITripService, TripService>();
+builder.Services.AddScoped<ITripSeatsService, TripSeatsService>();
+builder.Services.AddScoped<IUserTripsService, UserTripsService>();
 
 
 builder.Services.AddControllers();

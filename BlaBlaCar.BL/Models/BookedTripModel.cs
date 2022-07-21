@@ -13,7 +13,8 @@ namespace BlaBlaCar.BL.Models
         public UserModel User { get; set; }
         public int TripId { get; set; }
         public TripModel Trip { get; set; }
-        ICollection<BookedSeatModel> BookedSeats { get; set; }
+
+        public ICollection<BookedSeatModel> BookedSeats { get; set; }
 
     }
 }

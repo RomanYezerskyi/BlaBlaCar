@@ -15,6 +15,8 @@ namespace BlaBlaCar.BL.Models
         public DateTime EndTime { get; set; }
         public int PricePerSeat { get; set; }
         public string Description { get; set; }
+        public int CountOfSeats { get; set; }
+        public string UserId { get; set; }
         public ICollection<SeatModel> Seats { get; set; }
     }
 }
