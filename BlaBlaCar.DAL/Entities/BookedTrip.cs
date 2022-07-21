@@ -13,7 +13,7 @@ namespace BlaBlaCar.DAL.Entities
         public User User { get; set; }
         public int TripId { get; set; }
         public Trip Trip { get; set; }
-        ICollection<BookedSeat> BookedSeats { get; set; }
+        public ICollection<BookedSeat> BookedSeats { get; set; }
 
     }
 }
