@@ -87,7 +87,7 @@ namespace BlaBlaCar.Api.Controllers
                 return BadRequest(e.Message);
             }
         }
-        [HttpPost]
+        [HttpDelete]
         public async Task<IActionResult> DeleteTrip(int id)
         {
             try
