@@ -1,8 +1,8 @@
-﻿using IdentityServer.API.Models;
+﻿using IdentityServerJWT.API.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace IdentityServer.API.Data
+namespace IdentityServerJWT.API.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

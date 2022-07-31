@@ -2,7 +2,7 @@
 
 namespace IdentityServer.API.Models
 {
-    public class AppUser: IdentityUser
+    public class ApplicationUser: IdentityUser
     {
     }
 }
