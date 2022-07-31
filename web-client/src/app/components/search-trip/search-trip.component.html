@@ -1,0 +1,40 @@
+
+
+<div class="container">
+  
+    <form #searchForm="ngForm" (ngSubmit)="searchData(searchForm)">
+      <h2 class="form-signin-heading">Search</h2>
+        <div *ngIf="invalidForm" class="alert alert-danger">Invalid username or password.</div>
+        <br/>
+        <div class="search-inputs">
+          <div class="input__item">
+          <label for="startPlace" class="sr-only">Start Place</label>
+          <input type="email" id="startPlace" name="startPlace" [(ngModel)]="trip.startPlace" 
+            class="form-control" placeholder="Start place" required >
+          </div>
+          <div class="input__item">
+          <label for="endPlace" class="sr-only">End Place</label>
+          <input type="email" id="endPlace" name="endPlace" [(ngModel)]="trip.endPlace" 
+            class="form-control" placeholder="End place" required >
+          </div>
+          <div class="input__item">
+          <label for="countOfSeats" class="sr-only">Count of Seats</label>
+          <input type="number" id="countOfSeats" name="countOfSeats" min="0" max="" [(ngModel)]="trip.countOfSeats" 
+            class="form-control" placeholder="countOfSeats" required >
+          </div>
+          <div class="input__item">
+          <label for="startTime" class="sr-only">startTime</label>
+          <input type="date" id="startDate" name="searchData" [(ngModel)]="trip.startTime" 
+            class="form-control" placeholder="countOfSeats" required >
+          </div>
+          <button class="btn btn-lg btn-primary" type="submit" [disabled]="!searchForm.valid">Search</button>
+      </div>
+    </form>
+  </div>
+
+<a (click)="navigateToTripPage(1)">A</a>
+
+
+  <div *ngFor="let item of data" (click)="navigateToTripPage(item.id)">
+    {{item}}
+  </div>

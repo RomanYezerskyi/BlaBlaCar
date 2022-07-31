@@ -7,9 +7,8 @@ namespace BlaBlaCar.DAL
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _context;
-        private BaseRepositoryAsync<User> _users;
+        private BaseRepositoryAsync<ApplicationUser> _users;
         private BaseRepositoryAsync<Trip> _trips;
-        private BaseRepositoryAsync<UserTrip> _userTrips;
         private BaseRepositoryAsync<Seat> _tripSeats;
         private BaseRepositoryAsync<BookedSeat> _bookedSeats;
         private BaseRepositoryAsync<BookedTrip> _bookedTrips;
@@ -18,11 +17,11 @@ namespace BlaBlaCar.DAL
             _context = context;
         }
 
-        public IRepositoryAsync<User> Users
+        public IRepositoryAsync<ApplicationUser> Users
         {
             get
             {
-                return _users ??= new BaseRepositoryAsync<User>(_context);
+                return _users ??= new BaseRepositoryAsync<ApplicationUser>(_context);
             }
         }
 
@@ -34,13 +33,6 @@ namespace BlaBlaCar.DAL
             }
         }
 
-        public IRepositoryAsync<UserTrip> UserTrips
-        {
-            get
-            {
-                return _userTrips ??= new BaseRepositoryAsync<UserTrip>(_context);
-            }
-        }
 
         public IRepositoryAsync<Seat> TripSeats
         {

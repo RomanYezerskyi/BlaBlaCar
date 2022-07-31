@@ -1,5 +1,5 @@
-﻿using BlaBlaCar.BL.Models;
-
+﻿using System.Security.Claims;
+using BlaBlaCar.BL.ODT.TripModels;
 
 namespace BlaBlaCar.BL.Interfaces
 {
@@ -7,8 +7,8 @@ namespace BlaBlaCar.BL.Interfaces
     {
         Task<TripModel> GetTripAsync(int id);
         Task<IEnumerable<TripModel>> GetTripsAsync();
-        Task<IEnumerable<TripModel>> GetTripsAsync(TripModel model);
-        Task<bool> AddTripAsync(TripModel tripModel);
+        Task<IEnumerable<TripModel>> SearchTripsAsync(SearchTripModel model);
+        Task<bool> AddTripAsync(AddNewTripModel tripModel, ClaimsPrincipal principal);
         Task<bool> UpdateTripAsync(TripModel tripModel);
         Task<bool> DeleteTripAsync(int id);
 
