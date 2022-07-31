@@ -7,6 +7,7 @@ using BlaBlaCar.DAL.Data;
 using BlaBlaCar.DAL.Interfaces;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.BL;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,17 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAuthentication(config =>
+{
+    config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.Authority = "https://localhost:7168/";
+        options.Audience = "BlaBlaCar.API";
+        options.RequireHttpsMetadata = false;
+    });
 
 
 
