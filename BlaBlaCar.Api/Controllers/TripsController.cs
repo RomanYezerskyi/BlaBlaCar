@@ -1,11 +1,14 @@
-﻿using BlaBlaCar.BL.Interfaces;
-using BlaBlaCar.BL.Models;
+﻿using System.Security.Claims;
+using BlaBlaCar.BL.Interfaces;
+using BlaBlaCar.BL.ODT.TripModels;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlaBlaCar.Api.Controllers
 {
-    [Produces("application/json")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
     public class TripsController : ControllerBase
@@ -17,54 +20,59 @@ namespace BlaBlaCar.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<TripModel>> GetTrips()
+        public async Task<IActionResult> GetTrips()
         {
             try
             {
-                return await _tripService.GetTripsAsync();
+                var res = await _tripService.GetTripsAsync();
+                if (res.Any()) return Ok(res);
+                return NoContent();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                return BadRequest(e.Message);
             }
         }
+        [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<TripModel> GetTrips(int id)
+        public async Task<IActionResult> GetTrips(int id)
         {
             try
             {
-                return await _tripService.GetTripAsync(id);
+                var res = await _tripService.GetTripAsync(id);
+                if (res != null) return Ok(res);
+                return NoContent();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                return BadRequest(e.Message);
             }
         }
-        [HttpGet("search")]
-        public async Task<IEnumerable<TripModel>> GetTrips([FromQuery]TripModel tripModel)
+        [AllowAnonymous]
+        [HttpPost("search")]
+        public async Task<IActionResult> SearchTrips([FromBody]SearchTripModel tripModel)
         {
             try
             {
-                return await _tripService.GetTripsAsync(tripModel);
+                var res = await _tripService.SearchTripsAsync(tripModel);
+                if(res.Any()) return Ok(res);
+                return NoContent();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                return BadRequest(e.Message);
             }
         }
         [HttpPost]
-        public async Task<IActionResult> CreateTrip([FromBody]TripModel  tripModel)
+        public async Task<IActionResult> CreateTrip([FromBody]AddNewTripModel  tripModel)
         {
             try
             {
                 if (tripModel == null)
                     return BadRequest();
-                var res = await _tripService.AddTripAsync(tripModel);
-                if (res) return new JsonResult("Added Successfully");
-                return new JsonResult("Fail");
+                var res = await _tripService.AddTripAsync(tripModel, User);
+                if (res) return Ok("Added Successfully");
+                return BadRequest("Fail");
             }
             catch (Exception e)
             {
@@ -79,8 +87,8 @@ namespace BlaBlaCar.Api.Controllers
                 if (tripModel == null)
                     return BadRequest();
                 var res = await _tripService.UpdateTripAsync(tripModel);
-                if (res) return new JsonResult("Added Successfully");
-                return new JsonResult("Fail");
+                if (res) return Ok("Added Successfully");
+                return BadRequest("Fail");
             }
             catch (Exception e)
             {
@@ -93,8 +101,8 @@ namespace BlaBlaCar.Api.Controllers
             try
             {
                 var res = await _tripService.DeleteTripAsync(id);
-                if (res) return new JsonResult("Deleted Successfully");
-                return new JsonResult("Fail");
+                if (res) return Ok("Deleted Successfully");
+                return BadRequest("Fail");
             }
             catch (Exception e)
             {

@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using BlaBlaCar.BL.Interfaces;
-using BlaBlaCar.BL.Models;
+using BlaBlaCar.BL.ODT.BookTripModels;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlaBlaCar.BL.Services
 {
@@ -42,15 +43,27 @@ namespace BlaBlaCar.BL.Services
             return await _unitOfWork.SaveAsync();
         }
 
-        public async Task<bool> AddTripSeatsAsync(BookedTripModel tripModel)
+        public async Task<BookedTripModel> AddTripSeatsAsync(BookedTripModel tripModel, int requestedCount)
         {
-            List<BookedSeatModel> seatModels = new List<BookedSeatModel>();
-            foreach (var bookedSeat in tripModel.BookedSeats)
+
+            var bookedTrips = await _unitOfWork.BookedTrips.GetAsync(null,
+                x => x.Include(x => x.BookedSeats),
+                x => x.TripId == tripModel.TripId);
+
+            var seats = await _unitOfWork.TripSeats.GetAsync(null, null, x => x.TripId == tripModel.TripId);
+            seats = seats.Where(x => bookedTrips.All(y => y.BookedSeats.All(z => z.SeatId != x.Id))).ToList();
+
+            if (requestedCount > seats.ToList().Count()) throw new Exception("There are no available seats on this trip");
+
+            tripModel.BookedSeats = new List<BookedSeatModel>();
+            for (int i = 0; i < requestedCount; i++)
             {
-                seatModels.Add(new BookedSeatModel{ BookedTripId = tripModel.TripId, SeatId = bookedSeat.SeatId});
+                tripModel.BookedSeats.Add(
+                    new BookedSeatModel() { BookedTrip = tripModel, SeatId = seats.ElementAt(i).Id }
+                );
             }
-            await _unitOfWork.BookedSeats.InsertRangeAsync(_mapper.Map<IEnumerable<BookedSeat>>(seatModels));
-            return await _unitOfWork.SaveAsync();
+
+            return tripModel;
         }
 
         public Task<bool> UpdateTripSeatAsync(BookedSeatModel tripModel)

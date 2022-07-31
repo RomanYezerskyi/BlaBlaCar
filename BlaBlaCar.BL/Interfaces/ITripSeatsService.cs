@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BlaBlaCar.BL.Models;
+﻿using BlaBlaCar.BL.ODT.TripModels;
 
 namespace BlaBlaCar.BL.Interfaces
 {
@@ -12,7 +7,7 @@ namespace BlaBlaCar.BL.Interfaces
         Task<SeatModel> GetTripSeatAsync(int id);
         Task<IEnumerable<SeatModel>> GetSeatsByTripIdAsync(int tripId);
         Task<bool> AddTripSeatsAsync(IEnumerable<SeatModel> tripModel);
-        Task<bool> AddTripSeatsAsync(int tripId, int count);
+        Task<TripModel> AddTripSeatsAsync(TripModel trip, int count);
         Task<bool> UpdateTripSeatAsync(SeatModel tripModel);
         Task<bool> DeleteTripSeatAsync(int id);
     }

@@ -1,12 +1,17 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel;
+using IdentityModel.Client;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlaBlaCar.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
+
         //private readonly AuthorizationService _authService;
         //private readonly HttpContext _httpContext;
 
@@ -15,6 +20,11 @@ namespace BlaBlaCar.Api.Controllers
         //    _authService = authService;
         //    _httpContext = httpContextAccessor.HttpContext;
         //}
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return new JsonResult(from c in User.Claims select new { c.Type, c.Value });
+        }
 
         //[HttpPost("register")]
         //public async Task<IActionResult> Register([FromBody] UserRegisterModel user)

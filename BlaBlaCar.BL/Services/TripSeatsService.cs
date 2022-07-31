@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using BlaBlaCar.BL.Interfaces;
-using BlaBlaCar.BL.Models;
+using BlaBlaCar.BL.ODT.TripModels;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Interfaces;
 
@@ -42,15 +42,16 @@ namespace BlaBlaCar.BL.Services
             return await _unitOfWork.SaveAsync();
         }
 
-        public async Task<bool> AddTripSeatsAsync(int tripId, int count)
+        public async Task<TripModel> AddTripSeatsAsync(TripModel trip, int count)
         {
-            List<SeatModel> seatModels = new List<SeatModel>();
+
+            trip.Seats = new List<SeatModel>();
             for (int i = 0; i < count; i++)
             {
-                seatModels.Add(new SeatModel { TripId = tripId, Num = i + 1 });
+                trip.Seats.Add(new SeatModel { Trip = trip, Num = i + 1 });
             }
-            await _unitOfWork.TripSeats.InsertRangeAsync(_mapper.Map<IEnumerable<Seat>>(seatModels));
-            return await _unitOfWork.SaveAsync();
+
+            return trip;
         }
 
         public Task<bool> UpdateTripSeatAsync(SeatModel tripModel)

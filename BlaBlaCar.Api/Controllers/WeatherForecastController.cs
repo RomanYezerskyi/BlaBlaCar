@@ -1,9 +1,15 @@
+using System.Security.Claims;
+using IdentityModel;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlaBlaCar.Api.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
+    [ApiController] 
+    [Authorize(Roles = "blablacar.admin")]
+    [Route("api/[controller]")]
+    
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -18,16 +24,25 @@ namespace BlaBlaCar.Api.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        //[HttpGet]
+        //public IEnumerable<WeatherForecast> Get()
+        //{
+        //    return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        //    {
+        //        Date = DateTime.Now.AddDays(index),
+        //        TemperatureC = Random.Shared.Next(-20, 55),
+        //        Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+        //    })
+        //    .ToArray();
+        //}
+        [HttpGet]
+        public string Get()
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+
+            var a = User.Identity.Name;
+            var b = User.Claims.FirstOrDefault(x=>x.Type == ClaimTypes.Name);
+            var c = User.Claims.FirstOrDefault().Value;
+            return User.Claims.FirstOrDefault().Value.ToString().ToString();
         }
     }
 }
