@@ -4,14 +4,14 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BookedTripModel } from 'src/app/interfaces/booked-trip';
 import { TripModel } from 'src/app/interfaces/trip';
-
+import { CarModel } from "src/app/interfaces/car";
 @Component({
   selector: 'app-dialog-booking-confirmation',
   templateUrl: './dialog-booking-confirmation.component.html',
   styleUrls: ['./dialog-booking-confirmation.component.scss']
 })
 export class DialogBookingConfirmationComponent implements OnInit {
-
+  carModel: CarModel = { id:0, carType:0, modelName:'',registNum:'' }
   trip: TripModel = { 
     id:0, 
     startPlace:'',
@@ -21,30 +21,32 @@ export class DialogBookingConfirmationComponent implements OnInit {
     countOfSeats:0,
     pricePerSeat:0,
     description:'',
-    userId:'' };
-
-  bookedtrip: BookedTripModel ={ id:0, bookedSeats:[], countOfSeats: 2, tripId:1 }
-  data: any;
+    userId:'',
+    AvailableSeats: [],
+    car: this.carModel
+   };
+  requestedSeats:number = 0;
+  bookedtrip: BookedTripModel ={ id:0, bookedSeats:[], requestedSeats: this.requestedSeats, tripId:this.trip.id }
+  
 
   constructor(
       private dialogRef: MatDialogRef<DialogBookingConfirmationComponent>,private http: HttpClient,
-      @Inject(MAT_DIALOG_DATA) data:any,) {
-
-      this.trip = data.trip;
+      @Inject(MAT_DIALOG_DATA) data: any,) {
+      this.trip = data.trip as TripModel;
+      this.requestedSeats = data.requestedSeats;
   }
 
   ngOnInit() {
  
   }
-  searchData = () => {
+  confirmBook = async () => {
     const url ='https://localhost:6001/api/BookedTrip'
-    this.http.post(url, this.bookedtrip, {
+    await this.http.post(url, this.bookedtrip, {
       headers: new HttpHeaders({ "Content-Type": "application/json"})
     })
     .subscribe({
       next: (res)=>{
-        this.data = res
-        console.log(this.data);
+        console.log(res);
       },
       error: (err: HttpErrorResponse) => console.error(err),
     })

@@ -23,8 +23,8 @@ namespace BlaBlaCar.API.Controllers
         {
             try
             {
-                var res = await _tripService.GetBookedTripsAsync();
-                if (res.Any()) return Ok(res);
+                //var res = await _tripService.GetBookedTripsAsync();
+                //if (res.Any()) return Ok(res);
                 return NoContent();
             }
             catch (Exception e)
@@ -37,10 +37,10 @@ namespace BlaBlaCar.API.Controllers
         {
             try
             {
-                if (bookedTrip == null)
-                    return BadRequest();
-                var res = await _tripService.AddBookedTripAsync(bookedTrip, User);
-                if (res) return Ok("Added Successfully");
+            //    if (bookedTrip == null)
+            //        return BadRequest();
+            //    var res = await _tripService.AddBookedTripAsync(bookedTrip, User);
+            //    if (res) return Ok("Added Successfully");
                 return BadRequest("Fail");
             }
             catch (Exception e)

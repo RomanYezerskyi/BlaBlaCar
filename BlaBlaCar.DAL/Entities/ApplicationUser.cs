@@ -9,14 +9,12 @@ using Microsoft.EntityFrameworkCore;
 namespace BlaBlaCar.DAL.Entities
 {
     public class ApplicationUser
-
     {
         public string Id { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        public string UserName { get; set; }
         public string? FirstName { get; set; }
-        public ICollection<Trip> UserTrips { get; set; }
-        public ICollection<BookedTrip> BookedTrips { get; set; }
+        public ICollection<Car> Cars { get; set; }
+        public ICollection<Trip> Trips { get; set; }
     }
 }

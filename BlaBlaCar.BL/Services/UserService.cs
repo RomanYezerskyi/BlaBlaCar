@@ -47,8 +47,8 @@ namespace BlaBlaCar.BL.Services
                 .GetAsync(null, x => x.Email == userEmail);
             if (user == null)
             {
-                await AddUserAsync(principal);
-                return await _unitOfWork.SaveAsync();
+                return await AddUserAsync(principal);
+                //return await _unitOfWork.SaveAsync();
             }
             return true;
         }
@@ -58,7 +58,6 @@ namespace BlaBlaCar.BL.Services
             var user = new ApplicationUser()
             {
                 Id = principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id)?.Value,
-                UserName = principal.Identity.Name,
                 Email = principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 FirstName = principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.GivenName).Value,
                 PhoneNumber = principal.Claims.FirstOrDefault(x=>x.Type == JwtClaimTypes.PhoneNumber).Value

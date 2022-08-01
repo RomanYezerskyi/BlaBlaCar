@@ -2,6 +2,7 @@
 using AutoMapper;
 using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.BL.ODT;
+using BlaBlaCar.BL.ODT.CarModels;
 using BlaBlaCar.BL.ODT.TripModels;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Interfaces;
@@ -17,22 +18,26 @@ namespace BlaBlaCar.BL.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly ITripSeatsService _tripSeatsService;
         private readonly IUserService _userService;
-        
+        private readonly ICarSeatsService _carSeatsService;
         public TripService(IUnitOfWork unitOfWork, 
             IMapper mapper,
-            ITripSeatsService tripSeatsService, IUserService userService)
+             IUserService userService, ICarSeatsService carSeatsService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _tripSeatsService = tripSeatsService;
             _userService = userService;
+            _carSeatsService = carSeatsService;
         }
         public async Task<TripModel> GetTripAsync(int id)
         {
-            var trip = _mapper.Map<Trip, TripModel>(await _unitOfWork.Trips.GetAsync(null, x=>x.Id == id));
+            var trip = _mapper.Map<Trip, TripModel>(await _unitOfWork.Trips.GetAsync(
+                                        x=>x.Include(y=>y.AvailableSeats), 
+                                        x => x.Id == id));
+            var car = await _unitOfWork.Cars.GetAsync(null, x => x.Id == trip.CarId);
+            trip.Car = _mapper.Map<CarModel>(car);
             return trip;
+
         }
 
         public async Task<IEnumerable<TripModel>> GetTripsAsync()
@@ -45,12 +50,9 @@ namespace BlaBlaCar.BL.Services
         public async Task<IEnumerable<TripModel>> SearchTripsAsync(SearchTripModel model)
         {
 
-            var trip = await _unitOfWork.Trips.GetAsync(null, x=>x.Include(x=>x.BookedTrips).ThenInclude(x=>x.BookedSeats),
-                x => x.StartPlace.Contains(model.StartPlace) && 
-                     x.EndPlace.Contains(model.EndPlace)
-                     && x.StartTime.Date.Equals(model.StartTime) && x.Seats.Count >= model.CountOfSeats);
-
-
+            var trip = await _unitOfWork.Trips.GetAsync(null,
+                x => x.Include(x => x.AvailableSeats).Include(x => x.TripUsers),
+                x => x.StartPlace.Contains(model.StartPlace) && x.StartTime <= model.StartTime);
 
 
             var res = _mapper.Map<IEnumerable<Trip>, IEnumerable<TripModel>>(trip);
@@ -66,11 +68,14 @@ namespace BlaBlaCar.BL.Services
                 if (!checkIfUserExist) throw new Exception("This user cannot create trip!");
 
                 var tripModel = _mapper.Map<AddNewTripModel, TripModel>(newTripModel);
-                tripModel.UserId = principal.Claims.FirstOrDefault(x=>x.Type == JwtClaimTypes.Id).Value;
-                
-                var res = await _tripSeatsService.AddTripSeatsAsync(tripModel, tripModel.CountOfSeats);
+                tripModel.UserId = principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value;
+
+                tripModel.CarId = newTripModel.CarId;
+
+                await _carSeatsService.AddAvailableSeatsAsync(tripModel, newTripModel.CountOfSeats);
 
                 var trip = _mapper.Map<TripModel, Trip>(tripModel);
+
                 await _unitOfWork.Trips.InsertAsync(trip);
                 return await _unitOfWork.SaveAsync();
             }
@@ -80,12 +85,12 @@ namespace BlaBlaCar.BL.Services
 
         public async Task<bool> UpdateTripAsync(TripModel tripModel)
         {
-            if (tripModel != null)
-            {
-                var trip = _mapper.Map<TripModel, Trip>(tripModel);
-                _unitOfWork.Trips.Update(trip);
-                return await _unitOfWork.SaveAsync();
-            }
+            //if (tripModel != null)
+            //{
+            //    var trip = _mapper.Map<TripModel, TripModel>(tripModel);
+            //    _unitOfWork.Trips.Update(trip);
+            //    return await _unitOfWork.SaveAsync();
+            //}
             return false;
         }
 

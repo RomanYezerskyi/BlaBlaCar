@@ -39,11 +39,13 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //builder.Services.AddScoped<AuthorizationService>();
 builder.Services.AddScoped<ITripService, TripService>();
-builder.Services.AddScoped<ITripSeatsService, TripSeatsService>();
+
 //builder.Services.AddScoped<IUserTripsService, UserTripsService>();
 builder.Services.AddScoped<IBookedSeatsService, BookedSeatsService>();
 builder.Services.AddScoped<IBookedTripsService, BookedTripsService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICarService, CarService>();
+builder.Services.AddScoped<ICarSeatsService, CarSeatsService>();
 
 //builder.Services.AddAuthentication("Bearer")
 //    .AddIdentityServerAuthentication("Bearer", options =>
