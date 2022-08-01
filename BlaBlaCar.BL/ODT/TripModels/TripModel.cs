@@ -1,4 +1,5 @@
-﻿using BlaBlaCar.BL.ODT.BookTripModels;
+﻿using BlaBlaCar.BL.ODT.CarModels;
+using BlaBlaCar.DAL.Entities;
 
 namespace BlaBlaCar.BL.ODT.TripModels
 {
@@ -11,9 +12,11 @@ namespace BlaBlaCar.BL.ODT.TripModels
         public DateTime EndTime { get; set; }
         public int PricePerSeat { get; set; }
         public string Description { get; set; }
-        public int CountOfSeats { get; set; }
         public string UserId { get; set; }
-        public ICollection<BookedTripModel> BookedTrips { get; set; }
-        public ICollection<SeatModel> Seats { get; set; }
+        public UserModel User { get; set; }
+        public int CarId { get; set; }
+        public CarModel Car { get; set; }
+        public ICollection<TripUserModel> TripUsers { get; set; }
+        public ICollection<AvailableSeatsModel> AvailableSeats { get; set; }
     }
 }

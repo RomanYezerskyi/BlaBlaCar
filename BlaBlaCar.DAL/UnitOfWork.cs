@@ -10,11 +10,36 @@ namespace BlaBlaCar.DAL
         private BaseRepositoryAsync<ApplicationUser> _users;
         private BaseRepositoryAsync<Trip> _trips;
         private BaseRepositoryAsync<Seat> _tripSeats;
-        private BaseRepositoryAsync<BookedSeat> _bookedSeats;
-        private BaseRepositoryAsync<BookedTrip> _bookedTrips;
+        private BaseRepositoryAsync<AvailableSeats> _availableSeats;
+        private BaseRepositoryAsync<Car> _car;
+        private BaseRepositoryAsync<TripUser> _tripUser;
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        public IRepositoryAsync<AvailableSeats> AvaliableSeats
+        {
+            get
+            {
+                return _availableSeats ??= new BaseRepositoryAsync<AvailableSeats>(_context);
+            }
+        }
+
+        public IRepositoryAsync<Car> Cars
+        {
+            get
+            {
+                return _car ??= new BaseRepositoryAsync<Car>(_context);
+            }
+        }
+
+        public IRepositoryAsync<TripUser> TripUser
+        {
+            get
+            {
+                return _tripUser ??= new BaseRepositoryAsync<TripUser>(_context);
+            }
         }
 
         public IRepositoryAsync<ApplicationUser> Users
@@ -33,7 +58,6 @@ namespace BlaBlaCar.DAL
             }
         }
 
-
         public IRepositoryAsync<Seat> TripSeats
         {
             get
@@ -42,21 +66,7 @@ namespace BlaBlaCar.DAL
             }
         }
 
-        public IRepositoryAsync<BookedSeat> BookedSeats
-        {
-            get
-            {
-                return _bookedSeats ??= new BaseRepositoryAsync<BookedSeat>(_context);
-            }
-        }
-
-        public IRepositoryAsync<BookedTrip> BookedTrips
-        {
-            get
-            {
-                return _bookedTrips ??= new BaseRepositoryAsync<BookedTrip>(_context);
-            }
-        }
+       
 
 
         public async Task<bool> SaveAsync()

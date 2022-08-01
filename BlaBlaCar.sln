@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlaBlaCar.BL", "BlaBlaCar.B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlaBlaCar.DAL", "BlaBlaCar.DAL\BlaBlaCar.DAL.csproj", "{2E9A9050-6EF7-4EB9-9BFD-75EF3568DEDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServerJWT.API", "IdentityServerJWT.API\IdentityServerJWT.API.csproj", "{7AD76077-535A-4068-870A-90DC56662E6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServerJWT.API", "IdentityServerJWT.API\IdentityServerJWT.API.csproj", "{7AD76077-535A-4068-870A-90DC56662E6C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

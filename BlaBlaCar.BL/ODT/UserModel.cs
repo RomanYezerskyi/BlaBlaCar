@@ -1,4 +1,4 @@
-﻿using BlaBlaCar.BL.ODT.BookTripModels;
+﻿using BlaBlaCar.BL.ODT.CarModels;
 using BlaBlaCar.BL.ODT.TripModels;
 
 namespace BlaBlaCar.BL.ODT
@@ -7,9 +7,9 @@ namespace BlaBlaCar.BL.ODT
     {
         public string Id { get; set; }
         public string Email { get; set; }
-        public string UserName { get; set; }
+        public string PhoneNumber { get; set; }
         public string? FirstName { get; set; }
-        public ICollection<TripModel> UserTrips { get; set; }
-        public ICollection<BookedTripModel> BookedTrips { get; set; }
+        public ICollection<CarModel> Cars { get; set; }
+        public ICollection<TripModel> Trips { get; set; }
     }
 }

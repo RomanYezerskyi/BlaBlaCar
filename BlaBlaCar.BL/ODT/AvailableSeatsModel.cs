@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BlaBlaCar.BL.ODT.TripModels;
+using BlaBlaCar.BL.ODT.CarModels;
 
 namespace BlaBlaCar.DAL.Entities
 {
-    public class BookedSeat
+    public class AvailableSeatsModel
     {
         public int Id { get; set; }
+        public int TripId { get; set; }
+        public TripModel Trip { get; set; }
         public int SeatId { get; set; }
-        public Seat Seat { get; set; }
-        public int BookedTripId { get; set; }
-        public BookedTrip BookedTrip { get; set; }
+        public SeatModel Seat { get; set; }
     }
 }

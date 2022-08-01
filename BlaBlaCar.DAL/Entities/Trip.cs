@@ -9,15 +9,17 @@ namespace BlaBlaCar.DAL.Entities
     public class Trip
     {
         public int Id { get; set; }
-        public string userId { get; set; }
-        public ApplicationUser User { get; set; }
         public string StartPlace { get; set; }
         public string EndPlace { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public int PricePerSeat { get; set; }
         public string Description { get; set; }
-        public ICollection<BookedTrip> BookedTrips { get; set; }
-        public ICollection<Seat> Seats { get; set; }
+        public string UserId { get; set; }
+        public ApplicationUser User { get; set; }
+        public int CarId { get; set; }
+        public Car Car { get; set; }
+        public ICollection<TripUser> TripUsers { get; set; }
+        public ICollection<AvailableSeats> AvailableSeats { get; set; }
     }
 }
