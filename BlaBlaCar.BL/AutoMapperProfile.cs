@@ -24,6 +24,7 @@ namespace BlaBlaCar.BL
 
             CreateMap<Seat, SeatModel>().ReverseMap();
             CreateMap<TripUser, TripUserModel>().ReverseMap();
+            CreateMap<AddNewBookTrip, TripUserModel>().ReverseMap();
             //CreateMap<BookedSeat, BookedSeatModel>().ReverseMap();
 
             //CreateMap<BookedTrip, BookedTripModel>().ReverseMap();

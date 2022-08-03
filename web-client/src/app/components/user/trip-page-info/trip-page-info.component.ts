@@ -24,7 +24,7 @@ export class TripPageInfoComponent implements OnInit {
 		pricePerSeat:0,
 		description:'',
 		userId:'',
-		AvailableSeats: [],
+		availableSeats: [],
 		car: this.carModel
 	};
 	private readonly url ='https://localhost:6001/api/Trips/';
@@ -59,10 +59,10 @@ export class TripPageInfoComponent implements OnInit {
 
 		dialogConfig.disableClose = true;
 		dialogConfig.autoFocus = true;
-		dialogConfig.position = {
-		'top': '0',
-		left: '0'
-		};
+		// dialogConfig.position = {
+		// 'top': '0',
+		// left: '0'
+		// };
 		dialogConfig.data = {
 		trip: this.data,
 		requestedSeats: this.requestedSeats

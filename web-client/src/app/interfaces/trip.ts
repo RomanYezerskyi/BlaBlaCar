@@ -11,6 +11,6 @@ export interface TripModel {
     description: string;
     countOfSeats: number;
     userId:string;
-    AvailableSeats: AvailableSeatsModel[]; 
+    availableSeats: AvailableSeatsModel[]; 
     car: CarModel
 }
