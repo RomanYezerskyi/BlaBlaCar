@@ -6,15 +6,15 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule,ReactiveFormsModule } from "@angular/forms";
 import { LoginComponent } from './components/login/login.component';
-import { HomeComponent } from './components/home/home.component';
+import { HomeComponent } from './components/user/home/home.component';
 import { JwtModule } from "@auth0/angular-jwt";
 import { AuthGuard } from './guards/auth.guard';
-import { SearchTripComponent } from './components/search-trip/search-trip.component';
-import { AddTripComponent } from './components/add-trip/add-trip.component';
+import { SearchTripComponent } from './components/user/search-trip/search-trip.component';
+import { AddTripComponent } from './components/user/add-trip/add-trip.component';
 import { RegisterComponent } from './components/register/register.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { TripPageInfoComponent } from './components/trip-page-info/trip-page-info.component';
-import { DialogBookingConfirmationComponent } from './components/dialog-booking-confirmation/dialog-booking-confirmation.component';
+import { TripPageInfoComponent } from './components/user/trip-page-info/trip-page-info.component';
+import { DialogBookingConfirmationComponent } from './components/user/dialog-booking-confirmation/dialog-booking-confirmation.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -34,7 +34,6 @@ export function tokenGetter() {
     NavbarComponent,
     TripPageInfoComponent,
     DialogBookingConfirmationComponent,
-    
    
   ],
   imports: [

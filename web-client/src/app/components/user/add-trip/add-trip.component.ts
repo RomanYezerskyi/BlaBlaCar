@@ -52,6 +52,10 @@ export class AddTripComponent implements OnInit {
   
   addTrip = (form: NgForm) => {
     if(form.valid){
+      if(this.userCars === undefined){
+        alert("Add cars!");
+        return;
+      }
     const url ='https://localhost:6001/api/Trips/'
      this.http.post(url, this.trip)
     .subscribe((res)=>{
