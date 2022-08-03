@@ -18,6 +18,8 @@ import { DialogBookingConfirmationComponent } from './components/user/dialog-boo
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MainComponent } from './components/admin/main/main.component';
+import { RolesComponent } from './components/admin/roles/roles.component';
 
 export function tokenGetter() { 
   return localStorage.getItem("jwt"); 
@@ -34,6 +36,8 @@ export function tokenGetter() {
     NavbarComponent,
     TripPageInfoComponent,
     DialogBookingConfirmationComponent,
+    MainComponent,
+    RolesComponent,
    
   ],
   imports: [
