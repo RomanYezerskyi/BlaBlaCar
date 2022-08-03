@@ -8,6 +8,8 @@ import { RegisterComponent } from './components/register/register.component';
 import { SearchTripComponent } from './components/user/search-trip/search-trip.component';
 import { TripPageInfoComponent } from './components/user/trip-page-info/trip-page-info.component';
 import { AuthGuard } from './guards/auth.guard';
+import { MainComponent } from './components/admin/main/main.component';
+import { RolesComponent } from './components/admin/roles/roles.component';
 
 const routes: Routes = [
   { path: "" , redirectTo: "/app-root", pathMatch: "full"},
@@ -18,6 +20,13 @@ const routes: Routes = [
   { path: 'trip-page-info/:id', component: TripPageInfoComponent, canActivate: [AuthGuard] },
   // { path: '', component: DialogBookingConfirmationComponent, canActivate: [AuthGuard] },
   { path: 'home', component: HomeComponent  /*, canActivate: [AuthGuard]*/},
+
+  {
+    path: 'admin', component: MainComponent, canActivate: [AuthGuard],
+    children: [
+      { path: 'roles', component: RolesComponent , canActivate: [AuthGuard]},
+    ]
+  },
 
 ];
   

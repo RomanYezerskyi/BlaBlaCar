@@ -20,15 +20,15 @@ namespace BlaBlaCar.BL.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<CarModel> AddSeatsToCarAsync(CarModel carModel, int count)
+        public Task<CarModel> AddSeatsToCarAsync(CarModel carModel, int count)
         {
             carModel.Seats = new List<SeatModel>();
-            for (int i = 0; i < count; i++)
+            for (int i = 1; i <= count; i++)
             {
-                carModel.Seats.Add(new SeatModel() { Car = carModel, Num = i + 1 });
+                carModel.Seats.Add(new SeatModel() { Car = carModel, Num = i });
             }
 
-            return carModel;
+            return Task.FromResult(carModel);
         }
 
         public async Task<TripModel> AddAvailableSeatsAsync(TripModel tripModel, int count)
