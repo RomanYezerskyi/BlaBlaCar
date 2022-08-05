@@ -1,8 +1,9 @@
-﻿using BlaBlaCar.DAL.Entities;
+﻿using BlaBlaCar.BL.ODT.CarModels;
+using BlaBlaCar.DAL.Entities;
 
-namespace BlaBlaCar.BL.ODT.TripModels
+namespace BlaBlaCar.BL.ViewModels
 {
-    public class AddNewTripModel
+    public class NewTripViewModel
     {
         public string StartPlace { get; set; }
         public string EndPlace { get; set; }
@@ -11,7 +12,8 @@ namespace BlaBlaCar.BL.ODT.TripModels
         public int PricePerSeat { get; set; }
         public string Description { get; set; }
         public int CountOfSeats { get; set; }
-        public int CarId { get; set; }
+        public Guid CarId { get; set; }
+        public ICollection<AvailableSeatViewModel> AvailableSeats { get; set; }
 
     }
 }

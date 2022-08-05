@@ -1,0 +1,21 @@
+<p>add-available-seats works!</p>
+<div class="container">
+    <form #addTripForm="ngForm" (ngSubmit)="addTrip(addTripForm)">
+      <h2 class="form-signin-heading">Add trip</h2>
+        <div *ngIf="invalidForm" class="alert alert-danger">Invalid username or password.</div>
+        <br/>
+        <label for="pricePerSeat" class="sr-only">pricePerSeat</label>
+        <input type="number" id="pricePerSeat" name="pricePerSeat" [(ngModel)]="trip.pricePerSeat" 
+          class="form-control" placeholder="pricePerSeat" required >
+        <br/>
+        <label for="description" class="sr-only">description</label>
+        <input type="text" id="description" name="description" [(ngModel)]="trip.description" 
+          class="form-control" placeholder="description" required >
+        <br/>
+        <div *ngFor="let seat of userCar.seats" >
+            <p (click)="addSeat(seat.id)"> {{seat.num}} </p>
+        </div>
+        <button class="btn btn-lg btn-primary" type="submit" [disabled]="!addTripForm.valid">Add new trip</button>
+    </form>
+  </div>
+

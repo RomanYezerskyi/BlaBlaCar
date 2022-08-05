@@ -11,7 +11,7 @@ namespace BlaBlaCar.BL.Interfaces
 {
     public interface IBookedTripsService
     {
-        Task<TripUserModel> GetBookedTripAsync(int id);
+        Task<TripUserModel> GetBookedTripAsync(Guid id);
         //Task<IEnumerable<BookedTripModel>> GetBookedTripsAsync();
         //Task<IEnumerable<BookedTripModel>> GetBookedTripsAsync(BookedTripModel model);
         Task<bool> AddBookedTripAsync(AddNewBookTrip tripModel, ClaimsPrincipal principal);

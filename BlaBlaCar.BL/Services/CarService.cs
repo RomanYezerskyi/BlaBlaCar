@@ -8,6 +8,7 @@ using AutoMapper;
 using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.BL.ODT;
 using BlaBlaCar.BL.ODT.CarModels;
+using BlaBlaCar.BL.ViewModels;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
@@ -31,7 +32,7 @@ namespace BlaBlaCar.BL.Services
             _carSeatsService = carSeatsService;
         }
 
-        public async Task<IEnumerable<CarModel>> GetUserCars(ClaimsPrincipal principal)
+        public async Task<IEnumerable<CarModel>> GetUserCarsAsync(ClaimsPrincipal principal)
         {
             var checkIfUserExist = await _userService.СheckIfUserExistsAsync(principal);
             if (!checkIfUserExist) throw new Exception("This user cannot create trip!");
@@ -43,13 +44,19 @@ namespace BlaBlaCar.BL.Services
             return userCars;
         }
 
+        public async Task<CarModel> GetCarByIdAsync(Guid id)
+        {
+            var car = _mapper.Map<CarModel>(await _unitOfWork.Cars.GetAsync(x=>x.Include(z=>z.Seats), x => x.Id == id));
+            return car;
+        }
 
-        public async Task<bool> AddCarAsync(AddNewCarModel carModel, ClaimsPrincipal principal)
+
+        public async Task<bool> AddCarAsync(NewCarViewModel carModel, ClaimsPrincipal principal)
         {
             var checkIfUserExist = await _userService.СheckIfUserExistsAsync(principal);
             if (!checkIfUserExist) throw new Exception("This user cannot create trip!");
 
-            var newCar = _mapper.Map<AddNewCarModel, CarModel>(carModel);
+            var newCar = _mapper.Map<NewCarViewModel, CarModel>(carModel);
             newCar.UserId = principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value;
 
             await _carSeatsService.AddSeatsToCarAsync(newCar, carModel.CountOfSeats);

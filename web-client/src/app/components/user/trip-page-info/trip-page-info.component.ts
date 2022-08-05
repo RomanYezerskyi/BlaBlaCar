@@ -13,7 +13,7 @@ import { CarModel } from 'src/app/interfaces/car';
 export class TripPageInfoComponent implements OnInit {
 	private id!: number;
 	requestedSeats = 0;
-	carModel: CarModel = { id:0, carType:0, modelName:'',registNum:'' }
+	carModel: CarModel = { id:0, carType:0, modelName:'',registNum:'', seats:[] }
 	data: TripModel = { 
 		id:0, 
 		startPlace:'',
@@ -33,7 +33,7 @@ export class TripPageInfoComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.route.params.subscribe(params => {
-			this.id = + params['id']; 
+			this.id = params['id']; 
 		});
 		this.route.queryParams.subscribe(params => {
 			this.requestedSeats =  params['requestedSeats']

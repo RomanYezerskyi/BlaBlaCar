@@ -3,6 +3,7 @@ using BlaBlaCar.BL.ODT;
 using BlaBlaCar.BL.ODT.BookTripModels;
 using BlaBlaCar.BL.ODT.CarModels;
 using BlaBlaCar.BL.ODT.TripModels;
+using BlaBlaCar.BL.ViewModels;
 using BlaBlaCar.DAL.Entities;
 
 namespace BlaBlaCar.BL
@@ -14,15 +15,17 @@ namespace BlaBlaCar.BL
             CreateMap<ApplicationUser, UserModel>().ReverseMap();
             //.ForMember(u => u.UserName, opt =>
             //    opt.MapFrom(ur => ur.Email));
-            CreateMap<TripModel, AddNewTripModel>().ReverseMap();
-            CreateMap<AddNewTripModel, TripModel>().ReverseMap();
+            CreateMap<NewTripViewModel, TripModel>().ReverseMap();
             CreateMap<Trip, TripModel>().ReverseMap();
 
             CreateMap<AvailableSeats, AvailableSeatsModel>().ReverseMap();
             CreateMap<Car, CarModel>().ReverseMap();
-            CreateMap<AddNewCarModel, CarModel>().ReverseMap();
+            CreateMap<NewCarViewModel, CarModel>().ReverseMap();
 
-            CreateMap<Seat, SeatModel>().ReverseMap();
+
+
+            CreateMap<AvailableSeatsModel, AvailableSeatViewModel>().ReverseMap();
+            CreateMap<SeatModel, Seat>().ReverseMap();
             CreateMap<TripUser, TripUserModel>().ReverseMap();
             CreateMap<AddNewBookTrip, TripUserModel>().ReverseMap();
             //CreateMap<BookedSeat, BookedSeatModel>().ReverseMap();

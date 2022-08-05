@@ -33,7 +33,7 @@ namespace BlaBlaCar.BL.Services
             _userService = userService;
         }
 
-        public async Task<TripUserModel> GetBookedTripAsync(int id)
+        public async Task<TripUserModel> GetBookedTripAsync(Guid id)
         {
             var trip = _mapper.Map<TripUser, TripUserModel>(await _unitOfWork.TripUser.GetAsync(null, x => x.Id == id));
             return trip;
@@ -43,53 +43,14 @@ namespace BlaBlaCar.BL.Services
         {
 
             var checkIfUserExist = await _userService.СheckIfUserExistsAsync(principal);
-
             if (!checkIfUserExist) throw new Exception("This user cannot book trip!");
             string userId = principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value;
-            IEnumerable<TripUserModel> listOfBookedSeats = null; 
-            if (!tripModel.BookedSeats.Any())
-            {
-                listOfBookedSeats = await BookSeats(tripModel, userId);
-            }
-            else
-            {
-                listOfBookedSeats = await BookSeatsById(tripModel, userId);
-            }
 
-            if (!listOfBookedSeats.Any()) throw new Exception("Seats not booked");
-
-            await _unitOfWork.TripUser.InsertRangeAsync(_mapper.Map<IEnumerable<TripUser>>(listOfBookedSeats));
-            return await _unitOfWork.SaveAsync();
-        }
-
-        private async Task<IEnumerable<TripUserModel>> BookSeats(AddNewBookTrip tripModel, string userId)
-        {
-            var availableSeats =
-                await _unitOfWork.AvaliableSeats.GetAsync(null, null, x => x.TripId == tripModel.TripId);
             var usersBookedTrip = await _unitOfWork.TripUser
                 .GetAsync(null, null, x => x.TripId == tripModel.TripId);
-
-            availableSeats = availableSeats.Where(x => usersBookedTrip.All(y => y.SeatId != x.SeatId)).ToList();
-            if(!availableSeats.Any()) throw new Exception("This seats already booked!");
-            var listOfSeats = new List<TripUserModel>();
-            for (int i = 0; i < tripModel.RequestedSeats; i++)
-            {
-                var userTripModel = _mapper.Map<AddNewBookTrip, TripUserModel>(tripModel);
-
-                userTripModel.UserId = userId;
-                userTripModel.SeatId = availableSeats.ElementAt(i).SeatId;
-                listOfSeats.Add(userTripModel);
-            }
-
-            return listOfSeats;
-        }
-        private async Task<IEnumerable<TripUserModel>> BookSeatsById(AddNewBookTrip tripModel, string userId)
-        {
-            var usersBookedTrip = await _unitOfWork.TripUser
-                .GetAsync(null, null, x => x.TripId == tripModel.TripId);
-
             var checkIfSeatNotBooked = tripModel.BookedSeats.Any(x => usersBookedTrip.Any(y => y.SeatId == x.Id));
             if (checkIfSeatNotBooked) throw new Exception("This seats already booked!");
+
             var listOfSeats = new List<TripUserModel>();
             for (int i = 0; i < tripModel.RequestedSeats; i++)
             {
@@ -100,88 +61,10 @@ namespace BlaBlaCar.BL.Services
                 listOfSeats.Add(userTripModel);
             }
             await _unitOfWork.TripUser.InsertRangeAsync(_mapper.Map<IEnumerable<TripUser>>(listOfSeats));
-
-            return listOfSeats;
+            return await _unitOfWork.SaveAsync();
         }
 
 
-
-        //public async Task<bool> AddBookedTripAsync(AddNewBookTrip tripModel, ClaimsPrincipal principal)
-
-        //{
-
-        //    if (tripModel != null)
-
-        //    {
-
-
-        //        //var checkIfUserExist = await _userService.СheckIfUserExistsAsync(principal);
-
-        //        //if (!checkIfUserExist) throw new Exception("This user cannot book trip!");
-
-
-        //        //var bookedTripModel = _mapper.Map<AddNewBookTrip, BookedTripModel>(tripModel);
-
-        //        //bookedTripModel.UserId = principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id)?.Value;
-
-
-        //        //var booked = await _bookedSeatsService.AddTripSeatsAsync(bookedTripModel, tripModel.CountOfSeats);
-
-
-        //        //var bookedTrip = _mapper.Map<BookedTripModel, BookedTrip>(bookedTripModel);
-
-        //        //await _unitOfWork.BookedTrips.InsertAsync(bookedTrip);
-
-
-        //        //return await _unitOfWork.SaveAsync();
-
-
-        //        // var bookedTrip = _mapper.Map<AddNewBookTrip, BookedTrip>(tripModel);
-
-        //        // bookedTrip.UserId = principal.Claims.FirstOrDefault(x=>x.Type == JwtClaimTypes.Id).Value;
-
-        //        // bookedTrip.BookedSeats = new List<BookedSeat>()
-
-        //        //     { new BookedSeat() { BookedTrip = bookedTrip, SeatId = 3 } };
-
-
-        //        // await _unitOfWork.BookedTrips.InsertAsync(bookedTrip);
-
-
-        //        // //var seat = new BookedSeat() { BookedTrip = bookedTrip, SeatId = 2 };
-
-        //        // //await _unitOfWork.BookedSeats.InsertAsync(seat);
-
-
-        //        // await _unitOfWork.SaveAsync();
-
-
-        //        //var bookedTrips = await _unitOfWork.BookedTrips.GetAsync(null,
-
-        //        //    x => x.Include(x => x.BookedSeats),
-
-        //        //    x => x.TripId == tripModel.TripId);
-
-
-        //        //var seats = await _unitOfWork.TripSeats.GetAsync(null, null, x => x.TripId == tripModel.TripId);
-
-        //        //seats = seats.Where(x => bookedTrips.Any(y => y.BookedSeats.Any(z => z.SeatId != x.Id))).ToList();
-
-
-        //        //// var a = seats.Where(x => bookedTrips.Any(y => y.BookedSeats.Any(z => z.SeatId != x.Id))).ToList();
-
-
-        //        //List<BookedSeatModel> bookedSeats = new List<BookedSeatModel>();
-
-        //        //for (int i = 0; i < tripModel.CountOfSeats; i++)
-
-        //        //{
-
-        //        //    var b = seats.ElementAt(i).Id;
-
-        //        //    bookedSeats.Add(new BookedSeatModel() { BookedTripId = bookedTripModel.Id, SeatId = b });
-
-        //        //}
         //public async Task<BookedTripModel> GetBookedTripAsync(int id)
 
         //{

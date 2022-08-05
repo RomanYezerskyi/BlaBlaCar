@@ -8,7 +8,7 @@ namespace BlaBlaCar.DAL.Entities
 {
     public class Trip
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string StartPlace { get; set; }
         public string EndPlace { get; set; }
         public DateTime StartTime { get; set; }
@@ -17,7 +17,7 @@ namespace BlaBlaCar.DAL.Entities
         public string Description { get; set; }
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
-        public int CarId { get; set; }
+        public Guid CarId { get; set; }
         public Car Car { get; set; }
         public ICollection<TripUser> TripUsers { get; set; }
         public ICollection<AvailableSeats> AvailableSeats { get; set; }

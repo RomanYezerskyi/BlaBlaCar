@@ -8,9 +8,9 @@ namespace BlaBlaCar.DAL.Entities
 {
     public class Seat
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public int Num { get; set; }
-        public int CarId { get; set; }
+        public Guid CarId { get; set; }
         public Car Car { get; set; }
         public ICollection<TripUser> TripUsers { get; set; }
         public ICollection<AvailableSeats> AvailableSeats { get; set; }

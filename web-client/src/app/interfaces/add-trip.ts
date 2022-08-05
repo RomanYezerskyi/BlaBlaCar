@@ -1,3 +1,5 @@
+import { AddAvailableSeats } from "./add-available-seats";
+
 export interface AddTripModel {
     startPlace: string;
     endPlace: string;
@@ -7,4 +9,5 @@ export interface AddTripModel {
     description: string;
     countOfSeats: number;
     carId:number; 
+    availableSeats: AddAvailableSeats[];
 }

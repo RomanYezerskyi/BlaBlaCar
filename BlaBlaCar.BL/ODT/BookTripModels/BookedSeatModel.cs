@@ -8,8 +8,8 @@ namespace BlaBlaCar.BL.ODT.BookTripModels
 {
     public class BookedSeatModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public int Num { get; set; }
-        public int CarId { get; set; }
+        public Guid CarId { get; set; }
     }
 }
