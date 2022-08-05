@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MainComponent } from './main.component';
+import { AddTripLayoutComponent } from './add-trip-layout.component';
 
-describe('MainComponent', () => {
-  let component: MainComponent;
-  let fixture: ComponentFixture<MainComponent>;
+describe('AddTripLayoutComponent', () => {
+  let component: AddTripLayoutComponent;
+  let fixture: ComponentFixture<AddTripLayoutComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MainComponent ]
+      declarations: [ AddTripLayoutComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MainComponent);
+    fixture = TestBed.createComponent(AddTripLayoutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

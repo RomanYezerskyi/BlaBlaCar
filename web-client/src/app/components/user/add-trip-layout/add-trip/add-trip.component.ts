@@ -1,51 +1,51 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CarType } from 'src/app/enums/car-type';
 import { AddTripModel } from 'src/app/interfaces/add-trip';
 import { AddNewCarModel } from 'src/app/interfaces/addnew-car';
+import { AvailableSeatsModel } from 'src/app/interfaces/available-seats';
 import { CarModel } from 'src/app/interfaces/car';
-
+import { SeatModel } from 'src/app/interfaces/seat';
 @Component({
   selector: 'app-add-trip',
   templateUrl: './add-trip.component.html',
-  styleUrls: ['./add-trip.component.scss']
+  styleUrls: ['./add-trip.component.scss'],
 })
 export class AddTripComponent implements OnInit {
+  message:string | undefined;
   invalidForm: boolean | undefined;
   data:any = []
   trip: AddTripModel = {
-    startPlace: '',
+    startPlace: 'aaa',
     endPlace: '',
     startTime: new Date(''),
     endTime: new Date(''),
     pricePerSeat: 0,
     description: '',
     countOfSeats: 0,
-    carId:0
+    carId:0,
+    availableSeats: []
   };
   carType = CarType;
   userCars: CarModel[] | undefined;
   newCar: AddNewCarModel = {countOfSeats:0, modelName:'', registNum:'', carType: 0};
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router : Router) { }
 
   ngOnInit(): void {
-    
+   
     this.getUserCars();
-    // const cars =  this.http.get("https://localhost:6001/api/Car")
-    // .subscribe({
-    //   next: (res) => {
-    //     this.userCars = res as CarModel[];
-    //     console.log(res);
-    //   }
-    // });
   }
-  async getUserCars() {
-    await this.http.get("https://localhost:6001/api/Car")
+  navigateToAvailableSeats() {
+    this.router.navigate(['add-trip/add-seats'], { state: this.trip});
+  }
+
+  getUserCars() {
+    this.http.get("https://localhost:6001/api/Car")
     .subscribe({
       next: (res) => {
         this.userCars = res as CarModel[];
-        console.log(res);
       }
     });
   }

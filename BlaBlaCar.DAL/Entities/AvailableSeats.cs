@@ -8,10 +8,10 @@ namespace BlaBlaCar.DAL.Entities
 {
     public class AvailableSeats
     {
-        public int Id { get; set; }
-        public int TripId { get; set; }
+        public Guid Id { get; set; }
+        public Guid TripId { get; set; }
         public Trip Trip { get; set; }
-        public int SeatId { get; set; }
+        public Guid SeatId { get; set; }
         public Seat Seat { get; set; }
     }
 }

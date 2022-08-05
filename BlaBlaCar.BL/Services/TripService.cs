@@ -4,6 +4,7 @@ using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.BL.ODT;
 using BlaBlaCar.BL.ODT.CarModels;
 using BlaBlaCar.BL.ODT.TripModels;
+using BlaBlaCar.BL.ViewModels;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
@@ -29,7 +30,7 @@ namespace BlaBlaCar.BL.Services
             _userService = userService;
             _carSeatsService = carSeatsService;
         }
-        public async Task<TripModel> GetTripAsync(int id)
+        public async Task<TripModel> GetTripAsync(Guid id)
         {
             var usersBookedTrip = await _unitOfWork.TripUser
                 .GetAsync(null,null,x => x.TripId == id);
@@ -64,14 +65,14 @@ namespace BlaBlaCar.BL.Services
 
             var trip = await _unitOfWork.Trips.GetAsync(null,
                 x => x.Include(x => x.AvailableSeats).Include(x => x.TripUsers),
-                x => x.StartPlace.Contains(model.StartPlace) && x.StartTime <= model.StartTime);
+                x => x.StartPlace.Contains(model.StartPlace) && x.StartTime >= model.StartTime);
 
 
             var res = _mapper.Map<IEnumerable<Trip>, IEnumerable<TripModel>>(trip);
             return res;
         }
 
-        public async Task<bool> AddTripAsync(AddNewTripModel newTripModel, ClaimsPrincipal principal)
+        public async Task<bool> AddTripAsync(NewTripViewModel newTripModel, ClaimsPrincipal principal)
         {
             if (newTripModel != null)
             {
@@ -79,12 +80,8 @@ namespace BlaBlaCar.BL.Services
                 var checkIfUserExist = await _userService.СheckIfUserExistsAsync(principal);
                 if (!checkIfUserExist) throw new Exception("This user cannot create trip!");
 
-                var tripModel = _mapper.Map<AddNewTripModel, TripModel>(newTripModel);
+                var tripModel = _mapper.Map<NewTripViewModel, TripModel>(newTripModel);
                 tripModel.UserId = principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value;
-
-                tripModel.CarId = newTripModel.CarId;
-
-                await _carSeatsService.AddAvailableSeatsAsync(tripModel, newTripModel.CountOfSeats);
 
                 var trip = _mapper.Map<TripModel, Trip>(tripModel);
 
@@ -106,7 +103,7 @@ namespace BlaBlaCar.BL.Services
             return false;
         }
 
-        public async Task<bool> DeleteTripAsync(int id)
+        public async Task<bool> DeleteTripAsync(Guid id)
         {
             var trip = await _unitOfWork.Trips.GetAsync(includes: null, filter: x=>x.Id == id);
             if (trip == null) throw new Exception("No information about this trip! Trip cannot be deleted!");

@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.BL.ODT.TripModels;
+using BlaBlaCar.BL.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -35,7 +36,7 @@ namespace BlaBlaCar.Api.Controllers
         }
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTrips(int id)
+        public async Task<IActionResult> GetTrips(Guid id)
         {
             try
             {
@@ -64,7 +65,7 @@ namespace BlaBlaCar.Api.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> CreateTrip([FromBody]AddNewTripModel  tripModel)
+        public async Task<IActionResult> CreateTrip([FromBody]NewTripViewModel  tripModel)
         {
             try
             {
@@ -96,7 +97,7 @@ namespace BlaBlaCar.Api.Controllers
             }
         }
         [HttpDelete]
-        public async Task<IActionResult> DeleteTrip(int id)
+        public async Task<IActionResult> DeleteTrip(Guid id)
         {
             try
             {

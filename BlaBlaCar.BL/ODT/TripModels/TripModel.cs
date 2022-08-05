@@ -5,7 +5,7 @@ namespace BlaBlaCar.BL.ODT.TripModels
 {
     public class TripModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string StartPlace { get; set; }
         public string EndPlace { get; set; }
         public DateTime StartTime { get; set; }
@@ -14,7 +14,7 @@ namespace BlaBlaCar.BL.ODT.TripModels
         public string Description { get; set; }
         public string UserId { get; set; }
         public UserModel User { get; set; }
-        public int CarId { get; set; }
+        public Guid CarId { get; set; }
         public CarModel Car { get; set; }
         public ICollection<TripUserModel> TripUsers { get; set; }
         public ICollection<AvailableSeatsModel> AvailableSeats { get; set; }

@@ -14,7 +14,7 @@ import { SeatModel } from 'src/app/interfaces/seat';
 })
 export class DialogBookingConfirmationComponent implements OnInit {
   seatType = AvailableSeatsType;
-  carModel: CarModel = { id:0, carType:0, modelName:'',registNum:'' }
+  carModel: CarModel = { id:0, carType:0, modelName:'',registNum:'', seats:[] }
   trip: TripModel = { 
     id:0, 
     startPlace:'',
@@ -63,7 +63,7 @@ export class DialogBookingConfirmationComponent implements OnInit {
       this.dialogRef.close();
   }
   bookSeat(seatId:number){
-    const seat: SeatModel = { id:seatId, carId:0, num:0,tripUsers:[] }
+    const seat: SeatModel = { id:seatId, carId:this.trip.car.id, num:0,tripUsers:[] }
     if(this.bookedtrip.bookedSeats.find(x=>x.id == seat.id)){
       this.bookedtrip.bookedSeats.splice(this.bookedtrip.bookedSeats.indexOf(seat));
       console.log("bbbb " + JSON.stringify(this.bookedtrip));

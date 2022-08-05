@@ -1,10 +1,10 @@
 ﻿using BlaBlaCar.BL.Interfaces;
-using BlaBlaCar.BL.ODT.CarModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authorization;
+using BlaBlaCar.BL.ViewModels;
 
 namespace BlaBlaCar.Api.Controllers
 {
@@ -20,11 +20,24 @@ namespace BlaBlaCar.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCarsId()
+        public async Task<IActionResult> GetCars()
         {
             try
             {
-                var res = await _carService.GetUserCars(User);
+                var res = await _carService.GetUserCarsAsync(User);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCarById(Guid id)
+        {
+            try
+            {
+                var res = await _carService.GetCarByIdAsync(id);
                 return Ok(res);
             }
             catch (Exception e)
@@ -33,9 +46,8 @@ namespace BlaBlaCar.Api.Controllers
             }
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> CreateCar([FromBody] AddNewCarModel carModel)
+        public async Task<IActionResult> CreateCar([FromBody] NewCarViewModel carModel)
         {
             try
             {

@@ -7,6 +7,7 @@ using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.BL.ODT;
 using BlaBlaCar.BL.ODT.CarModels;
 using BlaBlaCar.BL.ODT.TripModels;
+using BlaBlaCar.BL.ViewModels;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -29,20 +30,6 @@ namespace BlaBlaCar.BL.Services
             }
 
             return Task.FromResult(carModel);
-        }
-
-        public async Task<TripModel> AddAvailableSeatsAsync(TripModel tripModel, int count)
-        {
-            var userCar = await _unitOfWork.Cars.GetAsync(x =>
-                    x.Include(x => x.Seats.Where(s=>s.AvailableSeats.All(seat=>seat.SeatId != s.Id))),
-                x => x.Id == tripModel.CarId);
-            tripModel.AvailableSeats = new List<AvailableSeatsModel>(); 
-            for (int i = 0; i < count; i++)
-            {
-                tripModel.AvailableSeats.Add(new AvailableSeatsModel() { Trip = tripModel, SeatId = userCar.Seats.ElementAt(i).Id });
-            }
-
-            return tripModel;
         }
     }
 }

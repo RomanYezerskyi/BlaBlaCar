@@ -49,17 +49,15 @@ namespace BlaBlaCar.DAL.Migrations
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.AvailableSeats", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<Guid>("SeatId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("SeatId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TripId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("TripId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -72,11 +70,9 @@ namespace BlaBlaCar.DAL.Migrations
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.Car", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("CarType")
                         .HasColumnType("int");
@@ -104,14 +100,12 @@ namespace BlaBlaCar.DAL.Migrations
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.Seat", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("CarId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CarId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Num")
                         .HasColumnType("int");
@@ -125,14 +119,12 @@ namespace BlaBlaCar.DAL.Migrations
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.Trip", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("CarId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CarId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -170,17 +162,15 @@ namespace BlaBlaCar.DAL.Migrations
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.TripUser", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<Guid>("SeatId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("SeatId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TripId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("TripId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("userId")
                         .IsRequired()

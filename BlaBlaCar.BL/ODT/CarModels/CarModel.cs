@@ -9,7 +9,7 @@ namespace BlaBlaCar.BL.ODT.CarModels
 {
     public class CarModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string ModelName { get; set; }
         public string RegistNum { get; set; }
         public CarTypeModel CarType { get; set; }
