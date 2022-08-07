@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security.Claims;
 using AutoMapper;
 using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.BL.ODT.BookTripModels;
@@ -11,11 +6,10 @@ using BlaBlaCar.BL.ODT.TripModels;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
-using Microsoft.EntityFrameworkCore;
 
-namespace BlaBlaCar.BL.Services
+namespace BlaBlaCar.BL.Services.BookedTripServices
 {
-    public class BookedTripsService: IBookedTripsService
+    public class BookedTripsService : IBookedTripsService
     {
         private readonly IUnitOfWork _unitOfWork;
 

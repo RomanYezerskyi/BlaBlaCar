@@ -36,6 +36,7 @@ namespace IdentityServerJWT.API.Services
             var newAccessToken = GenerateAccessTokenTokenAsync(principal.Claims);
             var newRefreshToken = GenerateRefreshTokenAsync();
             user.RefreshToken = newRefreshToken;
+            user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(_jwtSettings.RefreshInMinutes);
             await _userManager.UpdateAsync(user);
 
             return new AuthenticatedResponse()
@@ -60,7 +61,7 @@ namespace IdentityServerJWT.API.Services
                 issuer: _jwtSettings.Issuer,
                 audience: _jwtSettings.Audience,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(5),
+                expires: DateTime.Now.AddMinutes(_jwtSettings.ExpirationInMinutes),
                 signingCredentials: signinCredentials
             );
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);

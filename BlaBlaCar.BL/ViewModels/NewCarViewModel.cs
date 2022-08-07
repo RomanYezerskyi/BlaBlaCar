@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BlaBlaCar.BL.ODT.CarModels;
 using BlaBlaCar.BL.ODT.TripModels;
+using Microsoft.AspNetCore.Http;
 
 namespace BlaBlaCar.BL.ViewModels
 {
@@ -14,6 +15,7 @@ namespace BlaBlaCar.BL.ViewModels
         public string ModelName { get; set; }
         public string RegistNum { get; set; }
         public int CountOfSeats { get; set; }
+        public IFormFile TechPassportFile { get; set; }
         public CarTypeModel CarType { get; set; }
     }
 }

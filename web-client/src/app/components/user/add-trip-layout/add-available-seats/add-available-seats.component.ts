@@ -6,6 +6,7 @@ import { CarType } from 'src/app/enums/car-type';
 import { AddAvailableSeats } from 'src/app/interfaces/add-available-seats';
 import { AddTripModel } from 'src/app/interfaces/add-trip';
 import { CarModel } from 'src/app/interfaces/car';
+import { CarStatus } from 'src/app/interfaces/car-status';
 import { SeatModel } from 'src/app/interfaces/seat';
 import { TripModel } from 'src/app/interfaces/trip';
 
@@ -27,7 +28,7 @@ export class AddAvailableSeatsComponent implements OnInit {
     carId: 0,
     availableSeats: []
   };
-  userCar: CarModel = {id:0,carType:-1, modelName:'', registNum:'',seats:[]};
+  userCar: CarModel = {id:0,carType:-1, modelName:'', registNum:'',seats:[], carStatus:-1,techPassport:''};
   private readonly url ='https://localhost:6001/api/Trips/';
   constructor(private http: HttpClient) { }
 

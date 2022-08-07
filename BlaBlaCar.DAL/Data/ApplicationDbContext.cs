@@ -25,6 +25,7 @@ namespace BlaBlaCar.DAL.Data
 
             builder.Entity<ApplicationUser>().HasIndex(x => x.Email);
             builder.Entity<ApplicationUser>().HasIndex(x => x.PhoneNumber);
+            builder.Entity<ApplicationUser>().Property(x=>x.DrivingLicense).IsRequired(false);
             builder.Entity<Car>().HasIndex(x => x.RegistNum);
         }
     }

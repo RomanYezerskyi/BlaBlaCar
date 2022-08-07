@@ -9,6 +9,8 @@ namespace BlaBlaCar.BL.ODT
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public string? FirstName { get; set; }
+        public string DrivingLicense { get; set; }
+        public ModelStatus UserStatus { get; set; }
         public ICollection<CarModel> Cars { get; set; }
         public ICollection<TripModel> Trips { get; set; }
     }

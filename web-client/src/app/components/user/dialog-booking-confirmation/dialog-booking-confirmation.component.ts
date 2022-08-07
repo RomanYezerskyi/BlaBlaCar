@@ -14,7 +14,7 @@ import { SeatModel } from 'src/app/interfaces/seat';
 })
 export class DialogBookingConfirmationComponent implements OnInit {
   seatType = AvailableSeatsType;
-  carModel: CarModel = { id:0, carType:0, modelName:'',registNum:'', seats:[] }
+  carModel: CarModel = { id:0, carType:0, modelName:'',registNum:'', seats:[],carStatus:-1,techPassport:'' }
   trip: TripModel = { 
     id:0, 
     startPlace:'',

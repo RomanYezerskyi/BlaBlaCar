@@ -62,7 +62,7 @@ namespace IdentityServerJWT.API.Services
                 var refreshToken = _tokenService.GenerateRefreshTokenAsync();
 
                 user.RefreshToken = refreshToken;
-                user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+                user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(_jwtSettings.RefreshInMinutes);
 
                 await _userManager.UpdateAsync(user);
                 
@@ -92,14 +92,14 @@ namespace IdentityServerJWT.API.Services
             }
 
 
-            
+
 
             //var newRole = new IdentityRole
             //{
-            //    Name = "blablacar.admin"
+            //    Name = "blablacar.user"
             //};
             //var roleResult = await _roleManager.CreateAsync(newRole);
-            var result1 = await _userManager.AddToRoleAsync(user, "blablacar.admin");
+            var result1 = await _userManager.AddToRoleAsync(user, "blablacar.user");
 
             var roles = await _userManager.GetRolesAsync(user);
             var roleClaims = roles.Select(r => new Claim(JwtClaimTypes.Role, r));

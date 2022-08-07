@@ -5,23 +5,20 @@ using BlaBlaCar.BL.ODT;
 using BlaBlaCar.BL.ODT.CarModels;
 using BlaBlaCar.BL.ODT.TripModels;
 using BlaBlaCar.BL.ViewModels;
-using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Interfaces;
+using BlaBlaCar.DAL.Entities;
 using IdentityModel;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.JsonWebTokens;
 
-namespace BlaBlaCar.BL.Services
+namespace BlaBlaCar.BL.Services.TripServices
 {
-    public class TripService: ITripService
+    public class TripService : ITripService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
         private readonly ICarSeatsService _carSeatsService;
-        public TripService(IUnitOfWork unitOfWork, 
+        public TripService(IUnitOfWork unitOfWork,
             IMapper mapper,
              IUserService userService, ICarSeatsService carSeatsService)
         {
@@ -33,19 +30,20 @@ namespace BlaBlaCar.BL.Services
         public async Task<TripModel> GetTripAsync(Guid id)
         {
             var usersBookedTrip = await _unitOfWork.TripUser
-                .GetAsync(null,null,x => x.TripId == id);
+                .GetAsync(null, null, x => x.TripId == id);
             var trip = _mapper.Map<Trip, TripModel>(await _unitOfWork.Trips.GetAsync(
-                                        x=>x.Include(
-                                            y=>y.AvailableSeats).ThenInclude(x=>x.Seat), 
+                                        x => x.Include(
+                                            y => y.AvailableSeats).ThenInclude(x => x.Seat),
                                         x => x.Id == id));
-            trip.AvailableSeats.Select(x => {
-                    if (usersBookedTrip.Any(y => y.SeatId == x.SeatId))
-                    {
-                        x.AvailableSeatsType = AvailableSeatsType.Booked;
-                    }
-                    return x;
-                }).ToList();
-                
+            trip.AvailableSeats.Select(x =>
+            {
+                if (usersBookedTrip.Any(y => y.SeatId == x.SeatId))
+                {
+                    x.AvailableSeatsType = AvailableSeatsType.Booked;
+                }
+                return x;
+            }).ToList();
+
 
             var car = await _unitOfWork.Cars.GetAsync(null, x => x.Id == trip.CarId);
             trip.Car = _mapper.Map<CarModel>(car);
@@ -105,7 +103,7 @@ namespace BlaBlaCar.BL.Services
 
         public async Task<bool> DeleteTripAsync(Guid id)
         {
-            var trip = await _unitOfWork.Trips.GetAsync(includes: null, filter: x=>x.Id == id);
+            var trip = await _unitOfWork.Trips.GetAsync(includes: null, filter: x => x.Id == id);
             if (trip == null) throw new Exception("No information about this trip! Trip cannot be deleted!");
             _unitOfWork.Trips.Delete(trip);
             return await _unitOfWork.SaveAsync();

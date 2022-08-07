@@ -50,7 +50,7 @@ namespace BlaBlaCar.DAL
                 queryable = queryable.Where(filter);
             }
 
-            return await queryable.FirstOrDefaultAsync();
+            return await queryable.AsNoTracking().FirstOrDefaultAsync();
         }
 
         public async Task InsertAsync(TEntity entity)

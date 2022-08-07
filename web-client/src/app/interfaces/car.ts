@@ -1,4 +1,5 @@
 import { CarType } from "../enums/car-type";
+import { CarStatus } from "./car-status";
 import { SeatModel } from "./seat";
 
 export interface CarModel {
@@ -7,4 +8,6 @@ export interface CarModel {
     registNum:string;
     carType: CarType;
     seats: SeatModel[];
+    techPassport: string;
+    carStatus:CarStatus;
 }

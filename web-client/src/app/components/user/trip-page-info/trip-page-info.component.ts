@@ -13,7 +13,7 @@ import { CarModel } from 'src/app/interfaces/car';
 export class TripPageInfoComponent implements OnInit {
 	private id!: number;
 	requestedSeats = 0;
-	carModel: CarModel = { id:0, carType:0, modelName:'',registNum:'', seats:[] }
+	carModel: CarModel = { id:0, carType:0, modelName:'',registNum:'', seats:[],carStatus:-1,techPassport:'' }
 	data: TripModel = { 
 		id:0, 
 		startPlace:'',

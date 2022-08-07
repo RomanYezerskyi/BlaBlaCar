@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using BlaBlaCar.BL.Interfaces;
-using BlaBlaCar.BL.ODT.BookTripModels;
-using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
-namespace BlaBlaCar.BL.Services
+namespace BlaBlaCar.BL.Services.BookedTripServices
 {
     public class BookedSeatsService : IBookedSeatsService
     {

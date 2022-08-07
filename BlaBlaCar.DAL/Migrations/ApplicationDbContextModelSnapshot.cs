@@ -27,6 +27,9 @@ namespace BlaBlaCar.DAL.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("DrivingLicense")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -37,6 +40,9 @@ namespace BlaBlaCar.DAL.Migrations
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("UserStatus")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -74,6 +80,9 @@ namespace BlaBlaCar.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("CarStatus")
+                        .HasColumnType("int");
+
                     b.Property<int>("CarType")
                         .HasColumnType("int");
 
@@ -84,6 +93,10 @@ namespace BlaBlaCar.DAL.Migrations
                     b.Property<string>("RegistNum")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TechPassport")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()

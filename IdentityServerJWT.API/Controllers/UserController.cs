@@ -44,10 +44,10 @@ namespace IdentityServerJWT.API.Controllers
         {
 
             var user = await _userManager.FindByIdAsync(roleModel.UserId);
-            var allRoles = _roleManager.Roles.ToList().First();
+            var allRoles = _roleManager.Roles.Where(x=>x.Name != roleModel.RoleName);
             var role = await _roleManager.FindByNameAsync(roleModel.RoleName);
             await _userManager.AddToRoleAsync(user, role.Name);
-            await _userManager.RemoveFromRoleAsync(user, allRoles.Name);
+            await _userManager.RemoveFromRoleAsync(user, allRoles.First().Name);
             return Ok();
         }
     }

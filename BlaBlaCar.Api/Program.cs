@@ -8,10 +8,16 @@ using BlaBlaCar.DAL.Data;
 using BlaBlaCar.DAL.Interfaces;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.BL;
+using BlaBlaCar.BL.Services.Admin;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication;
+using BlaBlaCar.BL.Services.BookedTripServices;
+using BlaBlaCar.BL.Services.TripServices;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.FileProviders;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -34,6 +40,12 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 //        options.Password.RequiredLength = 4;
 //    }).AddEntityFrameworkStores<ApplicationDbContext>()
 //    .AddDefaultTokenProviders();
+builder.Services.Configure<FormOptions>(o =>
+{
+    o.ValueLengthLimit = int.MaxValue;
+    o.MultipartBodyLengthLimit = int.MaxValue;
+    o.MemoryBufferThreshold = int.MaxValue;
+});
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -46,6 +58,7 @@ builder.Services.AddScoped<IBookedTripsService, BookedTripsService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICarService, CarService>();
 builder.Services.AddScoped<ICarSeatsService, CarSeatsService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 
 //builder.Services.AddAuthentication("Bearer")
 //    .AddIdentityServerAuthentication("Bearer", options =>
@@ -128,7 +141,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"DriverDocuments")),
+    RequestPath = new PathString("/DriverDocuments")
+});
 
 app.UseAuthentication(); 
 app.UseAuthorization();

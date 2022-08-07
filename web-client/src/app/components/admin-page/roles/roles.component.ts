@@ -1,9 +1,10 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { CheckboxControlValueAccessor, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RoleModel } from 'src/app/interfaces/role';
 import { UserModel } from 'src/app/interfaces/user-model';
+import { UserStatus } from 'src/app/interfaces/user-status';
 
 @Component({
   selector: 'app-roles',
@@ -11,10 +12,11 @@ import { UserModel } from 'src/app/interfaces/user-model';
   styleUrls: ['./roles.component.scss']
 })
 export class RolesComponent implements OnInit {
-
+  isCheckedName = '';
   rolesList: Array<RoleModel> = [];
   userEmail = '';
-  searchUser:UserModel = { id:'', email:'',firstName:'',phoneNumber:'', roles:[]};
+  searchUser:UserModel = { id:'', email:'',firstName:'',phoneNumber:'', roles:[], drivingLicense:'', 
+  userStatus:UserStatus.WithoutCar, cars:[]};
   constructor(private http: HttpClient, private router: Router) { }
 
   ngOnInit(): void {
@@ -38,17 +40,16 @@ export class RolesComponent implements OnInit {
       .subscribe({
         next: (res: any) => {
           this.searchUser = res as UserModel;
+          this.isCheckedName = this.searchUser.roles[0].name;
           console.log(this.searchUser);
         },
         error: (err: HttpErrorResponse) => console.error(err),
       })
   }
-  changeRole = (checkBox:any, roleName:string, userId:string) => {
-    if(checkBox.checked == false){
-      console.log("aaaaaa");
-      return;
-    }
-    const data = {roleName: roleName, userId: userId};
+ 
+  changeRole(e:any, role:string, userId:string){       
+    this.isCheckedName = role;
+    const data = {roleName: role, userId: userId};
     const url ='https://localhost:5001/api/User/'
     this.http.post(url, data)
       .subscribe({

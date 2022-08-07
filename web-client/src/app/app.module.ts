@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from "@angular/common/http";
-import { FormsModule,ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/user/home/home.component';
 import { JwtModule } from "@auth0/angular-jwt";
@@ -18,14 +18,20 @@ import { DialogBookingConfirmationComponent } from './components/user/dialog-boo
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
-import { AdminPageComponent } from './components/admin/admin-page/admin-page.component';
-import { RolesComponent } from './components/admin/roles/roles.component';
 import { AddTripLayoutComponent } from './components/user/add-trip-layout/add-trip-layout.component';
-import { AddCarComponent } from './components/user/add-trip-layout/add-car/add-car.component';
+import { AddCarComponent } from './components/user/add-car/add-car.component';
 import { AddAvailableSeatsComponent } from './components/user/add-trip-layout/add-available-seats/add-available-seats.component';
-
-export function tokenGetter() { 
-  return localStorage.getItem("jwt"); 
+import { RequestDrivingLicenseComponent } from './components/user/request-driving-license/request-driving-license.component';
+import { AdminPageComponent } from './components/admin-page/admin-page.component';
+import { RolesComponent } from './components/admin-page/roles/roles.component';
+import { UsersRequestsComponent } from './components/admin-page/users-requests/users-requests.component';
+import { UserRequestInfoComponent } from './components/admin-page/user-request-info/user-request-info.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { PendingComponent } from './components/admin-page/users-requests/pending/pending.component';
+export function tokenGetter() {
+  return localStorage.getItem("jwt");
 }
 
 @NgModule({
@@ -39,12 +45,17 @@ export function tokenGetter() {
     NavbarComponent,
     TripPageInfoComponent,
     DialogBookingConfirmationComponent,
-    AdminPageComponent,
-    RolesComponent,
     AddTripLayoutComponent,
     AddCarComponent,
     AddAvailableSeatsComponent,
-   
+    RequestDrivingLicenseComponent,
+    AdminPageComponent,
+    RolesComponent,
+    UsersRequestsComponent,
+    UserRequestInfoComponent,
+    PendingComponent,
+
+
   ],
   imports: [
     BrowserModule,
@@ -61,10 +72,18 @@ export function tokenGetter() {
       }
     }),
     BrowserAnimationsModule,
-    MatDialogModule
+    MatDialogModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent],
-  entryComponents: [DialogBookingConfirmationComponent]
+  entryComponents: [DialogBookingConfirmationComponent],
+  exports: [
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+  ]
 })
 export class AppModule { }

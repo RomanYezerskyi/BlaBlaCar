@@ -21,12 +21,13 @@
 
 <div *ngIf="searchUser.roles.length > 0" >
     <p>{{searchUser.email}}</p>
-    <div *ngFor="let role of rolesList; let userRole of searchUser.roles" >
-        <input type="checkbox" value="{{role.id}}"   *ngIf="role.name == userRole.name; else elseItem" 
-        checked (click)="changeRole(this,role.name, searchUser.id)"> 
-        <p  *ngIf="role.name == userRole.name;">{{role.name}}</p>
+    <div *ngFor="let role of rolesList;" >
+        <input type="checkbox" value="{{role.id}}"   *ngIf="role.name == searchUser.roles[0].name; else elseItem" 
+        (change)="changeRole($event,role.name, searchUser.id)" [checked]="role.name == searchUser.roles[0].name && isCheckedName == role.name"> 
+        <p *ngIf="role.name == searchUser.roles[0].name;">{{role.name}}</p>
         <ng-template #elseItem>
-          <input type="checkbox" value="{{role.id}}" (click)="changeRole(this,role.name, searchUser.id)"> <p>{{role.name}}</p>
+          <input type="checkbox" value="{{role.id}}"  (change)="changeRole($event, role.name, searchUser.id)"  
+          [checked]="isCheckedName == role.name"> <p>{{role.name}}</p>
         </ng-template>
     </div>
 </div>
