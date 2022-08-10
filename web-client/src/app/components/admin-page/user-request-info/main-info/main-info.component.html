@@ -1,0 +1,55 @@
+<div class="wrapper">
+    <div class="main_info">
+        <div class="part_one">
+            <div class="user__image">
+                <img [src]="'../../../../assets/images/user.png'" alt="" class="img profile__img">
+            </div>
+            <div class="info">
+                <div class="info__data">
+                    <p>10</p>
+                    <p>Cars</p>
+                </div>
+                <div class="info__data">
+                    <p>11</p>
+                    <p>Trips</p>
+                </div>
+                <div class="info__data">
+                    <p>12</p>
+                    <p>Travels</p>
+                </div>
+
+            </div>
+            <button class="btn btn-message">Message</button>
+        </div>
+        <div class="part_two">
+            <p><strong>{{user.firstName}}</strong></p>
+            <div class="user__data">
+
+
+                <p>{{user.email}}</p>
+
+                <p>{{user.phoneNumber}}</p>
+
+            </div>
+            <hr class="data__underline" />
+        </div>
+    </div>
+    <!-- <div class="main_info licenses">
+        <h3 class="title"><strong>Driving license</strong></h3>
+        <div class="driving_licenses">
+            <div *ngFor="let doc of user.userDocuments" class="license_image">
+                <img [src]="sanitaizeImg(doc.drivingLicense)" class="img driving_license__img" alt="">
+            </div>
+         
+        </div>
+        <div class="actions">
+            <img (click)="changeUserStatus(userStatus.Confirmed)" class="btn btn_actions"
+                src="../../../../assets/images/like1.png" alt="">
+            <img (click)="changeUserStatus(userStatus.NeedMoreData)" class="btn btn_actions"
+                src="../../../../assets/images/customer-satisfaction.png" alt="">
+            <img (click)="changeUserStatus(userStatus.Rejected)" class="btn btn_actions"
+                src="../../../../assets/images/dislike1.png" alt="">
+        </div>
+       
+    </div> -->
+</div>

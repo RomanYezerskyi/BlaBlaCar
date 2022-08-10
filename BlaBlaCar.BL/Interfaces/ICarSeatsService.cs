@@ -11,6 +11,6 @@ namespace BlaBlaCar.BL.Interfaces
 {
     public interface ICarSeatsService
     {
-        Task<CarModel> AddSeatsToCarAsync(CarModel carModel, int count);
+        CarModel AddSeatsToCarAsync(CarModel carModel, int count);
     }
 }

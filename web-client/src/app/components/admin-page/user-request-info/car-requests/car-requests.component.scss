@@ -1,0 +1,24 @@
+.cars {
+    margin: 1rem;
+    padding: 1;
+    // border: 1px red solid;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+}
+
+.title {
+    text-align: center;
+}
+
+.car {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.driving_licenses .license_image {
+    max-width: 15rem;
+}
+
+.car_info {
+    width: 10rem;
+    height: auto;
+}

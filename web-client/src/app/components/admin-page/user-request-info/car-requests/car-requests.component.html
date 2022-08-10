@@ -1,0 +1,29 @@
+<div class="wrapper">
+    <div class="cars" style="padding: 1rem;">
+        <h3 class="title"><strong>Cars</strong></h3>
+        <div class="cars_colllection">
+            <div class="car_global" *ngFor="let car of user.cars">
+                <div class="car">
+                    <div class="car_info">
+                        <p>{{car.modelName}}</p>
+                        <p>{{car.registNum}}</p>
+                    </div>
+                    <div class="driving_licenses">
+                        <div class="documents" *ngFor="let doc of car.carDocuments" class="license_image">
+                            <img [src]="sanitaizeImg(doc.techPassport)" alt="" class="img driving_license__img">
+                        </div>
+                    </div>
+                </div>
+                <div class="actions">
+                    <img (click)="changeCarStatus(carStatus.Confirmed, car.id)" class="btn btn_actions"
+                        src="../../../../assets/images/like1.png" alt="">
+                    <img (click)="changeCarStatus(carStatus.NeedMoreData, car.id)" class="btn btn_actions"
+                        src="../../../../assets/images/customer-satisfaction.png" alt="">
+                    <img (click)="changeCarStatus(carStatus.Rejected, car.id)" class="btn btn_actions"
+                        src="../../../../assets/images/dislike1.png" alt="">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

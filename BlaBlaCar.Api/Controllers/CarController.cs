@@ -47,7 +47,7 @@ namespace BlaBlaCar.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCar([FromBody] NewCarViewModel carModel)
+        public async Task<IActionResult> CreateCar([FromForm] NewCarViewModel carModel)
         {
             try
             {

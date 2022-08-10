@@ -1,0 +1,9 @@
+<p>pending works!</p>
+
+<div *ngFor="let user of users">
+    <div (click)="navigateToRequestInfo(user.id)" style="border: 1px solid #000;">
+        {{user.firstName}}
+        <p>Driving License - {{user.userStatus == userStatus.Pending}}</p>
+        <!-- <img  style="width: 30%;" src="{{user.drivingLicense}}" alt=""> -->
+    </div>
+</div>

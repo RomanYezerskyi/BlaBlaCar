@@ -28,9 +28,9 @@ export class AddTripComponent implements OnInit {
     carId:0,
     availableSeats: []
   };
-  carType = CarType;
+
   userCars: CarModel[] | undefined;
-  newCar: AddNewCarModel = {countOfSeats:0, modelName:'', registNum:'', carType: 0};
+  
   constructor(private http: HttpClient, private router : Router) { }
 
   ngOnInit(): void {
@@ -62,20 +62,6 @@ export class AddTripComponent implements OnInit {
       this.data = res
       console.log(this.data)
       console.error(res);
-      })
-    } 
-  } 
-  addCar = ( form: NgForm) => {
-    if (form.valid) {
-      this.http.post("https://localhost:6001/api/Car", this.newCar, {
-        headers: new HttpHeaders({ "Content-Type": "application/json"})
-      })
-      .subscribe({
-        next: (res) => {
-        this.data = res
-        console.log(this.data)
-        }, 
-        error: (err: HttpErrorResponse) => console.error(err)
       })
     } 
   }

@@ -1,0 +1,28 @@
+<!-- <p>user-request-info works!</p> -->
+
+
+<!-- {{user.firstName}}
+
+<p><img style="width: 30%;" [src]="convertImg(user.drivingLicense)" alt=""></p>
+
+<button (click)="changeUserStatus(userStatus.Confirmed)">Confirm</button>
+<button (click)="changeUserStatus(userStatus.Rejected)">Reject</button>
+<button (click)="changeUserStatus(userStatus.NeedMoreData)">Again</button>
+<div *ngFor="let car of user.cars">
+    <p>{{car.modelName}}</p>
+    <p><img style="width: 30%;" [src]="convertImg(car.techPassport)" alt=""></p>
+    <button (click)="changeCarStatus(carStatus.Confirmed, car.id)">Confirm</button>
+    <button (click)="changeCarStatus(carStatus.Rejected, car.id)">Reject</button>
+    <button (click)="changeCarStatus(carStatus.NeedMoreData, car.id)">Again</button>
+</div> -->
+<div class="tabs">
+    <img (click)="changePage(menu.User)" class="tabs__actions icon_resume" src="../../../../assets/images/resume1.png"
+        alt="">
+    <img (click)="changePage(menu.Licenses)" class="tabs__actions icon_license"
+        src="../../../../assets/images/driver-license1.png" alt="">
+    <img (click)="changePage(menu.Cars)" class="tabs__actions icon_car" src="../../../../assets/images/car1.png" alt="">
+</div>
+
+<app-main-info [user]="user" *ngIf="check == menu.User"></app-main-info>
+<app-driving-license-request [user]="user" *ngIf="check == menu.Licenses"></app-driving-license-request>
+<app-car-requests [user]="user" *ngIf="check == menu.Cars"></app-car-requests>

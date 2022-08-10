@@ -1,0 +1,33 @@
+<p>roles works!</p>
+
+<div *ngFor="let role of rolesList" >
+    <p>{{role.name}}</p>
+</div>
+
+<div class="container">
+    <form #searchForm="ngForm" (ngSubmit)="getUser(searchForm)">
+      <h2 class="form-signin-heading">Search</h2>
+        <br/>
+        <div class="search-inputs">
+          <div class="input__item">
+          <label for="startPlace" class="sr-only">User email</label>
+          <input type="email" id="startPlace" name="startPlace" [(ngModel)]="userEmail" 
+            class="form-control" placeholder="Start place" required >
+          </div>
+          <button class="btn btn-lg btn-primary" type="submit" [disabled]="!searchForm.valid">Search</button>
+      </div>
+    </form>
+  </div>
+
+<div *ngIf="searchUser.roles.length > 0" >
+    <p>{{searchUser.email}}</p>
+    <div *ngFor="let role of rolesList;" >
+        <input type="checkbox" value="{{role.id}}"   *ngIf="role.name == searchUser.roles[0].name; else elseItem" 
+        (change)="changeRole($event,role.name, searchUser.id)" [checked]="role.name == searchUser.roles[0].name && isCheckedName == role.name"> 
+        <p *ngIf="role.name == searchUser.roles[0].name;">{{role.name}}</p>
+        <ng-template #elseItem>
+          <input type="checkbox" value="{{role.id}}"  (change)="changeRole($event, role.name, searchUser.id)"  
+          [checked]="isCheckedName == role.name"> <p>{{role.name}}</p>
+        </ng-template>
+    </div>
+</div>

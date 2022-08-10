@@ -17,6 +17,8 @@ namespace BlaBlaCar.DAL.Data
         public DbSet<Car> Cars { get; set; }
         public DbSet<TripUser> TripUsers { get; set; }
         public DbSet<AvailableSeats> AvailableSeats { get; set; }
+        public DbSet<UserDocuments> UserDocuments  { get; set; }
+        public DbSet<CarDocuments> CarDocuments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -25,6 +27,7 @@ namespace BlaBlaCar.DAL.Data
 
             builder.Entity<ApplicationUser>().HasIndex(x => x.Email);
             builder.Entity<ApplicationUser>().HasIndex(x => x.PhoneNumber);
+           // builder.Entity<ApplicationUser>().Property(x=>x.DrivingLicense).IsRequired(false);
             builder.Entity<Car>().HasIndex(x => x.RegistNum);
         }
     }

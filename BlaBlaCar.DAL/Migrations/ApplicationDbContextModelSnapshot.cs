@@ -38,6 +38,9 @@ namespace BlaBlaCar.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("UserStatus")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Email");
@@ -74,6 +77,9 @@ namespace BlaBlaCar.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("CarStatus")
+                        .HasColumnType("int");
+
                     b.Property<int>("CarType")
                         .HasColumnType("int");
 
@@ -96,6 +102,26 @@ namespace BlaBlaCar.DAL.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Cars");
+                });
+
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.CarDocuments", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CarId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("TechPassport")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarId");
+
+                    b.ToTable("CarDocuments");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.Seat", b =>
@@ -187,6 +213,27 @@ namespace BlaBlaCar.DAL.Migrations
                     b.ToTable("TripUsers");
                 });
 
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.UserDocuments", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DrivingLicense")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserDocuments");
+                });
+
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.AvailableSeats", b =>
                 {
                     b.HasOne("BlaBlaCar.DAL.Entities.Seat", "Seat")
@@ -215,6 +262,17 @@ namespace BlaBlaCar.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.CarDocuments", b =>
+                {
+                    b.HasOne("BlaBlaCar.DAL.Entities.Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Car");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.Seat", b =>
@@ -270,6 +328,17 @@ namespace BlaBlaCar.DAL.Migrations
                     b.Navigation("Seat");
 
                     b.Navigation("Trip");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.UserDocuments", b =>
+                {
+                    b.HasOne("BlaBlaCar.DAL.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

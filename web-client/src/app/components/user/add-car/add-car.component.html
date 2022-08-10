@@ -1,0 +1,27 @@
+<div class="container">
+  <form #carForm="ngForm" (ngSubmit)="addCar(carForm)">
+    <h2 class="form-signin-heading">Add info about car</h2>
+    <br />
+    <label for="modelName" class="sr-only">Car model</label>
+    <input type="text" id="modelName" name="modelName" [(ngModel)]="newCar.modelName" class="form-control"
+      placeholder="model name" required>
+    <br />
+    <label for="registNum" class="sr-only">Registration number</label>
+    <input type="text" id="registNum" name="registNum" [(ngModel)]="newCar.registNum" class="form-control"
+      placeholder="registeration number" required>
+    <br />
+    <label for="countOfSeats" class="sr-only">Count of seats</label>
+    <input type="text" id="countOfSeats" name="countOfSeats" [(ngModel)]="newCar.countOfSeats" class="form-control"
+      placeholder="count of seats" required>
+    <br />
+    <label for="carType" class="sr-only">Car Type</label>
+    <select name="carId" id="carId" [(ngModel)]="newCar.carType" required>
+      <option value="{{carType.Bus}}"> Bus </option>
+      <option value="{{carType.Sedan}}"> Sedan </option>
+    </select>
+    <br />
+    <input type="file" #file placeholder="Choose file" (change)="uploadFile(file.files)" multiple>
+    <!-- <button type="button" class="btn btn-success" (click)="addLicense()">Upload File</button> -->
+    <button class="btn btn-lg btn-primary" type="submit" [disabled]="!carForm.valid">Save car</button>
+  </form>
+</div>

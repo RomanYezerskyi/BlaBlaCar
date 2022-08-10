@@ -24,7 +24,7 @@
   <div class="seats">
   <ul class="cards">
     <li *ngFor="let item of trip.availableSeats">
-        <button class="btn uno" *ngIf="(item.availableSeatsType != seatType.Booked); else elseItem" (click)="bookSeat(item.seatId)" 
+        <button class="btn uno" *ngIf="(item.availableSeatsType == seatType.Booked); else elseItem" (click)="bookSeat(item.seatId)" 
         style="color: blue;" disabled>
           {{item.seat.num}}
         </button>

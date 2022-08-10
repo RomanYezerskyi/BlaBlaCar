@@ -22,12 +22,13 @@ export class HomeComponent implements OnInit {
     localStorage.removeItem("jwt");
     localStorage.removeItem("refreshToken");
   }
-  // isUserAuthenticated = (): boolean => {
-  //   const token = localStorage.getItem("jwt");
-  //   if (token && !this.jwtHelper.isTokenExpired(token)){
-  //     return true;
-  //   }
-  // return false;
+  isUserAuthenticated = (): boolean => {
+    const token = localStorage.getItem("jwt");
+    if (token && !this.jwtHelper.isTokenExpired(token)){
+      return true;
+    }
+  return false;
+  }
   // }
   // logOut = () => {
   //   localStorage.removeItem("jwt");

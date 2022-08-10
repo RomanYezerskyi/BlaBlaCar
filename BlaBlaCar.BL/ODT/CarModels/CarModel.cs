@@ -15,6 +15,8 @@ namespace BlaBlaCar.BL.ODT.CarModels
         public CarTypeModel CarType { get; set; }
         public string UserId { get; set; }
         public UserModel User { get; set; }
+        public ICollection<CarDocumentsModel> CarDocuments { get; set; }
+        public ModelStatus CarStatus { get; set; }
         public ICollection<SeatModel> Seats { get; set; }
         public ICollection<TripModel> Trips { get; set; }
     }
