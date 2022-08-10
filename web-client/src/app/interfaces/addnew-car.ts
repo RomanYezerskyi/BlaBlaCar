@@ -5,5 +5,5 @@ export interface AddNewCarModel {
     registNum: string;
     countOfSeats: number;
     carType: CarType;
-    techPassportFile: File | null
+    techPassportFile: File[]
 }

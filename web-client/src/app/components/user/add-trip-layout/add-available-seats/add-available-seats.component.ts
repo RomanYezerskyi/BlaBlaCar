@@ -28,48 +28,48 @@ export class AddAvailableSeatsComponent implements OnInit {
     carId: 0,
     availableSeats: []
   };
-  userCar: CarModel = {id:0,carType:-1, modelName:'', registNum:'',seats:[], carStatus:-1,techPassport:''};
-  private readonly url ='https://localhost:6001/api/Trips/';
+  userCar: CarModel = { id: 0, carType: -1, modelName: '', registNum: '', seats: [], carStatus: -1, carDocuments: [] };
+  private readonly url = 'https://localhost:6001/api/Trips/';
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-    this.trip=history.state;
+    this.trip = history.state;
     console.log(this.trip);
     this.getUserCar()
   }
   getUserCar() {
     this.http.get("https://localhost:6001/api/Car/" + this.trip.carId)
-    .subscribe({
-      next: (res) => {
-        this.userCar = res as CarModel;
-        console.log(this.userCar);
-      }
-    });
+      .subscribe({
+        next: (res) => {
+          this.userCar = res as CarModel;
+          console.log(this.userCar);
+        }
+      });
   }
-  
-  addSeat(seatId:number){
-    const seat: AddAvailableSeats = { seatId:seatId }
-    if(this.trip.availableSeats.find(x=>x.seatId == seat.seatId)){
+
+  addSeat(seatId: number) {
+    const seat: AddAvailableSeats = { seatId: seatId }
+    if (this.trip.availableSeats.find(x => x.seatId == seat.seatId)) {
       this.trip.availableSeats.splice(this.trip.availableSeats.indexOf(seat));
       console.log("bbbb " + JSON.stringify(this.trip.availableSeats));
     }
-    else{
+    else {
       this.trip.availableSeats.push(seat);
       console.log("aaaaa " + JSON.stringify(this.trip.availableSeats));
     }
   }
   addTrip = (form: NgForm) => {
-    if(form.valid){
-      if(this.userCar === undefined){
+    if (form.valid) {
+      if (this.userCar === undefined) {
         alert("Add cars!");
         return;
       }
-      const url ='https://localhost:6001/api/Trips'
+      const url = 'https://localhost:6001/api/Trips'
       this.http.post(url, this.trip)
-      .subscribe((res)=>{
-      console.error(res);
-      })
-    } 
-  } 
+        .subscribe((res) => {
+          console.error(res);
+        })
+    }
+  }
 
 }

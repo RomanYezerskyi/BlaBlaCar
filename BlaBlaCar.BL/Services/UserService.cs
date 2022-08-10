@@ -21,13 +21,13 @@ namespace BlaBlaCar.BL.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-
+        private readonly IFileService _fileService;
         public UserService(IUnitOfWork unitOfWork,
-            IMapper mapper)
+            IMapper mapper, IFileService fileService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-
+            _fileService = fileService;
         }
         public Task<UserModel> GetUserAsync(int id)
         {
@@ -43,7 +43,8 @@ namespace BlaBlaCar.BL.Services
         {
             throw new NotImplementedException();
         }
-        public async Task<bool> RequestForCar(ClaimsPrincipal principal, IFormFile drivingLicense)
+
+        public async Task<bool> RequestForDrivingLicense(ClaimsPrincipal principal, IEnumerable<IFormFile> drivingLicense)
         {
             var userEmail = principal.Identity.Name;
             var userModel = _mapper.Map<UserModel>(await _unitOfWork.Users
@@ -51,25 +52,21 @@ namespace BlaBlaCar.BL.Services
             if (userModel.UserStatus == ModelStatus.Rejected) throw new Exception("This user cannot add driving license!");
 
            
-            if (drivingLicense.Length > 0)
+            if (drivingLicense.Any())
             {
-                var folderName = Path.Combine("DriverDocuments", "Images");
-                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                var fileName = ContentDispositionHeaderValue.Parse(drivingLicense.ContentDisposition).FileName.Trim('"').Split(".");
-                var newFileName = new string(Guid.NewGuid() +"."+ fileName.Last());
-                var fullPath = Path.Combine(pathToSave, newFileName);
-                var dbPath = Path.Combine(folderName, newFileName);
-                await using (var stream = new FileStream(fullPath, FileMode.Create))
-                {
-                    drivingLicense.CopyTo(stream);
-                }
-
+                
                 //await using (var stream = new FileStream(dbPath, FileMode.Open))
                 //{
                 //    PhysicalFileInfo fileInfo = new PhysicalFileInfo(new FileInfo(stream.Name));
                 //    return fileInfo;
                 //}
-                userModel.DrivingLicense = dbPath;
+               // userModel.DrivingLicense = dbPath;
+
+               var files = await _fileService.FilesDbPathListAsync(drivingLicense);
+
+               //userModel.UserDocuments = new List<UserDocumentsModel>();
+               userModel.UserDocuments = files.Select(f => new UserDocumentsModel() { User = userModel, DrivingLicense = f }).ToList();
+
                 userModel.UserStatus = ModelStatus.Pending;
 
 

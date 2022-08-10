@@ -59,6 +59,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICarService, CarService>();
 builder.Services.AddScoped<ICarSeatsService, CarSeatsService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IFileService, FileService>();
 
 //builder.Services.AddAuthentication("Bearer")
 //    .AddIdentityServerAuthentication("Bearer", options =>

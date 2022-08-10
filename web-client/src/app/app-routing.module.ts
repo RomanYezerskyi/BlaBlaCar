@@ -17,6 +17,7 @@ import { RequestDrivingLicenseComponent } from './components/user/request-drivin
 import { UsersRequestsComponent } from './components/admin-page/users-requests/users-requests.component';
 import { UserRequestInfoComponent } from './components/admin-page/user-request-info/user-request-info.component';
 import { PendingComponent } from './components/admin-page/users-requests/pending/pending.component';
+import { MainInfoComponent } from './components/admin-page/user-request-info/main-info/main-info.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -38,7 +39,12 @@ const routes: Routes = [
           { path: 'pending', component: PendingComponent, canActivate: [AuthGuard] },
 
 
-          { path: 'info/:id', component: UserRequestInfoComponent, canActivate: [AuthGuard] }
+          {
+            path: 'info/:id', component: UserRequestInfoComponent, canActivate: [AuthGuard],
+            children: [
+              { path: 'user', component: MainInfoComponent, canActivate: [AuthGuard] },
+            ]
+          }
         ]
       },
 

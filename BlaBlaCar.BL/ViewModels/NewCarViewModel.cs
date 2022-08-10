@@ -15,7 +15,7 @@ namespace BlaBlaCar.BL.ViewModels
         public string ModelName { get; set; }
         public string RegistNum { get; set; }
         public int CountOfSeats { get; set; }
-        public IFormFile TechPassportFile { get; set; }
+        public IEnumerable<IFormFile> TechPassportFile { get; set; }
         public CarTypeModel CarType { get; set; }
     }
 }

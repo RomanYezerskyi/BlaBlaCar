@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -12,6 +13,8 @@ using BlaBlaCar.BL.ViewModels;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.FileProviders.Physical;
 
 namespace BlaBlaCar.BL.Services.Admin
 {
@@ -28,7 +31,7 @@ namespace BlaBlaCar.BL.Services.Admin
         {
             var users = _mapper.Map<IEnumerable<UserModel>>(await _unitOfWork.Users.GetAsync(null,
                 x=>
-                    x.Include(x=>x.Cars.Where(x=>x.CarStatus == (Status)status)),
+                    x.Include(x=>x.Cars.Where(x=>x.CarStatus == (Status)status)).ThenInclude(x => x.CarDocuments),
                 x=>x.UserStatus == (Status)status || x.Cars.Any(c=>c.CarStatus == (Status)status)));
             return users;
 
@@ -37,7 +40,9 @@ namespace BlaBlaCar.BL.Services.Admin
         public async Task<UserModel> GetUserRequestsAsync(string id)
         {
             var user = _mapper.Map<UserModel>(await _unitOfWork.Users.GetAsync(
-                x => x.Include(x => x.Cars),
+                x => x.Include(x => x.UserDocuments)
+                    .Include(x => x.Cars)
+                    .ThenInclude(x => x.CarDocuments),
                 x => x.Id == id));
             return user;
         }
@@ -49,6 +54,7 @@ namespace BlaBlaCar.BL.Services.Admin
             if (user is null) throw new Exception("User not found");
             user.UserStatus = changeUserStatus.Status;
 
+            _unitOfWork.Users.Update(_mapper.Map<ApplicationUser>(user));
             //добавити меседжі
             return await _unitOfWork.SaveAsync();
         }
@@ -58,8 +64,9 @@ namespace BlaBlaCar.BL.Services.Admin
                 (await _unitOfWork.Cars.GetAsync(null, x=>x.Id == changeCarStatus.CarId));
 
             if (car is null) throw new Exception("Car not found");
-           car.CarStatus = changeCarStatus.Status;
+            car.CarStatus = changeCarStatus.Status;
 
+            _unitOfWork.Cars.Update(_mapper.Map<Car>(car));
             //добавити меседжі
             return await _unitOfWork.SaveAsync();
         }

@@ -11,7 +11,10 @@ import { AddNewCarModel } from 'src/app/interfaces/addnew-car';
   styleUrls: ['./add-car.component.scss']
 })
 export class AddCarComponent implements OnInit {
-  newCar: AddNewCarModel = { countOfSeats: 0, modelName: '', registNum: '', carType: 0, techPassportFile: null };
+  newCar: AddNewCarModel = {
+    countOfSeats: 0, modelName: '', registNum: '', carType: 0,
+    techPassportFile: []
+  };
   carType = CarType;
   imageBase64 = '';
   fileSelected?: File;
@@ -26,9 +29,13 @@ export class AddCarComponent implements OnInit {
     if (files.length === 0) {
       return;
     }
-    let fileToUpload = <File>files[0];
+    let fileToUpload: Array<any> = files;
+    console.log(fileToUpload);
+    for (let item of fileToUpload) {
+      this.formData.append('techPassportFile', item, item.name);
+    }
 
-    this.formData.append('TechPassportFile', fileToUpload, fileToUpload.name);
+    //this.formData.append('TechPassportFile', fileToUpload, fileToUpload.name);
 
     //this.newCar.techPassportFile = this.formData;
     // console.log(this.newCar.techPassportFile.get);
@@ -39,7 +46,6 @@ export class AddCarComponent implements OnInit {
       this.formData.append("ModelName", this.newCar.modelName);
       this.formData.append("RegistNum", this.newCar.registNum);
       this.formData.append("CountOfSeats", this.newCar.countOfSeats.toString());
-      this.formData.append("CarType", this.newCar.carType.toString());
       this.http.post("https://localhost:6001/api/Car", this.formData)
         .subscribe({
           next: (res) => {

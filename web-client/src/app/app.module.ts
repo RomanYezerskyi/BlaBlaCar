@@ -30,6 +30,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { PendingComponent } from './components/admin-page/users-requests/pending/pending.component';
+import { MainInfoComponent } from './components/admin-page/user-request-info/main-info/main-info.component';
+import { DrivingLicenseRequestComponent } from './components/admin-page/user-request-info/driving-license-request/driving-license-request.component';
+import { CarRequestsComponent } from './components/admin-page/user-request-info/car-requests/car-requests.component';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -54,6 +57,9 @@ export function tokenGetter() {
     UsersRequestsComponent,
     UserRequestInfoComponent,
     PendingComponent,
+    MainInfoComponent,
+    DrivingLicenseRequestComponent,
+    CarRequestsComponent,
 
 
   ],

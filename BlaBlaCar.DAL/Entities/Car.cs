@@ -13,8 +13,8 @@ namespace BlaBlaCar.DAL.Entities
         public string RegistNum { get; set; }
         public CarType CarType { get; set; }
         public string UserId { get; set; }
-        public string TechPassport { get; set; }
         public Status CarStatus { get; set; }
+        public ICollection<CarDocuments> CarDocuments { get; set; }
         public ApplicationUser User { get; set; }
         public ICollection<Seat> Seats { get; set; }
         public ICollection<Trip> Trips { get; set; }

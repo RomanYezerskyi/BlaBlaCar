@@ -20,7 +20,7 @@
       <option value="{{carType.Sedan}}"> Sedan </option>
     </select>
     <br />
-    <input type="file" #file placeholder="Choose file" (change)="uploadFile(file.files)">
+    <input type="file" #file placeholder="Choose file" (change)="uploadFile(file.files)" multiple>
     <!-- <button type="button" class="btn btn-success" (click)="addLicense()">Upload File</button> -->
     <button class="btn btn-lg btn-primary" type="submit" [disabled]="!carForm.valid">Save car</button>
   </form>

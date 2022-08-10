@@ -8,6 +8,7 @@ using BlaBlaCar.BL.ViewModels;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlaBlaCar.BL.Services.TripServices
@@ -18,14 +19,16 @@ namespace BlaBlaCar.BL.Services.TripServices
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
         private readonly ICarSeatsService _carSeatsService;
+        private readonly IFileService _fileService;
         public CarService(IUnitOfWork unitOfWork,
             IMapper mapper,
-           IUserService userService, ICarSeatsService carSeatsService)
+           IUserService userService, ICarSeatsService carSeatsService, IFileService fileService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _userService = userService;
             _carSeatsService = carSeatsService;
+            _fileService = fileService;
         }
 
         public async Task<IEnumerable<CarModel>> GetUserCarsAsync(ClaimsPrincipal principal)
@@ -56,37 +59,32 @@ namespace BlaBlaCar.BL.Services.TripServices
                 x => x.Id == userId));
 
             if (user.UserStatus == ModelStatus.Rejected) throw new Exception("This user cannot add car!");
-            //if (user.UserStatus == UserModelStatus.WithoutCar) user.UserStatus = UserModelStatus.Requested;
-
-            if (carModel.TechPassportFile.Length > 0)
+            
+            if (carModel.TechPassportFile.Any())
             {
-                var folderName = Path.Combine("DriverDocuments", "Images");
-                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                var fileName = ContentDispositionHeaderValue.Parse(carModel.TechPassportFile.ContentDisposition).FileName.Trim('"').Split(".");
-                var newFileName = new string(Guid.NewGuid() + "." + fileName.Last());
-                var fullPath = Path.Combine(pathToSave, newFileName);
-                var dbPath = Path.Combine(folderName, newFileName);
-                await using (var stream = new FileStream(fullPath, FileMode.Create))
-                {
-                    carModel.TechPassportFile.CopyTo(stream);
-                }
-
                 var newCar = _mapper.Map<NewCarViewModel, CarModel>(carModel);
+                
+
+                var files = await _fileService.FilesDbPathListAsync(carModel.TechPassportFile);
+
+                newCar.CarDocuments = files.Select(f => new CarDocumentsModel() { Car = newCar, TechPassport = f }).ToList();
                 newCar.CarStatus = ModelStatus.Pending;
-                newCar.TechPassport = dbPath;
-                //newCar.UserId = principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value;
+
                 _carSeatsService.AddSeatsToCarAsync(newCar, carModel.CountOfSeats);
 
-                user.Cars.Add(newCar);
+                newCar.UserId = userId;
+                //user.Cars.Add(newCar);
 
-                _unitOfWork.Users.Update(_mapper.Map<ApplicationUser>(user));
-                //var car = _mapper.Map<Car>(newCar);
-                //await _unitOfWork.Cars.InsertAsync(car);
+                //_unitOfWork.Users.Update(_mapper.Map<ApplicationUser>(user));
+
+                var car = _mapper.Map<Car>(newCar);
+                await _unitOfWork.Cars.InsertAsync(car);
                 return await _unitOfWork.SaveAsync();
             }
             throw new Exception("Problems with file");
         }
 
+       
 
     }
 }

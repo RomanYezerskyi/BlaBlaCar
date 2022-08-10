@@ -9,7 +9,6 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 })
 export class RequestDrivingLicenseComponent implements OnInit {
   private formData = new FormData();
-  imgData = "https://localhost:6001/DriverDocuments/images/c0884a6e-26b0-4cd5-9c8c-1e35c5134de9.png";
   @Output() public onUploadFinished = new EventEmitter();
   constructor(private http: HttpClient, private sant: DomSanitizer) { }
 
@@ -19,9 +18,12 @@ export class RequestDrivingLicenseComponent implements OnInit {
     if (files.length === 0) {
       return;
     }
-    let fileToUpload = <File>files[0];
+    let fileToUpload: Array<any> = files;
 
-    this.formData.append('fileToUpload', fileToUpload, fileToUpload.name);
+    console.log(fileToUpload);
+    for (let item of fileToUpload) {
+      this.formData.append('fileToUpload', item, item.name);
+    }
     console.log(this.formData);
   }
   sanitizeImageUrl(imageUrl: string): SafeUrl {
@@ -31,8 +33,7 @@ export class RequestDrivingLicenseComponent implements OnInit {
     this.http.post('https://localhost:6001/api/User/license', this.formData)
       .subscribe({
         next: (event: any) => {
-          this.imgData = event.res as string;
-          console.log(this.imgData);
+          console.log(event);
         },
         error: (err: HttpErrorResponse) => console.log(err)
       });

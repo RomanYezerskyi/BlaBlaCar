@@ -15,16 +15,18 @@ export class RolesComponent implements OnInit {
   isCheckedName = '';
   rolesList: Array<RoleModel> = [];
   userEmail = '';
-  searchUser:UserModel = { id:'', email:'',firstName:'',phoneNumber:'', roles:[], drivingLicense:'', 
-  userStatus:UserStatus.WithoutCar, cars:[]};
+  searchUser: UserModel = {
+    id: '', email: '', firstName: '', phoneNumber: '', roles: [], userDocuments: [],
+    userStatus: UserStatus.WithoutCar, cars: []
+  };
   constructor(private http: HttpClient, private router: Router) { }
 
   ngOnInit(): void {
     this.getAllRoles();
-    
+
   }
-  getAllRoles =  () => {
-    const url ='https://localhost:5001/api/User/roles'
+  getAllRoles = () => {
+    const url = 'https://localhost:5001/api/User/roles'
     this.http.get(url)
       .subscribe({
         next: (res) => {
@@ -34,8 +36,8 @@ export class RolesComponent implements OnInit {
         error: (err: HttpErrorResponse) => console.error(err),
       })
   }
-  getUser = (form:NgForm) => {
-    const url ='https://localhost:5001/api/User/'
+  getUser = (form: NgForm) => {
+    const url = 'https://localhost:5001/api/User/'
     this.http.get(url + this.userEmail)
       .subscribe({
         next: (res: any) => {
@@ -46,11 +48,11 @@ export class RolesComponent implements OnInit {
         error: (err: HttpErrorResponse) => console.error(err),
       })
   }
- 
-  changeRole(e:any, role:string, userId:string){       
+
+  changeRole(e: any, role: string, userId: string) {
     this.isCheckedName = role;
-    const data = {roleName: role, userId: userId};
-    const url ='https://localhost:5001/api/User/'
+    const data = { roleName: role, userId: userId };
+    const url = 'https://localhost:5001/api/User/'
     this.http.post(url, data)
       .subscribe({
         next: (res: any) => {

@@ -2,10 +2,10 @@
 
 <div class="row" style="margin-bottom:15px;">
     <div class="col-md-3">
-        <input type="file" #file placeholder="Choose file" (change)="uploadFile(file.files)">
+        <input type="file" #file placeholder="Choose file" (change)="uploadFile(file.files)" multiple>
         <button type="button" class="btn btn-success" (click)="addLicense()">Upload File</button>
     </div>
-    <img [src]=" sanitizeImageUrl(imgData)" style="width: 20%;" alt="Image Review">
+    <img [src]="" style="width: 20%;" alt="Image Review">
     <!-- <label for="file">Select File
     <img [src]="imageUrl" style="width: 20%;" alt="Image Review">
 </label>

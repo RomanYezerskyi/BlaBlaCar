@@ -16,13 +16,13 @@ namespace BlaBlaCar.API.Controllers
             _userService = userService;
         }
         [HttpPost("license")]
-        public async Task<IActionResult> AddDrivingLicense(IFormFile fileToUpload)
+        public async Task<IActionResult> AddDrivingLicense(IEnumerable<IFormFile> fileToUpload)
         {
             try
             {
                 if (fileToUpload is null)
                     return BadRequest();
-                var res = await _userService.RequestForCar(User, fileToUpload);
+                var res = await _userService.RequestForDrivingLicense(User, fileToUpload);
                 if (res != null) return Ok(new {res} );
                 return BadRequest("Fail");
             }
