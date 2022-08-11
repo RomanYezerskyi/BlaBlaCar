@@ -16,7 +16,7 @@ export class RolesComponent implements OnInit {
   rolesList: Array<RoleModel> = [];
   userEmail = '';
   searchUser: UserModel = {
-    id: '', email: '', firstName: '', phoneNumber: '', roles: [], userDocuments: [],
+    id: '', email: '', firstName: '', phoneNumber: '', roles: [], userDocuments: [] = [],
     userStatus: UserStatus.WithoutCar, cars: []
   };
   constructor(private http: HttpClient, private router: Router) { }

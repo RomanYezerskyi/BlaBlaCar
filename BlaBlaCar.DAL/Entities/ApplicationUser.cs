@@ -18,5 +18,6 @@ namespace BlaBlaCar.DAL.Entities
         public ICollection<UserDocuments> UserDocuments { get; set; }
         public ICollection<Car> Cars { get; set; }
         public ICollection<Trip> Trips { get; set; }
+        public ICollection<TripUser> TripUsers { get; set; }
     }
 }

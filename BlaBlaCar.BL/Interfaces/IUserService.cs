@@ -12,7 +12,7 @@ namespace BlaBlaCar.BL.Interfaces
 {
     public interface IUserService
     {
-        Task<UserModel> GetUserAsync(int id);
+        Task<UserModel> GetUserInformationAsync(ClaimsPrincipal claimsPrincipal);
         Task<IEnumerable<UserModel>> GetUsersAsync();
         Task<IEnumerable<UserModel>> SearchUsersAsync(UserModel model);
         Task<bool> RequestForDrivingLicense(ClaimsPrincipal principal, IEnumerable<IFormFile> drivingLicense);
