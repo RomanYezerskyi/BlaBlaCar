@@ -1,13 +1,149 @@
-.container{
-    margin-top: 56px;
+.search-inputs {
+    margin-top: 1rem;
+    border: 1px #000 solid;
+    width: 50%;
+    margin: 1rem auto;
+    padding: 49px 55px;
+    padding-bottom: 70px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
 }
-.search-inputs{
+
+.other {
     display: flex;
-    justify-content: center;
-    // background-color: #34375b;
-    padding: 50px;
-    border-radius: 50px;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
-input{
+
+.input__item {
+    background-color: white;
+    position: relative;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    display: flex;
+}
+
+.place .input__item {
+    border: 1px #000 solid;
+    padding: 10px 20px;
+    padding-right: 60px;
+}
+
+.input__item .input {
+    font-size: 18px;
+    padding: 19px 0;
+    color: #666;
+    font-family: inherit;
+    outline: none;
+    margin: 0;
+    border: none;
+    box-shadow: none;
+    width: 100%;
+}
+
+label {
+    font-size: 18px;
+    color: #333;
+    text-transform: capitalize;
+    display: block;
+    font-weight: 700;
+    white-space: nowrap;
+    margin: auto;
+    margin-right: 30px;
+}
+
+.search_icon {
+    position: absolute;
+    font-size: 36px;
+    color: #ccc;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 37px;
+    height: 33px;
+}
+
+.counter {
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+
+    .add_icon,
+    .remove_icon,
+    .counter_value {
+        margin: auto;
+    }
+
+    .counter_value {
+        width: 30px;
+        text-align: center;
+    }
+
+    .add_icon,
+    .remove_icon {
+        border: 1px #000 solid;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+}
+
+.other .input__item {
+    padding: 10px 20px;
+    padding-right: 60px;
+    height: 50px;
+    min-width: 250px;
+}
+
+.other .input {
+    font-size: 14px;
+    padding: 0;
+}
+
+.btn {
+    border: none;
+    border-radius: 10px;
+}
+
+.search {
+    width: 100%;
+    margin: auto;
+}
+
+.btn__search {
+    width: 100%;
     padding: 10px;
+    font-size: 20px;
+    color: white;
+    text-transform: capitalize;
+    display: block;
+    font-weight: 700;
+    white-space: nowrap;
+    margin: auto;
+    background-color: teal;
+}
+
+.btn__search:hover {
+    transform: translateY(-1px);
+}
+
+/**/
+
+.search_results {
+    width: 50%;
+    margin: auto;
+    border: #000 1px solid;
+    padding: 49px 55px;
+    padding-bottom: 70px;
+    border-radius: 10px;
+}
+
+.header {
+    display: flex;
+
+    .line {
+        border: 1px #000 solid;
+        height: 100px;
+    }
 }
