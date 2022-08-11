@@ -13,6 +13,7 @@ using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders.Physical;
 
 namespace BlaBlaCar.BL.Services
@@ -29,9 +30,17 @@ namespace BlaBlaCar.BL.Services
             _mapper = mapper;
             _fileService = fileService;
         }
-        public Task<UserModel> GetUserAsync(int id)
+        public async Task<UserModel> GetUserInformationAsync(ClaimsPrincipal claimsPrincipal)
         {
-            throw new NotImplementedException();
+            var userId = claimsPrincipal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value;
+            if (userId == null) throw new Exception("User no found!");
+            var user = _mapper.Map<UserModel>(
+               await _unitOfWork.Users.GetAsync(x=>x.Include(i=>i.Cars)
+                                                    .ThenInclude(i=>i.CarDocuments)
+                                                    .Include(i=>i.UserDocuments), 
+                   u=>u.Id == userId)
+            );
+            return user;
         }
 
         public Task<IEnumerable<UserModel>> GetUsersAsync()

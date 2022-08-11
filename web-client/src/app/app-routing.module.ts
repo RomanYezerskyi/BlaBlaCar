@@ -18,6 +18,7 @@ import { UsersRequestsComponent } from './components/admin-page/users-requests/u
 import { UserRequestInfoComponent } from './components/admin-page/user-request-info/user-request-info.component';
 import { PendingComponent } from './components/admin-page/users-requests/pending/pending.component';
 import { MainInfoComponent } from './components/admin-page/user-request-info/main-info/main-info.component';
+import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -59,6 +60,7 @@ const routes: Routes = [
   },
   { path: 'add-car', component: AddCarComponent, canActivate: [AuthGuard] },
   { path: 'driving', component: RequestDrivingLicenseComponent, canActivate: [AuthGuard] },
+  { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] },
 
 
 ];

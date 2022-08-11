@@ -33,6 +33,7 @@ import { PendingComponent } from './components/admin-page/users-requests/pending
 import { MainInfoComponent } from './components/admin-page/user-request-info/main-info/main-info.component';
 import { DrivingLicenseRequestComponent } from './components/admin-page/user-request-info/driving-license-request/driving-license-request.component';
 import { CarRequestsComponent } from './components/admin-page/user-request-info/car-requests/car-requests.component';
+import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -60,6 +61,7 @@ export function tokenGetter() {
     MainInfoComponent,
     DrivingLicenseRequestComponent,
     CarRequestsComponent,
+    UserProfileComponent,
 
 
   ],

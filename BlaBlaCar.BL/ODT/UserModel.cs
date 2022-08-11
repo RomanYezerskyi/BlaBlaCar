@@ -14,5 +14,6 @@ namespace BlaBlaCar.BL.ODT
         public ICollection<UserDocumentsModel> UserDocuments { get; set; }
         public ICollection<CarModel> Cars { get; set; }
         public ICollection<TripModel> Trips { get; set; }
+        public ICollection<TripUserModel> TripUsers { get; set; }
     }
 }
