@@ -1,5 +1,6 @@
 import { AvailableSeatsModel } from "./available-seats";
 import { CarModel } from "./car";
+import { UserModel } from "./user-model";
 
 export interface TripModel {
     id: number;
@@ -10,7 +11,8 @@ export interface TripModel {
     pricePerSeat: number;
     description: string;
     countOfSeats: number;
-    userId:string;
-    availableSeats: AvailableSeatsModel[]; 
+    userId: string;
+    availableSeats: AvailableSeatsModel[];
     car: CarModel
+    user?: UserModel;
 }

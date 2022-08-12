@@ -36,30 +36,43 @@
     </div>
   </form>
 
-  <div class="search_results">
+  <div class="search_results" *ngIf="data.length > 0">
     <!-- <div *ngFor="let item of data" (click)="navigateToTripPage(item.id)">
       {{item}}
     </div> -->
-    <div class="search_item">
-      <div class="header">
-        <div class="time">
-          <p>08:00</p>
-          <p>15:00</p>
-        </div>
-        <div class="line">
-        </div>
-        <div class="cities">
-          <div class="start">
-            <mat-icon>gps_fixed</mat-icon>
-            <p>Lviv</p>
-          </div>
-          <div class="destination">
-            <mat-icon> place</mat-icon>
-            <p>Kyiv</p>
-          </div>
-        </div>
-        <div class="price">
+    <div class="filters">
 
+    </div>
+    <div class="items">
+      <div class="search_item" *ngFor="let item of data" (click)="navigateToTripPage(item.id)">
+        <div class="header">
+          <div class="time">
+            <p>{{item.startTime | date:'mm:ss'}}</p>
+            <p>{{item.endTime | date:'mm:ss'}}</p>
+          </div>
+          <div class="line">
+          </div>
+          <div class="price_item">
+            <div class="cities">
+              <div class="start">
+                <mat-icon class="item_icon">gps_fixed</mat-icon>
+                <p>{{item.startPlace}}</p>
+              </div>
+              <div class="destination">
+                <mat-icon class="item_icon"> place</mat-icon>
+                <p>{{item.endPlace}}</p>
+              </div>
+            </div>
+            <div class="price">
+              <p>{{item.pricePerSeat | currency:"UAH":"symbol"}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="body">
+          <div class="profile_img">
+            <img src="../../../../assets/images/user.png" class="img" alt="">
+          </div>
+          <p class="user_name">{{item.user?.firstName}}</p>
         </div>
       </div>
     </div>

@@ -62,7 +62,9 @@ namespace BlaBlaCar.BL.Services.TripServices
         {
 
             var trip = await _unitOfWork.Trips.GetAsync(null,
-                x => x.Include(x => x.AvailableSeats).Include(x => x.TripUsers),
+                x => x.Include(x => x.AvailableSeats)
+                                                .Include(x => x.TripUsers)
+                                                .Include(x=>x.User),
                 x => x.StartPlace.Contains(model.StartPlace) && x.StartTime >= model.StartTime);
 
 
