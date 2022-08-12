@@ -12,7 +12,7 @@ import { UserStatus } from 'src/app/interfaces/user-status';
 export class UserProfileComponent implements OnInit {
   user: UserModel = {
     id: '', email: '', firstName: '', phoneNumber: '',
-    roles: [], cars: [] = [], userDocuments: [] = [], userStatus: -1, trips: [] = [], userTrips: [] = []
+    roles: [], cars: [] = [], userDocuments: [] = [], userStatus: -1, trips: [], tripUsers: []
   };
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -25,7 +25,7 @@ export class UserProfileComponent implements OnInit {
       .subscribe({
         next: (res: any) => {
           this.user = res as UserModel;
-          console.log(this.user);
+          console.log(res);
         },
         error: (err: HttpErrorResponse) => console.error(err),
       });

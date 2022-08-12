@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Router, RouterModule, Routes } from '@angular/router';
 import { AddTripComponent } from './components/user/add-trip-layout/add-trip/add-trip.component';
-import { DialogBookingConfirmationComponent } from './components/user/dialog-booking-confirmation/dialog-booking-confirmation.component';
+import { DialogBookingConfirmationComponent } from './components/user/trip-page-info/dialog-booking-confirmation/dialog-booking-confirmation.component';
 import { HomeComponent } from './components/user/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -27,7 +27,6 @@ const routes: Routes = [
   { path: 'search', component: SearchTripComponent },
 
   { path: 'trip-page-info/:id', component: TripPageInfoComponent, canActivate: [AuthGuard] },
-  // { path: '', component: DialogBookingConfirmationComponent, canActivate: [AuthGuard] },
   { path: 'home', component: HomeComponent  /*, canActivate: [AuthGuard]*/ },
 
   {

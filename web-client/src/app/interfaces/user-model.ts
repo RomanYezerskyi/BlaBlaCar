@@ -14,5 +14,5 @@ export interface UserModel {
     userStatus: UserStatus;
     cars: CarModel[];
     trips?: TripModel[];
-    userTrips?: TripModel[];
+    tripUsers?: TripModel[];
 }

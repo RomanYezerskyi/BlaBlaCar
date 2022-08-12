@@ -2,13 +2,13 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TripModel } from 'src/app/interfaces/trip';
-import { DialogBookingConfirmationComponent } from '../dialog-booking-confirmation/dialog-booking-confirmation.component';
+import { DialogBookingConfirmationComponent } from './dialog-booking-confirmation/dialog-booking-confirmation.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CarModel } from 'src/app/interfaces/car';
 @Component({
 	selector: 'app-trip-page-info',
 	templateUrl: './trip-page-info.component.html',
-	styleUrls: ['./trip-page-info.component.scss']
+	styleUrls: ['./trip-page-info.component.scss', '../search-trip/search-trip.component.scss']
 })
 export class TripPageInfoComponent implements OnInit {
 	private id!: number;
@@ -25,7 +25,8 @@ export class TripPageInfoComponent implements OnInit {
 		description: '',
 		userId: '',
 		availableSeats: [],
-		car: this.carModel
+		car: this.carModel,
+		user: { id: '', cars: [], email: '', firstName: '', phoneNumber: '', roles: [], userDocuments: [], userStatus: -1 }
 	};
 	private readonly url = 'https://localhost:6001/api/Trips/';
 	constructor(private route: ActivatedRoute, private http: HttpClient,

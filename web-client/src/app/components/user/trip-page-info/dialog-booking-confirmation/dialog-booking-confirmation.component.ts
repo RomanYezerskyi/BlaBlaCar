@@ -30,6 +30,7 @@ export class DialogBookingConfirmationComponent implements OnInit {
   };
   requestedSeats = 0;
   bookedtrip: BookedTripModel = { id: 0, bookedSeats: [], requestedSeats: 0, tripId: 0 }
+  toggle = false;
   constructor(
     private dialogRef: MatDialogRef<DialogBookingConfirmationComponent>, private http: HttpClient,
     @Inject(MAT_DIALOG_DATA) data: any,) {
@@ -50,24 +51,28 @@ export class DialogBookingConfirmationComponent implements OnInit {
       headers: new HttpHeaders({ "Content-Type": "application/json" })
     })
       .subscribe({
-        next: (res) => {
-          console.log(res);
+        next: (res: any) => {
+          alert(res.result)
+          this.dialogRef.close();
         },
-        error: (err: HttpErrorResponse) => console.error(err),
+        error: (err: HttpErrorResponse) => {
+          alert(err.error)
+          console.error(err)
+        },
       })
-  }
-  save() {
-    this.dialogRef.close();
   }
   close() {
     this.dialogRef.close();
   }
   bookSeat(seatId: number) {
+
     const seat: SeatModel = { id: seatId, carId: this.trip.car.id, num: 0, tripUsers: [] }
     if (this.bookedtrip.bookedSeats.find(x => x.id == seat.id)) {
       this.bookedtrip.bookedSeats.splice(this.bookedtrip.bookedSeats.indexOf(seat));
       console.log("bbbb " + JSON.stringify(this.bookedtrip));
+      return;
     }
+    if (this.bookedtrip.bookedSeats.length == this.requestedSeats) return;
     else {
       this.bookedtrip.bookedSeats.push(seat);
       console.log("aaaaa " + JSON.stringify(this.bookedtrip));

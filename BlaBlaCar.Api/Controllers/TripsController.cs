@@ -49,6 +49,7 @@ namespace BlaBlaCar.Api.Controllers
                 return BadRequest(e.Message);
             }
         }
+
         [AllowAnonymous]
         [HttpPost("search")]
         public async Task<IActionResult> SearchTrips([FromBody]SearchTripModel tripModel)

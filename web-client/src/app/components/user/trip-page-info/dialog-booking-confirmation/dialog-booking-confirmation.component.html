@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>Choose {{requestedSeats}} places</h2>
+<mat-dialog-content>
+  <div class="box">
+    <div class="seats">
+      <div class="wheel">
+        <img src="../../../../assets/images/wheel.png" class="img__wheel" alt="">
+      </div>
+      <div class="seats_list">
+        <div *ngFor="let item of trip.availableSeats" class="seat_item">
+          <button class="btn seat booked" *ngIf="(item.availableSeatsType == seatType.Booked); else elseItem"
+            (click)="bookSeat(item.seatId)" disabled>
+            {{item.seat.num}}
+          </button>
+          <ng-template #elseItem>
+            <button class="btn seat" (click)="bookSeat(item.seatId)">{{item.seat.num}}</button>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <div class="actions">
+    <button class="btn_action" (click)="close()">Close</button>
+    <button class="btn_action" (click)="confirmBook()">Confirm</button>
+  </div>
+</mat-dialog-actions>

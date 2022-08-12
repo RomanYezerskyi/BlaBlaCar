@@ -32,8 +32,9 @@ namespace BlaBlaCar.BL.Services.TripServices
             var usersBookedTrip = await _unitOfWork.TripUser
                 .GetAsync(null, null, x => x.TripId == id);
             var trip = _mapper.Map<Trip, TripModel>(await _unitOfWork.Trips.GetAsync(
-                                        x => x.Include(
-                                            y => y.AvailableSeats).ThenInclude(x => x.Seat),
+                                        x => x.Include(y => y.AvailableSeats)
+                                                                        .ThenInclude(x => x.Seat)
+                                                                        .Include(x=>x.User),
                                         x => x.Id == id));
             trip.AvailableSeats.Select(x =>
             {
