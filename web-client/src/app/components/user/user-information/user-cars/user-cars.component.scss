@@ -1,0 +1,104 @@
+.container {
+    background-color: white;
+    padding: 20px;
+}
+
+.cars_list {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.status {
+    margin: 5px;
+
+    .material-icons {
+        font-size: 30px;
+        width: 30px;
+        height: 30px;
+        box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%) !important;
+        border-radius: 10px;
+    }
+
+
+}
+
+.car_info {
+
+    .car_num,
+    .car_model {
+        display: flex;
+
+        p {
+            display: inline-block;
+            margin: auto 0;
+            font-size: 15px;
+            font-weight: 600;
+        }
+    }
+
+    .car_icon,
+    .doc_icon {
+        font-size: 30px;
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+    }
+
+    // border: 1px #000 solid;
+    margin-right: 10px;
+    padding: 5px;
+}
+
+.car_trip_info {
+
+    .car_trips,
+    .car_seats {
+        display: flex;
+
+        p {
+            display: inline-block;
+            margin: auto 0;
+            font-size: 15px;
+            font-weight: 600;
+        }
+    }
+
+    .car_directions,
+    .seat_count {
+        font-size: 30px;
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+    }
+
+    // border: 1px #000 solid;
+    margin-right: 10px;
+    padding: 5px;
+}
+
+.line {
+    background-color: #000;
+    border: 1px #000 solid;
+}
+
+.car_documents {
+    display: flex;
+    flex-flow: row wrap;
+
+    .documents_list {
+        margin: 5px;
+        height: 100px;
+        width: 100px;
+        overflow: hidden;
+
+        img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+    }
+}
+
+.actions {
+    right: 0;
+}

@@ -33,7 +33,10 @@ import { PendingComponent } from './components/admin-page/users-requests/pending
 import { MainInfoComponent } from './components/admin-page/user-request-info/main-info/main-info.component';
 import { DrivingLicenseRequestComponent } from './components/admin-page/user-request-info/driving-license-request/driving-license-request.component';
 import { CarRequestsComponent } from './components/admin-page/user-request-info/car-requests/car-requests.component';
-import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
+import { UserProfileComponent } from './components/user/user-information/user-profile/user-profile.component';
+import { UserBookedTripsComponent } from './components/user/user-information/user-booked-trips/user-booked-trips.component';
+import { UserInformationComponent } from './components/user/user-information/user-information.component';
+import { UserCarsComponent } from './components/user/user-information/user-cars/user-cars.component';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -62,6 +65,10 @@ export function tokenGetter() {
     DrivingLicenseRequestComponent,
     CarRequestsComponent,
     UserProfileComponent,
+    UserBookedTripsComponent,
+    UserInformationComponent,
+    UserCarsComponent,
+
 
 
   ],

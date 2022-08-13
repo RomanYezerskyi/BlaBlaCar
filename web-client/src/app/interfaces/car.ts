@@ -2,6 +2,7 @@ import { CarType } from "../enums/car-type";
 import { CarDocuments } from "./car-documents";
 import { CarStatus } from "./car-status";
 import { SeatModel } from "./seat";
+import { TripModel } from "./trip";
 
 export interface CarModel {
     id: number;
@@ -11,4 +12,5 @@ export interface CarModel {
     seats: SeatModel[];
     carDocuments: CarDocuments[]
     carStatus: CarStatus;
+    trips?: TripModel[]
 }

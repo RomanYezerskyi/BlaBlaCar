@@ -35,11 +35,11 @@ namespace BlaBlaCar.BL.Services
             var userId = claimsPrincipal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value;
             if (userId == null) throw new Exception("User no found!");
             var user = _mapper.Map<UserModel>(
-               await _unitOfWork.Users.GetAsync(x=>x.Include(i=>i.Cars)
-                                                    .ThenInclude(i=>i.CarDocuments)
-                                                    .Include(i=>i.UserDocuments)
-                                                    .Include(x=>x.TripUsers), 
-                   u=>u.Id == userId)
+                await _unitOfWork.Users.GetAsync(x => x.Include(i => i.Cars)
+                        .ThenInclude(i => i.CarDocuments)
+                        .Include(i => i.UserDocuments)
+                        .Include(x => x.TripUsers),
+                    u => u.Id == userId)
             );
             return user;
         }

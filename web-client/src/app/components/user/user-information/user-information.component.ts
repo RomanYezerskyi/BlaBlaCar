@@ -2,14 +2,13 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserModel } from 'src/app/interfaces/user-model';
-import { UserStatus } from 'src/app/interfaces/user-status';
 
 @Component({
-  selector: 'app-user-profile',
-  templateUrl: './user-profile.component.html',
-  styleUrls: ['./user-profile.component.scss']
+  selector: 'app-user-information',
+  templateUrl: './user-information.component.html',
+  styleUrls: ['./user-information.component.scss']
 })
-export class UserProfileComponent implements OnInit {
+export class UserInformationComponent implements OnInit {
   user: UserModel = {
     id: '', email: '', firstName: '', phoneNumber: '',
     roles: [], cars: [] = [], userDocuments: [] = [], userStatus: -1, trips: [], tripUsers: []
@@ -30,5 +29,4 @@ export class UserProfileComponent implements OnInit {
         error: (err: HttpErrorResponse) => console.error(err),
       });
   }
-
 }
