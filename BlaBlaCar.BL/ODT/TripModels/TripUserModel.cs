@@ -1,4 +1,5 @@
-﻿using BlaBlaCar.DAL.Entities;
+﻿using BlaBlaCar.BL.ODT.CarModels;
+using BlaBlaCar.DAL.Entities;
 
 namespace BlaBlaCar.BL.ODT.TripModels
 {
@@ -8,8 +9,8 @@ namespace BlaBlaCar.BL.ODT.TripModels
         public string UserId { get; set; }
         public UserModel User { get; set; }
         public Guid SeatId { get; set; }
-        public Seat Seat { get; set; }
+        public SeatModel Seat { get; set; }
         public Guid TripId { get; set; }
-        public Trip Trip { get; set; }
+        public TripModel Trip { get; set; }
     }
 }

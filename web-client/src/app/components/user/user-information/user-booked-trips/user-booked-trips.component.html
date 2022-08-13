@@ -1,7 +1,46 @@
 <div class="container">
-    <div class="trip" *ngFor="let trip of user.tripUsers">
-        {{trip.id}}
+    <div class="search_results" *ngIf="trips.length > 0">
+        <div class="items">
+            <div class="search_item" *ngFor="let item of trips">
+                <div class="header">
+                    <div class="body">
+                        <div class="profile_img">
+                            <img src="../../../../assets/images/user.png" class="img" alt="">
+                        </div>
+                        <p class="user_name">{{item.user?.firstName}}</p>
+                    </div>
+                    <div class="time">
+                        <p>{{item.startTime | date:'MMM d, y, h:mm a'}}</p>
+                        <p>{{item.endTime | date:'MMM d, y, h:mm a'}}</p>
+                    </div>
+                    <div class="line">
+                    </div>
+                    <div class="price_item">
+                        <div class="cities">
+                            <div class="start">
+                                <mat-icon class="item_icon">gps_fixed</mat-icon>
+                                <p>{{item.startPlace}}</p>
+                            </div>
+                            <div class="destination">
+                                <mat-icon class="item_icon"> place</mat-icon>
+                                <p>{{item.endPlace}}</p>
+                            </div>
+                        </div>
+                        <div class="price">
+                            <p>{{item.pricePerSeat | currency:"UAH":"symbol"}}</p>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <i class="material-icons" (click)="deleteBookedTrip(item.tripUsers)">cancel</i>
+                    </div>
+                </div>
+                <div class="bookedSeats">
+                    <p class="title">You have booked seats:</p>
+                    <p *ngFor="let tripUser of item.tripUsers" class="seatNum">
+                        {{tripUser.seat.num}}
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
-
-
 </div>

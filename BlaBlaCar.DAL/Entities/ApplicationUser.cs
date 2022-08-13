@@ -14,6 +14,7 @@ namespace BlaBlaCar.DAL.Entities
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public string? FirstName { get; set; }
+        public string UserImg { get; set; }
         public Status UserStatus { get; set; }
         public ICollection<UserDocuments> UserDocuments { get; set; }
         public ICollection<Car> Cars { get; set; }

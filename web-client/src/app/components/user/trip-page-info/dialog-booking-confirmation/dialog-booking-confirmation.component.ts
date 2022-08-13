@@ -26,7 +26,8 @@ export class DialogBookingConfirmationComponent implements OnInit {
     description: '',
     userId: '',
     availableSeats: [],
-    car: this.carModel
+    car: this.carModel,
+    tripUsers: []
   };
   requestedSeats = 0;
   bookedtrip: BookedTripModel = { id: 0, bookedSeats: [], requestedSeats: 0, tripId: 0 }

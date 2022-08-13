@@ -16,6 +16,6 @@ namespace BlaBlaCar.BL.Interfaces
         //Task<IEnumerable<BookedTripModel>> GetBookedTripsAsync(BookedTripModel model);
         Task<bool> AddBookedTripAsync(AddNewBookTrip tripModel, ClaimsPrincipal principal);
         //Task<bool> UpdateBookedTripAsync(BookedTripModel tripModel);
-        //Task<bool> DeleteBookedTripAsync(int id);
+        Task<bool> DeleteBookedTripAsync(IEnumerable<TripUserModel> tripUserModel);
     }
 }

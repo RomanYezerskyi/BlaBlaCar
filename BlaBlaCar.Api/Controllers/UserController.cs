@@ -45,6 +45,20 @@ namespace BlaBlaCar.API.Controllers
                 return BadRequest(e.Message);
             }
         }
+        [HttpGet("trips")]
+        public async Task<IActionResult> GerUserTrips()
+        {
+            try
+            {
+                var res = await _userService.GetUserTripsAsync(User);
+                if (res != null) return Ok(res);
+                return BadRequest("Fail");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
     }
 }

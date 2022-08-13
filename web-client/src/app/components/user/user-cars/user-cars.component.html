@@ -1,0 +1,45 @@
+<div class="wrapper">
+    <div class="container">
+        <div class="cars_list" *ngFor="let car of user.cars">
+            <div class="status">
+                <i *ngIf="car.carStatus == carStatus.Confirmed" class="material-icons">verified</i>
+                <i *ngIf="car.carStatus == carStatus.Pending" class="material-icons">pending_actions</i>
+                <i *ngIf="car.carStatus == carStatus.Rejected " class="material-icons">block</i>
+                <i *ngIf="car.carStatus == carStatus.NeedMoreData " class="material-icons">thumbs_up_down</i>
+            </div>
+            <div class="fisrt_part">
+                <div class="car_info">
+                    <div class="car_model">
+                        <mat-icon class="car_icon"> directions_car</mat-icon>
+                        <p>{{car.modelName}}</p>
+                    </div>
+                    <hr class="line" />
+                    <div class="car_num">
+                        <i class="material-icons doc_icon">wysiwyg</i>
+                        <p>{{car.registNum}}</p>
+                    </div>
+                </div>
+                <div class="car_trip_info">
+                    <div class="car_seats">
+                        <i class="material-icons seat_count">airline_seat_recline_normal</i>
+                        <p>{{car.seats.length}}</p>
+                    </div>
+                    <hr class="line" />
+                    <div class="car_trips">
+                        <i class="material-icons car_directions">directions</i>
+                        <p>{{car.trips?.length}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="car_documents">
+                <div class="documents_list" *ngFor="let doc of car.carDocuments">
+                    <img [src]="sanitaizeImg(doc.techPassport)" alt="">
+                </div>
+            </div>
+            <div class="actions">
+                <i class="material-icons actions_btn">edit</i>
+                <i class="material-icons  actions_btn">delete</i>
+            </div>
+        </div>
+    </div>
+</div>

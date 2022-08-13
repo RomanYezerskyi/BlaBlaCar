@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.BL.ODT;
+using BlaBlaCar.BL.ODT.TripModels;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
@@ -38,7 +39,8 @@ namespace BlaBlaCar.BL.Services
                 await _unitOfWork.Users.GetAsync(x => x.Include(i => i.Cars)
                         .ThenInclude(i => i.CarDocuments)
                         .Include(i => i.UserDocuments)
-                        .Include(x => x.TripUsers),
+                        .Include(x => x.TripUsers)
+                        .Include(x=>x.Trips),
                     u => u.Id == userId)
             );
             return user;
@@ -52,6 +54,17 @@ namespace BlaBlaCar.BL.Services
         public Task<IEnumerable<UserModel>> SearchUsersAsync(UserModel model)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<TripModel>> GetUserTripsAsync(ClaimsPrincipal claimsPrincipal)
+        {
+            var userId = claimsPrincipal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value;
+
+            var trip = _mapper.Map<IEnumerable<TripModel>>( await _unitOfWork.Trips.GetAsync(x=>x.OrderByDescending(x=>x.StartTime), x=>
+                    x.Include(x=>x.TripUsers.Where(x=>x.userId == userId)).ThenInclude(x=>x.Seat), 
+                x => x.TripUsers
+                .Any(x => x.userId == userId)));
+            return trip;
         }
 
         public async Task<bool> RequestForDrivingLicense(ClaimsPrincipal principal, IEnumerable<IFormFile> drivingLicense)

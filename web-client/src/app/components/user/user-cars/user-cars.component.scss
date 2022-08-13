@@ -1,15 +1,36 @@
+.wrapper {
+    width: 80%;
+    margin: auto;
+    padding: 1.5rem;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+}
+
 .container {
-    background-color: white;
+    background-color: rgb(0 0 0 / 50%);
     padding: 20px;
+    border-radius: 10px;
+
 }
 
 .cars_list {
+    width: 80%;
+    margin: auto;
     display: flex;
     flex-flow: row wrap;
+    margin-bottom: 40px;
+    background-color: #f7fafc;
+    border-radius: 10px;
+    position: relative;
+}
+
+.fisrt_part {
+    display: flex;
+    margin-left: 7%;
 }
 
 .status {
     margin: 5px;
+    margin-left: 4%;
 
     .material-icons {
         font-size: 30px;
@@ -45,6 +66,7 @@
     }
 
     // border: 1px #000 solid;
+    margin: auto 0;
     margin-right: 10px;
     padding: 5px;
 }
@@ -72,6 +94,7 @@
     }
 
     // border: 1px #000 solid;
+    margin: auto 0;
     margin-right: 10px;
     padding: 5px;
 }
@@ -83,13 +106,16 @@
 
 .car_documents {
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row;
+    margin: auto 0;
+    margin-left: 15%;
 
     .documents_list {
         margin: 5px;
-        height: 100px;
-        width: 100px;
+        height: 80px;
+        width: 80px;
         overflow: hidden;
+        border-radius: 10px;
 
         img {
             height: 100%;
@@ -100,5 +126,21 @@
 }
 
 .actions {
-    right: 0;
+    right: 6%;
+    top: 50%;
+    transform: translateY(-50%);
+    position: absolute;
+    display: flex;
+    flex-flow: column;
+    margin: auto 0;
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%) !important;
+    border-radius: 10px;
+
+    .actions_btn {
+        cursor: pointer;
+    }
+
+    .actions_btn:first-child {
+        margin-bottom: 15px;
+    }
 }

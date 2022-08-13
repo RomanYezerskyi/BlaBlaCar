@@ -16,7 +16,7 @@ export class UserInformationComponent implements OnInit {
   constructor(private http: HttpClient, private router: Router) { }
 
   ngOnInit(): void {
-    this.getUser();
+    // this.getUser();
   }
   getUser = () => {
     const url = 'https://localhost:6001/api/User';

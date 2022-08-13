@@ -9,6 +9,7 @@ export interface UserModel {
     email: string;
     firstName: string;
     phoneNumber: string;
+    userImg?: string
     roles: any[];
     userDocuments: UserDocuments[];
     userStatus: UserStatus;

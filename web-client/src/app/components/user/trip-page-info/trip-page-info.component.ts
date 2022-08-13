@@ -26,6 +26,7 @@ export class TripPageInfoComponent implements OnInit {
 		userId: '',
 		availableSeats: [],
 		car: this.carModel,
+		tripUsers: [],
 		user: { id: '', cars: [], email: '', firstName: '', phoneNumber: '', roles: [], userDocuments: [], userStatus: -1 }
 	};
 	private readonly url = 'https://localhost:6001/api/Trips/';

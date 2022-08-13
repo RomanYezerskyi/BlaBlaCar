@@ -15,15 +15,12 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
 
         private readonly IMapper _mapper;
 
-        private readonly IBookedSeatsService _bookedSeatsService;
-
         private readonly IUserService _userService;
 
-        public BookedTripsService(IUnitOfWork unitOfWork, IMapper mapper, IBookedSeatsService bookedSeatsService, IUserService userService)
+        public BookedTripsService(IUnitOfWork unitOfWork, IMapper mapper,IUserService userService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _bookedSeatsService = bookedSeatsService;
             _userService = userService;
         }
 
@@ -58,99 +55,12 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
             return await _unitOfWork.SaveAsync();
         }
 
-
-        //public async Task<BookedTripModel> GetBookedTripAsync(int id)
-
-        //{
-
-        //    //var bookedTrip =
-
-        //    //    _mapper.Map<BookedTrip, BookedTripModel>(await _unitOfWork.BookedTrips.GetAsync(null, x => x.Id == id));
-
-        //    //return bookedTrip;
-
-        //    throw new NotImplementedException();
-
-        //}
-
-
-        //public async Task<IEnumerable<BookedTripModel>> GetBookedTripsAsync()
-
-        //{
-
-        //    //var bookedTrip =
-
-        //    //    _mapper.Map<IEnumerable<BookedTrip>, IEnumerable<BookedTripModel>>
-
-        //    //        (await _unitOfWork.BookedTrips.GetAsync(null, null,null));
-
-        //    //return bookedTrip;
-
-        //    throw new NotImplementedException();
-
-        //}
-
-
-        //public Task<IEnumerable<BookedTripModel>> GetBookedTripsAsync(BookedTripModel model)
-
-        //{
-
-        //    throw new NotImplementedException();
-
-        //}
-
-
-        //        //var res = await _bookedSeatsService.AddTripSeatsAsync(tripModel);
-
-        //        //if (!res) throw new Exception("Something went wrong with booked seats");
-
-
-        //    }
-
-
-        //    throw new Exception("Incorrect trip data!");
-
-        //}
-
-
-        //public async Task<bool> UpdateBookedTripAsync(BookedTripModel tripModel)
-
-        //{
-
-        //    //if (tripModel != null)
-
-        //    //{
-
-        //    //    var trip = _mapper.Map<BookedTripModel, BookedTrip>(tripModel);
-
-        //    //    _unitOfWork.BookedTrips.Update(trip);
-
-
-        //    //    return await _unitOfWork.SaveAsync();
-
-
-        //    //}
-
-
-        //    return false;
-
-        //}
-
-
-        //public async Task<bool> DeleteBookedTripAsync(int id)
-
-        //{
-
-        //    //var trip = await _unitOfWork.BookedTrips.GetAsync(includes: null, filter: x => x.Id == id);
-
-        //    //if (trip == null) throw new Exception("No information about this trip! Trip cannot be deleted!");
-
-        //    //_unitOfWork.BookedTrips.Delete(trip);
-
-        //    //return await _unitOfWork.SaveAsync();
-
-        //    throw new NotImplementedException();
-
-        //}
+        public async Task<bool> DeleteBookedTripAsync(IEnumerable<TripUserModel> tripUserModel)
+        {
+            var trip = _mapper.Map<IEnumerable<TripUserModel>>(await _unitOfWork.TripUser.GetAsync(null,null, x => tripUserModel.Any(y=>y.Id == x.Id)));
+            if (trip == null) throw new Exception("Trip not found");
+            _unitOfWork.TripUser.Delete(_mapper.Map<IEnumerable<TripUser>>(trip));
+            return await _unitOfWork.SaveAsync();
+        }
     }
 }

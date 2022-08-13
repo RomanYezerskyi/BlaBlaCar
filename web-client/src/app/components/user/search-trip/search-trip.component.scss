@@ -12,7 +12,7 @@
 .other {
     display: flex;
     flex-flow: row wrap;
-    justify-content: space-between;
+    justify-content: space-around;
     flex-wrap: wrap;
 }
 
@@ -67,7 +67,7 @@ label {
 .counter {
     width: 100%;
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row;
     justify-content: center;
 
     .add_icon,
@@ -93,7 +93,8 @@ label {
     padding: 10px 20px;
     padding-right: 60px;
     height: 50px;
-    min-width: 250px;
+    min-width: 35%;
+    width: 35%;
 }
 
 .other .input {

@@ -1,7 +1,8 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TripModel } from 'src/app/interfaces/trip';
+import { TripUserModel } from 'src/app/interfaces/trip-user-model';
 import { UserModel } from 'src/app/interfaces/user-model';
 
 @Component({
@@ -10,35 +11,59 @@ import { UserModel } from 'src/app/interfaces/user-model';
   styleUrls: ['./user-booked-trips.component.scss']
 })
 export class UserBookedTripsComponent implements OnInit {
-  @Input() user: UserModel = {
-    id: '', email: '', firstName: '', phoneNumber: '',
-    roles: [], cars: [] = [], userDocuments: [] = [], userStatus: -1, trips: [], tripUsers: []
-  };
-  trips: TripModel[] = [] //{
-  //   id: 0,
-  //   car: {
-  //     id: 0, carDocuments: [], carStatus: -1, carType: -1, modelName: '', registNum: '', seats: []
-  //   },
-  //   availableSeats: [], countOfSeats: 0, description: '', endPlace: '', endTime: new Date(), pricePerSeat: 0, startPlace: '',
-  //   startTime: new Date(), userId: ''
-  // }
+  trips: TripModel[] = [];
   constructor(private http: HttpClient, private router: Router) { }
 
   ngOnInit(): void {
+    this.getUserBookedTrips();
   }
 
-  getUser = () => {
-    const url = 'https://localhost:6001/api/User';
-    this.user.tripUsers?.forEach(trip => {
-      this.http.get(url)
-        .subscribe({
-          next: (res: any) => {
-            this.trips.push(res as TripModel);
-            console.log(res);
-          },
-          error: (err: HttpErrorResponse) => console.error(err),
-        });
-    })
+  getUserBookedTrips = () => {
+    const url = 'https://localhost:6001/api/User/trips';
+    this.http.get(url)
+      .subscribe({
+        next: (res: any) => {
+          this.trips = res as TripModel[];
+          console.log(this.trips);
+        },
+        error: (err: HttpErrorResponse) => console.error(err),
+      });
+
+
+  }
+  deleteBookedTrip = (tripUser: TripUserModel[]) => {
+    const url = 'https://localhost:6001/api/BookedTrip/';
+    console.log(tripUser)
+    const options = {
+      body: {
+        tripUser: JSON.stringify(tripUser)
+      },
+    };
+
+    this.http.delete(url, { body: tripUser })
+      .subscribe({
+        next: (res: any) => {
+          this.trips = res as TripModel[];
+          console.log(this.trips);
+        },
+        error: (err: HttpErrorResponse) => console.error(err),
+      });
+
+
+  }
+  deleteBookedSeat = (id: number) => {
+    console.log(id);
+    const url = 'https://localhost:6001/api/BookedTrip/';
+    let params = new HttpParams();
+    params = params.append('id', id);
+    this.http.delete(url, { params })
+      .subscribe({
+        next: (res: any) => {
+          this.trips = res as TripModel[];
+          console.log(this.trips);
+        },
+        error: (err: HttpErrorResponse) => console.error(err),
+      });
 
 
   }
