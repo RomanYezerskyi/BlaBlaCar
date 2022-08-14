@@ -20,12 +20,12 @@ namespace BlaBlaCar.Api.Controllers
             _tripService = tripService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetTrips()
+        [HttpGet("user-trips")]
+        public async Task<IActionResult> GetUserTrips()
         {
             try
             {
-                var res = await _tripService.GetTripsAsync();
+                var res = await _tripService.GetUserTripsAsync(User);
                 if (res.Any()) return Ok(res);
                 return NoContent();
             }
@@ -36,7 +36,7 @@ namespace BlaBlaCar.Api.Controllers
         }
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTrips(Guid id)
+        public async Task<IActionResult> GetTrip(Guid id)
         {
             try
             {
@@ -49,6 +49,7 @@ namespace BlaBlaCar.Api.Controllers
                 return BadRequest(e.Message);
             }
         }
+
         [AllowAnonymous]
         [HttpPost("search")]
         public async Task<IActionResult> SearchTrips([FromBody]SearchTripModel tripModel)
@@ -96,13 +97,13 @@ namespace BlaBlaCar.Api.Controllers
                 return BadRequest(e.Message);
             }
         }
-        [HttpDelete]
+        [HttpDelete("trip/{id}")]
         public async Task<IActionResult> DeleteTrip(Guid id)
         {
             try
             {
                 var res = await _tripService.DeleteTripAsync(id);
-                if (res) return Ok("Deleted Successfully");
+                if (res) return Ok(new { result="Deleted Successfully"});
                 return BadRequest("Fail");
             }
             catch (Exception e)

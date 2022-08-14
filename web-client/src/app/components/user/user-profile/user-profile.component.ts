@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserModel } from 'src/app/interfaces/user-model';
 import { UserStatus } from 'src/app/interfaces/user-status';
@@ -10,9 +10,9 @@ import { UserStatus } from 'src/app/interfaces/user-status';
   styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
-  user: UserModel = {
+  @Input() user: UserModel = {
     id: '', email: '', firstName: '', phoneNumber: '',
-    roles: [], cars: [] = [], userDocuments: [] = [], userStatus: -1, trips: [] = [], userTrips: [] = []
+    roles: [], cars: [] = [], userDocuments: [] = [], userStatus: -1, trips: [], tripUsers: []
   };
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -25,10 +25,10 @@ export class UserProfileComponent implements OnInit {
       .subscribe({
         next: (res: any) => {
           this.user = res as UserModel;
-          console.log(this.user);
+          console.log(res);
         },
         error: (err: HttpErrorResponse) => console.error(err),
       });
-  }
 
+  }
 }

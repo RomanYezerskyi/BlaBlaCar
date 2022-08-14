@@ -1,38 +1,85 @@
-
-
 <div class="container">
-  
-    <form #searchForm="ngForm" (ngSubmit)="searchData(searchForm)">
-      <h2 class="form-signin-heading">Search</h2>
-        <div *ngIf="invalidForm" class="alert alert-danger">Invalid username or password.</div>
-        <br/>
-        <div class="search-inputs">
-          <div class="input__item">
-          <label for="startPlace" class="sr-only">Start Place</label>
-          <input type="email" id="startPlace" name="startPlace" [(ngModel)]="trip.startPlace" 
-            class="form-control" placeholder="Start place" required >
-          </div>
-          <div class="input__item">
-          <label for="endPlace" class="sr-only">End Place</label>
-          <input type="email" id="endPlace" name="endPlace" [(ngModel)]="trip.endPlace" 
-            class="form-control" placeholder="End place" required >
-          </div>
-          <div class="input__item">
-          <label for="countOfSeats" class="sr-only">Count of Seats</label>
-          <input type="number" id="countOfSeats" name="countOfSeats" min="0" max="" [(ngModel)]="trip.countOfSeats" 
-            class="form-control" placeholder="countOfSeats" required >
-          </div>
-          <div class="input__item">
-          <label for="startTime" class="sr-only">startTime</label>
-          <input type="date" id="startDate" name="searchData" [(ngModel)]="trip.startTime" 
-            class="form-control" placeholder="countOfSeats" required >
-          </div>
-          <button class="btn btn-lg btn-primary" type="submit" [disabled]="!searchForm.valid">Search</button>
+  <form #searchForm="ngForm" (ngSubmit)="searchTrips(searchForm)">
+    <div class="search-inputs">
+      <div class="place">
+        <div class="input__item">
+          <label for="startPlace" class="sr-only">Start Place:</label>
+          <input type="email" id="startPlace" name="startPlace" [(ngModel)]="trip.startPlace" class="input"
+            placeholder="City, region" required>
+          <mat-icon class="search_icon">location_on</mat-icon>
+        </div>
+        <div class="input__item">
+          <label for="endPlace" class="sr-only">End Place:</label>
+          <input type="email" id="endPlace" name="endPlace" [(ngModel)]="trip.endPlace" class="input"
+            placeholder="City, region" required>
+          <mat-icon class="search_icon">search</mat-icon>
+        </div>
       </div>
-    </form>
+      <div class="other">
+        <div class="input__item">
+          <label for="countOfSeats" class="sr-only">Travellers:</label>
+          <div class="counter">
+            <mat-icon class="add_icon" (click)="counterRemove()">remove</mat-icon>
+            <p class="counter_value">{{trip.countOfSeats}}</p>
+            <mat-icon class="remove_icon" (click)="counterAdd()">add</mat-icon>
+          </div>
+        </div>
+        <div class="input__item">
+          <label for="startTime" class="sr-only">Pick Up:</label>
+          <input type="date" id="startDate" name="searchData" [(ngModel)]="trip.startTime" class="input"
+            placeholder="countOfSeats" required>
+        </div>
+      </div>
+      <div class="search">
+        <input type="submit" class="btn btn__search" value="Search" [disabled]="!searchForm.valid">
+      </div>
+    </div>
+  </form>
+
+  <div class="search_results" *ngIf="data.length > 0">
+    <!-- <div *ngFor="let item of data" (click)="navigateToTripPage(item.id)">
+      {{item}}
+    </div> -->
+    <div class="filters">
+
+    </div>
+    <div class="items">
+      <div class="search_item" *ngFor="let item of data" (click)="navigateToTripPage(item.id)">
+        <div class="header">
+          <div class="time">
+            <p>{{item.startTime | date:'mm:ss'}}</p>
+            <p>{{item.endTime | date:'mm:ss'}}</p>
+          </div>
+          <div class="line">
+          </div>
+          <div class="price_item">
+            <div class="cities">
+              <div class="start">
+                <mat-icon class="item_icon">gps_fixed</mat-icon>
+                <p>{{item.startPlace}}</p>
+              </div>
+              <div class="destination">
+                <mat-icon class="item_icon"> place</mat-icon>
+                <p>{{item.endPlace}}</p>
+              </div>
+            </div>
+            <div class="price">
+              <p>{{item.pricePerSeat | currency:"UAH":"symbol"}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="body">
+          <div class="profile_img">
+            <img src="../../../../assets/images/user.png" class="img" alt="">
+          </div>
+          <p class="user_name">{{item.user?.firstName}}</p>
+        </div>
+      </div>
+    </div>
   </div>
+</div>
 
 
-  <div *ngFor="let item of data" (click)="navigateToTripPage(item.id)">
-    {{item}}
-  </div>
+<!-- <div *ngFor="let item of data" (click)="navigateToTripPage(item.id)">
+  {{item}}
+</div> -->

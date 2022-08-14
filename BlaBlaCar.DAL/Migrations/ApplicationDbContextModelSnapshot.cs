@@ -38,6 +38,10 @@ namespace BlaBlaCar.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("UserImg")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("UserStatus")
                         .HasColumnType("int");
 
@@ -267,7 +271,7 @@ namespace BlaBlaCar.DAL.Migrations
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.CarDocuments", b =>
                 {
                     b.HasOne("BlaBlaCar.DAL.Entities.Car", "Car")
-                        .WithMany()
+                        .WithMany("CarDocuments")
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -320,7 +324,7 @@ namespace BlaBlaCar.DAL.Migrations
                         .IsRequired();
 
                     b.HasOne("BlaBlaCar.DAL.Entities.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("TripUsers")
                         .HasForeignKey("userId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -335,7 +339,7 @@ namespace BlaBlaCar.DAL.Migrations
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.UserDocuments", b =>
                 {
                     b.HasOne("BlaBlaCar.DAL.Entities.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("UserDocuments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -347,11 +351,17 @@ namespace BlaBlaCar.DAL.Migrations
                 {
                     b.Navigation("Cars");
 
+                    b.Navigation("TripUsers");
+
                     b.Navigation("Trips");
+
+                    b.Navigation("UserDocuments");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.Car", b =>
                 {
+                    b.Navigation("CarDocuments");
+
                     b.Navigation("Seats");
 
                     b.Navigation("Trips");

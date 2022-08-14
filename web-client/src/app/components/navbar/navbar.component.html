@@ -48,7 +48,7 @@
         <li class="logo" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">BlaBlaCar</a></li>
         <li class="item" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">Home</a></li>
         <li class="item" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">About</a></li>
-        <li class="item" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">Profile2</a></li>
+        <li class="item" [ngClass]="{'': toggle, 'active': !toggle}"><a [routerLink]="['profile']">Profile2</a></li>
         <li class="item button" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">Login</a></li>
         <li class="item button secondary" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">Sing up</a></li>
         <li class="toggle" (click)="change()"><span class="bars"></span></li>

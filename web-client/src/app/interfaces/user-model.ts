@@ -9,10 +9,11 @@ export interface UserModel {
     email: string;
     firstName: string;
     phoneNumber: string;
+    userImg?: string
     roles: any[];
     userDocuments: UserDocuments[];
     userStatus: UserStatus;
     cars: CarModel[];
     trips?: TripModel[];
-    userTrips?: TripModel[];
+    tripUsers?: TripModel[];
 }

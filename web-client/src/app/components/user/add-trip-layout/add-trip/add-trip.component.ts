@@ -14,55 +14,55 @@ import { SeatModel } from 'src/app/interfaces/seat';
   styleUrls: ['./add-trip.component.scss'],
 })
 export class AddTripComponent implements OnInit {
-  message:string | undefined;
+  message: string | undefined;
   invalidForm: boolean | undefined;
-  data:any = []
+  data: any = []
   trip: AddTripModel = {
-    startPlace: 'aaa',
+    startPlace: '',
     endPlace: '',
     startTime: new Date(''),
     endTime: new Date(''),
     pricePerSeat: 0,
     description: '',
     countOfSeats: 0,
-    carId:0,
+    carId: 0,
     availableSeats: []
   };
 
   userCars: CarModel[] | undefined;
-  
-  constructor(private http: HttpClient, private router : Router) { }
+
+  constructor(private http: HttpClient, private router: Router) { }
 
   ngOnInit(): void {
-   
+
     this.getUserCars();
   }
   navigateToAvailableSeats() {
-    this.router.navigate(['add-trip/add-seats'], { state: this.trip});
+    this.router.navigate(['add-trip/add-seats'], { state: this.trip });
   }
 
   getUserCars() {
     this.http.get("https://localhost:6001/api/Car")
-    .subscribe({
-      next: (res) => {
-        this.userCars = res as CarModel[];
-      }
-    });
+      .subscribe({
+        next: (res) => {
+          this.userCars = res as CarModel[];
+        }
+      });
   }
-  
+
   addTrip = (form: NgForm) => {
-    if(form.valid){
-      if(this.userCars === undefined){
+    if (form.valid) {
+      if (this.userCars === undefined) {
         alert("Add cars!");
         return;
       }
-    const url ='https://localhost:6001/api/Trips/'
-     this.http.post(url, this.trip)
-    .subscribe((res)=>{
-      this.data = res
-      console.log(this.data)
-      console.error(res);
-      })
-    } 
+      const url = 'https://localhost:6001/api/Trips/'
+      this.http.post(url, this.trip)
+        .subscribe((res) => {
+          this.data = res
+          console.log(this.data)
+          console.error(res);
+        })
+    }
   }
 }

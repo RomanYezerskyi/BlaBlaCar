@@ -14,7 +14,7 @@ import { AddTripComponent } from './components/user/add-trip-layout/add-trip/add
 import { RegisterComponent } from './components/register/register.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { TripPageInfoComponent } from './components/user/trip-page-info/trip-page-info.component';
-import { DialogBookingConfirmationComponent } from './components/user/dialog-booking-confirmation/dialog-booking-confirmation.component';
+import { DialogBookingConfirmationComponent } from './components/user/trip-page-info/dialog-booking-confirmation/dialog-booking-confirmation.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -34,6 +34,10 @@ import { MainInfoComponent } from './components/admin-page/user-request-info/mai
 import { DrivingLicenseRequestComponent } from './components/admin-page/user-request-info/driving-license-request/driving-license-request.component';
 import { CarRequestsComponent } from './components/admin-page/user-request-info/car-requests/car-requests.component';
 import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
+import { UserBookedTripsComponent } from './components/user/user-information/user-booked-trips/user-booked-trips.component';
+import { UserInformationComponent } from './components/user/user-information/user-information.component';
+import { UserCarsComponent } from './components/user/user-cars/user-cars.component';
+import { UserTripsComponent } from './components/user/user-information/user-trips/user-trips.component';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -62,6 +66,11 @@ export function tokenGetter() {
     DrivingLicenseRequestComponent,
     CarRequestsComponent,
     UserProfileComponent,
+    UserBookedTripsComponent,
+    UserInformationComponent,
+    UserCarsComponent,
+    UserTripsComponent,
+
 
 
   ],

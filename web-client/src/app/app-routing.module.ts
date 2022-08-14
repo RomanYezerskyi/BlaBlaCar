@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Router, RouterModule, Routes } from '@angular/router';
 import { AddTripComponent } from './components/user/add-trip-layout/add-trip/add-trip.component';
-import { DialogBookingConfirmationComponent } from './components/user/dialog-booking-confirmation/dialog-booking-confirmation.component';
+import { DialogBookingConfirmationComponent } from './components/user/trip-page-info/dialog-booking-confirmation/dialog-booking-confirmation.component';
 import { HomeComponent } from './components/user/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -19,6 +19,10 @@ import { UserRequestInfoComponent } from './components/admin-page/user-request-i
 import { PendingComponent } from './components/admin-page/users-requests/pending/pending.component';
 import { MainInfoComponent } from './components/admin-page/user-request-info/main-info/main-info.component';
 import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
+import { UserBookedTripsComponent } from './components/user/user-information/user-booked-trips/user-booked-trips.component';
+import { UserInformationComponent } from './components/user/user-information/user-information.component';
+import { UserCarsComponent } from './components/user/user-cars/user-cars.component';
+import { UserTripsComponent } from './components/user/user-information/user-trips/user-trips.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -27,7 +31,6 @@ const routes: Routes = [
   { path: 'search', component: SearchTripComponent },
 
   { path: 'trip-page-info/:id', component: TripPageInfoComponent, canActivate: [AuthGuard] },
-  // { path: '', component: DialogBookingConfirmationComponent, canActivate: [AuthGuard] },
   { path: 'home', component: HomeComponent  /*, canActivate: [AuthGuard]*/ },
 
   {
@@ -60,7 +63,16 @@ const routes: Routes = [
   },
   { path: 'add-car', component: AddCarComponent, canActivate: [AuthGuard] },
   { path: 'driving', component: RequestDrivingLicenseComponent, canActivate: [AuthGuard] },
+  { path: 'cars', component: UserCarsComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] },
+  {
+    path: 'user-information', component: UserInformationComponent, canActivate: [AuthGuard],
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: '/user-information/user-trips' },
+      { path: 'booked-trips', component: UserBookedTripsComponent, canActivate: [AuthGuard], },
+      { path: 'user-trips', component: UserTripsComponent, canActivate: [AuthGuard], },
+    ]
+  },
 
 
 ];

@@ -17,6 +17,7 @@ namespace BlaBlaCar.BL
             //    opt.MapFrom(ur => ur.Email));
             CreateMap<NewTripViewModel, TripModel>().ReverseMap();
             CreateMap<Trip, TripModel>().ReverseMap();
+            CreateMap<TripAndTripUsersViewModel, TripModel>().ReverseMap();
 
             CreateMap<AvailableSeats, AvailableSeatsModel>().ReverseMap();
             CreateMap<Car, CarModel>().ReverseMap();
@@ -28,6 +29,7 @@ namespace BlaBlaCar.BL
             CreateMap<SeatModel, Seat>().ReverseMap();
             CreateMap<TripUser, TripUserModel>().ReverseMap();
             CreateMap<AddNewBookTrip, TripUserModel>().ReverseMap();
+            CreateMap<TripUserViewModel, TripUserModel>().ReverseMap();
 
             CreateMap<CarDocuments, CarDocumentsModel>().ReverseMap();
             CreateMap<UserDocuments, UserDocumentsModel>().ReverseMap();

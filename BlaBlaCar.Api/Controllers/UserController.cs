@@ -45,6 +45,5 @@ namespace BlaBlaCar.API.Controllers
                 return BadRequest(e.Message);
             }
         }
-
     }
 }

@@ -1,9 +1,43 @@
-
-<p>{{data.id}}</p>
-<p>{{data.startPlace}}</p>
-<p>{{data.endPlace}}</p>
-<p>{{data.startTime}}</p>
-
-<button mat-button (click)="openDialog()">Open dialog</button>
-
-<!-- <button (click)="" >Book</button> -->
+<div class="container">
+    <div class="search_info">
+        <div class="date">
+            <h4>
+                {{data.startTime | date}}
+            </h4>
+        </div>
+        <div class="header">
+            <div class="time">
+                <p>{{data.startTime | date:'mm:ss'}}</p>
+                <p>{{data.endTime | date:'mm:ss'}}</p>
+            </div>
+            <div class="line">
+            </div>
+            <div class="price_item">
+                <div class="cities">
+                    <div class="start">
+                        <mat-icon class="item_icon">gps_fixed</mat-icon>
+                        <p>{{data.startPlace}}</p>
+                    </div>
+                    <div class="destination">
+                        <mat-icon class="item_icon"> place</mat-icon>
+                        <p>{{data.endPlace}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="horizontal_line"></div>
+    <div class="price">
+        <p>For {{requestedSeats}} passangers</p>
+        <p>{{data.pricePerSeat*requestedSeats | currency:"UAH":"symbol"}}</p>
+    </div>
+    <div class="horizontal_line"></div>
+    <div class="user">
+        <div class="user_img">
+            <img src="../../../../assets/images/user.png" alt="" class="img">
+        </div>
+        <p>{{data.user?.firstName}}</p>
+    </div>
+    <div class="horizontal_line"></div>
+    <button mat-button (click)="openDialog()" class="btn_continue">Continue</button>
+</div>

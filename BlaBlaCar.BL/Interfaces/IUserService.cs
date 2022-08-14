@@ -5,6 +5,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using BlaBlaCar.BL.ODT;
+using BlaBlaCar.BL.ODT.TripModels;
+using BlaBlaCar.DAL.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.FileProviders.Physical;
 

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.BL.ODT;
+using BlaBlaCar.BL.ODT.TripModels;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
@@ -35,10 +36,12 @@ namespace BlaBlaCar.BL.Services
             var userId = claimsPrincipal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value;
             if (userId == null) throw new Exception("User no found!");
             var user = _mapper.Map<UserModel>(
-               await _unitOfWork.Users.GetAsync(x=>x.Include(i=>i.Cars)
-                                                    .ThenInclude(i=>i.CarDocuments)
-                                                    .Include(i=>i.UserDocuments), 
-                   u=>u.Id == userId)
+                await _unitOfWork.Users.GetAsync(x => x.Include(i => i.Cars)
+                        .ThenInclude(i => i.CarDocuments)
+                        .Include(i => i.UserDocuments)
+                        .Include(x => x.TripUsers)
+                        .Include(x=>x.Trips),
+                    u => u.Id == userId)
             );
             return user;
         }
@@ -52,6 +55,8 @@ namespace BlaBlaCar.BL.Services
         {
             throw new NotImplementedException();
         }
+
+        
 
         public async Task<bool> RequestForDrivingLicense(ClaimsPrincipal principal, IEnumerable<IFormFile> drivingLicense)
         {
