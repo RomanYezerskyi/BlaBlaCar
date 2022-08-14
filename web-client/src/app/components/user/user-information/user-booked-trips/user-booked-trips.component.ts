@@ -19,7 +19,7 @@ export class UserBookedTripsComponent implements OnInit {
   }
 
   getUserBookedTrips = () => {
-    const url = 'https://localhost:6001/api/User/trips';
+    const url = 'https://localhost:6001/api/BookedTrip/trips';
     this.http.get(url)
       .subscribe({
         next: (res: any) => {
@@ -32,35 +32,24 @@ export class UserBookedTripsComponent implements OnInit {
 
   }
   deleteBookedTrip = (tripUser: TripUserModel[]) => {
-    const url = 'https://localhost:6001/api/BookedTrip/';
-    console.log(tripUser)
-    const options = {
-      body: {
-        tripUser: JSON.stringify(tripUser)
-      },
-    };
+    const url = 'https://localhost:6001/api/BookedTrip/trip';
+    this.http.delete(url, { body: tripUser })
+      .subscribe({
+        next: (res: any) => {
+          console.log(res);
+          this.getUserBookedTrips();
+        },
+        error: (err: HttpErrorResponse) => console.error(err),
+      });
+  }
+  deleteBookedSeat = (tripUser: TripUserModel) => {
+    const url = 'https://localhost:6001/api/BookedTrip/seat';
 
     this.http.delete(url, { body: tripUser })
       .subscribe({
         next: (res: any) => {
-          this.trips = res as TripModel[];
-          console.log(this.trips);
-        },
-        error: (err: HttpErrorResponse) => console.error(err),
-      });
-
-
-  }
-  deleteBookedSeat = (id: number) => {
-    console.log(id);
-    const url = 'https://localhost:6001/api/BookedTrip/';
-    let params = new HttpParams();
-    params = params.append('id', id);
-    this.http.delete(url, { params })
-      .subscribe({
-        next: (res: any) => {
-          this.trips = res as TripModel[];
-          console.log(this.trips);
+          console.log(res);
+          this.getUserBookedTrips();
         },
         error: (err: HttpErrorResponse) => console.error(err),
       });

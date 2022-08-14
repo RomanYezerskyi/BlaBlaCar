@@ -37,6 +37,7 @@ import { UserProfileComponent } from './components/user/user-profile/user-profil
 import { UserBookedTripsComponent } from './components/user/user-information/user-booked-trips/user-booked-trips.component';
 import { UserInformationComponent } from './components/user/user-information/user-information.component';
 import { UserCarsComponent } from './components/user/user-cars/user-cars.component';
+import { UserTripsComponent } from './components/user/user-information/user-trips/user-trips.component';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -68,6 +69,7 @@ export function tokenGetter() {
     UserBookedTripsComponent,
     UserInformationComponent,
     UserCarsComponent,
+    UserTripsComponent,
 
 
 

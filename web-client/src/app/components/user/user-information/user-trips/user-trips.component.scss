@@ -127,45 +127,6 @@
     }
 }
 
-.bookedSeats {
-    display: flex;
-
-    .title {
-        margin: 15px;
-        font-size: 15px;
-    }
-
-    .seatNum {
-        border: 1px #000 solid;
-        border-radius: 10px;
-        margin: 5px;
-        width: 45px;
-        height: 45px;
-        position: relative;
-        display: flex;
-
-        p {
-            display: block;
-            margin: auto;
-        }
-
-        .material-icons {
-            position: absolute;
-            top: 0;
-            font-size: 16px;
-            right: -7px;
-            top: -4px;
-            background-color: white;
-        }
-
-        .material-icons:hover {
-            transition-timing-function: ease-in;
-            transition: 0.2s;
-            transform: translateY(-10%);
-        }
-    }
-}
-
 .actions {
 
     margin: 10px;
@@ -183,4 +144,113 @@
 
     }
 
+}
+
+.booked_info {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
+
+    .info {
+        display: flex;
+        flex-flow: row;
+    }
+
+    .bookedSeatsCount,
+    .availableSeatsCount {
+        margin-left: 10px;
+        display: flex;
+        flex-flow: row;
+
+        p {
+            display: block;
+            margin: auto 0;
+        }
+
+        .icons,
+        .material-icons {
+            font-size: 30px;
+            border-radius: 50%;
+            height: 30px;
+            width: 30px;
+
+            margin-right: 10px;
+        }
+
+
+    }
+
+    .actions {
+        margin: 0;
+        margin-right: 10px;
+
+    }
+}
+
+//**//
+
+.list_users {
+    margin-top: 10px;
+
+    hr {
+        background-color: #000;
+    }
+}
+
+.user_info {
+    display: flex;
+}
+
+.body {
+    position: relative;
+
+    .material-icons {
+        position: absolute;
+        right: 47%;
+        font-size: 26px;
+    }
+
+    .material-icons:hover {
+        transform: translateY(-5%);
+        transition-timing-function: ease-in;
+        transition: 0.2s;
+    }
+}
+
+.cancel {
+    margin: auto 0;
+    margin-left: 10px;
+}
+
+.cancel:hover {
+    transform: translateY(-5%);
+    transition-timing-function: ease-in;
+    transition: 0.2s;
+}
+
+.bookedSeats {
+    display: flex;
+    flex-flow: row wrap;
+
+    p {
+        margin: auto 0;
+    }
+
+    .booked_seats_num {
+        margin: auto 0;
+        margin-left: 10px;
+        margin-top: 5px;
+        text-align: center;
+        height: 40px;
+        width: 40px;
+        border: #000 1px solid;
+        border-radius: 10px;
+        display: flex;
+
+        p {
+            display: block;
+            margin: auto;
+        }
+    }
 }

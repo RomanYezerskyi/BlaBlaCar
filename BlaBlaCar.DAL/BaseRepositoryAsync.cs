@@ -33,7 +33,7 @@ namespace BlaBlaCar.DAL
                 return await orderBy(queryable).ToListAsync();
             }
 
-            return await queryable.ToListAsync();
+            return await queryable.AsNoTracking().ToListAsync();
         }
 
         public async Task<TEntity> GetAsync(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> includes = null,

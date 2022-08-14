@@ -17,7 +17,6 @@ namespace BlaBlaCar.BL.Interfaces
         Task<UserModel> GetUserInformationAsync(ClaimsPrincipal claimsPrincipal);
         Task<IEnumerable<UserModel>> GetUsersAsync();
         Task<IEnumerable<UserModel>> SearchUsersAsync(UserModel model);
-        Task<IEnumerable<TripModel>> GetUserTripsAsync(ClaimsPrincipal claimsPrincipal);
         Task<bool> RequestForDrivingLicense(ClaimsPrincipal principal, IEnumerable<IFormFile> drivingLicense);
         Task<bool> СheckIfUserExistsAsync(ClaimsPrincipal user);
         Task<bool> AddUserAsync(ClaimsPrincipal user);

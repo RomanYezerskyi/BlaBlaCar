@@ -18,7 +18,7 @@ import { TripModel } from 'src/app/interfaces/trip';
 export class AddAvailableSeatsComponent implements OnInit {
   invalidForm: boolean | undefined;
   trip: AddTripModel = {
-    startPlace: 'aaa',
+    startPlace: '',
     endPlace: '',
     startTime: new Date(''),
     endTime: new Date(''),
@@ -64,6 +64,7 @@ export class AddAvailableSeatsComponent implements OnInit {
         alert("Add cars!");
         return;
       }
+      console.log(this.trip);
       const url = 'https://localhost:6001/api/Trips'
       this.http.post(url, this.trip)
         .subscribe((res) => {

@@ -52,11 +52,38 @@ namespace BlaBlaCar.BL.Services.TripServices
 
         }
 
-        public async Task<IEnumerable<TripModel>> GetTripsAsync()
+        public async Task<IEnumerable<TripAndTripUsersViewModel>> GetUserTripsAsync(ClaimsPrincipal principal)
         {
-            var trips = _mapper.Map<IEnumerable<Trip>, IEnumerable<TripModel>>
-                (await _unitOfWork.Trips.GetAsync(null, null, null));
-            return trips;
+            string userId = principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value;
+            var trips = _mapper.Map<IEnumerable<TripModel>>
+                (await _unitOfWork.Trips.GetAsync(null, 
+                    x=>x.Include(i=>i.Car)
+                        .Include(x=>x.AvailableSeats)
+                        .Include(i=>i.TripUsers).ThenInclude(i=>i.User)
+                        .Include(i => i.TripUsers).ThenInclude(x=>x.Seat), 
+                    x=>x.UserId == userId));
+            var listGroupByUsers = trips.First().TripUsers
+                .GroupBy(x => x.UserId)
+                .Select(x=>new BookedTripUsersViewModel
+                                                            { UserId= x.Key, 
+                                                            User = x.Select(u=>u.User).FirstOrDefault() ,
+                                                            Seats =  x.Select(x=>x.Seat).ToList()
+                                                            }).ToList();
+            var result = _mapper.Map<IEnumerable<TripAndTripUsersViewModel>>(trips);
+            result = result.Select(trip =>
+            {
+                trip.BookedTripUsers = listGroupByUsers.Select(l =>
+                {
+                    if (trip.TripUsers.Any(user=>user.UserId == l.UserId))
+                    {
+                        return l;
+                    }
+                    return null;
+                }).ToList()!;
+                return trip;
+            }).ToList();
+            
+            return result;
         }
 
         public async Task<IEnumerable<TripModel>> SearchTripsAsync(SearchTripModel model)
@@ -66,7 +93,7 @@ namespace BlaBlaCar.BL.Services.TripServices
                 x => x.Include(x => x.AvailableSeats)
                                                 .Include(x => x.TripUsers)
                                                 .Include(x=>x.User),
-                x => x.StartPlace.Contains(model.StartPlace) && x.StartTime >= model.StartTime);
+                x => x.StartPlace.Contains(model.StartPlace) && x.EndPlace.Contains(model.EndPlace) && x.StartTime >= model.StartTime);
 
 
             var res = _mapper.Map<IEnumerable<Trip>, IEnumerable<TripModel>>(trip);
@@ -108,6 +135,10 @@ namespace BlaBlaCar.BL.Services.TripServices
         {
             var trip = await _unitOfWork.Trips.GetAsync(includes: null, filter: x => x.Id == id);
             if (trip == null) throw new Exception("No information about this trip! Trip cannot be deleted!");
+            var availableSeats = await _unitOfWork.AvaliableSeats.GetAsync(null, null, x => x.TripId == id);
+            if(availableSeats != null) _unitOfWork.AvaliableSeats.Delete(availableSeats);
+            var tripUsers = await _unitOfWork.TripUser.GetAsync(null, null, x => x.TripId == id);
+            if (tripUsers != null) _unitOfWork.TripUser.Delete(tripUsers);
             _unitOfWork.Trips.Delete(trip);
             return await _unitOfWork.SaveAsync();
         }

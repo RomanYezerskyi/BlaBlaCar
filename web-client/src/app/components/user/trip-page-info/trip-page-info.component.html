@@ -29,7 +29,7 @@
     <div class="horizontal_line"></div>
     <div class="price">
         <p>For {{requestedSeats}} passangers</p>
-        <p>{{data.pricePerSeat | currency:"UAH":"symbol"}}</p>
+        <p>{{data.pricePerSeat*requestedSeats | currency:"UAH":"symbol"}}</p>
     </div>
     <div class="horizontal_line"></div>
     <div class="user">

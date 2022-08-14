@@ -3,9 +3,11 @@ using AutoMapper;
 using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.BL.ODT.BookTripModels;
 using BlaBlaCar.BL.ODT.TripModels;
+using BlaBlaCar.BL.ViewModels;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlaBlaCar.BL.Services.BookedTripServices
 {
@@ -24,9 +26,14 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
             _userService = userService;
         }
 
-        public async Task<TripUserModel> GetBookedTripAsync(Guid id)
+        public async Task<IEnumerable<TripModel>> GetUserTripsAsync(ClaimsPrincipal claimsPrincipal)
         {
-            var trip = _mapper.Map<TripUser, TripUserModel>(await _unitOfWork.TripUser.GetAsync(null, x => x.Id == id));
+            var userId = claimsPrincipal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value;
+
+            var trip = _mapper.Map<IEnumerable<TripModel>>(await _unitOfWork.Trips.GetAsync(x => x.OrderByDescending(x => x.StartTime), x =>
+                    x.Include(x => x.TripUsers.Where(x => x.userId == userId)).ThenInclude(x => x.Seat),
+                x => x.TripUsers
+                    .Any(x => x.userId == userId)));
             return trip;
         }
 
@@ -55,12 +62,32 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
             return await _unitOfWork.SaveAsync();
         }
 
-        public async Task<bool> DeleteBookedTripAsync(IEnumerable<TripUserModel> tripUserModel)
+        public async Task<bool> DeleteBookedTripAsync(IEnumerable<TripUserViewModel> tripUserModel)
         {
-            var trip = _mapper.Map<IEnumerable<TripUserModel>>(await _unitOfWork.TripUser.GetAsync(null,null, x => tripUserModel.Any(y=>y.Id == x.Id)));
+            var trip = _mapper.Map<IEnumerable<TripUserModel>>(await _unitOfWork.TripUser.GetAsync(null, null, x =>
+                x.TripId == tripUserModel.FirstOrDefault().TripId && x.userId == tripUserModel.FirstOrDefault().UserId));
+            if (trip == null) throw new Exception("Trip not found");
+            _unitOfWork.TripUser.Delete(_mapper.Map<IEnumerable<TripUser>>(trip));
+            return await _unitOfWork.SaveAsync();
+        }
+
+        public async Task<bool> DeleteBookedSeatAsync(TripUserViewModel tripUserModel)
+        {
+            var trip = _mapper.Map<TripUserModel>(await _unitOfWork.TripUser.GetAsync(null, x =>
+                x.TripId == tripUserModel.TripId && x.userId == tripUserModel.UserId && x.SeatId == tripUserModel.SeatId));
+            if (trip == null) throw new Exception("Trip not found");
+            _unitOfWork.TripUser.Delete(_mapper.Map<TripUser>(trip));
+            return await _unitOfWork.SaveAsync();
+        }
+
+        public async Task<bool> DeleteUserFromTripAsync(TripUserViewModel tripUserModel)
+        {
+            var trip = _mapper.Map<IEnumerable<TripUserModel>>(await _unitOfWork.TripUser.GetAsync(null,null, x =>
+                x.TripId == tripUserModel.TripId && x.userId == tripUserModel.UserId && x.TripId == tripUserModel.TripId));
             if (trip == null) throw new Exception("Trip not found");
             _unitOfWork.TripUser.Delete(_mapper.Map<IEnumerable<TripUser>>(trip));
             return await _unitOfWork.SaveAsync();
         }
     }
+    
 }

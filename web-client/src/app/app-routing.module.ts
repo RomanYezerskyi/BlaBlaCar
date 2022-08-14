@@ -22,6 +22,7 @@ import { UserProfileComponent } from './components/user/user-profile/user-profil
 import { UserBookedTripsComponent } from './components/user/user-information/user-booked-trips/user-booked-trips.component';
 import { UserInformationComponent } from './components/user/user-information/user-information.component';
 import { UserCarsComponent } from './components/user/user-cars/user-cars.component';
+import { UserTripsComponent } from './components/user/user-information/user-trips/user-trips.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -67,9 +68,9 @@ const routes: Routes = [
   {
     path: 'user-information', component: UserInformationComponent, canActivate: [AuthGuard],
     children: [
+      { path: '', pathMatch: 'full', redirectTo: '/user-information/user-trips' },
       { path: 'booked-trips', component: UserBookedTripsComponent, canActivate: [AuthGuard], },
-
-
+      { path: 'user-trips', component: UserTripsComponent, canActivate: [AuthGuard], },
     ]
   },
 

@@ -49,14 +49,55 @@ namespace BlaBlaCar.API.Controllers
                 return BadRequest(e.Message);
             }
         }
-
-        [HttpDelete]
+        [HttpGet("trips")]
+        public async Task<IActionResult> GerUserTrips()
+        {
+            try
+            {
+                var res = await _tripService.GetUserTripsAsync(User);
+                if (res != null) return Ok(res);
+                return BadRequest("Fail");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        [HttpDelete("trip")]
         public async Task<IActionResult> DeleteBookedTrip(IEnumerable<TripUserViewModel> tripUser)
         {
             try
             {
-                //var res = await _tripService.DeleteBookedTripAsync(id);
-                //if (res) return Ok(new { Result = res });
+                var res = await _tripService.DeleteBookedTripAsync(tripUser);
+                if (res) return Ok(new { Result = res });
+                return BadRequest("Fail");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        [HttpDelete("seat")]
+        public async Task<IActionResult> DeleteBookedSeat(TripUserViewModel tripUser)
+        {
+            try
+            {
+                var res = await _tripService.DeleteBookedSeatAsync(tripUser);
+                if (res) return Ok(new { Result = res });
+                return BadRequest("Fail");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        [HttpDelete("user")]
+        public async Task<IActionResult> DeleteUserFromTrip(TripUserViewModel tripUser)
+        {
+            try
+            {
+                var res = await _tripService.DeleteUserFromTripAsync(tripUser);
+                if (res) return Ok(new { Result = res });
                 return BadRequest("Fail");
             }
             catch (Exception e)

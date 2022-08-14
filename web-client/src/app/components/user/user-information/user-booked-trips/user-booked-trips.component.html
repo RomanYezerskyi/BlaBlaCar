@@ -36,9 +36,10 @@
                 </div>
                 <div class="bookedSeats">
                     <p class="title">You have booked seats:</p>
-                    <p *ngFor="let tripUser of item.tripUsers" class="seatNum">
-                        {{tripUser.seat.num}}
-                    </p>
+                    <div *ngFor="let tripUser of item.tripUsers" class="seatNum">
+                        <p>{{tripUser.seat.num}}</p>
+                        <i class="material-icons" (click)="deleteBookedSeat(tripUser)">cancel</i>
+                    </div>
                 </div>
             </div>
         </div>
