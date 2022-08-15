@@ -1,5 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { TripModel } from 'src/app/interfaces/trip';
 import { TripUserModel } from 'src/app/interfaces/trip-user-model';
@@ -12,10 +13,14 @@ import { UserModel } from 'src/app/interfaces/user-model';
 })
 export class UserBookedTripsComponent implements OnInit {
   trips: TripModel[] = [];
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
     this.getUserBookedTrips();
+  }
+  sanitaizeImg(img: string): SafeUrl {
+    console.log(img);
+    return this.sanitizer.bypassSecurityTrustUrl(img);
   }
 
   getUserBookedTrips = () => {

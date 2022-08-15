@@ -9,6 +9,7 @@ using BlaBlaCar.DAL.Interfaces;
 using BlaBlaCar.DAL.Entities;
 using IdentityModel;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace BlaBlaCar.BL.Services.TripServices
 {
@@ -17,15 +18,16 @@ namespace BlaBlaCar.BL.Services.TripServices
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
-        private readonly ICarSeatsService _carSeatsService;
+        private readonly HostSettings _hostSettings;
+       
         public TripService(IUnitOfWork unitOfWork,
             IMapper mapper,
-             IUserService userService, ICarSeatsService carSeatsService)
+             IUserService userService, IOptionsSnapshot<HostSettings> hostSettings)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _userService = userService;
-            _carSeatsService = carSeatsService;
+            _hostSettings = hostSettings.Value;
         }
         public async Task<TripModel> GetTripAsync(Guid id)
         {
@@ -34,7 +36,9 @@ namespace BlaBlaCar.BL.Services.TripServices
             var trip = _mapper.Map<Trip, TripModel>(await _unitOfWork.Trips.GetAsync(
                                         x => x.Include(y => y.AvailableSeats)
                                                                         .ThenInclude(x => x.Seat)
-                                                                        .Include(x=>x.User),
+                                                                        .Include(x=>x.User)
+                                                                        .Include(x=>x.Car)
+                                                                        .ThenInclude(x=>x.Seats),
                                         x => x.Id == id));
             trip.AvailableSeats.Select(x =>
             {
@@ -45,9 +49,13 @@ namespace BlaBlaCar.BL.Services.TripServices
                 return x;
             }).ToList();
 
-
-            var car = await _unitOfWork.Cars.GetAsync(null, x => x.Id == trip.CarId);
-            trip.Car = _mapper.Map<CarModel>(car);
+            trip.User.UserImg = _hostSettings.Host + trip.User.UserImg;
+            trip.Car.CarDocuments = trip.Car.CarDocuments.Select(c =>
+            {
+                c.TechPassport = _hostSettings.Host + c.TechPassport;
+                return c;
+            }).ToList();
+            
             return trip;
 
         }
@@ -62,6 +70,25 @@ namespace BlaBlaCar.BL.Services.TripServices
                         .Include(i=>i.TripUsers).ThenInclude(i=>i.User)
                         .Include(i => i.TripUsers).ThenInclude(x=>x.Seat), 
                     x=>x.UserId == userId));
+            if (!trips.Any()) return null;
+
+            trips = trips.Select(t =>
+            {
+                t.Car.CarDocuments = t.Car.CarDocuments.Select(c =>
+                {
+                    c.TechPassport = _hostSettings.Host + c.TechPassport;
+                    return c;
+                }).ToList();
+
+                t.TripUsers = t.TripUsers.Select(tu =>
+                {
+                    
+                    tu.User.UserImg = _hostSettings.Host + tu.User.UserImg;
+                    return tu;
+                }).ToList();
+                return t;
+            }).ToList();
+
             var listGroupByUsers = trips.First().TripUsers
                 .GroupBy(x => x.UserId)
                 .Select(x=>new BookedTripUsersViewModel
@@ -94,7 +121,11 @@ namespace BlaBlaCar.BL.Services.TripServices
                                                 .Include(x => x.TripUsers)
                                                 .Include(x=>x.User),
                 x => x.StartPlace.Contains(model.StartPlace) && x.EndPlace.Contains(model.EndPlace) && x.StartTime >= model.StartTime);
-
+            trip = trip.Select(t =>
+            {
+                t.User.UserImg = _hostSettings.Host + t.User.UserImg;
+                return t;
+            });
 
             var res = _mapper.Map<IEnumerable<Trip>, IEnumerable<TripModel>>(trip);
             return res;

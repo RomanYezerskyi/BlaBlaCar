@@ -14,7 +14,7 @@ html {
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
-    background-color: #fff;
+    // background-color: #fff;
 
     // box-shadow: 0 0 10px;
     box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
@@ -107,6 +107,8 @@ html {
     flex-flow: column;
     justify-content: space-between;
     padding: 1rem;
+    background-color: #fff;
+    border-radius: 10px;
 }
 
 .title {
@@ -118,7 +120,6 @@ html {
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
-    margin-bottom: 2rem;
     //align-content: space-between;
 }
 
@@ -136,15 +137,15 @@ html {
 }
 
 .actions {
-    height: 100px;
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row;
     justify-content: center;
+    margin-bottom: 20px;
 }
 
 .btn_actions {
     border-radius: 10%;
-    height: 70px;
+    font-size: 50px;
     margin-left: 1rem;
     margin-right: 1rem;
 }

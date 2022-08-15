@@ -27,8 +27,4 @@
     <ProjectReference Include="..\BlaBlaCar.DAL\BlaBlaCar.DAL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DriverDocuments\images\" />
-  </ItemGroup>
-
 </Project>

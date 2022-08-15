@@ -10,11 +10,13 @@
 // }
 
 .main_info {
-    display: flex;
+    // display: flex;
     margin: 1rem;
     text-align: center;
     // border: 1px red solid;
     box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+    background-color: #fff;
+    border-radius: 10px;
 }
 
 .user__image {

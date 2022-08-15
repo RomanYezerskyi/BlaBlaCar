@@ -74,7 +74,7 @@
         <div class="user_info">
             <div class="container user_container">
                 <div class="header">
-                    <img src="../../../../assets/images/user.png" alt="" class="img profile_img profile__img">
+                    <img [src]="sanitaizeImg(user.userImg!)" alt="" class="img profile_img profile__img">
                 </div>
                 <div class="name">
                     <h3 class="user_name first_title">{{user.firstName}}</h3>

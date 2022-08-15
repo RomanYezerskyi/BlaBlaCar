@@ -23,25 +23,22 @@ export class MainInfoComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
-  // sanitaizeImg(img: string): SafeUrl {
-  //   let file = 'https://localhost:6001/' + img;
-  //   console.log(file);
-  //   return this.sanitizer.bypassSecurityTrustUrl(file);
-  // }
-  // changeUserStatus = (status: UserStatus) => {
-  //   const newStatus = {
-  //     status: status,
-  //     userId: this.user.id
-  //   };
-  //   const url = 'https://localhost:6001/api/Admin/user/status';
-  //   this.http.post(url, newStatus)
-  //     .subscribe({
-  //       next: (res: any) => {
-  //         window.alert(res);
-  //         console.log(res);
-  //       },
-  //       error: (err: HttpErrorResponse) => console.error(err),
-  //     });
-  // }
+  sanitaizeImg(img: string): SafeUrl {
+    return this.sanitizer.bypassSecurityTrustUrl(img);
+  }
+  changeUserStatus = (status: UserStatus) => {
+    const newStatus = {
+      status: status,
+      userId: this.user.id
+    };
+    const url = 'https://localhost:6001/api/Admin/user/status';
+    this.http.post(url, newStatus)
+      .subscribe({
+        next: (res: any) => {
+          window.alert(res);
+          console.log(res);
+        },
+        error: (err: HttpErrorResponse) => console.error(err),
+      });
+  }
 }

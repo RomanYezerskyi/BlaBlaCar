@@ -8,32 +8,42 @@ using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace BlaBlaCar.BL.Services.BookedTripServices
 {
     public class BookedTripsService : IBookedTripsService
     {
         private readonly IUnitOfWork _unitOfWork;
-
         private readonly IMapper _mapper;
-
         private readonly IUserService _userService;
+        private readonly HostSettings _hostSettings;
 
-        public BookedTripsService(IUnitOfWork unitOfWork, IMapper mapper,IUserService userService)
+        public BookedTripsService(IUnitOfWork unitOfWork, IMapper mapper,IUserService userService, IOptionsSnapshot<HostSettings> hostSettings)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _userService = userService;
+            _hostSettings = hostSettings.Value;
         }
 
-        public async Task<IEnumerable<TripModel>> GetUserTripsAsync(ClaimsPrincipal claimsPrincipal)
+        public async Task<IEnumerable<TripModel>> GetUserBookedTripsAsync(ClaimsPrincipal claimsPrincipal)
         {
             var userId = claimsPrincipal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value;
 
-            var trip = _mapper.Map<IEnumerable<TripModel>>(await _unitOfWork.Trips.GetAsync(x => x.OrderByDescending(x => x.StartTime), x =>
-                    x.Include(x => x.TripUsers.Where(x => x.userId == userId)).ThenInclude(x => x.Seat),
+            var trip = _mapper.Map<IEnumerable<TripModel>>(await _unitOfWork.Trips.GetAsync(x => x.OrderByDescending(x => x.StartTime), 
+                x =>
+                                        x.Include(x => x.TripUsers.Where(x => x.userId == userId))
+                                            .ThenInclude(x => x.Seat)
+                                            .Include(x=>x.User),
                 x => x.TripUsers
                     .Any(x => x.userId == userId)));
+
+            trip = trip.Select(t =>
+            {
+                t.User.UserImg = _hostSettings.Host + t.User.UserImg;
+                return t;
+            });
             return trip;
         }
 

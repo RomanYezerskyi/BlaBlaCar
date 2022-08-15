@@ -46,6 +46,10 @@ export class DialogBookingConfirmationComponent implements OnInit {
   ngOnInit() {
 
   }
+  cheackSeat(item: SeatModel): boolean {
+    let a = this.trip.availableSeats.some(x => x.seatId == item.id);
+    return a;
+  }
   confirmBook = async () => {
     const url = 'https://localhost:6001/api/BookedTrip'
     await this.http.post(url, this.bookedtrip, {

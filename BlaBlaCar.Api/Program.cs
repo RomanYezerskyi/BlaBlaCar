@@ -40,6 +40,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 //        options.Password.RequiredLength = 4;
 //    }).AddEntityFrameworkStores<ApplicationDbContext>()
 //    .AddDefaultTokenProviders();
+
+builder.Services.Configure<HostSettings>(builder.Configuration.GetSection("CurrentHost"));
 builder.Services.Configure<FormOptions>(o =>
 {
     o.ValueLengthLimit = int.MaxValue;
@@ -58,6 +60,7 @@ builder.Services.AddScoped<ICarSeatsService, CarSeatsService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IFileService, FileService>();
 
+builder.Services.AddHttpContextAccessor();
 //builder.Services.AddAuthentication("Bearer")
 //    .AddIdentityServerAuthentication("Bearer", options =>
 //    {

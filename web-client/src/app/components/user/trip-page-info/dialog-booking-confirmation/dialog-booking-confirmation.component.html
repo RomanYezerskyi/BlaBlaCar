@@ -6,13 +6,21 @@
         <img src="../../../../assets/images/wheel.png" class="img__wheel" alt="">
       </div>
       <div class="seats_list">
-        <div *ngFor="let item of trip.availableSeats" class="seat_item">
+        <!-- <div *ngFor="let item of trip.availableSeats" class="seat_item">
           <button class="btn seat booked" *ngIf="(item.availableSeatsType == seatType.Booked); else elseItem"
             (click)="bookSeat(item.seatId)" disabled>
             {{item.seat.num}}
           </button>
           <ng-template #elseItem>
             <button class="btn seat" (click)="bookSeat(item.seatId)">{{item.seat.num}}</button>
+          </ng-template>
+        </div> -->
+        <div *ngFor="let item of  trip.car.seats" class="seat_item">
+          <button class="btn seat booked" (click)="bookSeat(item.id)" disabled *ngIf="!cheackSeat(item); else elseItem">
+            {{item.num}}
+          </button>
+          <ng-template #elseItem>
+            <button class="btn seat" (click)="bookSeat(item.id)">{{item.num}}</button>
           </ng-template>
         </div>
       </div>

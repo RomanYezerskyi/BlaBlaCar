@@ -54,7 +54,7 @@
                             <div class="body">
                                 <i class="material-icons">telegram</i>
                                 <div class="profile_img">
-                                    <img src="../../../../assets/images/user.png" class="img" alt="">
+                                    <img [src]="sanitaizeImg(tripUser.user.userImg!)" class="img" alt="">
                                 </div>
                                 <p class="user_name">{{tripUser?.user?.firstName}}</p>
                             </div>

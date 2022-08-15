@@ -1,29 +1,29 @@
 <div class="container">
-    <form #addTripForm="ngForm" (ngSubmit)="addTrip(addTripForm)">
-      <h2 class="form-signin-heading">Add trip</h2>
-        <div *ngIf="invalidForm" class="alert alert-danger">Invalid username or password.</div>
-        <br/>
-        <label for="startPlace" class="sr-only">Start Place</label>
-        <input type="email" id="startPlace" name="startPlace" [(ngModel)]="trip.startPlace" 
-          class="form-control" placeholder="Start place" required >
-        <br/>
-        <label for="endPlace" class="sr-only">End Place</label>
-        <input type="email" id="endPlace" name="endPlace" [(ngModel)]="trip.endPlace" 
-          class="form-control" placeholder="End place" required >
-        <br/>
-        <!-- <label for="countOfSeats" class="sr-only">Count of Seats</label>
+  <form #addTripForm="ngForm" (ngSubmit)="addTrip(addTripForm)">
+    <h2 class="form-signin-heading">Add trip</h2>
+    <div *ngIf="invalidForm" class="alert alert-danger">Invalid username or password.</div>
+    <br />
+    <label for="startPlace" class="sr-only">Start Place</label>
+    <input type="email" id="startPlace" name="startPlace" [(ngModel)]="trip.startPlace" class="form-control"
+      placeholder="Start place" required>
+    <br />
+    <label for="endPlace" class="sr-only">End Place</label>
+    <input type="email" id="endPlace" name="endPlace" [(ngModel)]="trip.endPlace" class="form-control"
+      placeholder="End place" required>
+    <br />
+    <!-- <label for="countOfSeats" class="sr-only">Count of Seats</label>
         <input type="number" id="countOfSeats" name="countOfSeats" min="0" max="" [(ngModel)]="trip.countOfSeats" 
           class="form-control" placeholder="countOfSeats" required >
         <br/> -->
-        <label for="startTime" class="sr-only">startTime</label>
-        <input type="date" id="startTime" name="startTime" [(ngModel)]="trip.startTime" 
-          class="form-control" placeholder="startTime" required >
-        <br/>
-        <label for="endTime" class="sr-only">endTime</label>
-        <input type="date" id="endTime" name="endTime" [(ngModel)]="trip.endTime" 
-          class="form-control" placeholder="endTime" required >
-        <br/>
-        <!-- <label for="pricePerSeat" class="sr-only">pricePerSeat</label>
+    <label for="startTime" class="sr-only">startTime</label>
+    <input type="date" id="startTime" name="startTime" [(ngModel)]="trip.startTime" class="form-control"
+      placeholder="startTime" required>
+    <br />
+    <label for="endTime" class="sr-only">endTime</label>
+    <input type="date" id="endTime" name="endTime" [(ngModel)]="trip.endTime" class="form-control" placeholder="endTime"
+      required>
+    <br />
+    <!-- <label for="pricePerSeat" class="sr-only">pricePerSeat</label>
         <input type="number" id="pricePerSeat" name="pricePerSeat" [(ngModel)]="trip.pricePerSeat" 
           class="form-control" placeholder="pricePerSeat" required >
         <br/>
@@ -31,15 +31,14 @@
         <input type="text" id="description" name="description" [(ngModel)]="trip.description" 
           class="form-control" placeholder="description" required >
         <br/> -->
-        <label for="carId" class="sr-only">Car</label>
-        <!-- <input type="text" id="description" name="description" [(ngModel)]="trip.description" 
+    <label for="carId" class="sr-only">Car</label>
+    <!-- <input type="text" id="description" name="description" [(ngModel)]="trip.description" 
           class="form-control" placeholder="description" required > -->
-          <select name="carId" id="carId" [(ngModel)]="trip.carId" required="">
-            <option *ngFor="let car of userCars"  value="{{car.id}}"  >{{car.modelName}}</option>
-          </select>
-        <br/>
-        <button  (click)=" navigateToAvailableSeats()" ></button>
-        <button class="btn btn-lg btn-primary" type="submit" [disabled]="!addTripForm.valid">Add new trip</button>
-    </form>
-  </div>
-
+    <select name="carId" id="carId" [(ngModel)]="trip.carId" required>
+      <option *ngFor="let car of userCars" value="{{car.id}}">{{car.modelName}}</option>
+    </select>
+    <br />
+    <button (click)=" navigateToAvailableSeats()"></button>
+    <button class="btn btn-lg btn-primary" type="submit" [disabled]="!addTripForm.valid">Add new trip</button>
+  </form>
+</div>

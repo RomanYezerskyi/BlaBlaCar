@@ -7,6 +7,7 @@
                     <div class="car_info">
                         <p>{{car.modelName}}</p>
                         <p>{{car.registNum}}</p>
+                        <p>{{car.carStatus}}</p>
                     </div>
                     <div class="driving_licenses">
                         <div class="documents" *ngFor="let doc of car.carDocuments" class="license_image">
@@ -15,12 +16,12 @@
                     </div>
                 </div>
                 <div class="actions">
-                    <img (click)="changeCarStatus(carStatus.Confirmed, car.id)" class="btn btn_actions"
-                        src="../../../../assets/images/like1.png" alt="">
-                    <img (click)="changeCarStatus(carStatus.NeedMoreData, car.id)" class="btn btn_actions"
-                        src="../../../../assets/images/customer-satisfaction.png" alt="">
-                    <img (click)="changeCarStatus(carStatus.Rejected, car.id)" class="btn btn_actions"
-                        src="../../../../assets/images/dislike1.png" alt="">
+                    <i class="material-icons btn btn_actions"
+                        (click)="changeCarStatus(carStatus.Confirmed, car.id)">thumb_up</i>
+                    <i class="material-icons btn btn_actions"
+                        (click)="changeCarStatus(carStatus.NeedMoreData, car.id)">thumbs_up_down</i>
+                    <i class="material-icons btn btn_actions"
+                        (click)="changeCarStatus(carStatus.Rejected, car.id)">thumb_down</i>
                 </div>
             </div>
         </div>

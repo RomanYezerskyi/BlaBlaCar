@@ -15,6 +15,7 @@ using BlaBlaCar.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.FileProviders.Physical;
+using Microsoft.Extensions.Options;
 
 namespace BlaBlaCar.BL.Services.Admin
 {
@@ -22,10 +23,12 @@ namespace BlaBlaCar.BL.Services.Admin
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public AdminService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly HostSettings _hostSettings;
+        public AdminService(IUnitOfWork unitOfWork, IMapper mapper, IOptionsSnapshot<HostSettings> hostSettings)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _hostSettings = hostSettings.Value;
         }
         public async Task<IEnumerable<UserModel>> GetRequestsAsync(ModelStatus status)
         {
@@ -42,8 +45,30 @@ namespace BlaBlaCar.BL.Services.Admin
             var user = _mapper.Map<UserModel>(await _unitOfWork.Users.GetAsync(
                 x => x.Include(x => x.UserDocuments)
                     .Include(x => x.Cars)
-                    .ThenInclude(x => x.CarDocuments),
+                    .ThenInclude(x => x.CarDocuments)
+                    .Include(x=>x.Trips)
+                    .Include(x=>x.TripUsers),
                 x => x.Id == id));
+
+            user.UserImg = user.UserImg.Insert(0, _hostSettings.Host);
+
+            user.UserDocuments = user.UserDocuments.Select(x =>
+            {
+                x.DrivingLicense = _hostSettings.Host + x.DrivingLicense;
+                return x;
+
+            }).ToList();
+
+            user.Cars = user.Cars.Select(x =>
+            {
+                x.CarDocuments.Select(c =>
+                {
+                    c.TechPassport = _hostSettings.Host + c.TechPassport;
+                    return c;
+                }).ToList();
+                return x;
+            }).ToList();
+
             return user;
         }
         public async Task<bool> ChangeUserStatusAsync(ChangeUserStatus changeUserStatus)

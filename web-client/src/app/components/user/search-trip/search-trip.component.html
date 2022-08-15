@@ -70,7 +70,7 @@
         </div>
         <div class="body">
           <div class="profile_img">
-            <img src="../../../../assets/images/user.png" class="img" alt="">
+            <img [src]="sanitaizeImg(item.user?.userImg!)" class="img" alt="">
           </div>
           <p class="user_name">{{item.user?.firstName}}</p>
         </div>

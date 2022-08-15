@@ -50,11 +50,11 @@ namespace BlaBlaCar.API.Controllers
             }
         }
         [HttpGet("trips")]
-        public async Task<IActionResult> GerUserTrips()
+        public async Task<IActionResult> GerUserBookedTrips()
         {
             try
             {
-                var res = await _tripService.GetUserTripsAsync(User);
+                var res = await _tripService.GetUserBookedTripsAsync(User);
                 if (res != null) return Ok(res);
                 return BadRequest("Fail");
             }
