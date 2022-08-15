@@ -78,10 +78,9 @@ namespace BlaBlaCar.API.Controllers
         {
             try
             {
-            //    var res = await _adminService.ChangeCarStatusAsync(status);
-            //    if (res != null) return Ok("User status changed");
-                //return BadRequest(res);
-                return Ok();
+                var res = await _adminService.ChangeCarStatusAsync(status);
+                if (res != null) return Ok(new{res="User status changed"});
+                return BadRequest(res);
             }
             catch (Exception e)
             {

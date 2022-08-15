@@ -1,5 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { TripModel } from 'src/app/interfaces/trip';
 import { TripUserModel } from 'src/app/interfaces/trip-user-model';
@@ -11,10 +12,14 @@ import { TripUserModel } from 'src/app/interfaces/trip-user-model';
 })
 export class UserTripsComponent implements OnInit {
   trips: TripModel[] = [];
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
     this.getUserTrips();
+  }
+  sanitaizeImg(img: string): SafeUrl {
+    console.log(img);
+    return this.sanitizer.bypassSecurityTrustUrl(img);
   }
   deleteUserFromTrip = (userId: string, tripId: number) => {
     const url = 'https://localhost:6001/api/BookedTrip/user';

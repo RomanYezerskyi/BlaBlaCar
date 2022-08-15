@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { SearchTripModel } from 'src/app/interfaces/search-trip';
 import { Router } from '@angular/router';
 import { TripModel } from 'src/app/interfaces/trip';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 @Component({
   selector: 'app-search-trip',
   templateUrl: './search-trip.component.html',
@@ -21,7 +22,7 @@ export class SearchTripComponent implements OnInit {
   tripRoute: { id: number } | undefined;
 
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private sanitizer: DomSanitizer) { }
 
   counterAdd() {
     if (this.trip.countOfSeats == 8) return;
@@ -34,6 +35,10 @@ export class SearchTripComponent implements OnInit {
 
   ngOnInit(): void {
 
+  }
+  sanitaizeImg(img: string): SafeUrl {
+    console.log(img);
+    return this.sanitizer.bypassSecurityTrustUrl(img);
   }
   searchTrips = (form: NgForm) => {
     if (form.valid) {

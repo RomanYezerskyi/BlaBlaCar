@@ -2,19 +2,19 @@
     <div class="main_info">
         <div class="part_one">
             <div class="user__image">
-                <img [src]="'../../../../assets/images/user.png'" alt="" class="img profile__img">
+                <img [src]="sanitaizeImg(user.userImg!)" alt="" class="img profile__img">
             </div>
             <div class="info">
                 <div class="info__data">
-                    <p>10</p>
+                    <p>{{user.cars.length}}</p>
                     <p>Cars</p>
                 </div>
                 <div class="info__data">
-                    <p>11</p>
+                    <p>{{user.trips?.length}}</p>
                     <p>Trips</p>
                 </div>
                 <div class="info__data">
-                    <p>12</p>
+                    <p>{{user.tripUsers?.length}}</p>
                     <p>Travels</p>
                 </div>
 
@@ -34,22 +34,19 @@
             <hr class="data__underline" />
         </div>
     </div>
-    <!-- <div class="main_info licenses">
+    <div class="main_info licenses">
         <h3 class="title"><strong>Driving license</strong></h3>
         <div class="driving_licenses">
             <div *ngFor="let doc of user.userDocuments" class="license_image">
                 <img [src]="sanitaizeImg(doc.drivingLicense)" class="img driving_license__img" alt="">
             </div>
-         
+
         </div>
         <div class="actions">
-            <img (click)="changeUserStatus(userStatus.Confirmed)" class="btn btn_actions"
-                src="../../../../assets/images/like1.png" alt="">
-            <img (click)="changeUserStatus(userStatus.NeedMoreData)" class="btn btn_actions"
-                src="../../../../assets/images/customer-satisfaction.png" alt="">
-            <img (click)="changeUserStatus(userStatus.Rejected)" class="btn btn_actions"
-                src="../../../../assets/images/dislike1.png" alt="">
+            <i class="material-icons btn btn_actions" (click)="changeUserStatus(userStatus.Confirmed)">thumb_up</i>
+            <i class="material-icons btn btn_actions"
+                (click)="changeUserStatus(userStatus.NeedMoreData)">thumbs_up_down</i>
+            <i class="material-icons btn btn_actions" (click)="changeUserStatus(userStatus.Rejected)">thumb_down</i>
         </div>
-       
-    </div> -->
+    </div>
 </div>

@@ -5,6 +5,7 @@ import { TripModel } from 'src/app/interfaces/trip';
 import { DialogBookingConfirmationComponent } from './dialog-booking-confirmation/dialog-booking-confirmation.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CarModel } from 'src/app/interfaces/car';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 @Component({
 	selector: 'app-trip-page-info',
 	templateUrl: './trip-page-info.component.html',
@@ -27,11 +28,11 @@ export class TripPageInfoComponent implements OnInit {
 		availableSeats: [],
 		car: this.carModel,
 		tripUsers: [],
-		user: { id: '', cars: [], email: '', firstName: '', phoneNumber: '', roles: [], userDocuments: [], userStatus: -1 }
+		user: { id: '', cars: [], email: '', firstName: '', phoneNumber: '', roles: [], userDocuments: [], userStatus: -1, userImg: '' }
 	};
 	private readonly url = 'https://localhost:6001/api/Trips/';
 	constructor(private route: ActivatedRoute, private http: HttpClient,
-		private dialog: MatDialog) { }
+		private dialog: MatDialog, private sanitizer: DomSanitizer) { }
 
 	ngOnInit(): void {
 		this.route.params.subscribe(params => {
@@ -41,6 +42,10 @@ export class TripPageInfoComponent implements OnInit {
 			this.requestedSeats = params['requestedSeats']
 		});
 		this.searchData();
+	}
+	sanitaizeImg(img: string): SafeUrl {
+		console.log(img);
+		return this.sanitizer.bypassSecurityTrustUrl(img);
 	}
 
 	searchData = () => {
@@ -61,10 +66,6 @@ export class TripPageInfoComponent implements OnInit {
 
 		dialogConfig.disableClose = true;
 		dialogConfig.autoFocus = true;
-		// dialogConfig.position = {
-		// 'top': '0',
-		// left: '0'
-		// };
 		dialogConfig.data = {
 			trip: this.data,
 			requestedSeats: this.requestedSeats

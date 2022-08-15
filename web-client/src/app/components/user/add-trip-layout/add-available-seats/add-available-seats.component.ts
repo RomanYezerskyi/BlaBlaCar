@@ -17,7 +17,7 @@ import { TripModel } from 'src/app/interfaces/trip';
 })
 export class AddAvailableSeatsComponent implements OnInit {
   invalidForm: boolean | undefined;
-  trip: AddTripModel = {
+  @Input() trip: AddTripModel = {
     startPlace: '',
     endPlace: '',
     startTime: new Date(''),

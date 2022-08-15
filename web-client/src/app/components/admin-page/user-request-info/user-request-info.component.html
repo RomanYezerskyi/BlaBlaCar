@@ -18,11 +18,11 @@
 <div class="tabs">
     <img (click)="changePage(menu.User)" class="tabs__actions icon_resume" src="../../../../assets/images/resume1.png"
         alt="">
-    <img (click)="changePage(menu.Licenses)" class="tabs__actions icon_license"
-        src="../../../../assets/images/driver-license1.png" alt="">
+    <!-- <img (click)="changePage(menu.Licenses)" class="tabs__actions icon_license"
+        src="../../../../assets/images/driver-license1.png" alt=""> -->
     <img (click)="changePage(menu.Cars)" class="tabs__actions icon_car" src="../../../../assets/images/car1.png" alt="">
 </div>
 
-<app-main-info [user]="user" *ngIf="check == menu.User"></app-main-info>
-<app-driving-license-request [user]="user" *ngIf="check == menu.Licenses"></app-driving-license-request>
-<app-car-requests [user]="user" *ngIf="check == menu.Cars"></app-car-requests>
+<app-main-info [user]="user" *ngIf="check == 1"></app-main-info>
+<!-- <app-driving-license-request [user]="user" *ngIf="check == menu.Licenses"></app-driving-license-request> -->
+<app-car-requests [user]="user" *ngIf="check == 3" (someOutput)=getOutPut($event)></app-car-requests>

@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders.Physical;
+using Microsoft.Extensions.Options;
 
 namespace BlaBlaCar.BL.Services
 {
@@ -24,12 +25,15 @@ namespace BlaBlaCar.BL.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IFileService _fileService;
+        private readonly HostSettings _hostSettings;
+
         public UserService(IUnitOfWork unitOfWork,
-            IMapper mapper, IFileService fileService)
+            IMapper mapper, IFileService fileService, IOptionsSnapshot<HostSettings> hostSettings)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _fileService = fileService;
+            _hostSettings = hostSettings.Value;
         }
         public async Task<UserModel> GetUserInformationAsync(ClaimsPrincipal claimsPrincipal)
         {
@@ -43,6 +47,24 @@ namespace BlaBlaCar.BL.Services
                         .Include(x=>x.Trips),
                     u => u.Id == userId)
             );
+            user.UserImg = user.UserImg.Insert(0, _hostSettings.Host);
+            
+            user.UserDocuments = user.UserDocuments.Select(x =>
+               {
+                   x.DrivingLicense = _hostSettings.Host + x.DrivingLicense;
+                   return x;
+
+               }).ToList();
+
+            user.Cars = user.Cars.Select(x =>
+               {
+                   x.CarDocuments.Select(c =>
+                   {
+                       c.TechPassport = _hostSettings.Host + c.TechPassport;
+                       return c;
+                   }).ToList();
+                   return x;
+               }).ToList();
             return user;
         }
 
@@ -90,18 +112,6 @@ namespace BlaBlaCar.BL.Services
             }
 
             throw new Exception("Problems with file");
-        }
-        private string GetContentType(string path)
-        {
-            var provider = new FileExtensionContentTypeProvider();
-            string contentType;
-
-            if (!provider.TryGetContentType(path, out contentType))
-            {
-                contentType = "application/octet-stream";
-            }
-
-            return contentType;
         }
 
         public async Task<bool> СheckIfUserExistsAsync(ClaimsPrincipal principal)

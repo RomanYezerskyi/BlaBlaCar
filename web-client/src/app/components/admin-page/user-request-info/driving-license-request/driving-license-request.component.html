@@ -33,9 +33,6 @@
             <div *ngFor="let doc of user.userDocuments" class="license_image">
                 <img [src]="sanitaizeImg(doc.drivingLicense)" class="img driving_license__img" alt="">
             </div>
-            <!-- <div *ngFor="let doc of user.userDocuments" class="license_image">
-                <img [src]="sanitaizeImg(doc.drivingLicense)" class="img driving_license__img" alt="">
-            </div> -->
         </div>
         <div class="actions">
             <img (click)="changeUserStatus(userStatus.Confirmed)" class="btn btn_actions"

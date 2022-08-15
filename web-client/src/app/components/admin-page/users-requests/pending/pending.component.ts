@@ -31,7 +31,7 @@ export class PendingComponent implements OnInit {
       })
   }
   navigateToRequestInfo = (id: string) => {
-    this.router.navigate(['admin/requests/info/', id])
+    this.router.navigate(['admin/requests/info/', id], { queryParams: { type: 1 } })
   }
 
 }

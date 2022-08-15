@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { CarStatus } from 'src/app/interfaces/car-status';
@@ -15,8 +15,7 @@ export enum Menu {
 @Component({
   selector: 'app-user-request-info',
   templateUrl: './user-request-info.component.html',
-  styleUrls: ['./user-request-info.component.scss'],
-
+  styleUrls: ['./user-request-info.component.scss']
 })
 export class UserRequestInfoComponent implements OnInit {
   menu = Menu;
@@ -30,6 +29,7 @@ export class UserRequestInfoComponent implements OnInit {
   private formData = new FormData();
   img = 'data:image/jpeg;base64,';
   result = '';
+  page = 0;
   constructor(private route: ActivatedRoute, private http: HttpClient,
     private sanitizer: DomSanitizer) { }
 
@@ -38,12 +38,17 @@ export class UserRequestInfoComponent implements OnInit {
       this.userId = params['id'];
     });
     this.getUser();
+    // this.route.queryParams.subscribe(params => {
+    //   this.menu = params['type'];
+    // });
 
   }
-
-  check = Menu.User;
+  getOutPut(event: any) {
+    this.ngOnInit(); // or something that you can use to make it
+  }
+  check = 1;
   changePage(item: Menu) {
-    this.check = item;
+    this.check = item as number;
     console.log(this.check);
   }
 
@@ -51,22 +56,6 @@ export class UserRequestInfoComponent implements OnInit {
     let file = 'https://localhost:6001/' + img;
     console.log(file);
     return this.sanitizer.bypassSecurityTrustUrl(file);
-  }
-
-  getImg = (img: string) => {
-    this.formData.append("img", img);
-    const url = 'https://localhost:6001/api/DriverFiles/';
-    this.http.post(url, this.formData)
-      .subscribe({
-        next: (res: any) => {
-          console.log(res);
-          // this.img = res.fileContents;
-          this.result = this.img + res.fileContents;
-          return this.result;
-          //console.log(this.result);
-        },
-        error: (err: HttpErrorResponse) => console.error(err),
-      });
   }
 
 
