@@ -23,6 +23,7 @@ import { UserBookedTripsComponent } from './components/user/user-information/use
 import { UserInformationComponent } from './components/user/user-information/user-information.component';
 import { UserCarsComponent } from './components/user/user-cars/user-cars.component';
 import { UserTripsComponent } from './components/user/user-information/user-trips/user-trips.component';
+import { PageAccessGuard } from './guards/page-access.guard';
 
 const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -56,13 +57,13 @@ const routes: Routes = [
   },
   {
     path: 'add-trip', component: AddTripLayoutComponent, canActivate: [AuthGuard],
-    children: [
-      { path: 'add', component: AddTripComponent, canActivate: [AuthGuard] },
-      { path: 'add-seats', component: AddAvailableSeatsComponent, canActivate: [AuthGuard] },
-    ]
+    // children: [
+    //   { path: 'add', component: AddTripComponent, canActivate: [AuthGuard] },
+    //   { path: 'add-seats', component: AddAvailableSeatsComponent, canActivate: [AuthGuard] },
+    // ]
   },
   { path: 'add-car', component: AddCarComponent, canActivate: [AuthGuard] },
-  { path: 'driving', component: RequestDrivingLicenseComponent, canActivate: [AuthGuard] },
+  { path: 'driving-license', component: RequestDrivingLicenseComponent, canActivate: [AuthGuard] },
   { path: 'cars', component: UserCarsComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] },
   {

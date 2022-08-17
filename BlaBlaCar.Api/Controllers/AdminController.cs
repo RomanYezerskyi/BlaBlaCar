@@ -40,15 +40,6 @@ namespace BlaBlaCar.API.Controllers
         {
             try
             {
-                //var data = System.IO.File.ReadAllBytes("DriverDocuments\\Images\\3f7302cb-0cd7-4305-a550-65a46c029ae9.jpg");
-
-
-                //var d =new List<byte[]>();
-                //d.Add(data);
-                //d.Add(data);
-                //FileInfo aInfo = new FileInfo(id);
-
-                //return Ok(File(data, MediaTypeNames.Image.Jpeg, "3f7302cb-0cd7-4305-a550-65a46c029ae9.jpg"));
                 var res = await _adminService.GetUserRequestsAsync(id);
                 if (res != null) return Ok(res);
                 return BadRequest(res);
@@ -59,12 +50,12 @@ namespace BlaBlaCar.API.Controllers
             }
         }
         [HttpPost("user/status")]
-        public async Task<IActionResult> ChangeTaskUserRequest([FromBody]ChangeUserStatus status)
+        public async Task<IActionResult> ChangeUserRequest([FromBody]ChangeUserStatus status)
         {
             try
             {
-                //var res = await _adminService.ChangeUserStatusAsync(status);
-                //if (res != null) return Ok("User status changed
+                var res = await _adminService.ChangeUserStatusAsync(status);
+                if (res != null) return Ok("User status changed");
                 return Ok(new JsonResult("User status changed!"));
                //return BadRequest("bad");
             }

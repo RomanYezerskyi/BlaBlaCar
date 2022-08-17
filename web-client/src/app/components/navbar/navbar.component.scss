@@ -99,6 +99,20 @@ a:hover {
     top: -5px;
 }
 
+.menu__list {
+    position: relative;
+}
+
+.submenu {
+    display: none;
+}
+
+.menu__list:hover .submenu {
+    display: block;
+    position: absolute;
+    background-color: #222;
+}
+
 /*Tablet*/
 
 @media all and (min-width:468px) {

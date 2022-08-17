@@ -1,39 +1,25 @@
-<!-- <mat-toolbar color="primary">
-    <div fxHide.gt-xs>
-        <button mat-icon-button (click)="onToggleSidenav()">
-            <mat-icon>menu</mat-icon>
-        </button>
-    </div>
-    <div>
-        <a routerLink="/home">Owner-Account</a>
-    </div>
-    <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
-        <ul fxLayout fxLayoutGap="15px" class="navigation-items">
-            <li>
-                <a routerLink="/owner">Owner Actions</a>
-            </li>
-            <li>
-                <a routerLink="/account">Account Actions</a>
-            </li>
-        </ul>
-    </div>
-  </mat-toolbar> -->
-
 <nav *ngIf="isAdmin() && isUserAuthenticated()">
     <ul class="menu">
         <li class="logo" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">BlaBlaCar</a></li>
         <li class="item" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">Administrators</a></li>
         <li class="item" [ngClass]="{'': toggle, 'active': !toggle}"><a [routerLink]="['admin/roles']">Roles</a></li>
         <li class="item" [ngClass]="{'': toggle, 'active': !toggle}">
-            <a class="menu__list" [routerLink]="['admin/requests']">Requests</a>
-            <ul class="menu submenu">
-                <li class="submenu_item" [ngClass]="{'': toggle, 'active': !toggle}">
-                    <a [routerLink]="['admin/requests', status.Pending]">Pending</a>
-                    <a [routerLink]="['admin/requests', status.Confirmed]">Confirmed</a>
-                    <a [routerLink]="['admin/requests', status.Rejected]">Rejected</a>
-                    <a [routerLink]="['admin/requests', status.NeedMoreData]">Need more data</a>
-                </li>
-            </ul>
+            <a class="menu__list" [routerLink]="['admin/requests']">Requests
+                <ul class="menu submenu">
+                    <li class="submenu_item">
+                        <a [routerLink]="['admin/requests', status.Pending]">Pending</a>
+                    </li>
+                    <li class="submenu_item">
+                        <a [routerLink]="['admin/requests', status.Confirmed]">Confirmed</a>
+                    </li>
+                    <li class="submenu_item">
+                        <a [routerLink]="['admin/requests', status.Rejected]">Rejected</a>
+                    </li>
+                    <li class="submenu_item">
+                        <a [routerLink]="['admin/requests', status.NeedMoreData]">Need more data</a>
+                    </li>
+                </ul>
+            </a>
         </li>
         <li class="item button" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">
                 <mat-icon>account_circle</mat-icon>
@@ -49,7 +35,21 @@
         <li class="item" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">Home</a></li>
         <li class="item" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">About</a></li>
         <li class="item" [ngClass]="{'': toggle, 'active': !toggle}"><a [routerLink]="['profile']">Profile2</a></li>
-        <li class="item button" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">Login</a></li>
+        <li class="item" [ngClass]="{'': toggle, 'active': !toggle}">
+            <a class="menu__list" [routerLink]="['admin/requests']">User
+                <ul class="menu submenu">
+                    <li class="submenu_item">
+                        <a [routerLink]="['admin/requests', status.Pending]">Add car</a>
+                    </li>
+                    <li class="submenu_item">
+                        <a [routerLink]="['admin/requests', status.Confirmed]">Trips</a>
+                    </li>
+                    <li class="submenu_item">
+                        <a [routerLink]="['admin/requests', status.Rejected]">Booked</a>
+                    </li>
+                </ul>
+            </a>
+        </li>
         <li class="item button secondary" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">Sing up</a></li>
         <li class="toggle" (click)="change()"><span class="bars"></span></li>
     </ul>
