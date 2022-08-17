@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CarType } from 'src/app/enums/car-type';
@@ -8,6 +8,7 @@ import { AddNewCarModel } from 'src/app/interfaces/addnew-car';
 import { AvailableSeatsModel } from 'src/app/interfaces/available-seats';
 import { CarModel } from 'src/app/interfaces/car';
 import { SeatModel } from 'src/app/interfaces/seat';
+import { SharedDataService } from 'src/app/services/shared-data.service';
 @Component({
   selector: 'app-add-trip',
   templateUrl: './add-trip.component.html',
@@ -17,7 +18,7 @@ export class AddTripComponent implements OnInit {
   message: string | undefined;
   invalidForm: boolean | undefined;
   data: any = []
-  trip: AddTripModel = {
+  @Input() trip: AddTripModel = {
     startPlace: '',
     endPlace: '',
     startTime: new Date(''),
@@ -28,41 +29,37 @@ export class AddTripComponent implements OnInit {
     carId: 0,
     availableSeats: []
   };
+  @Output() tripOutput: EventEmitter<AddTripModel> = new EventEmitter<AddTripModel>;
+  @Output() pageOutput: EventEmitter<number> = new EventEmitter<number>;
 
-  @Input() userCars: CarModel[] = [];
-
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private sharedDataService: SharedDataService) { }
 
   ngOnInit(): void {
 
     // this.getUserCars();
   }
   navigateToAvailableSeats() {
-    this.router.navigate(['add-trip/add-seats'], { state: this.trip });
+    // this.router.navigate(['add-trip/add-seats'], { state: this.trip });
+    this.tripOutput.emit(this.trip);
+    this.pageOutput.emit(2);
   }
 
-  // getUserCars() {
-  //   this.http.get("https://localhost:6001/api/Car")
-  //     .subscribe({
-  //       next: (res) => {
-  //         this.userCars = res as CarModel[];
-  //       }
-  //     });
+  // this.sharedDataService.changeMessage("message here");
+
+
+  // addTrip = (form: NgForm) => {
+  //   if (form.valid) {
+  //     if (this.userCars === undefined) {
+  //       alert("Add cars!");
+  //       return;
+  //     }
+  //     const url = 'https://localhost:6001/api/Trips/'
+  //     this.http.post(url, this.trip)
+  //       .subscribe((res) => {
+  //         this.data = res
+  //         console.log(this.data)
+  //         console.error(res);
+  //       })
+  //   }
   // }
-
-  addTrip = (form: NgForm) => {
-    if (form.valid) {
-      if (this.userCars === undefined) {
-        alert("Add cars!");
-        return;
-      }
-      const url = 'https://localhost:6001/api/Trips/'
-      this.http.post(url, this.trip)
-        .subscribe((res) => {
-          this.data = res
-          console.log(this.data)
-          console.error(res);
-        })
-    }
-  }
 }
