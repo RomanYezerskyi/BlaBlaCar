@@ -4,8 +4,8 @@
       <div class="form_item">
         <label for="carId" class="sr-only">Car</label>
 
-        <select name="carId" id="carId" [(ngModel)]="trip.carId" required>
-          <option *ngFor="let car of userCars" value="{{car.id}}">
+        <select name="carId" id="carId" [(ngModel)]="trip.carId" (ngModelChange)="setSelectedCar($event)" required>
+          <option *ngFor="let car of userCars" value="{{car.id}}" [ngValue]="car.id">
             <p class="option">{{car.modelName}}</p>
           </option>
         </select>
@@ -25,10 +25,14 @@
           <div *ngFor="let car of userCars">
             <div class="seats_list" *ngIf="trip.carId == car.id">
               <div class="seat_item" *ngFor="let seat of car.seats">
-                <div class="btn seat booked" (click)="addSeat(seat.id)">
+                <div class="btn seat booked" (click)="addSeat(seat.id)" *ngIf="!seat.isSelected; else elseBlock">
                   <p>{{seat.num}} </p>
                 </div>
-
+                <ng-template #elseBlock>
+                  <div class="btn seat" (click)="addSeat(seat.id)">
+                    <p>{{seat.num}} </p>
+                  </div>
+                </ng-template>
               </div>
             </div>
           </div>

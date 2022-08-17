@@ -36,6 +36,11 @@ export class DialogBookingConfirmationComponent implements OnInit {
     private dialogRef: MatDialogRef<DialogBookingConfirmationComponent>, private http: HttpClient,
     @Inject(MAT_DIALOG_DATA) data: any,) {
     this.trip = data.trip as TripModel;
+
+    this.trip.car.seats.forEach(x => {
+      x.isSelected = false;
+    });
+
     this.requestedSeats = data.requestedSeats;
     this.bookedtrip.requestedSeats = this.requestedSeats;
     this.bookedtrip.tripId = this.trip.id;
@@ -47,8 +52,8 @@ export class DialogBookingConfirmationComponent implements OnInit {
 
   }
   cheackSeat(item: SeatModel): boolean {
-    let a = this.trip.availableSeats.some(x => x.seatId == item.id);
-    return a;
+    let res = this.trip.availableSeats.some(x => x.seatId == item.id);
+    return res;
   }
   confirmBook = async () => {
     const url = 'https://localhost:6001/api/BookedTrip'
@@ -73,14 +78,25 @@ export class DialogBookingConfirmationComponent implements OnInit {
 
     const seat: SeatModel = { id: seatId, carId: this.trip.car.id, num: 0, tripUsers: [] }
     if (this.bookedtrip.bookedSeats.find(x => x.id == seat.id)) {
-      this.bookedtrip.bookedSeats.splice(this.bookedtrip.bookedSeats.indexOf(seat));
+      this.bookedtrip.bookedSeats = this.bookedtrip.bookedSeats.filter(x => x.id != seatId);
+      this.changeSeatStatus(seatId);
       console.log("bbbb " + JSON.stringify(this.bookedtrip));
       return;
     }
     if (this.bookedtrip.bookedSeats.length == this.requestedSeats) return;
     else {
       this.bookedtrip.bookedSeats.push(seat);
+      this.changeSeatStatus(seatId);
       console.log("aaaaa " + JSON.stringify(this.bookedtrip));
     }
+  }
+  changeSeatStatus(seatId: number) {
+    this.trip.car.seats.forEach(seat => {
+      if (seat.id == seatId) {
+        if (seat.isSelected) { seat.isSelected = false; }
+        else if (!seat.isSelected) { seat.isSelected = true; }
+        console.log(seat);
+      }
+    });
   }
 }

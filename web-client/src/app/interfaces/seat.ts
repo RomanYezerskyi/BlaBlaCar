@@ -1,6 +1,7 @@
 export interface SeatModel {
-    id:number;
-    num:number;
-    carId:number;
-    tripUsers:any[]
+    id: number;
+    num: number;
+    carId: number;
+    tripUsers: any[]
+    isSelected?: boolean
 }
