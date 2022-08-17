@@ -20,7 +20,7 @@ namespace BlaBlaCar.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCars()
+        public async Task<IActionResult> GetUserCars()
         {
             try
             {

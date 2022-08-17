@@ -1,5 +1,46 @@
-<div class="container">
-  <form #addTripForm="ngForm" (ngSubmit)="addTrip(addTripForm)">
+<form #addTripForm="ngForm" class="form" (ngSubmit)="navigateToAvailableSeats()">
+  <div class="form_items">
+    <div *ngIf="invalidForm" class="alert alert-danger">Invalid username or
+      password.</div>
+    <div class="form_item_inputs">
+      <div class="form_item">
+        <label for="startPlace" class="sr-only">Start Place</label>
+        <input type="email" id="startPlace" name="startPlace" [(ngModel)]="trip.startPlace" class="form-control"
+          placeholder="Start place" required>
+      </div>
+      <div class="form_item">
+        <label for="endPlace" class="sr-only">End Place</label>
+        <input type="email" id="endPlace" name="endPlace" [(ngModel)]="trip.endPlace" class="form-control"
+          placeholder="End place" required>
+      </div>
+    </div>
+    <div class="form_item_inputs">
+      <div class="form_item">
+        <label for="startTime" class="sr-only">startTime</label>
+        <input type="datetime-local" id="startTime" name="startTime" [(ngModel)]="trip.startTime" class="form-control"
+          placeholder="startTime" required>
+      </div>
+      <div class="form_item">
+        <label for="endTime" class="sr-only">endTime</label>
+        <input type="datetime-local" id="endTime" name="endTime" [(ngModel)]="trip.endTime" class="form-control"
+          placeholder="endTime" required>
+      </div>
+    </div>
+    <div class="form_item_inputs textarea_input">
+      <div class="form_item">
+        <label for="description" class="sr-only">description</label>
+        <textarea id="description" name="description" cols="30" rows="10" [(ngModel)]="trip.description"></textarea>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-submit" type="submit" [disabled]="!addTripForm.valid">OK</button>
+    </div>
+  </div>
+</form>
+
+
+<!-- <div class="container">
+  <form #addTripForm="ngForm">
     <h2 class="form-signin-heading">Add trip</h2>
     <div *ngIf="invalidForm" class="alert alert-danger">Invalid username or password.</div>
     <br />
@@ -11,34 +52,25 @@
     <input type="email" id="endPlace" name="endPlace" [(ngModel)]="trip.endPlace" class="form-control"
       placeholder="End place" required>
     <br />
-    <!-- <label for="countOfSeats" class="sr-only">Count of Seats</label>
-        <input type="number" id="countOfSeats" name="countOfSeats" min="0" max="" [(ngModel)]="trip.countOfSeats" 
-          class="form-control" placeholder="countOfSeats" required >
-        <br/> -->
     <label for="startTime" class="sr-only">startTime</label>
-    <input type="date" id="startTime" name="startTime" [(ngModel)]="trip.startTime" class="form-control"
+    <input type="datetime-local" id="startTime" name="startTime" [(ngModel)]="trip.startTime" class="form-control"
       placeholder="startTime" required>
     <br />
     <label for="endTime" class="sr-only">endTime</label>
-    <input type="date" id="endTime" name="endTime" [(ngModel)]="trip.endTime" class="form-control" placeholder="endTime"
-      required>
+    <input type="datetime-local" id="endTime" name="endTime" [(ngModel)]="trip.endTime" class="form-control"
+      placeholder="endTime" required>
     <br />
-    <!-- <label for="pricePerSeat" class="sr-only">pricePerSeat</label>
-        <input type="number" id="pricePerSeat" name="pricePerSeat" [(ngModel)]="trip.pricePerSeat" 
-          class="form-control" placeholder="pricePerSeat" required >
-        <br/>
-        <label for="description" class="sr-only">description</label>
-        <input type="text" id="description" name="description" [(ngModel)]="trip.description" 
-          class="form-control" placeholder="description" required >
-        <br/> -->
-    <label for="carId" class="sr-only">Car</label>
-    <!-- <input type="text" id="description" name="description" [(ngModel)]="trip.description" 
-          class="form-control" placeholder="description" required > -->
-    <select name="carId" id="carId" [(ngModel)]="trip.carId" required>
-      <option *ngFor="let car of userCars" value="{{car.id}}">{{car.modelName}}</option>
-    </select>
+    <label for="pricePerSeat" class="sr-only">pricePerSeat</label>
+    <input type="number" id="pricePerSeat" name="pricePerSeat" [(ngModel)]="trip.pricePerSeat" class="form-control"
+      placeholder="pricePerSeat" required>
     <br />
+    <label for="description" class="sr-only">description</label>
+    <input type="text" id="description" name="description" [(ngModel)]="trip.description" class="form-control"
+      placeholder="description" required>
+    <br />
+
+
     <button (click)=" navigateToAvailableSeats()"></button>
     <button class="btn btn-lg btn-primary" type="submit" [disabled]="!addTripForm.valid">Add new trip</button>
   </form>
-</div>
+</div> -->

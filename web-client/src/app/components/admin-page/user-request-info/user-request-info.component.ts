@@ -44,7 +44,7 @@ export class UserRequestInfoComponent implements OnInit {
 
   }
   getOutPut(event: any) {
-    this.ngOnInit(); // or something that you can use to make it
+    this.ngOnInit();
   }
   check = 1;
   changePage(item: Menu) {

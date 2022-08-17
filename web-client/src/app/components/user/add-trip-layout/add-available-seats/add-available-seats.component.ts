@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CarType } from 'src/app/enums/car-type';
@@ -9,11 +9,12 @@ import { CarModel } from 'src/app/interfaces/car';
 import { CarStatus } from 'src/app/interfaces/car-status';
 import { SeatModel } from 'src/app/interfaces/seat';
 import { TripModel } from 'src/app/interfaces/trip';
+import { SharedDataService } from 'src/app/services/shared-data.service';
 
 @Component({
   selector: 'app-add-available-seats',
   templateUrl: './add-available-seats.component.html',
-  styleUrls: ['./add-available-seats.component.scss'],
+  styleUrls: ['./add-available-seats.component.scss', '.././add-trip-layout.component.scss'],
 })
 export class AddAvailableSeatsComponent implements OnInit {
   invalidForm: boolean | undefined;
@@ -28,15 +29,20 @@ export class AddAvailableSeatsComponent implements OnInit {
     carId: 0,
     availableSeats: []
   };
+  @Input() userCars: CarModel[] = [];
+  @Output() tripOutput: EventEmitter<AddTripModel> = new EventEmitter<AddTripModel>;
   userCar: CarModel = { id: 0, carType: -1, modelName: '', registNum: '', seats: [], carStatus: -1, carDocuments: [] };
   private readonly url = 'https://localhost:6001/api/Trips/';
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-    this.trip = history.state;
+    // this.trip = history.state;
+    // console.log(this.trip);
+
     console.log(this.trip);
-    this.getUserCar()
+    // this.getUserCar()
   }
+
   getUserCar() {
     this.http.get("https://localhost:6001/api/Car/" + this.trip.carId)
       .subscribe({
@@ -57,6 +63,7 @@ export class AddAvailableSeatsComponent implements OnInit {
       this.trip.availableSeats.push(seat);
       console.log("aaaaa " + JSON.stringify(this.trip.availableSeats));
     }
+    this.tripOutput.emit(this.trip);
   }
   addTrip = (form: NgForm) => {
     if (form.valid) {
@@ -65,7 +72,7 @@ export class AddAvailableSeatsComponent implements OnInit {
         return;
       }
       console.log(this.trip);
-      const url = 'https://localhost:6001/api/Trips'
+      const url = 'https://localhost:6001/api/Trips/'
       this.http.post(url, this.trip)
         .subscribe((res) => {
           console.error(res);

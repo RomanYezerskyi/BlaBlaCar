@@ -21,8 +21,6 @@ export class UserProfileComponent implements OnInit {
     this.getUser();
   }
   sanitaizeImg(img: string): SafeUrl {
-    // let file = 'https://localhost:6001/' + img;
-    // console.log(file);
     return this.sanitizer.bypassSecurityTrustUrl(img);
   }
   getUser = () => {
