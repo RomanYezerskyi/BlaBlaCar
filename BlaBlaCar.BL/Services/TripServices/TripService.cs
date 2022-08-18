@@ -69,7 +69,7 @@ namespace BlaBlaCar.BL.Services.TripServices
                         .Include(x=>x.AvailableSeats)
                         .Include(i=>i.TripUsers).ThenInclude(i=>i.User)
                         .Include(i => i.TripUsers).ThenInclude(x=>x.Seat), 
-                    x=>x.UserId == userId));
+                    x=>x.UserId == Guid.Parse((ReadOnlySpan<char>)userId)));
             if (!trips.Any()) return null;
 
             trips = trips.Select(t =>
@@ -140,7 +140,7 @@ namespace BlaBlaCar.BL.Services.TripServices
                 if (!checkIfUserExist) throw new Exception("This user cannot create trip!");
 
                 var tripModel = _mapper.Map<NewTripViewModel, TripModel>(newTripModel);
-                tripModel.UserId = principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value;
+                tripModel.UserId = Guid.Parse((ReadOnlySpan<char>)principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
 
                 var trip = _mapper.Map<TripModel, Trip>(tripModel);
 

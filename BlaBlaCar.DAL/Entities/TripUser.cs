@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace BlaBlaCar.DAL.Entities
 {
-    public class TripUser
+    public class TripUser: BaseEntity
     {
-        public Guid Id { get; set; }
-        public string userId { get; set; }
+        //public Guid Id { get; set; }
+        public Guid UserId { get; set; }
         public ApplicationUser User { get; set; }
         public Guid SeatId { get; set; }
         public Seat Seat { get; set; }

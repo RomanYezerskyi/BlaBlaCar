@@ -37,7 +37,9 @@ namespace BlaBlaCar.BL.Services
         }
         public async Task<UserModel> GetUserInformationAsync(ClaimsPrincipal claimsPrincipal)
         {
-            var userId = claimsPrincipal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value;
+            Guid userId = Guid.Parse(claimsPrincipal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
+
+            var a = await _unitOfWork.Users.GetAsync(null, null,null);
             if (userId == null) throw new Exception("User no found!");
             var user = _mapper.Map<UserModel>(
                 await _unitOfWork.Users.GetAsync(x => x.Include(i => i.Cars)
@@ -47,7 +49,8 @@ namespace BlaBlaCar.BL.Services
                         .Include(x=>x.Trips),
                     u => u.Id == userId)
             );
-            user.UserImg = user.UserImg.Insert(0, _hostSettings.Host);
+            if(user.UserImg != null)
+                user.UserImg = user.UserImg.Insert(0, _hostSettings.Host);
             
             user.UserDocuments = user.UserDocuments.Select(x =>
                {
@@ -130,7 +133,7 @@ namespace BlaBlaCar.BL.Services
         {
             var user = new UserModel()
             {
-                Id = principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id)?.Value,
+                Id = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value),
                 Email = principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 FirstName = principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.GivenName).Value,
                 PhoneNumber = principal.Claims.FirstOrDefault(x=>x.Type == JwtClaimTypes.PhoneNumber).Value,
