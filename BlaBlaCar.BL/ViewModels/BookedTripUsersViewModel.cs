@@ -10,7 +10,7 @@ namespace BlaBlaCar.BL.ViewModels
 {
     public class BookedTripUsersViewModel
     {
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public UserModel User { get; set; }
         public IEnumerable<SeatModel> Seats { get; set; }
     }

@@ -13,7 +13,7 @@ namespace BlaBlaCar.BL.ODT.CarModels
         public string ModelName { get; set; }
         public string RegistNum { get; set; }
         public CarTypeModel CarType { get; set; }
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public UserModel User { get; set; }
         public ICollection<CarDocumentsModel> CarDocuments { get; set; }
         public ModelStatus CarStatus { get; set; }

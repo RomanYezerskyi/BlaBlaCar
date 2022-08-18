@@ -6,7 +6,7 @@ namespace BlaBlaCar.BL.ODT
     {
         public Guid Id { get; set; }
         public string DrivingLicense { get; set; }
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public UserModel User { get; set; }
     }
 }

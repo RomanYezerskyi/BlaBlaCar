@@ -40,7 +40,7 @@ namespace BlaBlaCar.BL.Services.Admin
 
         }
       
-        public async Task<UserModel> GetUserRequestsAsync(string id)
+        public async Task<UserModel> GetUserRequestsAsync(Guid id)
         {
             var user = _mapper.Map<UserModel>(await _unitOfWork.Users.GetAsync(
                 x => x.Include(x => x.UserDocuments)
@@ -74,7 +74,7 @@ namespace BlaBlaCar.BL.Services.Admin
         public async Task<bool> ChangeUserStatusAsync(ChangeUserStatus changeUserStatus)
         {
             var user = _mapper.Map<UserModel>(
-                await _unitOfWork.Users.GetAsync(null, x => x.Id == changeUserStatus.UserId));
+                await _unitOfWork.Users.GetAsync(null, x => x.Id == Guid.Parse((ReadOnlySpan<char>)changeUserStatus.UserId)));
 
             if (user is null) throw new Exception("User not found");
             user.UserStatus = changeUserStatus.Status;

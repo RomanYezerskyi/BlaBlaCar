@@ -11,7 +11,7 @@ namespace BlaBlaCar.BL.Interfaces
     public interface IAdminService
     {
         Task<IEnumerable<UserModel>> GetRequestsAsync(ModelStatus status);
-        Task<UserModel> GetUserRequestsAsync(string id);
+        Task<UserModel> GetUserRequestsAsync(Guid id);
         Task<bool> ChangeUserStatusAsync(ChangeUserStatus changeUserStatus);
         Task<bool> ChangeCarStatusAsync(ChangeCarStatus changeCarStatus);
     }

@@ -12,7 +12,7 @@ namespace BlaBlaCar.BL.ODT.TripModels
         public DateTime EndTime { get; set; }
         public int PricePerSeat { get; set; }
         public string Description { get; set; }
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public UserModel User { get; set; }
         public Guid CarId { get; set; }
         public CarModel Car { get; set; }

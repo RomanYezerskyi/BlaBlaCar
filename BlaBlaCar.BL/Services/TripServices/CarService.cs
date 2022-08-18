@@ -41,7 +41,7 @@ namespace BlaBlaCar.BL.Services.TripServices
             var userCars = _mapper.Map<IEnumerable<CarModel>>
                 (await _unitOfWork.Cars.GetAsync(null, x=>
                     x.Include(s=>s.Seats), 
-                    x => x.UserId == userId));
+                    x => x.UserId == Guid.Parse((ReadOnlySpan<char>)userId)));
             return userCars;
         }
 
@@ -56,9 +56,9 @@ namespace BlaBlaCar.BL.Services.TripServices
         {
             var checkIfUserExist = await _userService.СheckIfUserExistsAsync(principal);
             if (!checkIfUserExist) throw new Exception("This user cannot create trip!");
-            var userId = principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value;
+            Guid userId = Guid.Parse((ReadOnlySpan<char>)principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
             var user = _mapper.Map<UserModel>(await _unitOfWork.Users.GetAsync(null,
-                x => x.Id == userId));
+                x => x.Id == userId)); 
 
             if (user.UserStatus == ModelStatus.Rejected) throw new Exception("This user cannot add car!");
             

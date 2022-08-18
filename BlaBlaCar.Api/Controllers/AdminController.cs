@@ -36,7 +36,7 @@ namespace BlaBlaCar.API.Controllers
             }
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserRequests(string id)
+        public async Task<IActionResult> GetUserRequests(Guid id)
         {
             try
             {

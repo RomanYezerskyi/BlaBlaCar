@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace BlaBlaCar.DAL.Entities
 {
-    public class Car
+    public class Car: BaseEntity
     {
-        public Guid Id { get; set; }
         public string ModelName { get; set; }
         public string RegistNum { get; set; }
         public CarType CarType { get; set; }
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public Status CarStatus { get; set; }
         public ICollection<CarDocuments> CarDocuments { get; set; }
         public ApplicationUser User { get; set; }

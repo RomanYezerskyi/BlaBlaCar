@@ -12,6 +12,6 @@ namespace BlaBlaCar.BL.ViewModels
         public Guid Id { get; set; }
         public Guid SeatId { get; set; }
         public Guid TripId { get; set; }
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
     }
 }

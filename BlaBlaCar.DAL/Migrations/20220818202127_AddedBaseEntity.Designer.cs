@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlaBlaCar.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220803185050_added-guid-id")]
-    partial class addedguidid
+    [Migration("20220818202127_AddedBaseEntity")]
+    partial class AddedBaseEntity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,8 +26,15 @@ namespace BlaBlaCar.DAL.Migrations
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.ApplicationUser", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -39,6 +46,19 @@ namespace BlaBlaCar.DAL.Migrations
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserImg")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserStatus")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -76,8 +96,17 @@ namespace BlaBlaCar.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("CarStatus")
+                        .HasColumnType("int");
+
                     b.Property<int>("CarType")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ModelName")
                         .IsRequired()
@@ -87,9 +116,14 @@ namespace BlaBlaCar.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -98,6 +132,26 @@ namespace BlaBlaCar.DAL.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Cars");
+                });
+
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.CarDocuments", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CarId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("TechPassport")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarId");
+
+                    b.ToTable("CarDocuments");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.Seat", b =>
@@ -128,6 +182,12 @@ namespace BlaBlaCar.DAL.Migrations
                     b.Property<Guid>("CarId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -149,9 +209,14 @@ namespace BlaBlaCar.DAL.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -168,15 +233,26 @@ namespace BlaBlaCar.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("SeatId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("TripId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("userId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -184,9 +260,41 @@ namespace BlaBlaCar.DAL.Migrations
 
                     b.HasIndex("TripId");
 
-                    b.HasIndex("userId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("TripUsers");
+                });
+
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.UserDocuments", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DrivingLicense")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserDocuments");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.AvailableSeats", b =>
@@ -217,6 +325,17 @@ namespace BlaBlaCar.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.CarDocuments", b =>
+                {
+                    b.HasOne("BlaBlaCar.DAL.Entities.Car", "Car")
+                        .WithMany("CarDocuments")
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Car");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.Seat", b =>
@@ -264,8 +383,8 @@ namespace BlaBlaCar.DAL.Migrations
                         .IsRequired();
 
                     b.HasOne("BlaBlaCar.DAL.Entities.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("userId")
+                        .WithMany("TripUsers")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -276,15 +395,32 @@ namespace BlaBlaCar.DAL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.UserDocuments", b =>
+                {
+                    b.HasOne("BlaBlaCar.DAL.Entities.ApplicationUser", "User")
+                        .WithMany("UserDocuments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("Cars");
 
+                    b.Navigation("TripUsers");
+
                     b.Navigation("Trips");
+
+                    b.Navigation("UserDocuments");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.Car", b =>
                 {
+                    b.Navigation("CarDocuments");
+
                     b.Navigation("Seats");
 
                     b.Navigation("Trips");
