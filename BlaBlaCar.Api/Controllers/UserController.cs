@@ -36,8 +36,6 @@ namespace BlaBlaCar.API.Controllers
         {
             try
             {
-                var a = HttpContext.Request.Host;
-                var url = Request.Scheme + "://" + Request.Host.Value;
                 var res = await _userService.GetUserInformationAsync(User);
                 if (res != null) return Ok(res);
                 return BadRequest("Fail");

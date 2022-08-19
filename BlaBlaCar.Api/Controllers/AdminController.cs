@@ -54,7 +54,7 @@ namespace BlaBlaCar.API.Controllers
         {
             try
             {
-                var res = await _adminService.ChangeUserStatusAsync(status);
+                var res = await _adminService.ChangeUserStatusAsync(status, User);
                 if (res != null) return Ok("User status changed");
                 return Ok(new JsonResult("User status changed!"));
                //return BadRequest("bad");
@@ -69,7 +69,7 @@ namespace BlaBlaCar.API.Controllers
         {
             try
             {
-                var res = await _adminService.ChangeCarStatusAsync(status);
+                var res = await _adminService.ChangeCarStatusAsync(status, User);
                 if (res != null) return Ok(new{res="User status changed"});
                 return BadRequest(res);
             }

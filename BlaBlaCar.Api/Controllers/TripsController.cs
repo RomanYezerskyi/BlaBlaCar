@@ -102,7 +102,7 @@ namespace BlaBlaCar.Api.Controllers
         {
             try
             {
-                var res = await _tripService.DeleteTripAsync(id);
+                var res = await _tripService.DeleteTripAsync(id, User);
                 if (res) return Ok(new { result="Deleted Successfully"});
                 return BadRequest("Fail");
             }

@@ -56,7 +56,7 @@ namespace BlaBlaCar.BL.Services.TripServices
         {
             var checkIfUserExist = await _userService.СheckIfUserExistsAsync(principal);
             if (!checkIfUserExist) throw new Exception("This user cannot create trip!");
-            Guid userId = Guid.Parse((ReadOnlySpan<char>)principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
+            Guid userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
             var user = _mapper.Map<UserModel>(await _unitOfWork.Users.GetAsync(null,
                 x => x.Id == userId)); 
 
@@ -81,7 +81,7 @@ namespace BlaBlaCar.BL.Services.TripServices
 
                 var car = _mapper.Map<Car>(newCar);
                 await _unitOfWork.Cars.InsertAsync(car);
-                return await _unitOfWork.SaveAsync();
+                return await _unitOfWork.SaveAsync(userId);
             }
             throw new Exception("Problems with file");
         }

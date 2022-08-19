@@ -1,6 +1,7 @@
 ﻿using BlaBlaCar.DAL.Data;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlaBlaCar.DAL
 {
@@ -87,8 +88,27 @@ namespace BlaBlaCar.DAL
        
 
 
-        public async Task<bool> SaveAsync()
+        public async Task<bool> SaveAsync(Guid userId)
         {
+            var entities = _context.ChangeTracker.Entries();
+            if (!entities.Any()) 
+                return Convert.ToBoolean(await _context.SaveChangesAsync());
+
+            foreach (var entity in entities)
+            {
+                if (entity.Entity is not BaseEntity baseEntity) continue;
+
+                if (entity.State == EntityState.Added)
+                {
+                    baseEntity.CreatedBy = userId;
+                    baseEntity.CreatedAt = DateTime.Now;
+                }
+                else if (entity.State == EntityState.Modified)
+                {
+                    baseEntity.UpdatedBy = userId;
+                    baseEntity.UpdatedAt = DateTime.Now;
+                }
+            }
             return Convert.ToBoolean(await _context.SaveChangesAsync());
         }
     }

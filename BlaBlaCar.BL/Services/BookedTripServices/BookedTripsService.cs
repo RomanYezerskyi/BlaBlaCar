@@ -52,7 +52,7 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
 
             var checkIfUserExist = await _userService.СheckIfUserExistsAsync(principal);
             if (!checkIfUserExist) throw new Exception("This user cannot book trip!");
-            Guid userId = Guid.Parse((ReadOnlySpan<char>)principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
+            Guid userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
 
 
             var usersBookedTrip = await _unitOfWork.TripUser
@@ -70,34 +70,41 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
                 listOfSeats.Add(userTripModel);
             }
             await _unitOfWork.TripUser.InsertRangeAsync(_mapper.Map<IEnumerable<TripUser>>(listOfSeats));
-            return await _unitOfWork.SaveAsync();
+
+            return await _unitOfWork.SaveAsync(userId);
         }
 
-        public async Task<bool> DeleteBookedTripAsync(IEnumerable<TripUserViewModel> tripUserModel)
+        public async Task<bool> DeleteBookedTripAsync(IEnumerable<TripUserViewModel> tripUserModel, ClaimsPrincipal principal)
         {
             var trip = _mapper.Map<IEnumerable<TripUserModel>>(await _unitOfWork.TripUser.GetAsync(null, null, x =>
                 x.TripId == tripUserModel.FirstOrDefault().TripId && x.UserId == tripUserModel.FirstOrDefault().UserId));
             if (trip == null) throw new Exception("Trip not found");
             _unitOfWork.TripUser.Delete(_mapper.Map<IEnumerable<TripUser>>(trip));
-            return await _unitOfWork.SaveAsync();
+
+            var changedBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
+            return await _unitOfWork.SaveAsync(changedBy);
         }
 
-        public async Task<bool> DeleteBookedSeatAsync(TripUserViewModel tripUserModel)
+        public async Task<bool> DeleteBookedSeatAsync(TripUserViewModel tripUserModel, ClaimsPrincipal principal)
         {
             var trip = _mapper.Map<TripUserModel>(await _unitOfWork.TripUser.GetAsync(null, x =>
                 x.TripId == tripUserModel.TripId && x.UserId == tripUserModel.UserId && x.SeatId == tripUserModel.SeatId));
             if (trip == null) throw new Exception("Trip not found");
             _unitOfWork.TripUser.Delete(_mapper.Map<TripUser>(trip));
-            return await _unitOfWork.SaveAsync();
+
+            var changedBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
+            return await _unitOfWork.SaveAsync(changedBy);
         }
 
-        public async Task<bool> DeleteUserFromTripAsync(TripUserViewModel tripUserModel)
+        public async Task<bool> DeleteUserFromTripAsync(TripUserViewModel tripUserModel, ClaimsPrincipal principal)
         {
             var trip = _mapper.Map<IEnumerable<TripUserModel>>(await _unitOfWork.TripUser.GetAsync(null,null, x =>
                 x.TripId == tripUserModel.TripId && x.UserId == tripUserModel.UserId && x.TripId == tripUserModel.TripId));
             if (trip == null) throw new Exception("Trip not found");
             _unitOfWork.TripUser.Delete(_mapper.Map<IEnumerable<TripUser>>(trip));
-            return await _unitOfWork.SaveAsync();
+
+            var changedBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
+            return await _unitOfWork.SaveAsync(changedBy);
         }
     }
     
