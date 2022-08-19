@@ -36,30 +36,10 @@ export class AddTripComponent implements OnInit {
 
   ngOnInit(): void {
 
-    // this.getUserCars();
   }
   navigateToAvailableSeats() {
-    // this.router.navigate(['add-trip/add-seats'], { state: this.trip });
     this.tripOutput.emit(this.trip);
     this.pageOutput.emit(2);
   }
 
-  // this.sharedDataService.changeMessage("message here");
-
-
-  // addTrip = (form: NgForm) => {
-  //   if (form.valid) {
-  //     if (this.userCars === undefined) {
-  //       alert("Add cars!");
-  //       return;
-  //     }
-  //     const url = 'https://localhost:6001/api/Trips/'
-  //     this.http.post(url, this.trip)
-  //       .subscribe((res) => {
-  //         this.data = res
-  //         console.log(this.data)
-  //         console.error(res);
-  //       })
-  //   }
-  // }
 }

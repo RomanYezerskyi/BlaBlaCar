@@ -47,16 +47,6 @@ export class AddTripLayoutComponent implements OnInit {
   getPagePut(event: number) {
     this.check = Menu.Car;
   }
-  // getUserCars() {
-  //   this.http.get("https://localhost:6001/api/Car")
-  //     .subscribe({
-  //       next: (res) => {
-  //         this.userCars = res as CarModel[];
-  //         console.log(res);
-  //       },
-  //       error: (err: HttpErrorResponse) => console.log(err)
-  //     });
-  // }
   async getUserCars(): Promise<CarModel[]> {
     const userCar = await new Promise<CarModel[]>((resolve, reject) => {
       this.http.get<CarModel[]>("https://localhost:6001/api/Car/")

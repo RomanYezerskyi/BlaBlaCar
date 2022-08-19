@@ -39,8 +39,6 @@ namespace BlaBlaCar.BL.Services
         {
             Guid userId = Guid.Parse(claimsPrincipal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
 
-            var a = await _unitOfWork.Users.GetAsync(null, null,null);
-            if (userId == null) throw new Exception("User no found!");
             var user = _mapper.Map<UserModel>(
                 await _unitOfWork.Users.GetAsync(x => x.Include(i => i.Cars)
                         .ThenInclude(i => i.CarDocuments)
@@ -49,7 +47,9 @@ namespace BlaBlaCar.BL.Services
                         .Include(x=>x.Trips),
                     u => u.Id == userId)
             );
-            if(user.UserImg != null)
+            if (user == null) throw new Exception("User no found!");
+
+            if (user.UserImg != null)
                 user.UserImg = user.UserImg.Insert(0, _hostSettings.Host);
             
             user.UserDocuments = user.UserDocuments.Select(x =>

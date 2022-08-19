@@ -9,11 +9,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class AuthGuard implements CanActivate {
   constructor(private router: Router, private jwtHelper: JwtHelperService, private http: HttpClient) { }
-  private async logOut() {
-    localStorage.removeItem("jwt");
-    localStorage.removeItem("refreshToken");
-  };
+
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+
     const token = localStorage.getItem("jwt");
     if (token && !this.jwtHelper.isTokenExpired(token)) {
       console.log(this.jwtHelper.decodeToken(token))
@@ -35,7 +33,7 @@ export class AuthGuard implements CanActivate {
       return false;
     }
     const credentials = JSON.stringify({ accessToken: token, refreshToken: refreshToken });
-    let isRefreshSuccess: boolean;
+    let isRefreshSuccess = true;
     const refreshRes = await new Promise<AuthenticatedResponse>((resolve, reject) => {
       this.http.post<AuthenticatedResponse>("https://localhost:5001/api/token/refresh", credentials, {
         headers: new HttpHeaders({
@@ -43,17 +41,35 @@ export class AuthGuard implements CanActivate {
         })
       }).subscribe({
         next: (res: AuthenticatedResponse) => resolve(res),
-        error: (_) => {
-          reject(_);
-          isRefreshSuccess = false;
-          this.logOut();
-          this.router.navigate(["login"]);
-        }
+        error: (_) => { isRefreshSuccess = false; reject; }
+        // {
+        //   reject(_);
+        //   isRefreshSuccess = false;
+        //   this.logOut();
+        //   this.router.navigate(["login"]);
+        // }
       });
     });
     localStorage.setItem("jwt", refreshRes.token);
     localStorage.setItem("refreshToken", refreshRes.refreshToken);
-    isRefreshSuccess = true;
+    // isRefreshSuccess = true;
+    console.log("aa");
     return isRefreshSuccess;
+  }
+  private async logOut() {
+
+    // const refreshRes = await new Promise<any>((resolve, reject) => {
+    //   this.http.post<any>("https://localhost:5001/api/token/revoke", {
+    //     headers: new HttpHeaders({
+    //       "Content-Type": "application/json"
+    //     })
+    //   }).subscribe({
+    //     next: (res: any) => { resolve(res); console.log(res) },
+    //     error: (_) => { reject; console.log(_) }
+    //   });
+    // });
+    // console.log("aa");
+    localStorage.removeItem("jwt");
+    localStorage.removeItem("refreshToken");
   }
 }

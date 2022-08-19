@@ -23,7 +23,9 @@ import { UserBookedTripsComponent } from './components/user/user-information/use
 import { UserInformationComponent } from './components/user/user-information/user-information.component';
 import { UserCarsComponent } from './components/user/user-cars/user-cars.component';
 import { UserTripsComponent } from './components/user/user-information/user-trips/user-trips.component';
-import { PageAccessGuard } from './guards/page-access.guard';
+import { PageAccessGuard } from './guards/page-access/page-access.guard';
+import { InfoPageComponent } from './guards/info-page/info-page.component';
+import { AdminGuard } from './guards/admin-guard/admin.guard';
 
 const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -35,7 +37,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent  /*, canActivate: [AuthGuard]*/ },
 
   {
-    path: 'admin', component: AdminPageComponent, canActivate: [AuthGuard],
+    path: 'admin', component: AdminPageComponent, canActivate: [AuthGuard, AdminGuard],
     children: [
       { path: 'roles', component: RolesComponent, canActivate: [AuthGuard] },
       {
@@ -56,7 +58,7 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'add-trip', component: AddTripLayoutComponent, canActivate: [AuthGuard],
+    path: 'add-trip', component: AddTripLayoutComponent, canActivate: [PageAccessGuard],
     // children: [
     //   { path: 'add', component: AddTripComponent, canActivate: [AuthGuard] },
     //   { path: 'add-seats', component: AddAvailableSeatsComponent, canActivate: [AuthGuard] },
@@ -74,7 +76,7 @@ const routes: Routes = [
       { path: 'user-trips', component: UserTripsComponent, canActivate: [AuthGuard], },
     ]
   },
-
+  { path: 'info', component: InfoPageComponent, canActivate: [AuthGuard] }
 
 ];
 

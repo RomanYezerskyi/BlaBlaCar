@@ -1,0 +1,47 @@
+.container {
+    margin-top: 50px;
+}
+
+.info_page {
+    width: 50%;
+    margin: auto;
+    border: 15px white solid;
+    background-color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    border-radius: 10px;
+
+    .title {
+        margin-top: 40px;
+        margin-bottom: 40px;
+
+        h3 {
+            margin: 0;
+            font-size: 60px;
+            font-weight: 900
+        }
+    }
+
+    .message {
+        margin-bottom: 40px;
+
+        p {
+            font-weight: 500;
+            font-size: 15px;
+        }
+    }
+
+    .actions {
+        margin-bottom: 20px;
+
+        .home {
+            font-family: 'Muli', sans-serif;
+            display: inline-block;
+            font-weight: 400;
+            text-decoration: none;
+            background-color: transparent;
+            color: #222225;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+    }
+}

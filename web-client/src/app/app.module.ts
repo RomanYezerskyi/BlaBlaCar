@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from "@angular/common/http";
@@ -38,6 +37,7 @@ import { UserBookedTripsComponent } from './components/user/user-information/use
 import { UserInformationComponent } from './components/user/user-information/user-information.component';
 import { UserCarsComponent } from './components/user/user-cars/user-cars.component';
 import { UserTripsComponent } from './components/user/user-information/user-trips/user-trips.component';
+import { InfoPageComponent } from './guards/info-page/info-page.component';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -70,8 +70,7 @@ export function tokenGetter() {
     UserInformationComponent,
     UserCarsComponent,
     UserTripsComponent,
-
-
+    InfoPageComponent,
 
   ],
   imports: [
