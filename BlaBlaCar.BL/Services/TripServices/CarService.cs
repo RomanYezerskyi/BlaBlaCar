@@ -5,7 +5,7 @@ using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.BL.ODT;
 using BlaBlaCar.BL.ODT.CarModels;
 using BlaBlaCar.BL.ViewModels;
-using BlaBlaCar.DAL.Entities;
+using BlaBlaCar.DAL.Entities.CarEntities;
 using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
 using Microsoft.AspNetCore.Http;

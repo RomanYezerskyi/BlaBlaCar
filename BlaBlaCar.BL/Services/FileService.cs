@@ -18,17 +18,6 @@ namespace BlaBlaCar.BL.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<byte[]> GetFileAsync(string filePath)
-        {
-            if (filePath == null) throw new Exception("File path cannot be null");
-            byte[] result;
-
-            await using FileStream SourceStream = File.Open(filePath, FileMode.Open);
-            result = new byte[SourceStream.Length];
-            await SourceStream.ReadAsync(result, 0, (int)SourceStream.Length);
-            return result;
-        }
-
         public async Task<List<string>> FilesDbPathListAsync(IEnumerable<IFormFile> collection)
         {
             var folderName = Path.Combine("DriverDocuments", "Images");

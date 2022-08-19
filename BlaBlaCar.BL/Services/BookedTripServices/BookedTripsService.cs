@@ -4,7 +4,7 @@ using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.BL.ODT.BookTripModels;
 using BlaBlaCar.BL.ODT.TripModels;
 using BlaBlaCar.BL.ViewModels;
-using BlaBlaCar.DAL.Entities;
+using BlaBlaCar.DAL.Entities.TripEntities;
 using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
 using Microsoft.EntityFrameworkCore;

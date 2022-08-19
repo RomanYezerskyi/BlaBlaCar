@@ -10,8 +10,10 @@ using AutoMapper;
 using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.BL.ODT;
 using BlaBlaCar.BL.ODT.CarModels;
+using BlaBlaCar.BL.ODT.NotificationModels;
 using BlaBlaCar.BL.ViewModels;
 using BlaBlaCar.DAL.Entities;
+using BlaBlaCar.DAL.Entities.CarEntities;
 using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
 using Microsoft.EntityFrameworkCore;
@@ -26,10 +28,12 @@ namespace BlaBlaCar.BL.Services.Admin
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly HostSettings _hostSettings;
-        public AdminService(IUnitOfWork unitOfWork, IMapper mapper, IOptionsSnapshot<HostSettings> hostSettings)
+        private readonly INotificationService _notificationService;
+        public AdminService(IUnitOfWork unitOfWork, IMapper mapper, IOptionsSnapshot<HostSettings> hostSettings, INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _notificationService = notificationService;
             _hostSettings = hostSettings.Value;
         }
         public async Task<IEnumerable<UserModel>> GetRequestsAsync(ModelStatus status)
@@ -82,9 +86,16 @@ namespace BlaBlaCar.BL.Services.Admin
             user.UserStatus = changeUserStatus.Status;
 
             _unitOfWork.Users.Update(_mapper.Map<ApplicationUser>(user));
-            //добавити меседжі
 
             var changedBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
+
+            _notificationService.CreateNotificationAsync(
+                new NotificationViewModel()
+                {
+                    NotificationStatus = NotificationModelStatus.SpecificUser,
+                    Text = $"Your druving license status changed - {user.UserStatus}",
+                    User = user
+                }, principal);
             return await _unitOfWork.SaveAsync(changedBy);
         }
         public async Task<bool> ChangeCarStatusAsync(ChangeCarStatus changeCarStatus, ClaimsPrincipal principal)
@@ -96,8 +107,16 @@ namespace BlaBlaCar.BL.Services.Admin
             car.CarStatus = changeCarStatus.Status;
 
             _unitOfWork.Cars.Update(_mapper.Map<Car>(car));
-            //добавити меседжі
+
             var changedBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
+
+            _notificationService.CreateNotificationAsync(
+                new NotificationViewModel()
+                {
+                    NotificationStatus = NotificationModelStatus.SpecificUser,
+                    Text = $"Your car {car.RegistNum} status changed - {car.CarStatus}",
+                    UserId = car.UserId,
+                }, principal);
             return await _unitOfWork.SaveAsync(changedBy);
         }
     }

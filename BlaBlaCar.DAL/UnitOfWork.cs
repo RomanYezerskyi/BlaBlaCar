@@ -1,5 +1,8 @@
 ﻿using BlaBlaCar.DAL.Data;
 using BlaBlaCar.DAL.Entities;
+using BlaBlaCar.DAL.Entities.CarEntities;
+using BlaBlaCar.DAL.Entities.NotificationEntities;
+using BlaBlaCar.DAL.Entities.TripEntities;
 using BlaBlaCar.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,12 +19,14 @@ namespace BlaBlaCar.DAL
         private BaseRepositoryAsync<TripUser> _tripUser;
         private BaseRepositoryAsync<UserDocuments> _userDocuments;
         private BaseRepositoryAsync<CarDocuments> _carDocuments;
+        private BaseRepositoryAsync<Notification> _notification;
+        private BaseRepositoryAsync<ReadNotification> _readNotification;
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public IRepositoryAsync<AvailableSeats> AvaliableSeats
+        public  IRepositoryAsync<AvailableSeats> AvailableSeats
         {
             get
             {
@@ -85,7 +90,22 @@ namespace BlaBlaCar.DAL
             }
         }
 
-       
+
+        public IRepositoryAsync<Notification> Notifications
+        {
+            get
+            {
+                return _notification ??= new BaseRepositoryAsync<Notification>(_context);
+            }
+        }
+
+        public IRepositoryAsync<ReadNotification> ReadNotifications
+        {
+            get
+            {
+                return _readNotification ??= new BaseRepositoryAsync<ReadNotification>(_context);
+            }
+        }
 
 
         public async Task<bool> SaveAsync(Guid userId)

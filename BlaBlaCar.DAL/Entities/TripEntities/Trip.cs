@@ -1,7 +1,8 @@
-﻿
-namespace BlaBlaCar.DAL.Entities
+﻿using BlaBlaCar.DAL.Entities.CarEntities;
+
+namespace BlaBlaCar.DAL.Entities.TripEntities
 {
-    public class Trip:BaseEntity
+    public class Trip : BaseEntity
     {
         //public Guid Id { get; set; }
         public string StartPlace { get; set; }

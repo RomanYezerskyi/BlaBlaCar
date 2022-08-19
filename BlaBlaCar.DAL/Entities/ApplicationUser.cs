@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BlaBlaCar.DAL.Entities.CarEntities;
+using BlaBlaCar.DAL.Entities.NotificationEntities;
 using Microsoft.EntityFrameworkCore;
+using BlaBlaCar.DAL.Entities.TripEntities;
 
 namespace BlaBlaCar.DAL.Entities
 {
@@ -19,5 +22,7 @@ namespace BlaBlaCar.DAL.Entities
         public ICollection<Car> Cars { get; set; }
         public ICollection<Trip> Trips { get; set; }
         public ICollection<TripUser> TripUsers { get; set; }
+        public ICollection<Notification> Notifications { get; set; }
+        public ICollection<ReadNotification> ReadNotifications { get; set; }
     }
 }

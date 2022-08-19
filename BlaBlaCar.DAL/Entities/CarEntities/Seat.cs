@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BlaBlaCar.DAL.Entities.TripEntities;
 
-namespace BlaBlaCar.DAL.Entities
+namespace BlaBlaCar.DAL.Entities.CarEntities
 {
-    public class Seat:BaseEntity
+    public class Seat : BaseEntity
     {
         //public Guid Id { get; set; }
         public int Num { get; set; }

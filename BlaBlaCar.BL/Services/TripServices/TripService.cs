@@ -6,10 +6,10 @@ using BlaBlaCar.BL.ODT.CarModels;
 using BlaBlaCar.BL.ODT.TripModels;
 using BlaBlaCar.BL.ViewModels;
 using BlaBlaCar.DAL.Interfaces;
-using BlaBlaCar.DAL.Entities;
 using IdentityModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using BlaBlaCar.DAL.Entities.TripEntities;
 
 namespace BlaBlaCar.BL.Services.TripServices
 {
@@ -168,8 +168,8 @@ namespace BlaBlaCar.BL.Services.TripServices
         {
             var trip = await _unitOfWork.Trips.GetAsync(includes: null, filter: x => x.Id == id);
             if (trip == null) throw new Exception("No information about this trip! Trip cannot be deleted!");
-            var availableSeats = await _unitOfWork.AvaliableSeats.GetAsync(null, null, x => x.TripId == id);
-            if(availableSeats != null) _unitOfWork.AvaliableSeats.Delete(availableSeats);
+            var availableSeats = await _unitOfWork.AvailableSeats.GetAsync(null, null, x => x.TripId == id);
+            if(availableSeats != null) _unitOfWork.AvailableSeats.Delete(availableSeats);
             var tripUsers = await _unitOfWork.TripUser.GetAsync(null, null, x => x.TripId == id);
             if (tripUsers != null) _unitOfWork.TripUser.Delete(tripUsers);
             _unitOfWork.Trips.Delete(trip);

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BlaBlaCar.DAL.Entities.CarEntities;
 
-namespace BlaBlaCar.DAL.Entities
+namespace BlaBlaCar.DAL.Entities.TripEntities
 {
-    public class TripUser: BaseEntity
+    public class TripUser : BaseEntity
     {
         //public Guid Id { get; set; }
         public Guid UserId { get; set; }
