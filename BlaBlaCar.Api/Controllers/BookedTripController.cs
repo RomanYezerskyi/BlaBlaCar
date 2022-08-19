@@ -68,7 +68,7 @@ namespace BlaBlaCar.API.Controllers
         {
             try
             {
-                var res = await _tripService.DeleteBookedTripAsync(tripUser);
+                var res = await _tripService.DeleteBookedTripAsync(tripUser, User);
                 if (res) return Ok(new { Result = res });
                 return BadRequest("Fail");
             }
@@ -82,7 +82,7 @@ namespace BlaBlaCar.API.Controllers
         {
             try
             {
-                var res = await _tripService.DeleteBookedSeatAsync(tripUser);
+                var res = await _tripService.DeleteBookedSeatAsync(tripUser, User);
                 if (res) return Ok(new { Result = res });
                 return BadRequest("Fail");
             }
@@ -96,7 +96,7 @@ namespace BlaBlaCar.API.Controllers
         {
             try
             {
-                var res = await _tripService.DeleteUserFromTripAsync(tripUser);
+                var res = await _tripService.DeleteUserFromTripAsync(tripUser, User);
                 if (res) return Ok(new { Result = res });
                 return BadRequest("Fail");
             }

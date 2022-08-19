@@ -9,7 +9,7 @@ namespace BlaBlaCar.BL.ViewModels
 {
     public class ChangeUserStatus
     {
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public ModelStatus Status { get; set; }
     }
 }

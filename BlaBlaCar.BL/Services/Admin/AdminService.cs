@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -12,6 +13,7 @@ using BlaBlaCar.BL.ODT.CarModels;
 using BlaBlaCar.BL.ViewModels;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Interfaces;
+using IdentityModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.FileProviders.Physical;
@@ -49,8 +51,8 @@ namespace BlaBlaCar.BL.Services.Admin
                     .Include(x=>x.Trips)
                     .Include(x=>x.TripUsers),
                 x => x.Id == id));
-
-            user.UserImg = user.UserImg.Insert(0, _hostSettings.Host);
+            if(user.UserImg != null)
+                user.UserImg = user.UserImg.Insert(0, _hostSettings.Host);
 
             user.UserDocuments = user.UserDocuments.Select(x =>
             {
@@ -71,19 +73,21 @@ namespace BlaBlaCar.BL.Services.Admin
 
             return user;
         }
-        public async Task<bool> ChangeUserStatusAsync(ChangeUserStatus changeUserStatus)
+        public async Task<bool> ChangeUserStatusAsync(ChangeUserStatus changeUserStatus, ClaimsPrincipal principal)
         {
             var user = _mapper.Map<UserModel>(
-                await _unitOfWork.Users.GetAsync(null, x => x.Id == Guid.Parse((ReadOnlySpan<char>)changeUserStatus.UserId)));
+                await _unitOfWork.Users.GetAsync(null, x => x.Id == changeUserStatus.UserId));
 
             if (user is null) throw new Exception("User not found");
             user.UserStatus = changeUserStatus.Status;
 
             _unitOfWork.Users.Update(_mapper.Map<ApplicationUser>(user));
             //добавити меседжі
-            return await _unitOfWork.SaveAsync();
+
+            var changedBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
+            return await _unitOfWork.SaveAsync(changedBy);
         }
-        public async Task<bool> ChangeCarStatusAsync(ChangeCarStatus changeCarStatus)
+        public async Task<bool> ChangeCarStatusAsync(ChangeCarStatus changeCarStatus, ClaimsPrincipal principal)
         {
             var car = _mapper.Map<CarModel>
                 (await _unitOfWork.Cars.GetAsync(null, x=>x.Id == changeCarStatus.CarId));
@@ -93,7 +97,8 @@ namespace BlaBlaCar.BL.Services.Admin
 
             _unitOfWork.Cars.Update(_mapper.Map<Car>(car));
             //добавити меседжі
-            return await _unitOfWork.SaveAsync();
+            var changedBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
+            return await _unitOfWork.SaveAsync(changedBy);
         }
     }
 }

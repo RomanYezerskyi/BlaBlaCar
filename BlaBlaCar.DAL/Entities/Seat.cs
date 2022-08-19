@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BlaBlaCar.DAL.Entities
 {
-    public class Seat
+    public class Seat:BaseEntity
     {
-        public Guid Id { get; set; }
+        //public Guid Id { get; set; }
         public int Num { get; set; }
         public Guid CarId { get; set; }
         public Car Car { get; set; }

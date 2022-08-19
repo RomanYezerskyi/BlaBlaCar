@@ -13,12 +13,9 @@ namespace BlaBlaCar.BL.Interfaces
     public interface IBookedTripsService
     {
         Task<IEnumerable<TripModel>> GetUserBookedTripsAsync(ClaimsPrincipal claimsPrincipal);
-        //Task<IEnumerable<BookedTripModel>> GetBookedTripsAsync();
-        //Task<IEnumerable<BookedTripModel>> GetBookedTripsAsync(BookedTripModel model);
         Task<bool> AddBookedTripAsync(AddNewBookTrip tripModel, ClaimsPrincipal principal);
-        //Task<bool> UpdateBookedTripAsync(BookedTripModel tripModel);
-        Task<bool> DeleteBookedTripAsync(IEnumerable<TripUserViewModel> tripUserModel);
-        Task<bool> DeleteBookedSeatAsync(TripUserViewModel tripUserModel);
-        Task<bool> DeleteUserFromTripAsync(TripUserViewModel tripUserModel);
+        Task<bool> DeleteBookedTripAsync(IEnumerable<TripUserViewModel> tripUserModel, ClaimsPrincipal principal);
+        Task<bool> DeleteBookedSeatAsync(TripUserViewModel tripUserModel, ClaimsPrincipal principal);
+        Task<bool> DeleteUserFromTripAsync(TripUserViewModel tripUserModel, ClaimsPrincipal principal);
     }
 }

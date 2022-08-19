@@ -93,17 +93,8 @@ namespace BlaBlaCar.BL.Services
            
             if (drivingLicense.Any())
             {
-                
-                //await using (var stream = new FileStream(dbPath, FileMode.Open))
-                //{
-                //    PhysicalFileInfo fileInfo = new PhysicalFileInfo(new FileInfo(stream.Name));
-                //    return fileInfo;
-                //}
-               // userModel.DrivingLicense = dbPath;
+                var files = await _fileService.FilesDbPathListAsync(drivingLicense);
 
-               var files = await _fileService.FilesDbPathListAsync(drivingLicense);
-
-               //userModel.UserDocuments = new List<UserDocumentsModel>();
                userModel.UserDocuments = files.Select(f => new UserDocumentsModel() { User = userModel, DrivingLicense = f }).ToList();
 
                 userModel.UserStatus = ModelStatus.Pending;
@@ -111,7 +102,7 @@ namespace BlaBlaCar.BL.Services
 
                 var user = _mapper.Map<ApplicationUser>(userModel);
                 _unitOfWork.Users.Update(user);
-                return await _unitOfWork.SaveAsync();
+                return await _unitOfWork.SaveAsync(user.Id);
             }
 
             throw new Exception("Problems with file");
@@ -140,7 +131,7 @@ namespace BlaBlaCar.BL.Services
                 UserStatus = ModelStatus.WithoutCar
             };
             await _unitOfWork.Users.InsertAsync(_mapper.Map<ApplicationUser>(user));
-            return await _unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync(user.Id);
         }
 
         public Task<bool> UpdateUserAsync(UserModel user)

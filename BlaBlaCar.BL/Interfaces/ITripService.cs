@@ -12,7 +12,7 @@ namespace BlaBlaCar.BL.Interfaces
         Task<IEnumerable<TripModel>> SearchTripsAsync(SearchTripModel model);
         Task<bool> AddTripAsync(NewTripViewModel tripModel, ClaimsPrincipal principal);
         Task<bool> UpdateTripAsync(TripModel tripModel);
-        Task<bool> DeleteTripAsync(Guid id);
+        Task<bool> DeleteTripAsync(Guid id, ClaimsPrincipal principal);
 
     }
 }

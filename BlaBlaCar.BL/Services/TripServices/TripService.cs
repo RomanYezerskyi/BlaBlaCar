@@ -139,13 +139,15 @@ namespace BlaBlaCar.BL.Services.TripServices
                 var checkIfUserExist = await _userService.СheckIfUserExistsAsync(principal);
                 if (!checkIfUserExist) throw new Exception("This user cannot create trip!");
 
+                var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
+
                 var tripModel = _mapper.Map<NewTripViewModel, TripModel>(newTripModel);
-                tripModel.UserId = Guid.Parse((ReadOnlySpan<char>)principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
+                tripModel.UserId = userId;
 
                 var trip = _mapper.Map<TripModel, Trip>(tripModel);
 
                 await _unitOfWork.Trips.InsertAsync(trip);
-                return await _unitOfWork.SaveAsync();
+                return await _unitOfWork.SaveAsync(userId);
             }
 
             throw new Exception("Trip cannot be added because not all data is available");
@@ -162,7 +164,7 @@ namespace BlaBlaCar.BL.Services.TripServices
             return false;
         }
 
-        public async Task<bool> DeleteTripAsync(Guid id)
+        public async Task<bool> DeleteTripAsync(Guid id, ClaimsPrincipal principal)
         {
             var trip = await _unitOfWork.Trips.GetAsync(includes: null, filter: x => x.Id == id);
             if (trip == null) throw new Exception("No information about this trip! Trip cannot be deleted!");
@@ -171,7 +173,9 @@ namespace BlaBlaCar.BL.Services.TripServices
             var tripUsers = await _unitOfWork.TripUser.GetAsync(null, null, x => x.TripId == id);
             if (tripUsers != null) _unitOfWork.TripUser.Delete(tripUsers);
             _unitOfWork.Trips.Delete(trip);
-            return await _unitOfWork.SaveAsync();
+
+            var changedBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
+            return await _unitOfWork.SaveAsync(changedBy);
         }
     }
 }
