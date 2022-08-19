@@ -57,6 +57,6 @@ export class SearchTripComponent implements OnInit {
   }
 
   navigateToTripPage = (id: number) => {
-    this.router.navigate(['trip-page-info', id], { queryParams: { requestedSeats: this.trip.countOfSeats } })
+    this.router.navigate(['trip-page-info', id], { queryParams: { requestedSeats: this.trip.countOfSeats } });
   }
 }

@@ -3,6 +3,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { UserStatus } from 'src/app/interfaces/user-status';
+import { HttpClient, HttpHeaders, HttpStatusCode } from '@angular/common/http';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -11,7 +12,7 @@ import { UserStatus } from 'src/app/interfaces/user-status';
 export class NavbarComponent implements OnInit {
   status = UserStatus;
   toggle: boolean = true;
-  constructor(private jwtHelper: JwtHelperService) { }
+  constructor(private jwtHelper: JwtHelperService, private http: HttpClient) { }
 
   ngOnInit(): void {
 
@@ -19,9 +20,21 @@ export class NavbarComponent implements OnInit {
   change() {
     this.toggle = !this.toggle;
   }
-  logOut = () => {
+  logOut = async () => {
+    // const refreshRes = await new Promise<HttpStatusCode>((resolve, reject) => {
+    //   this.http.post("https://localhost:5001/api/token/revoke", {
+    //     headers: new HttpHeaders({
+    //       "Content-Type": "application/json"
+    //     })
+    //   }).subscribe({
+    //     next: (res: any) => { resolve(res); console.log(res) },
+    //     error: (_) => { reject; console.log(_) }
+    //   });
+    // });
+    // console.log("aa");
     localStorage.removeItem("jwt");
     localStorage.removeItem("refreshToken");
+    // return refreshRes;
   }
   isUserAuthenticated = (): boolean => {
     const token = localStorage.getItem("jwt");
