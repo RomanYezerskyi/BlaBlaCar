@@ -4,19 +4,19 @@
         <li class="item" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">Administrators</a></li>
         <li class="item" [ngClass]="{'': toggle, 'active': !toggle}"><a [routerLink]="['admin/roles']">Roles</a></li>
         <li class="item" [ngClass]="{'': toggle, 'active': !toggle}">
-            <a class="menu__list" [routerLink]="['admin/requests']">Requests
+            <a class="menu__list">Requests
                 <ul class="menu submenu">
                     <li class="submenu_item">
-                        <a [routerLink]="['admin/requests', status.Pending]">Pending</a>
+                        <a (click)="navigateToUserRequests(userStatus.Pending)">Pending</a>
                     </li>
                     <li class="submenu_item">
-                        <a [routerLink]="['admin/requests', status.Confirmed]">Confirmed</a>
+                        <a (click)="navigateToUserRequests(userStatus.Confirmed)">Confirmed</a>
                     </li>
                     <li class="submenu_item">
-                        <a [routerLink]="['admin/requests', status.Rejected]">Rejected</a>
+                        <a (click)="navigateToUserRequests(userStatus.Rejected)">Rejected</a>
                     </li>
                     <li class="submenu_item">
-                        <a [routerLink]="['admin/requests', status.NeedMoreData]">Need more data</a>
+                        <a (click)="navigateToUserRequests(userStatus.NeedMoreData)">Need more data</a>
                     </li>
                 </ul>
             </a>
@@ -32,25 +32,30 @@
 <nav *ngIf="isUserAuthenticated() && !isAdmin()">
     <ul class="menu">
         <li class="logo" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">BlaBlaCar</a></li>
-        <li class="item" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">Home</a></li>
-        <li class="item" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">About</a></li>
-        <li class="item" [ngClass]="{'': toggle, 'active': !toggle}"><a [routerLink]="['profile']">Profile2</a></li>
         <li class="item" [ngClass]="{'': toggle, 'active': !toggle}">
+            <p href="#" class="notification"><i>Notifi</i>
+                <app-notifications class="notification_list"></app-notifications>
+            </p>
+        </li>
+        <li class="item" [ngClass]="{'': toggle, 'active': !toggle}">
+
             <a class="menu__list" [routerLink]="['admin/requests']">User
                 <ul class="menu submenu">
                     <li class="submenu_item">
-                        <a [routerLink]="['admin/requests', status.Pending]">Add car</a>
+                        <a>Add car</a>
                     </li>
                     <li class="submenu_item">
-                        <a [routerLink]="['admin/requests', status.Confirmed]">Trips</a>
+                        <a>Trips</a>
                     </li>
                     <li class="submenu_item">
-                        <a [routerLink]="['admin/requests', status.Rejected]">Booked</a>
+                        <a>Booked</a>
                     </li>
                 </ul>
             </a>
         </li>
-        <li class="item button secondary" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">Sing up</a></li>
+        <li class="item" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">Home</a></li>
+        <li class="item" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">About</a></li>
+        <li class="item" [ngClass]="{'': toggle, 'active': !toggle}"><a [routerLink]="['profile']">Profile2</a></li>
         <li class="toggle" (click)="change()"><span class="bars"></span></li>
     </ul>
 </nav>

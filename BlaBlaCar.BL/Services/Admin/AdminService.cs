@@ -89,13 +89,13 @@ namespace BlaBlaCar.BL.Services.Admin
 
             var changedBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
 
-            _notificationService.CreateNotificationAsync(
-                new NotificationViewModel()
+            _notificationService.ChangeUserStatusNotificationAsync(
+                new CreateNotificationViewModel()
                 {
                     NotificationStatus = NotificationModelStatus.SpecificUser,
-                    Text = $"Your druving license status changed - {user.UserStatus}",
-                    User = user
-                }, principal);
+                    Text = $"Your driving license status changed - {user.UserStatus}",
+                    UserId = user.Id
+                });
             return await _unitOfWork.SaveAsync(changedBy);
         }
         public async Task<bool> ChangeCarStatusAsync(ChangeCarStatus changeCarStatus, ClaimsPrincipal principal)
@@ -110,13 +110,13 @@ namespace BlaBlaCar.BL.Services.Admin
 
             var changedBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
 
-            _notificationService.CreateNotificationAsync(
-                new NotificationViewModel()
+            _notificationService.ChangeUserStatusNotificationAsync(
+                new CreateNotificationViewModel()
                 {
                     NotificationStatus = NotificationModelStatus.SpecificUser,
                     Text = $"Your car {car.RegistNum} status changed - {car.CarStatus}",
                     UserId = car.UserId,
-                }, principal);
+                });
             return await _unitOfWork.SaveAsync(changedBy);
         }
     }

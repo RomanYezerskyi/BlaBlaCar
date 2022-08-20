@@ -23,8 +23,25 @@ namespace BlaBlaCar.BL.Services.NotificationServices
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+        public async Task<IEnumerable<GetNotificationViewModel>> GetUserNotificationsAsync(ClaimsPrincipal principal)
+        {
+            var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
+            var notifications = _mapper.Map<IEnumerable<GetNotificationViewModel>>(
+                await _unitOfWork.Notifications.GetAsync(
+                    x=>x.OrderByDescending(x=>x.CreatedAt),
+                    null, x => x.UserId == userId));
+            var readNotifications = _mapper.Map<IEnumerable<ReadNotificationModel>>(
+                await _unitOfWork.ReadNotifications.GetAsync(null, null, x => x.UserId == userId));
 
-        public async Task<bool> CreateNotificationAsync(NotificationViewModel notificationModel, ClaimsPrincipal principal)
+            notifications = notifications.Select(n =>
+            {
+                if (readNotifications.Any(x => x.NotificationId == n.Id))
+                    n.ReadNotificationStatus = ReadNotificationStatus.Read;
+                return n;
+            });
+            return notifications;
+        }
+        public async Task<bool> CreateNotificationAsync(CreateNotificationViewModel notificationModel, ClaimsPrincipal principal)
         {
             var notification = _mapper.Map<Notification>(notificationModel);
 
@@ -34,15 +51,22 @@ namespace BlaBlaCar.BL.Services.NotificationServices
             return await _unitOfWork.SaveAsync(createdBy);
         }
 
-        public async Task<bool> ReadNotificationAsync(NotificationViewModel notificationModel, ClaimsPrincipal principal)
+        public async Task ChangeUserStatusNotificationAsync(CreateNotificationViewModel notificationModel)
         {
-            var readNotification = new ReadNotificationModel()
-            {
-                NotificationId = (Guid)notificationModel.Id,
-                UserId = (Guid)notificationModel.UserId,
-            };
+            var notification = _mapper.Map<Notification>(notificationModel);
 
-            await _unitOfWork.ReadNotifications.InsertAsync(_mapper.Map<ReadNotification>(readNotification));
+            await _unitOfWork.Notifications.InsertAsync(notification);
+        }
+
+        public async Task<bool> ReadAllNotificationAsync(IEnumerable<NotificationModel> notification, ClaimsPrincipal principal)
+        {
+            var readNotifications = new List<ReadNotificationModel>();
+
+
+            readNotifications.AddRange(
+                notification.Select(n => new ReadNotificationModel() { NotificationId = n.Id, UserId = (Guid)n.UserId }));
+
+            await _unitOfWork.ReadNotifications.InsertRangeAsync(_mapper.Map<IEnumerable<ReadNotification>>(readNotifications));
 
             var createdBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
             return await _unitOfWork.SaveAsync(createdBy);

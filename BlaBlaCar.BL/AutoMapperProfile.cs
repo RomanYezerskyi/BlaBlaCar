@@ -37,6 +37,9 @@ namespace BlaBlaCar.BL
             
             CreateMap<Notification, NotificationModel>().ReverseMap();
             CreateMap<ReadNotification, ReadNotificationModel>().ReverseMap();
+            CreateMap<Notification, CreateNotificationViewModel>().ReverseMap();
+            CreateMap<ReadNotification, CreateNotificationViewModel>();
+            CreateMap<Notification, GetNotificationViewModel>().ReverseMap();
 
         }
     }

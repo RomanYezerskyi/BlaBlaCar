@@ -13,7 +13,8 @@ ul {
     list-style-type: none;
 }
 
-a {
+a,
+p {
     color: white;
     text-decoration: none;
 
@@ -40,7 +41,18 @@ a:hover {
     border-bottom: 1px #444 solid;
 }
 
-/*Mobele*/
+.notification_list {
+    display: none;
+    position: relative;
+}
+
+.notification:hover .notification_list {
+    display: block;
+    position: absolute;
+    right: 30%;
+}
+
+/*Mobile*/
 .menu {
     display: flex;
     flex-wrap: wrap;
@@ -99,19 +111,7 @@ a:hover {
     top: -5px;
 }
 
-.menu__list {
-    position: relative;
-}
 
-.submenu {
-    display: none;
-}
-
-.menu__list:hover .submenu {
-    display: block;
-    position: absolute;
-    background-color: #222;
-}
 
 /*Tablet*/
 
@@ -194,4 +194,27 @@ a:hover {
     .menu li.button {
         padding-right: 0;
     }
+
+    /*Dropdown menu*/
+    .menu__list {
+        position: relative;
+    }
+
+    .submenu {
+        display: none;
+    }
+
+    .menu__list:hover .submenu {
+        display: block;
+        position: absolute;
+        background-color: #222;
+    }
+
+    /*Dropdown motifications*/
+    .notifications_list {
+        position: relative;
+        cursor: unset;
+    }
+
+
 }

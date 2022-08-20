@@ -1,0 +1,69 @@
+.notification_dropdown {
+    position: absolute;
+    background-color: #ddd;
+    right: 0;
+    width: 300px;
+    max-height: 300px;
+    padding: 10px;
+    border-radius: 10px;
+    line-height: 1.5;
+    overflow-y: auto;
+
+    .notification_dropdown__header {
+        display: flex;
+        justify-content: space-between;
+
+
+        label {
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0;
+            font-weight: 700;
+            color: #868e96;
+            font-size: 12px;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            font-size: 10px;
+            color: #868e96;
+            transition: all 0.2s ease-in-out;
+            text-decoration: none;
+            background-color: transparent;
+        }
+    }
+
+    .notification__list {
+        .notification_data {
+            padding: 5px;
+            margin-top: 10px;
+            border-bottom: #868e96 1px solid;
+
+            p {
+                text-align: start;
+                font-size: 13px;
+                color: #868e96;
+                margin: 0;
+            }
+
+            .notif_text {
+                text-align: center;
+            }
+
+            .date {
+                // display: flex;
+
+                .mark {
+                    margin: 0;
+                    width: 10px;
+                    height: 10px;
+                    background-color: rgba(0, 175, 245, 0.8);
+                    // border: 1px blue solid;
+                    border-radius: 50%;
+                    margin-bottom: 5px;
+                }
+            }
+        }
+    }
+}
