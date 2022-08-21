@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders.Physical;
 using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
 
 namespace BlaBlaCar.BL.Services
 {
@@ -26,13 +28,14 @@ namespace BlaBlaCar.BL.Services
         private readonly IMapper _mapper;
         private readonly IFileService _fileService;
         private readonly HostSettings _hostSettings;
-
+        private readonly IHttpContextAccessor _contextAccessor;
         public UserService(IUnitOfWork unitOfWork,
-            IMapper mapper, IFileService fileService, IOptionsSnapshot<HostSettings> hostSettings)
+            IMapper mapper, IFileService fileService, IOptionsSnapshot<HostSettings> hostSettings, IHttpContextAccessor contextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _fileService = fileService;
+            _contextAccessor = contextAccessor;
             _hostSettings = hostSettings.Value;
         }
         public async Task<UserModel> GetUserInformationAsync(ClaimsPrincipal claimsPrincipal)
@@ -134,9 +137,33 @@ namespace BlaBlaCar.BL.Services
             return await _unitOfWork.SaveAsync(user.Id);
         }
 
-        public Task<bool> UpdateUserAsync(UserModel user)
+        public async Task<bool> UpdateUserNameAsync(UpdateUserModel newUserData, ClaimsPrincipal principal)
         {
-            throw new NotImplementedException();
+            var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
+            var accessToken = _contextAccessor.HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+
+            using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            StringContent userModel = new StringContent(JsonConvert.SerializeObject(newUserData), Encoding.UTF8, "application/json");
+
+            using var response = await httpClient.PostAsync("https://localhost:5001/api/User/update", userModel);
+            if (response.IsSuccessStatusCode)
+            {
+                var user = await _unitOfWork.Users.GetAsync(null, x => x.Id == newUserData.Id);
+
+                if (user.FirstName != newUserData.FirstName)
+                    user.FirstName = newUserData.FirstName;
+
+                if (user.Email != newUserData.Email)
+                    user.Email = newUserData.Email;
+
+                if (user.PhoneNumber != newUserData.PhoneNumber)
+                    user.PhoneNumber = newUserData.PhoneNumber;
+                _unitOfWork.Users.Update(user);
+                return await _unitOfWork.SaveAsync(userId);
+            }
+
+            return false;
         }
 
         public Task<bool> DeleteUserAsync(int id)

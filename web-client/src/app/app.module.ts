@@ -99,7 +99,7 @@ export function tokenGetter() {
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent],
-  entryComponents: [DialogBookingConfirmationComponent],
+  entryComponents: [DialogBookingConfirmationComponent, UserProfileComponent],
   exports: [
     MatToolbarModule,
     MatButtonModule,

@@ -1,220 +1,210 @@
-* {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
+.container {
+    padding-right: 15px;
+    padding-left: 15px;
+    background-color: #131022 !important;
+
 }
 
 nav {
-    background-color: #222;
-    padding: 5px 20px;
+
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    padding: 10px;
 }
 
 ul {
     list-style-type: none;
 }
 
-a,
-p {
-    color: white;
+a {
     text-decoration: none;
-
+    color: #fff;
 }
 
-a:hover {
-    text-decoration: underline;
+.toggle {
+    display: none;
 }
 
-.menu li {
-    font-size: 16px;
-    padding: 15px 5px;
+.btn {
+    border: none;
+    // background-color: white;
+    padding: 0;
 }
 
-.menu li a {
-    display: block;
+.navbar-nav {
+    display: flex;
+    margin: auto;
+
+    .nav-item {
+        margin: 0;
+    }
 }
 
-.logo a {
+.navbar-brand {
+    display: inline-block;
+    margin: auto 0;
     font-size: 20px;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 700;
 }
 
-.button.secondary {
-    border-bottom: 1px #444 solid;
+.notification {
+    position: relative;
 }
 
 .notification_list {
     display: none;
-    position: relative;
+
 }
 
 .notification:hover .notification_list {
     display: block;
     position: absolute;
-    right: 30%;
+    right: -1px;
+    bottom: -1px;
 }
 
-/*Mobile*/
 .menu {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
 }
 
-.toggle {
-    order: 1;
+.navbar-section-main {
+    margin: 10px 0;
 
+    .navbar-nav {
+        .nav-item {
+
+            .nav-link,
+            button {
+                cursor: pointer;
+                display: block;
+                margin: auto 5px;
+                font-size: 16px;
+                font-weight: 400;
+                color: rgba(255, 255, 255, .85);
+                position: relative;
+                opacity: 1 !important;
+                padding: 10px;
+
+            }
+
+            button {
+                // background-color: #6366f1;
+                // border-color: #6366f1;
+                border-radius: 10px;
+                // transition: all 0.15s ease;
+                background-image: linear-gradient(to right, #5C258D 0%, #4389A2 51%, #5C258D 100%);
+                transition: .5s;
+                background-size: 200% auto;
+                // text-transform: uppercase;
+            }
+
+            .btn-toggler {
+                display: flex;
+                padding: 8px;
+            }
+
+
+
+            button:hover {
+                background-position: right center;
+                color: #fff;
+                text-decoration: none;
+                // transform: translateY(-1%);
+                // background-color: #000;
+                // color: white;
+            }
+        }
+
+        .toggler {
+            display: none;
+        }
+    }
 }
 
-.item.button {
-    order: 2;
-}
-
-.item {
-    width: 100%;
-    text-align: center;
-    order: 3;
-    display: none;
-}
-
-.item.active {
-    display: block;
-}
-
-
-.toggle {
-    cursor: pointer;
-}
-
-.bars {
-    background-color: #999;
-    display: inline-block;
-    height: 2px;
+.nav-item {
     position: relative;
-    width: 18px;
 }
 
-.bars::before,
-.bars::after {
-    content: "";
-    background-color: #999;
-    display: inline-block;
-    height: 2px;
+.submenu {
+    display: none;
+    margin: auto;
     position: absolute;
-    width: 18px;
+    width: 150px;
+    left: 12px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%) !important;
+    transition: 2s all ease;
+
+    ul {
+        padding: 0;
+    }
+
+    .submenu_text {
+        color: #000;
+        position: relative;
+        opacity: 1 !important;
+        padding: 10px;
+        display: block;
+        margin: auto 5px;
+        font-size: 16px;
+        font-weight: 400;
+        cursor: pointer;
+    }
 }
 
-.bars::before {
-    top: 5px;
-}
+.nav-item:hover .submenu {
+    display: block;
 
-.bars::after {
-    top: -5px;
 }
 
 
+@media all and (max-width:768px) {
+    nav {
+        flex-wrap: wrap;
+    }
 
-/*Tablet*/
+    .navbar-section-main {
+        .navbar-nav {
+            .toggler {
+                display: block;
+            }
+        }
+    }
 
-@media all and (min-width:468px) {
     .menu {
-        justify-content: center;
-    }
-
-    .logo {
-        flex: 1;
-    }
-
-    .item.button {
-        width: auto;
+        width: 100%;
         order: 1;
+        width: 100%;
+        display: none;
+        // justify-content: center;
+    }
+
+    .menu_active {
         display: block;
     }
 
-    .toggle {
-        order: 2;
+    .main_nav {
+        flex-flow: column;
+
+        .nav-item {
+            width: 100%;
+            border-bottom: 1px solid#fff;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-1%);
+            transition: all 0.20s ease;
+        }
     }
 
-    .button.secondary {
-        border: 0;
-    }
-
-    .button a {
-        text-decoration: none;
-        padding: 7px 15px;
-        background: teal;
-        border: 1px solid #006d6d;
-        border-radius: 50em;
-    }
-
-    .button.secondary a {
-        background: transparent;
-    }
-
-    .button a:hover {
-        transition: all .25s;
-    }
-
-    .button:not(.secondary) a:hover {
-        background: #006d6d;
-        border-color: #005959;
-    }
-
-    .button.secondary a:hover {
-        color: #ddd;
-
-    }
 }
 
-@media all and (min-width:768px) {
-    .item {
-        display: block;
-        width: auto;
-    }
-
-    .toggle {
-        display: none;
-    }
-
-    .logo {
-        order: 0;
-    }
-
-    .item {
-        order: 1;
-    }
-
-    .button {
-        order: 2;
-    }
-
-    .menu li {
-        padding: 15px 10px;
-    }
-
-    .menu li.button {
-        padding-right: 0;
-    }
-
-    /*Dropdown menu*/
-    .menu__list {
-        position: relative;
-    }
-
-    .submenu {
-        display: none;
-    }
-
-    .menu__list:hover .submenu {
-        display: block;
-        position: absolute;
-        background-color: #222;
-    }
-
-    /*Dropdown motifications*/
-    .notifications_list {
-        position: relative;
-        cursor: unset;
-    }
-
-
-}
+// @media all and (max-width:468px) {
+//     nav {
+//         background-color: #000;
+//     }
+// }

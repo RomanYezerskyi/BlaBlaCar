@@ -1,6 +1,6 @@
 .notification_dropdown {
     position: absolute;
-    background-color: #ddd;
+    background-color: #fff;
     right: 0;
     width: 300px;
     max-height: 300px;
@@ -19,7 +19,7 @@
             letter-spacing: 0.5px;
             margin-bottom: 0;
             font-weight: 700;
-            color: #868e96;
+            color: #2c2e30;
             font-size: 12px;
         }
 
@@ -27,7 +27,7 @@
             cursor: pointer;
             border: none;
             font-size: 10px;
-            color: #868e96;
+            color: #2c2e30;
             transition: all 0.2s ease-in-out;
             text-decoration: none;
             background-color: transparent;
@@ -43,7 +43,7 @@
             p {
                 text-align: start;
                 font-size: 13px;
-                color: #868e96;
+                color: #2c2e30;
                 margin: 0;
             }
 

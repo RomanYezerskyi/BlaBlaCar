@@ -1,4 +1,4 @@
-<nav *ngIf="isAdmin() && isUserAuthenticated()">
+<!-- <nav *ngIf="isAdmin() && isUserAuthenticated()">
     <ul class="menu">
         <li class="logo" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">BlaBlaCar</a></li>
         <li class="item" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">Administrators</a></li>
@@ -32,9 +32,11 @@
 <nav *ngIf="isUserAuthenticated() && !isAdmin()">
     <ul class="menu">
         <li class="logo" [ngClass]="{'': toggle, 'active': !toggle}"><a href="#">BlaBlaCar</a></li>
-        <li class="item" [ngClass]="{'': toggle, 'active': !toggle}">
+        <li class="item" [ngClass]="{'': toggle, 'active': !toggle}" (click)="openNotification()">
             <p href="#" class="notification"><i>Notifi</i>
-                <app-notifications class="notification_list"></app-notifications>
+                <app-notifications [ngClass]="{'': !notification, 'notification_list_active': notification}"
+                    class="notification_list">
+                </app-notifications>
             </p>
         </li>
         <li class="item" [ngClass]="{'': toggle, 'active': !toggle}">
@@ -70,4 +72,76 @@
                 up</a></li>
         <li class="toggle" (click)="change()"><span class="bars"></span></li>
     </ul>
-</nav>
+</nav> -->
+
+<div class="container">
+    <nav>
+        <a class="navbar-brand">BlaBlaCar</a>
+        <div class="menu" [ngClass]="{'': toggle, 'menu_active': !toggle}">
+            <div class="navbar-section-main" *ngIf="isUserAuthenticated() && isAdmin()">
+                <ul class="navbar-nav main_nav">
+                    <li class="nav-item active"><a href="#" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Work</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link">Requests</a>
+                        <div class="submenu">
+                            <ul>
+                                <li class="submenu_item">
+                                    <a class=" submenu_text"
+                                        (click)="navigateToUserRequests(userStatus.Pending)">Pending</a>
+                                </li>
+                                <li class="submenu_item">
+                                    <a class="submenu_text"
+                                        (click)="navigateToUserRequests(userStatus.Confirmed)">Confirmed</a>
+                                </li>
+                                <li class="submenu_item">
+                                    <a class="submenu_text"
+                                        (click)="navigateToUserRequests(userStatus.Rejected)">Rejected</a>
+                                </li>
+                                <li class="submenu_item">
+                                    <a class="submenu_text"
+                                        (click)="navigateToUserRequests(userStatus.NeedMoreData)">Need more data</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="navbar-section-main" *ngIf="isUserAuthenticated() && !isAdmin()">
+                <ul class="navbar-nav main_nav">
+                    <li class="nav-item active"><a href="#" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Work</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Blog</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="navbar-section-main actions" *ngIf="isUserAuthenticated()">
+            <ul class="navbar-nav">
+                <li class="nav-item notification"><button class="btn btn-toggler">
+                        <i class="material-icons">notifications_none</i>
+                        <app-notifications class="notification_list">
+                        </app-notifications>
+                    </button>
+
+                </li>
+                <li class="nav-item notification"><button class="btn btn-toggler" (click)="openDialog()">
+                        <i class="material-icons">perm_identity</i></button></li>
+                <li class="nav-item toggler" (click)="change()"><button class="btn btn-toggler"><i
+                            class="material-icons">density_medium</i></button></li>
+                <li class="nav-item"><button class="btn btn-toggler" (click)="logOut()"><i
+                            class="material-icons">logout</i></button></li>
+            </ul>
+        </div>
+        <div class="navbar-section-main actions" *ngIf="!isUserAuthenticated()">
+            <ul class="navbar-nav">
+                <li class="nav-item"><button class="btn btn-main" routerLink="/login">Sign in</button></li>
+                <li class="nav-item"><button class="btn btn-secondary" routerLink="/register">Sing up</button></li>
+                <li class="nav-item toggler" (click)="change()"><button class="btn btn-toggler"><i
+                            class="material-icons">density_medium</i></button></li>
+
+            </ul>
+        </div>
+    </nav>
+</div>

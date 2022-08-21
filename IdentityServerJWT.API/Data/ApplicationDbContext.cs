@@ -13,6 +13,8 @@ namespace IdentityServerJWT.API.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<ApplicationUser>().HasIndex(x => x.Email).IsUnique();
+            builder.Entity<ApplicationUser>().HasIndex(x => x.PhoneNumber).IsUnique();
             base.OnModelCreating(builder);
         }
     }

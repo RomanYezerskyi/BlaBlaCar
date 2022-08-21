@@ -1,7 +1,11 @@
-﻿using BlaBlaCar.BL.Interfaces;
+﻿using System.Net.Http.Headers;
+using BlaBlaCar.BL.Interfaces;
+using BlaBlaCar.BL.ODT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
 
 namespace BlaBlaCar.API.Controllers
 {
@@ -39,6 +43,23 @@ namespace BlaBlaCar.API.Controllers
                 var res = await _userService.GetUserInformationAsync(User);
                 if (res != null) return Ok(res);
                 return BadRequest("Fail");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+
+        [HttpPost("update")]
+        public async Task<IActionResult> UpdateUser(UpdateUserModel userModel)
+        {
+            try
+            {
+                var res = await _userService.UpdateUserNameAsync(userModel, User);
+                if (res)
+                    return Ok();
+                return BadRequest();
             }
             catch (Exception e)
             {

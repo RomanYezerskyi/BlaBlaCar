@@ -5,6 +5,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { UserStatus } from 'src/app/interfaces/user-status';
 import { HttpClient, HttpHeaders, HttpStatusCode } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { UserProfileComponent } from '../user/user-profile/user-profile.component';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -13,15 +15,32 @@ import { Router } from '@angular/router';
 export class NavbarComponent implements OnInit {
   userStatus = UserStatus;
   toggle: boolean = true;
-  constructor(private jwtHelper: JwtHelperService, private http: HttpClient, private router: Router) { }
+  notification: boolean = false;
+  constructor(private jwtHelper: JwtHelperService, private http: HttpClient, private router: Router, private dialog: MatDialog) { }
 
   ngOnInit(): void {
 
   }
+
+  openDialog() {
+
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = {
+
+    };
+    this.dialog.open(UserProfileComponent, dialogConfig);
+  }
+
+
+  openNotification() {
+    this.notification = !this.notification;
+  }
   change() {
     this.toggle = !this.toggle;
   }
-
   navigateToUserRequests = (id: number) => {
     this.router.navigate(['/admin/requests/', id])
   }

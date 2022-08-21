@@ -11,7 +11,7 @@ namespace IdentityServerJWT.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "blablacar.admin")]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -25,6 +25,7 @@ namespace IdentityServerJWT.API.Controllers
         }
 
         [HttpGet("roles")]
+        [Authorize(Roles = "blablacar.admin")]
         public async Task<IActionResult> Roles()
         {
             var roles = await _roleManager.Roles.ToListAsync();
@@ -40,6 +41,7 @@ namespace IdentityServerJWT.API.Controllers
             return Ok(userWithRoles);
         }
         [HttpPost]
+        [Authorize(Roles = "blablacar.admin")]
         public async Task<IActionResult>ChangeRole(UserChangeRoleModel roleModel)
         {
 
@@ -50,5 +52,29 @@ namespace IdentityServerJWT.API.Controllers
             await _userManager.RemoveFromRoleAsync(user, allRoles.First().Name);
             return Ok();
         }
+        [HttpPost("update")]
+        [Authorize]
+        public async Task<IActionResult> UpdateUser(UpdateUser userModel)
+        {
+            if (!ModelState.IsValid) throw new Exception("All data is required !");
+            var user = await _userManager.FindByIdAsync(userModel.Id);
+
+            if (user == null) throw new Exception("User not found");
+
+            if (user.FirstName != userModel.FirstName)
+                user.FirstName = userModel.FirstName;
+            
+            if (user.Email != userModel.Email) 
+                user.Email = userModel.Email;
+
+            if(user.PhoneNumber != userModel.PhoneNumber)
+                user.PhoneNumber = userModel.PhoneNumber;
+            
+            var result =await _userManager.UpdateAsync(user);
+            if(result.Succeeded)
+                return Ok(result);
+            return BadRequest(result.Errors);
+        }
+
     }
 }
