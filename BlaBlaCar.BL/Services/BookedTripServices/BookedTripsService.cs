@@ -33,15 +33,15 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
 
             var trip = _mapper.Map<IEnumerable<TripModel>>(await _unitOfWork.Trips.GetAsync(x => x.OrderByDescending(x => x.StartTime), 
                 x =>
-                                        x.Include(x => x.TripUsers.Where(x => x.UserId == userId))
-                                            .ThenInclude(x => x.Seat)
-                                            .Include(x=>x.User),
+                    x.Include(x => x.TripUsers.Where(x => x.UserId == userId))
+                        .ThenInclude(x => x.Seat)
+                        .Include(x=>x.User),
                 x => x.TripUsers
                     .Any(x => x.UserId == userId)));
 
             trip = trip.Select(t =>
             {
-                t.User.UserImg = _hostSettings.Host + t.User.UserImg;
+                t.User.UserImg = _hostSettings.CurrentHost + t.User.UserImg;
                 return t;
             });
             return trip;

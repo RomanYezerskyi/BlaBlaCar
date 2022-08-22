@@ -37,5 +37,12 @@ namespace BlaBlaCar.BL.Services
             }
             return files;
         }
+        public async Task<string> FilesDbPathListAsync(IFormFile file)
+        {
+            var list = new List<IFormFile>();
+            list.Add(file);
+            var res = await FilesDbPathListAsync(list);
+            return res.FirstOrDefault();
+        }
     }
 }

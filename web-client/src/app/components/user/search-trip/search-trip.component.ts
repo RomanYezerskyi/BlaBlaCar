@@ -12,7 +12,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 })
 export class SearchTripComponent implements OnInit {
   invalidForm: boolean | undefined;
-  data: TripModel[] = []
+  trips: TripModel[] = [];
   trip: SearchTripModel = {
     countOfSeats: 1,
     endPlace: '',
@@ -21,6 +21,14 @@ export class SearchTripComponent implements OnInit {
   };
   tripRoute: { id: number } | undefined;
 
+  private noOfItemsToShowInitially: number = 5;
+  // itemsToLoad - number of new items to be displayed
+  private itemsToLoad: number = 5;
+  // 18 items loaded for demo purposes
+  // List that is going to be actually displayed to user
+  public itemsToShow = this.trips.slice(0, this.noOfItemsToShowInitially);
+  // No need to call onScroll if full list has already been displayed
+  public isFullListDisplayed: boolean = false;
 
   constructor(private http: HttpClient, private router: Router, private sanitizer: DomSanitizer) { }
 
@@ -36,27 +44,57 @@ export class SearchTripComponent implements OnInit {
   ngOnInit(): void {
 
   }
+
+  navigateToTripPage = (id: number) => {
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree(['trip-page-info', id], { queryParams: { requestedSeats: this.trip.countOfSeats } })
+    );
+
+    window.open(url, '_blank');
+  }
+
   sanitaizeImg(img: string): SafeUrl {
-    console.log(img);
+
     return this.sanitizer.bypassSecurityTrustUrl(img);
   }
-  searchTrips = (form: NgForm) => {
-    if (form.valid) {
-      const url = 'https://localhost:6001/api/Trips/search/'
-      this.http.post(url, this.trip, {
-        headers: new HttpHeaders({ "Content-Type": "application/json" })
-      })
-        .subscribe({
-          next: (res) => {
-            this.data = res as TripModel[];
-            console.log(this.data);
-          },
-          error: (err: HttpErrorResponse) => console.error(err),
-        })
+  async onScroll(form: NgForm) {
+
+    if (this.noOfItemsToShowInitially <= this.trips.length || this.trips.length == 0) {
+      console.log("aa");
+      this.trip.take = this.itemsToLoad;
+      this.trip.skip = this.trips.length == 0 ? 0 : this.noOfItemsToShowInitially;
+      if (this.trips.length != 0) {
+        this.noOfItemsToShowInitially += this.itemsToLoad;
+      }
+
+      let searchTrips = await this.searchTrips(form);
+      if (searchTrips != undefined) {
+        this.trips = this.trips.concat(searchTrips);
+      }
+      this.itemsToShow = this.trips.slice(0, this.noOfItemsToShowInitially);
+      console.log(this.itemsToShow);
+    } else {
+
+      this.isFullListDisplayed = true;
     }
   }
 
-  navigateToTripPage = (id: number) => {
-    this.router.navigate(['trip-page-info', id], { queryParams: { requestedSeats: this.trip.countOfSeats } });
+  async searchTrips(form: NgForm): Promise<TripModel[] | undefined> {
+    if (!form.valid) { return; }
+    const url = 'https://localhost:6001/api/Trips/search/'
+    return await new Promise<TripModel[]>((resolve, reject) => {
+      this.http.post<TripModel[]>(url, this.trip, {
+        headers: new HttpHeaders({ "Content-Type": "application/json" })
+      }).subscribe({
+        next: (res) => {
+          console.log(res);
+          resolve(res);
+        },
+        error: (err: HttpErrorResponse) => { console.error(err); reject(err) },
+      });
+    });
+
   }
+
+
 }

@@ -156,9 +156,18 @@ a {
     }
 }
 
-.nav-item:hover .submenu {
+.btn:hover .submenu {
     display: block;
 
+}
+
+.user_ptofile_items {
+    position: relative;
+
+    .submenu {
+        left: -106px;
+        top: 42px;
+    }
 }
 
 

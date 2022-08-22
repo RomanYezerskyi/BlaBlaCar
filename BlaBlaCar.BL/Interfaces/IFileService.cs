@@ -10,5 +10,6 @@ namespace BlaBlaCar.BL.Interfaces
     public interface IFileService
     {
         Task<List<string>> FilesDbPathListAsync(IEnumerable<IFormFile> collection);
+        Task<string> FilesDbPathListAsync(IFormFile file);
     }
 }

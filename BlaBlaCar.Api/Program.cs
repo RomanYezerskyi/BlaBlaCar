@@ -33,7 +33,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 
-builder.Services.Configure<HostSettings>(builder.Configuration.GetSection("CurrentHost"));
+builder.Services.Configure<HostSettings>(builder.Configuration.GetSection("ApiHostSettings"));
+
 builder.Services.Configure<FormOptions>(o =>
 {
     o.ValueLengthLimit = int.MaxValue;

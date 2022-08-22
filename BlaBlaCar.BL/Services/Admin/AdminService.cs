@@ -56,11 +56,11 @@ namespace BlaBlaCar.BL.Services.Admin
                     .Include(x=>x.TripUsers),
                 x => x.Id == id));
             if(user.UserImg != null)
-                user.UserImg = user.UserImg.Insert(0, _hostSettings.Host);
+                user.UserImg = user.UserImg.Insert(0, _hostSettings.CurrentHost);
 
             user.UserDocuments = user.UserDocuments.Select(x =>
             {
-                x.DrivingLicense = _hostSettings.Host + x.DrivingLicense;
+                x.DrivingLicense = _hostSettings.CurrentHost + x.DrivingLicense;
                 return x;
 
             }).ToList();
@@ -69,7 +69,7 @@ namespace BlaBlaCar.BL.Services.Admin
             {
                 x.CarDocuments.Select(c =>
                 {
-                    c.TechPassport = _hostSettings.Host + c.TechPassport;
+                    c.TechPassport = _hostSettings.CurrentHost + c.TechPassport;
                     return c;
                 }).ToList();
                 return x;
@@ -89,7 +89,7 @@ namespace BlaBlaCar.BL.Services.Admin
 
             var changedBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
 
-            _notificationService.ChangeUserStatusNotificationAsync(
+            await _notificationService.ChangeUserStatusNotificationAsync(
                 new CreateNotificationViewModel()
                 {
                     NotificationStatus = NotificationModelStatus.SpecificUser,
@@ -110,7 +110,7 @@ namespace BlaBlaCar.BL.Services.Admin
 
             var changedBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
 
-            _notificationService.ChangeUserStatusNotificationAsync(
+            await _notificationService.ChangeUserStatusNotificationAsync(
                 new CreateNotificationViewModel()
                 {
                     NotificationStatus = NotificationModelStatus.SpecificUser,

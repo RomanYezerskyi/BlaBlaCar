@@ -15,23 +15,35 @@ namespace BlaBlaCar.DAL
             _context = context;
             dbSet = context.Set<TEntity>();
         }
-        public async Task<IEnumerable<TEntity>> GetAsync(Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy,
-            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> includes = null, Expression<Func<TEntity, bool>> filter = null)
+        public async Task<IEnumerable<TEntity>> GetAsync(
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> includes = null, 
+            Expression<Func<TEntity, bool>> filter = null, 
+            int skip = 0, 
+            int take = int.MaxValue)
         {
             IQueryable<TEntity> queryable = _context.Set<TEntity>();
-            if (includes != null)
-            {
-                queryable = includes(queryable);
-            }
 
-            if (filter != null)
-            {
-                queryable = queryable.Where(filter);
-            }
-            if (orderBy != null)
-            {
-                return await orderBy(queryable).ToListAsync();
-            }
+            queryable = skip == 0? queryable.Take(take) : queryable.Skip(skip).Take(take);
+            queryable = filter is null ? queryable : queryable.Where(filter);
+            queryable = includes is null ? queryable : includes(queryable);
+            queryable = orderBy is null ? queryable : orderBy(queryable);
+
+            
+            //if (includes != null)
+            //{
+            //    queryable = includes(queryable);
+            //}
+
+            //if (filter != null)
+            //{
+
+            //    queryable = queryable.Where(filter);
+            //}
+            //if (orderBy != null)
+            //{
+            //    return await orderBy(queryable).ToListAsync();
+            //}
 
             return await queryable.AsNoTracking().ToListAsync();
         }

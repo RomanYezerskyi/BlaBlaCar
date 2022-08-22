@@ -8,6 +8,8 @@ namespace BlaBlaCar.BL
 {
     public class HostSettings
     {
-        public string Host { get; set; }
+        public string CurrentHost { get; set; }
+        public string IdentityServerUpdateUserHost { get; set; }
+        public string IdentityServerUpdateUserPasswordHost { get; set; }
     }
 }

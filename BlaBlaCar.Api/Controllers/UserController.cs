@@ -56,7 +56,22 @@ namespace BlaBlaCar.API.Controllers
         {
             try
             {
-                var res = await _userService.UpdateUserNameAsync(userModel, User);
+                var res = await _userService.UpdateUserAsync(userModel, User);
+                if (res)
+                    return Ok();
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        [HttpPost("updateUserImg")]
+        public async Task<IActionResult> UpdateUserImg(IFormFile userImg)
+        {
+            try
+            {
+                var res = await _userService.UpdateUserImgAsync(userImg, User);
                 if (res)
                     return Ok();
                 return BadRequest();

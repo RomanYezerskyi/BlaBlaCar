@@ -32,6 +32,7 @@ namespace IdentityServerJWT.API.Controllers
             return Ok(roles);
         }
         [HttpGet("{email}")]
+        [Authorize(Roles = "blablacar.admin")]
         public async Task<IActionResult> GetUser(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
@@ -61,17 +62,24 @@ namespace IdentityServerJWT.API.Controllers
 
             if (user == null) throw new Exception("User not found");
 
-            if (user.FirstName != userModel.FirstName)
-                user.FirstName = userModel.FirstName;
-            
-            if (user.Email != userModel.Email) 
-                user.Email = userModel.Email;
-
-            if(user.PhoneNumber != userModel.PhoneNumber)
-                user.PhoneNumber = userModel.PhoneNumber;
+            user.FirstName = userModel.FirstName;
+            user.Email = userModel.Email;
+            user.PhoneNumber = userModel.PhoneNumber;
             
             var result =await _userManager.UpdateAsync(user);
             if(result.Succeeded)
+                return Ok(result);
+            return BadRequest(result.Errors);
+        }
+        [HttpPost("update-password")]
+        [Authorize]
+        public async Task<IActionResult> UpdateUserPassword(UpdateUserPassword userModel)
+        {
+            if (!ModelState.IsValid) throw new Exception("All data is required !");
+            var user = await _userManager.FindByIdAsync(userModel.UserId);
+            if (user == null) throw new Exception("User not found !");
+            var result = await _userManager.ChangePasswordAsync(user, userModel.CurrentPassword, userModel.NewPassword);
+            if (result.Succeeded)
                 return Ok(result);
             return BadRequest(result.Errors);
         }

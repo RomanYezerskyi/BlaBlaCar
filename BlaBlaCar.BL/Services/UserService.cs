@@ -53,11 +53,11 @@ namespace BlaBlaCar.BL.Services
             if (user == null) throw new Exception("User no found!");
 
             if (user.UserImg != null)
-                user.UserImg = user.UserImg.Insert(0, _hostSettings.Host);
+                user.UserImg = user.UserImg.Insert(0, _hostSettings.CurrentHost);
             
             user.UserDocuments = user.UserDocuments.Select(x =>
                {
-                   x.DrivingLicense = _hostSettings.Host + x.DrivingLicense;
+                   x.DrivingLicense = _hostSettings.CurrentHost + x.DrivingLicense;
                    return x;
 
                }).ToList();
@@ -66,7 +66,7 @@ namespace BlaBlaCar.BL.Services
                {
                    x.CarDocuments.Select(c =>
                    {
-                       c.TechPassport = _hostSettings.Host + c.TechPassport;
+                       c.TechPassport = _hostSettings.CurrentHost + c.TechPassport;
                        return c;
                    }).ToList();
                    return x;
@@ -137,7 +137,7 @@ namespace BlaBlaCar.BL.Services
             return await _unitOfWork.SaveAsync(user.Id);
         }
 
-        public async Task<bool> UpdateUserNameAsync(UpdateUserModel newUserData, ClaimsPrincipal principal)
+        public async Task<bool> UpdateUserAsync(UpdateUserModel newUserData, ClaimsPrincipal principal)
         {
             var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
             var accessToken = _contextAccessor.HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
@@ -146,24 +146,37 @@ namespace BlaBlaCar.BL.Services
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             StringContent userModel = new StringContent(JsonConvert.SerializeObject(newUserData), Encoding.UTF8, "application/json");
 
-            using var response = await httpClient.PostAsync("https://localhost:5001/api/User/update", userModel);
+            using var response = await httpClient.PostAsync(_hostSettings.IdentityServerUpdateUserHost, userModel);
             if (response.IsSuccessStatusCode)
             {
                 var user = await _unitOfWork.Users.GetAsync(null, x => x.Id == newUserData.Id);
 
-                if (user.FirstName != newUserData.FirstName)
-                    user.FirstName = newUserData.FirstName;
+                user.FirstName = newUserData.FirstName;
+                user.Email = newUserData.Email;
+                user.PhoneNumber = newUserData.PhoneNumber;
 
-                if (user.Email != newUserData.Email)
-                    user.Email = newUserData.Email;
-
-                if (user.PhoneNumber != newUserData.PhoneNumber)
-                    user.PhoneNumber = newUserData.PhoneNumber;
                 _unitOfWork.Users.Update(user);
                 return await _unitOfWork.SaveAsync(userId);
             }
 
             return false;
+        }
+
+        public async Task<bool> UpdateUserImgAsync(IFormFile userImg, ClaimsPrincipal principal)
+        {
+            var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
+
+            var user = _mapper.Map<UserModel>(
+                await _unitOfWork.Users.GetAsync(null, x => x.Id == userId));
+
+            var img = await _fileService.FilesDbPathListAsync(userImg);
+
+
+
+            user.UserImg = img;
+            _unitOfWork.Users.Update(_mapper.Map<ApplicationUser>(user));
+            return await _unitOfWork.SaveAsync(userId);
+
         }
 
         public Task<bool> DeleteUserAsync(int id)

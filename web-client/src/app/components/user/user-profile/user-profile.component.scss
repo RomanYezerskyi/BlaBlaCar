@@ -1,5 +1,18 @@
 .body {
     background-color: #fff;
+    position: relative;
+}
+
+.close_btn {
+    cursor: pointer;
+    position: absolute;
+    right: -17px;
+    width: 23px;
+    transition: all .15s ease;
+}
+
+.close_btn:hover {
+    transform: translateY(-2%);
 }
 
 // mat-dialog-content {
@@ -53,18 +66,24 @@
     }
 }
 
+
+
 .actions {
 
+
     p,
-    input {
+    input,
+    button {
+
         cursor: pointer;
         border: none;
-        margin: 0;
-        padding: 10px;
+        display: block;
+        margin: auto;
+
         background-image: linear-gradient(to right, #5C258D 0%, #4389A2 51%, #5C258D 100%);
         border-radius: 10px;
         // margin: 10px;
-        padding: 15px 45px;
+        padding: 15px 20px;
         text-align: center;
         text-transform: uppercase;
         transition: .5s;
@@ -73,17 +92,35 @@
         box-shadow: 0 0 20px #eee;
         border-radius: 10px;
 
+
+    }
+
+    .photo_button {
+        display: block;
+        margin: auto;
     }
 
     input:hover,
-    p:hover {
+    p:hover,
+    button:hover {
         background-position: right center;
         color: #fff;
         text-decoration: none;
     }
 }
 
-.user_main_info {
+.form_actions {
+    display: flex;
+    justify-content: space-between;
+
+    button {
+        width: 95px;
+    }
+}
+
+
+
+.body_data {
     flex: 0 0 33.333333%;
     max-width: 33.333333%;
 }
@@ -143,6 +180,38 @@
     margin-bottom: 10px;
 }
 
+.user_data_info {
+    p {
+        margin: 0;
+    }
+}
+
+.changePasswordForm {
+    margin-top: 10px;
+
+
+    h4 {
+        text-align: center;
+        font-size: 20px;
+        font-weight: 500;
+    }
+
+    button {
+        margin: auto;
+        width: auto;
+    }
+}
+
+@media all and (max-width:1000px) {
+    .row {
+        flex-flow: column;
+    }
+
+    .user_main_info {
+        // flex: 0 0 33.333333%;
+        max-width: 100%;
+    }
+}
 
 // .container {
 //     padding: 10px 0;
