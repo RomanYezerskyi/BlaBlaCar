@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders.Physical;
 using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
 
 namespace BlaBlaCar.BL.Services
 {
@@ -26,13 +28,14 @@ namespace BlaBlaCar.BL.Services
         private readonly IMapper _mapper;
         private readonly IFileService _fileService;
         private readonly HostSettings _hostSettings;
-
+        private readonly IHttpContextAccessor _contextAccessor;
         public UserService(IUnitOfWork unitOfWork,
-            IMapper mapper, IFileService fileService, IOptionsSnapshot<HostSettings> hostSettings)
+            IMapper mapper, IFileService fileService, IOptionsSnapshot<HostSettings> hostSettings, IHttpContextAccessor contextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _fileService = fileService;
+            _contextAccessor = contextAccessor;
             _hostSettings = hostSettings.Value;
         }
         public async Task<UserModel> GetUserInformationAsync(ClaimsPrincipal claimsPrincipal)
@@ -50,11 +53,11 @@ namespace BlaBlaCar.BL.Services
             if (user == null) throw new Exception("User no found!");
 
             if (user.UserImg != null)
-                user.UserImg = user.UserImg.Insert(0, _hostSettings.Host);
+                user.UserImg = user.UserImg.Insert(0, _hostSettings.CurrentHost);
             
             user.UserDocuments = user.UserDocuments.Select(x =>
                {
-                   x.DrivingLicense = _hostSettings.Host + x.DrivingLicense;
+                   x.DrivingLicense = _hostSettings.CurrentHost + x.DrivingLicense;
                    return x;
 
                }).ToList();
@@ -63,7 +66,7 @@ namespace BlaBlaCar.BL.Services
                {
                    x.CarDocuments.Select(c =>
                    {
-                       c.TechPassport = _hostSettings.Host + c.TechPassport;
+                       c.TechPassport = _hostSettings.CurrentHost + c.TechPassport;
                        return c;
                    }).ToList();
                    return x;
@@ -134,9 +137,46 @@ namespace BlaBlaCar.BL.Services
             return await _unitOfWork.SaveAsync(user.Id);
         }
 
-        public Task<bool> UpdateUserAsync(UserModel user)
+        public async Task<bool> UpdateUserAsync(UpdateUserModel newUserData, ClaimsPrincipal principal)
         {
-            throw new NotImplementedException();
+            var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
+            var accessToken = _contextAccessor.HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+
+            using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            StringContent userModel = new StringContent(JsonConvert.SerializeObject(newUserData), Encoding.UTF8, "application/json");
+
+            using var response = await httpClient.PostAsync(_hostSettings.IdentityServerUpdateUserHost, userModel);
+            if (response.IsSuccessStatusCode)
+            {
+                var user = await _unitOfWork.Users.GetAsync(null, x => x.Id == newUserData.Id);
+
+                user.FirstName = newUserData.FirstName;
+                user.Email = newUserData.Email;
+                user.PhoneNumber = newUserData.PhoneNumber;
+
+                _unitOfWork.Users.Update(user);
+                return await _unitOfWork.SaveAsync(userId);
+            }
+
+            return false;
+        }
+
+        public async Task<bool> UpdateUserImgAsync(IFormFile userImg, ClaimsPrincipal principal)
+        {
+            var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
+
+            var user = _mapper.Map<UserModel>(
+                await _unitOfWork.Users.GetAsync(null, x => x.Id == userId));
+
+            var img = await _fileService.FilesDbPathListAsync(userImg);
+
+
+
+            user.UserImg = img;
+            _unitOfWork.Users.Update(_mapper.Map<ApplicationUser>(user));
+            return await _unitOfWork.SaveAsync(userId);
+
         }
 
         public Task<bool> DeleteUserAsync(int id)

@@ -52,7 +52,11 @@ export class DialogBookingConfirmationComponent implements OnInit {
 
   }
   cheackSeat(item: SeatModel): boolean {
-    let res = this.trip.availableSeats.some(x => x.seatId == item.id);
+    let res = this.trip.availableSeats.some(x => {
+      if (x.seatId == item.id && x.availableSeatsType == AvailableSeatsType.Booked)
+        return true;
+      return false;
+    });
     return res;
   }
   confirmBook = async () => {

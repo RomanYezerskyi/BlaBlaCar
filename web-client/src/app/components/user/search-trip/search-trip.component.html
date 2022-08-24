@@ -1,5 +1,7 @@
-<div class="container">
-  <form #searchForm="ngForm" (ngSubmit)="searchTrips(searchForm)">
+<div class="container" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+  (scrolled)="onScroll(searchForm);" [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false"
+  style="height: 87vh; overflow: auto;">
+  <form #searchForm="ngForm" (ngSubmit)="onScroll(searchForm);">
     <div class="search-inputs">
       <div class="place">
         <div class="input__item">
@@ -36,19 +38,16 @@
     </div>
   </form>
 
-  <div class="search_results" *ngIf="data.length > 0">
-    <!-- <div *ngFor="let item of data" (click)="navigateToTripPage(item.id)">
-      {{item}}
-    </div> -->
+  <div class="search_results" *ngIf="trips.length > 0">
     <div class="filters">
 
     </div>
     <div class="items">
-      <div class="search_item" *ngFor="let item of data" (click)="navigateToTripPage(item.id)">
+      <div class="search_item" *ngFor="let trip of trips" (click)="navigateToTripPage(trip.id)">
         <div class="header">
           <div class="time">
-            <p>{{item.startTime | date:'mm:ss'}}</p>
-            <p>{{item.endTime | date:'mm:ss'}}</p>
+            <p>{{trip.startTime | date:'hh:mm'}}</p>
+            <p>{{trip.endTime | date:'hh:mm'}}</p>
           </div>
           <div class="line">
           </div>
@@ -56,30 +55,25 @@
             <div class="cities">
               <div class="start">
                 <mat-icon class="item_icon">gps_fixed</mat-icon>
-                <p>{{item.startPlace}}</p>
+                <p>{{trip.startPlace}}</p>
               </div>
               <div class="destination">
                 <mat-icon class="item_icon"> place</mat-icon>
-                <p>{{item.endPlace}}</p>
+                <p>{{trip.endPlace}}</p>
               </div>
             </div>
             <div class="price">
-              <p>{{item.pricePerSeat | currency:"UAH":"symbol"}}</p>
+              <p>{{trip.pricePerSeat | currency:"UAH":"symbol"}}</p>
             </div>
           </div>
         </div>
         <div class="body">
           <div class="profile_img">
-            <img [src]="sanitaizeImg(item.user?.userImg!)" class="img" alt="">
+            <img [src]="sanitaizeImg(trip.user?.userImg!)" class="img" alt="">
           </div>
-          <p class="user_name">{{item.user?.firstName}}</p>
+          <p class="user_name">{{trip.user?.firstName}}</p>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-
-<!-- <div *ngFor="let item of data" (click)="navigateToTripPage(item.id)">
-  {{item}}
-</div> -->

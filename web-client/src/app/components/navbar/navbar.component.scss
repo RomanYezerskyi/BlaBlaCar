@@ -1,12 +1,15 @@
-* {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
+.container {
+    padding-right: 15px;
+    padding-left: 15px;
+    background-color: #131022 !important;
 }
 
 nav {
-    background-color: #222;
-    padding: 5px 20px;
+
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    padding: 10px;
 }
 
 ul {
@@ -14,184 +17,202 @@ ul {
 }
 
 a {
-    color: white;
     text-decoration: none;
-
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-.menu li {
-    font-size: 16px;
-    padding: 15px 5px;
-}
-
-.menu li a {
-    display: block;
-}
-
-.logo a {
-    font-size: 20px;
-}
-
-.button.secondary {
-    border-bottom: 1px #444 solid;
-}
-
-/*Mobele*/
-.menu {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
+    color: #fff;
 }
 
 .toggle {
-    order: 1;
-
-}
-
-.item.button {
-    order: 2;
-}
-
-.item {
-    width: 100%;
-    text-align: center;
-    order: 3;
     display: none;
 }
 
-.item.active {
-    display: block;
+.btn {
+    border: none;
+    // background-color: white;
+    padding: 0;
 }
 
+.navbar-nav {
+    display: flex;
+    margin: auto;
 
-.toggle {
-    cursor: pointer;
+    .nav-item {
+        margin: 0;
+    }
 }
 
-.bars {
-    background-color: #999;
+.navbar-brand {
     display: inline-block;
-    height: 2px;
+    margin: auto 0;
+    font-size: 20px;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.notification {
     position: relative;
-    width: 18px;
 }
 
-.bars::before,
-.bars::after {
-    content: "";
-    background-color: #999;
-    display: inline-block;
-    height: 2px;
+.notification_list {
+    display: none;
+
+}
+
+.notification:hover .notification_list {
+    display: block;
     position: absolute;
-    width: 18px;
+    right: -1px;
+    bottom: -1px;
 }
 
-.bars::before {
-    top: 5px;
+.menu {
+    display: flex;
 }
 
-.bars::after {
-    top: -5px;
+.navbar-section-main {
+    margin: 10px 0;
+
+    .navbar-nav {
+        .nav-item {
+
+            .nav-link,
+            button {
+                cursor: pointer;
+                display: block;
+                margin: auto 5px;
+                font-size: 16px;
+                font-weight: 400;
+                color: rgba(255, 255, 255, .85);
+                position: relative;
+                opacity: 1 !important;
+                padding: 10px;
+
+            }
+
+            button {
+                // background-color: #6366f1;
+                // border-color: #6366f1;
+                border-radius: 10px;
+                // transition: all 0.15s ease;
+                background-image: linear-gradient(to right, #5C258D 0%, #4389A2 51%, #5C258D 100%);
+                transition: .5s;
+                background-size: 200% auto;
+                // text-transform: uppercase;
+            }
+
+            .btn-toggler {
+                display: flex;
+                padding: 8px;
+            }
+
+
+
+            button:hover {
+                background-position: right center;
+                color: #fff;
+                text-decoration: none;
+                // transform: translateY(-1%);
+                // background-color: #000;
+                // color: white;
+            }
+        }
+
+        .toggler {
+            display: none;
+        }
+    }
 }
 
-.menu__list {
+.nav-item {
     position: relative;
 }
 
 .submenu {
     display: none;
-}
-
-.menu__list:hover .submenu {
-    display: block;
+    margin: auto;
     position: absolute;
-    background-color: #222;
+    width: 150px;
+    left: 12px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%) !important;
+    transition: 2s all ease;
+
+    ul {
+        padding: 0;
+    }
+
+    .submenu_text {
+        color: #000;
+        position: relative;
+        opacity: 1 !important;
+        padding: 10px;
+        display: block;
+        margin: auto 5px;
+        font-size: 16px;
+        font-weight: 400;
+        cursor: pointer;
+    }
 }
 
-/*Tablet*/
+.btn:hover .submenu {
+    display: block;
 
-@media all and (min-width:468px) {
+}
+
+.user_ptofile_items {
+    position: relative;
+
+    .submenu {
+        left: -106px;
+        top: 42px;
+    }
+}
+
+
+@media all and (max-width:768px) {
+    nav {
+        flex-wrap: wrap;
+    }
+
+    .navbar-section-main {
+        .navbar-nav {
+            .toggler {
+                display: block;
+            }
+        }
+    }
+
     .menu {
-        justify-content: center;
-    }
-
-    .logo {
-        flex: 1;
-    }
-
-    .item.button {
-        width: auto;
+        width: 100%;
         order: 1;
-        display: block;
-    }
-
-    .toggle {
-        order: 2;
-    }
-
-    .button.secondary {
-        border: 0;
-    }
-
-    .button a {
-        text-decoration: none;
-        padding: 7px 15px;
-        background: teal;
-        border: 1px solid #006d6d;
-        border-radius: 50em;
-    }
-
-    .button.secondary a {
-        background: transparent;
-    }
-
-    .button a:hover {
-        transition: all .25s;
-    }
-
-    .button:not(.secondary) a:hover {
-        background: #006d6d;
-        border-color: #005959;
-    }
-
-    .button.secondary a:hover {
-        color: #ddd;
-
-    }
-}
-
-@media all and (min-width:768px) {
-    .item {
-        display: block;
-        width: auto;
-    }
-
-    .toggle {
+        width: 100%;
         display: none;
+        // justify-content: center;
     }
 
-    .logo {
-        order: 0;
+    .menu_active {
+        display: block;
     }
 
-    .item {
-        order: 1;
+    .main_nav {
+        flex-flow: column;
+
+        .nav-item {
+            width: 100%;
+            border-bottom: 1px solid#fff;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-1%);
+            transition: all 0.20s ease;
+        }
     }
 
-    .button {
-        order: 2;
-    }
-
-    .menu li {
-        padding: 15px 10px;
-    }
-
-    .menu li.button {
-        padding-right: 0;
-    }
 }
+
+// @media all and (max-width:468px) {
+//     nav {
+//         background-color: #000;
+//     }
+// }

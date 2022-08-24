@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlaBlaCar.DAL.Entities
+namespace BlaBlaCar.DAL.Entities.NotificationEntities
 {
-    public enum CarType
+    public enum NotificationStatus
     {
-        Sedan = 0,
-        Bus = 1,
+        Global = 1,
+        SpecificUser = 2,
     }
 }

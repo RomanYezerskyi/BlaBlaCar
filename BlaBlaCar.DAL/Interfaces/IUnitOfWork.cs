@@ -1,4 +1,7 @@
 ﻿using BlaBlaCar.DAL.Entities;
+using BlaBlaCar.DAL.Entities.CarEntities;
+using BlaBlaCar.DAL.Entities.NotificationEntities;
+using BlaBlaCar.DAL.Entities.TripEntities;
 
 namespace BlaBlaCar.DAL.Interfaces
 {
@@ -6,12 +9,14 @@ namespace BlaBlaCar.DAL.Interfaces
     {
         IRepositoryAsync<ApplicationUser> Users { get; }
         IRepositoryAsync<Trip> Trips { get; }
-        IRepositoryAsync<Seat> TripSeats { get; }
-        IRepositoryAsync<AvailableSeats> AvaliableSeats { get; }
+        IRepositoryAsync<Seat> CarSeats { get; }
+        IRepositoryAsync<AvailableSeats> AvailableSeats { get; }
         IRepositoryAsync<Car> Cars { get; }
         IRepositoryAsync<TripUser> TripUser { get; }
         IRepositoryAsync<UserDocuments> UserDocuments { get; }
         IRepositoryAsync<CarDocuments> CarDocuments { get; }
+        IRepositoryAsync<Notification> Notifications { get; }
+        IRepositoryAsync<ReadNotification> ReadNotifications { get; }
         Task<bool> SaveAsync(Guid userId);
     }
 }

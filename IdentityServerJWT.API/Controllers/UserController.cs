@@ -11,7 +11,7 @@ namespace IdentityServerJWT.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "blablacar.admin")]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -25,12 +25,14 @@ namespace IdentityServerJWT.API.Controllers
         }
 
         [HttpGet("roles")]
+        [Authorize(Roles = "blablacar.admin")]
         public async Task<IActionResult> Roles()
         {
             var roles = await _roleManager.Roles.ToListAsync();
             return Ok(roles);
         }
         [HttpGet("{email}")]
+        [Authorize(Roles = "blablacar.admin")]
         public async Task<IActionResult> GetUser(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
@@ -40,6 +42,7 @@ namespace IdentityServerJWT.API.Controllers
             return Ok(userWithRoles);
         }
         [HttpPost]
+        [Authorize(Roles = "blablacar.admin")]
         public async Task<IActionResult>ChangeRole(UserChangeRoleModel roleModel)
         {
 
@@ -50,5 +53,36 @@ namespace IdentityServerJWT.API.Controllers
             await _userManager.RemoveFromRoleAsync(user, allRoles.First().Name);
             return Ok();
         }
+        [HttpPost("update")]
+        [Authorize]
+        public async Task<IActionResult> UpdateUser(UpdateUser userModel)
+        {
+            if (!ModelState.IsValid) throw new Exception("All data is required !");
+            var user = await _userManager.FindByIdAsync(userModel.Id);
+
+            if (user == null) throw new Exception("User not found");
+
+            user.FirstName = userModel.FirstName;
+            user.Email = userModel.Email;
+            user.PhoneNumber = userModel.PhoneNumber;
+            
+            var result =await _userManager.UpdateAsync(user);
+            if(result.Succeeded)
+                return Ok(result);
+            return BadRequest(result.Errors);
+        }
+        [HttpPost("update-password")]
+        [Authorize]
+        public async Task<IActionResult> UpdateUserPassword(UpdateUserPassword userModel)
+        {
+            if (!ModelState.IsValid) throw new Exception("All data is required !");
+            var user = await _userManager.FindByIdAsync(userModel.UserId);
+            if (user == null) throw new Exception("User not found !");
+            var result = await _userManager.ChangePasswordAsync(user, userModel.CurrentPassword, userModel.NewPassword);
+            if (result.Succeeded)
+                return Ok(result);
+            return BadRequest(result.Errors);
+        }
+
     }
 }

@@ -3,9 +3,8 @@
     border: 1px #000 solid;
     width: 50%;
     margin: 1rem auto;
-    padding: 49px 55px;
-    padding-bottom: 70px;
-    background: rgba(0, 0, 0, 0.8);
+    padding: 20px 20px;
+    background: #131022;
     border-radius: 10px;
 }
 
@@ -16,6 +15,11 @@
     flex-wrap: wrap;
 }
 
+.place {
+    display: flex;
+    justify-content: space-around;
+    flex-flow: row wrap;
+}
 
 .input__item {
     background-color: white;
@@ -26,9 +30,11 @@
 }
 
 .place .input__item {
-    border: 1px #000 solid;
     padding: 10px 20px;
     padding-right: 60px;
+    height: 50px;
+    min-width: 35%;
+    width: 35%;
 }
 
 .input__item .input {

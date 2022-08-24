@@ -1,23 +1,191 @@
-<div class="wrapper">
-    <div class="container">
-        <div class="settings">
-            <div class="title">
-                <h3 class="first_title">My account</h3>
+<!-- <mat-dialog-actions>
+    <div class="actions">
+        <button class="btn_action" (click)="close()">Close</button>
+    </div>
+</mat-dialog-actions> -->
+<mat-dialog-content>
+    <div class="body">
+        <img src="../../../../assets/close.png" class="close_btn" (click)="close()" alt="">
+
+        <div class="row">
+            <div class="body_data">
+                <div class="card_body user_main_info">
+                    <div class="user_img">
+                        <img [src]=" sanitaizeImg(user.userImg!)" alt="" class="img profile_img profile__img"
+                            *ngIf="imagePath == null; else elseImg">
+                        <ng-template #elseImg><img [src]="imagePath" alt="" class="img profile_img profile__img">
+                        </ng-template>
+
+                    </div>
+                    <div class="user">
+                        <h4>{{user.firstName}}</h4>
+                    </div>
+                    <div class="actions">
+                        <input style="display: none" type="file" (change)="onFileChanged($event)" #fileInput>
+                        <button class="photo_button" (click)="fileInput.click(); changePhoto()"
+                            *ngIf="!changeUserPhoto; else elsePhoto">Change
+                            photo</button>
+                    </div>
+                    <ng-template #elsePhoto>
+
+                        <div class="actions form_actions">
+                            <button type="button" (click)="updateUserPhoto()">Save</button>
+                            <button type="button" (click)="changePhoto()">Cancel</button>
+                        </div>
+                    </ng-template>
+                    <hr>
+                    <div class="user_info">
+                        <div class="icon_img">
+                            <img src="../../../../assets/car.png" alt="">
+                        </div>
+                        <p>{{user.cars.length}}</p>
+                    </div>
+                    <hr>
+                    <div class="user_info">
+                        <div class="icon_img">
+                            <img src="../../../../assets/destination.png" alt="">
+                        </div>
+                        <p>{{user.trips?.length}}</p>
+                    </div>
+                    <hr>
+                    <div class="user_info">
+                        <div class="icon_img">
+                            <img src="../../../../assets/tourist.png" alt="">
+                        </div>
+                        <p>{{user.tripUsers?.length}}</p>
+                    </div>
+                </div>
             </div>
+            <div class="card_body data_elements">
+                <form *ngIf="editUserData; else elseBlock" #userForm="ngForm" (ngSubmit)="updateUser(userForm)">
+                    <div class="form-group">
+                        <label for="firstName" class="sr-only">User</label>
+                        <div class="input">
+                            <input type="text" id="firstName" name="firstName" [(ngModel)]="user.firstName"
+                                class="form-control" placeholder="" value="{{user.firstName}}" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="sr-only">Email</label>
+                        <div class="input">
+                            <input type="email" id="email" name="email" [(ngModel)]="user.email" class="form-control"
+                                placeholder="" value="{{user.email}}" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneNumber" class="sr-only">Phone</label>
+                        <div class="input">
+                            <input type="tel" id="phoneNumber" name="phoneNumber" [(ngModel)]="user.phoneNumber"
+                                class="form-control" placeholder="" value="{{user.phoneNumber}}" required>
+                        </div>
+                    </div>
+                    <div class="actions form_actions">
+                        <button type="submit" [disabled]="!userForm.valid">Save</button>
+                        <button type="button" (click)="editData()" [disabled]="!userForm.valid">Cancel</button>
+                    </div>
+                </form>
+                <ng-template #elseBlock>
+                    <div class="user_data_info">
+                        <div class="form-group">
+                            <label for="firstName" class="sr-only">Name</label>
+                            <div class="input">
+                                <p>{{user.firstName}}</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="sr-only">Email</label>
+                            <div class="input">
+                                <p>{{user.email}}</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phoneNumber" class="sr-only">Phone</label>
+                            <div class="input">
+                                <p>{{user.phoneNumber}}</p>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <input type="button" (click)="editData()" value="Edit">
+                        </div>
+                    </div>
+                </ng-template>
+                <form #userPasswordForm="ngForm" class="changePasswordForm">
+                    <h4>Change password</h4>
+                    <div class="form-group">
+                        <label for="firstName" class="sr-only">Current</label>
+                        <div class="input">
+                            <input type="password" id="currentPassword" name="currentPassword"
+                                [(ngModel)]="newPassword.currentPassword" class="form-control" placeholder="" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="sr-only">New</label>
+                        <div class="input">
+                            <input type="password" id="newPassword" name="newPassword"
+                                [(ngModel)]="newPassword.newPassword" class="form-control" placeholder="" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneNumber" class="sr-only">New</label>
+                        <div class="input">
+                            <input type="password" id="newPassword1" name="newPassword1" class="form-control"
+                                placeholder="" required>
+                        </div>
+                    </div>
+                    <div class="actions form_actions">
+                        <button type="submit" [disabled]="!userPasswordForm.valid">Change password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="container">
+        <div class="user_info">
+            <div class="user_container">
+                <div class="header">
+                    <img [src]="sanitaizeImg(user.userImg!)" alt="" class="img profile_img profile__img">
+                </div>
+                <div class="name">
+                    <h3 class="user_name first_title">{{user.firstName}}</h3>
+                </div>
+                <button class="btn save__btn messages">Messages</button>
+                <div class="car_info">
+                    <div class="info__data">
+                        <p>{{user.cars.length}}</p>
+                        <p class="btn info_btn">Cars</p>
+                    </div>
+                    <div class="info__data">
+                        <p>{{user.trips?.length}}</p>
+                        <p class="btn info_btn">My trips</p>
+                    </div>
+                    <div class="info__data">
+                        <p>{{user.tripUsers?.length}}</p>
+                        <p class="btn info_btn">Trips</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="settings">
+
             <div class="user_information">
-                <h6 class="second_title">USER INFORMATION</h6>
-                <div class="body">
+                <h6 class="second_title">USER INFORMATION </h6>
+                <div class="body main_body">
+                    <div class="header">
+                        <img [src]="sanitaizeImg(user.userImg!)" alt="" class="img profile_img profile__img">
+                    </div>
                     <div class="form-group">
                         <label for="firstName" class="sr-only">User name</label>
                         <div class="input">
                             <input type="text" id="firstName" name="firstName" [(ngModel)]="user.firstName"
-                                class="form-control" placeholder="" value="{{user.firstName}}" required disabled>
+                                class="form-control" placeholder="" value="{{user.firstName}}" required>
                             <mat-icon>create</mat-icon>
-                            <mat-icon>check</mat-icon>
+                            <p (click)="changeUserName()">
+                                <mat-icon>check</mat-icon>
+                            </p>
                         </div>
                     </div>
                     <div class="form-group">
-
                         <label for="email" class="sr-only">Email</label>
                         <div class="input">
                             <input type="email" id="email" name="email" [(ngModel)]="user.email" class="form-control"
@@ -58,44 +226,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="password">
-            <div class="form-group">
-                <label for="phoneNumber" class="sr-only">Password </label>
-                <input type="tel" id="phoneNumber" name="phoneNumber" [(ngModel)]="user.phoneNumber"
-                    class="form-control" placeholder="" value="{{user.phoneNumber}}" required>
-            </div>
-            <div class="form-group">
-                <label for="phoneNumber" class="sr-only">Password</label>
-                <input type="tel" id="phoneNumber" name="phoneNumber" [(ngModel)]="user.phoneNumber"
-                    class="form-control" placeholder="" value="{{user.phoneNumber}}" required>
-            </div>
-        </div> -->
         </div>
-        <div class="user_info">
-            <div class="container user_container">
-                <div class="header">
-                    <img [src]="sanitaizeImg(user.userImg!)" alt="" class="img profile_img profile__img">
-                </div>
-                <div class="name">
-                    <h3 class="user_name first_title">{{user.firstName}}</h3>
-                </div>
-                <button class="btn save__btn messages">Messages</button>
-                <div class="car_info">
-                    <div class="info__data">
-                        <p>{{user.cars.length}}</p>
-                        <p class="btn info_btn">Cars</p>
-                    </div>
-                    <div class="info__data">
-                        <p>{{user.trips?.length}}</p>
-                        <p class="btn info_btn">My trips</p>
-                    </div>
-                    <div class="info__data">
-                        <p>{{user.tripUsers?.length}}</p>
-                        <p class="btn info_btn">Trips</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
+    </div> -->
+</mat-dialog-content>

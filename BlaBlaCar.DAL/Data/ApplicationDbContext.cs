@@ -1,4 +1,6 @@
 ﻿using BlaBlaCar.DAL.Entities;
+using BlaBlaCar.DAL.Entities.CarEntities;
+using BlaBlaCar.DAL.Entities.TripEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -25,8 +27,8 @@ namespace BlaBlaCar.DAL.Data
 
             base.OnModelCreating(builder);
 
-            builder.Entity<ApplicationUser>().HasIndex(x => x.Email);
-            builder.Entity<ApplicationUser>().HasIndex(x => x.PhoneNumber);
+            builder.Entity<ApplicationUser>().HasIndex(x => x.Email).IsUnique();
+            builder.Entity<ApplicationUser>().HasIndex(x => x.PhoneNumber).IsUnique();
            // builder.Entity<ApplicationUser>().Property(x=>x.DrivingLicense).IsRequired(false);
            builder.Entity<Car>().HasIndex(x => x.RegistNum);
         }

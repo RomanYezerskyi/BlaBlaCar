@@ -59,47 +59,16 @@ namespace BlaBlaCar.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email");
+                    b.HasIndex("Email")
+                        .IsUnique();
 
-                    b.HasIndex("PhoneNumber");
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("BlaBlaCar.DAL.Entities.AvailableSeats", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("SeatId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TripId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SeatId");
-
-                    b.HasIndex("TripId");
-
-                    b.ToTable("AvailableSeats");
-                });
-
-            modelBuilder.Entity("BlaBlaCar.DAL.Entities.Car", b =>
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.CarEntities.Car", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -143,7 +112,7 @@ namespace BlaBlaCar.DAL.Migrations
                     b.ToTable("Cars");
                 });
 
-            modelBuilder.Entity("BlaBlaCar.DAL.Entities.CarDocuments", b =>
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.CarEntities.CarDocuments", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -175,7 +144,7 @@ namespace BlaBlaCar.DAL.Migrations
                     b.ToTable("CarDocuments");
                 });
 
-            modelBuilder.Entity("BlaBlaCar.DAL.Entities.Seat", b =>
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.CarEntities.Seat", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -206,7 +175,108 @@ namespace BlaBlaCar.DAL.Migrations
                     b.ToTable("Seats");
                 });
 
-            modelBuilder.Entity("BlaBlaCar.DAL.Entities.Trip", b =>
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.NotificationEntities.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("NotificationStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notification");
+                });
+
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.NotificationEntities.ReadNotification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("NotificationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NotificationId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ReadNotification");
+                });
+
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.TripEntities.AvailableSeats", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SeatId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TripId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SeatId");
+
+                    b.HasIndex("TripId");
+
+                    b.ToTable("AvailableSeats");
+                });
+
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.TripEntities.Trip", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -260,7 +330,7 @@ namespace BlaBlaCar.DAL.Migrations
                     b.ToTable("Trips");
                 });
 
-            modelBuilder.Entity("BlaBlaCar.DAL.Entities.TripUser", b =>
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.TripEntities.TripUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -330,26 +400,7 @@ namespace BlaBlaCar.DAL.Migrations
                     b.ToTable("UserDocuments");
                 });
 
-            modelBuilder.Entity("BlaBlaCar.DAL.Entities.AvailableSeats", b =>
-                {
-                    b.HasOne("BlaBlaCar.DAL.Entities.Seat", "Seat")
-                        .WithMany("AvailableSeats")
-                        .HasForeignKey("SeatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BlaBlaCar.DAL.Entities.Trip", "Trip")
-                        .WithMany("AvailableSeats")
-                        .HasForeignKey("TripId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Seat");
-
-                    b.Navigation("Trip");
-                });
-
-            modelBuilder.Entity("BlaBlaCar.DAL.Entities.Car", b =>
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.CarEntities.Car", b =>
                 {
                     b.HasOne("BlaBlaCar.DAL.Entities.ApplicationUser", "User")
                         .WithMany("Cars")
@@ -360,9 +411,9 @@ namespace BlaBlaCar.DAL.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("BlaBlaCar.DAL.Entities.CarDocuments", b =>
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.CarEntities.CarDocuments", b =>
                 {
-                    b.HasOne("BlaBlaCar.DAL.Entities.Car", "Car")
+                    b.HasOne("BlaBlaCar.DAL.Entities.CarEntities.Car", "Car")
                         .WithMany("CarDocuments")
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -371,9 +422,9 @@ namespace BlaBlaCar.DAL.Migrations
                     b.Navigation("Car");
                 });
 
-            modelBuilder.Entity("BlaBlaCar.DAL.Entities.Seat", b =>
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.CarEntities.Seat", b =>
                 {
-                    b.HasOne("BlaBlaCar.DAL.Entities.Car", "Car")
+                    b.HasOne("BlaBlaCar.DAL.Entities.CarEntities.Car", "Car")
                         .WithMany("Seats")
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -382,9 +433,56 @@ namespace BlaBlaCar.DAL.Migrations
                     b.Navigation("Car");
                 });
 
-            modelBuilder.Entity("BlaBlaCar.DAL.Entities.Trip", b =>
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.NotificationEntities.Notification", b =>
                 {
-                    b.HasOne("BlaBlaCar.DAL.Entities.Car", "Car")
+                    b.HasOne("BlaBlaCar.DAL.Entities.ApplicationUser", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.NotificationEntities.ReadNotification", b =>
+                {
+                    b.HasOne("BlaBlaCar.DAL.Entities.NotificationEntities.Notification", "Notification")
+                        .WithMany("ReadNotifications")
+                        .HasForeignKey("NotificationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BlaBlaCar.DAL.Entities.ApplicationUser", "User")
+                        .WithMany("ReadNotifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Notification");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.TripEntities.AvailableSeats", b =>
+                {
+                    b.HasOne("BlaBlaCar.DAL.Entities.CarEntities.Seat", "Seat")
+                        .WithMany("AvailableSeats")
+                        .HasForeignKey("SeatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BlaBlaCar.DAL.Entities.TripEntities.Trip", "Trip")
+                        .WithMany("AvailableSeats")
+                        .HasForeignKey("TripId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Seat");
+
+                    b.Navigation("Trip");
+                });
+
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.TripEntities.Trip", b =>
+                {
+                    b.HasOne("BlaBlaCar.DAL.Entities.CarEntities.Car", "Car")
                         .WithMany("Trips")
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -401,15 +499,15 @@ namespace BlaBlaCar.DAL.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("BlaBlaCar.DAL.Entities.TripUser", b =>
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.TripEntities.TripUser", b =>
                 {
-                    b.HasOne("BlaBlaCar.DAL.Entities.Seat", "Seat")
+                    b.HasOne("BlaBlaCar.DAL.Entities.CarEntities.Seat", "Seat")
                         .WithMany("TripUsers")
                         .HasForeignKey("SeatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BlaBlaCar.DAL.Entities.Trip", "Trip")
+                    b.HasOne("BlaBlaCar.DAL.Entities.TripEntities.Trip", "Trip")
                         .WithMany("TripUsers")
                         .HasForeignKey("TripId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -443,6 +541,10 @@ namespace BlaBlaCar.DAL.Migrations
                 {
                     b.Navigation("Cars");
 
+                    b.Navigation("Notifications");
+
+                    b.Navigation("ReadNotifications");
+
                     b.Navigation("TripUsers");
 
                     b.Navigation("Trips");
@@ -450,7 +552,7 @@ namespace BlaBlaCar.DAL.Migrations
                     b.Navigation("UserDocuments");
                 });
 
-            modelBuilder.Entity("BlaBlaCar.DAL.Entities.Car", b =>
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.CarEntities.Car", b =>
                 {
                     b.Navigation("CarDocuments");
 
@@ -459,14 +561,19 @@ namespace BlaBlaCar.DAL.Migrations
                     b.Navigation("Trips");
                 });
 
-            modelBuilder.Entity("BlaBlaCar.DAL.Entities.Seat", b =>
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.CarEntities.Seat", b =>
                 {
                     b.Navigation("AvailableSeats");
 
                     b.Navigation("TripUsers");
                 });
 
-            modelBuilder.Entity("BlaBlaCar.DAL.Entities.Trip", b =>
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.NotificationEntities.Notification", b =>
+                {
+                    b.Navigation("ReadNotifications");
+                });
+
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.TripEntities.Trip", b =>
                 {
                     b.Navigation("AvailableSeats");
 

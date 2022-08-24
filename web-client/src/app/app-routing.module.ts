@@ -40,21 +40,8 @@ const routes: Routes = [
     path: 'admin', component: AdminPageComponent, canActivate: [AuthGuard, AdminGuard],
     children: [
       { path: 'roles', component: RolesComponent, canActivate: [AuthGuard] },
-      {
-        path: 'requests', component: UsersRequestsComponent, canActivate: [AuthGuard],
-        children: [
-          { path: 'pending', component: PendingComponent, canActivate: [AuthGuard] },
-
-
-          {
-            path: 'info/:id', component: UserRequestInfoComponent, canActivate: [AuthGuard],
-            children: [
-              { path: 'user', component: MainInfoComponent, canActivate: [AuthGuard] },
-            ]
-          }
-        ]
-      },
-
+      { path: 'requests/:id', component: UsersRequestsComponent, canActivate: [AuthGuard], },
+      { path: 'requests-info/:id', component: UserRequestInfoComponent, canActivate: [AuthGuard] }
     ]
   },
   {

@@ -11,25 +11,33 @@ import { UserStatus } from 'src/app/interfaces/user-status';
   styleUrls: ['./users-requests.component.scss']
 })
 export class UsersRequestsComponent implements OnInit {
-  requests: any;
+  requestsId = 0;
   users: UserModel[] = [];
   userStatus = UserStatus;
   carStatus = CarStatus;
-  constructor(private http: HttpClient, private router: Router) { }
-  ngOnInit(): void {
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
-  getRequests = () => {
+  async ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.requestsId = params['id'];
+    });
+    this.users = await this.getRequests(this.requestsId);
+  }
+  private async getRequests(status: UserStatus): Promise<UserModel[]> {
     const url = 'https://localhost:6001/api/Admin/requests/'
-    this.http.get(url + 1)
-      .subscribe({
-        next: (res) => {
-          this.users = res as UserModel[];
-          console.log(this.users);
-        },
-        error: (err: HttpErrorResponse) => console.error(err),
-      })
+    const user = await new Promise<UserModel[]>((resolve, reject) => {
+      this.http.get<UserModel[]>(url + status)
+        .subscribe({
+          next: (res: UserModel[]) => {
+            resolve(res), console.log(res);
+          },
+          error: (err: HttpErrorResponse) => { reject(err), console.error(err) }
+        });
+    });
+    return user;
   }
   navigateToRequestInfo = (id: string) => {
-    this.router.navigate(['/admin/info/', id])
+    this.router.navigate(['admin/requests-info/', id])
   }
 }

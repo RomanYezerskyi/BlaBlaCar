@@ -38,6 +38,9 @@ import { UserInformationComponent } from './components/user/user-information/use
 import { UserCarsComponent } from './components/user/user-cars/user-cars.component';
 import { UserTripsComponent } from './components/user/user-information/user-trips/user-trips.component';
 import { InfoPageComponent } from './guards/info-page/info-page.component';
+import { NotificationsComponent } from './components/notifications/notifications.component';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -71,6 +74,7 @@ export function tokenGetter() {
     UserCarsComponent,
     UserTripsComponent,
     InfoPageComponent,
+    NotificationsComponent,
 
   ],
   imports: [
@@ -92,10 +96,11 @@ export function tokenGetter() {
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
+    InfiniteScrollModule
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent],
-  entryComponents: [DialogBookingConfirmationComponent],
+  entryComponents: [DialogBookingConfirmationComponent, UserProfileComponent],
   exports: [
     MatToolbarModule,
     MatButtonModule,

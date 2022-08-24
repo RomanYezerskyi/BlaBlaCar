@@ -1,0 +1,15 @@
+<div class="notification_dropdown">
+    <div class="notification_dropdown__header">
+        <label>Notifications</label>
+        <button (click)="readNotifications()">Mark All as Read</button>
+    </div>
+    <div class="notification__list">
+        <div class="notification_data" *ngFor="let notif of notification">
+            <div class="date">
+                <p *ngIf="notif.readNotificationStatus == 2" class="mark"></p>
+                <p>{{notif.createdAt | date:'MMM d, y, h:mm a'}}</p>
+            </div>
+            <p class="notif_text">{{notif.text}}</p>
+        </div>
+    </div>
+</div>

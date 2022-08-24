@@ -28,7 +28,7 @@ namespace BlaBlaCar.API.Controllers
             {
                 var res = await _adminService.GetRequestsAsync(status);
                 if (res.Any()) return Ok(res);
-                return BadRequest(res);
+                return NoContent();
             }
             catch (Exception e)
             {

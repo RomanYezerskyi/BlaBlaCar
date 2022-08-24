@@ -5,7 +5,7 @@ using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.BL.ODT;
 using BlaBlaCar.BL.ODT.CarModels;
 using BlaBlaCar.BL.ViewModels;
-using BlaBlaCar.DAL.Entities;
+using BlaBlaCar.DAL.Entities.CarEntities;
 using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
 using Microsoft.AspNetCore.Http;
@@ -40,7 +40,7 @@ namespace BlaBlaCar.BL.Services.TripServices
             var userId = principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value;
             var userCars = _mapper.Map<IEnumerable<CarModel>>
                 (await _unitOfWork.Cars.GetAsync(null, x=>
-                    x.Include(s=>s.Seats), 
+                        x.Include(s=>s.Seats), 
                     x => x.UserId == Guid.Parse((ReadOnlySpan<char>)userId)));
             return userCars;
         }

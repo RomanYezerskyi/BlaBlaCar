@@ -1,5 +1,8 @@
 ﻿using BlaBlaCar.DAL.Data;
 using BlaBlaCar.DAL.Entities;
+using BlaBlaCar.DAL.Entities.CarEntities;
+using BlaBlaCar.DAL.Entities.NotificationEntities;
+using BlaBlaCar.DAL.Entities.TripEntities;
 using BlaBlaCar.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,18 +13,20 @@ namespace BlaBlaCar.DAL
         private readonly ApplicationDbContext _context;
         private BaseRepositoryAsync<ApplicationUser> _users;
         private BaseRepositoryAsync<Trip> _trips;
-        private BaseRepositoryAsync<Seat> _tripSeats;
+        private BaseRepositoryAsync<Seat> _carSeats;
         private BaseRepositoryAsync<AvailableSeats> _availableSeats;
         private BaseRepositoryAsync<Car> _car;
         private BaseRepositoryAsync<TripUser> _tripUser;
         private BaseRepositoryAsync<UserDocuments> _userDocuments;
         private BaseRepositoryAsync<CarDocuments> _carDocuments;
+        private BaseRepositoryAsync<Notification> _notification;
+        private BaseRepositoryAsync<ReadNotification> _readNotification;
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public IRepositoryAsync<AvailableSeats> AvaliableSeats
+        public  IRepositoryAsync<AvailableSeats> AvailableSeats
         {
             get
             {
@@ -77,15 +82,30 @@ namespace BlaBlaCar.DAL
             }
         }
 
-        public IRepositoryAsync<Seat> TripSeats
+        public IRepositoryAsync<Seat> CarSeats
         {
             get
             {
-                return _tripSeats ??= new BaseRepositoryAsync<Seat>(_context);
+                return _carSeats ??= new BaseRepositoryAsync<Seat>(_context);
             }
         }
 
-       
+
+        public IRepositoryAsync<Notification> Notifications
+        {
+            get
+            {
+                return _notification ??= new BaseRepositoryAsync<Notification>(_context);
+            }
+        }
+
+        public IRepositoryAsync<ReadNotification> ReadNotifications
+        {
+            get
+            {
+                return _readNotification ??= new BaseRepositoryAsync<ReadNotification>(_context);
+            }
+        }
 
 
         public async Task<bool> SaveAsync(Guid userId)

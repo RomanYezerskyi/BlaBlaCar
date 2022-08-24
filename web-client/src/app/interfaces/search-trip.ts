@@ -3,4 +3,6 @@ export interface SearchTripModel {
     endPlace: string;
     startTime: Date;
     countOfSeats: number;
+    skip?: number;
+    take?: number;
 }
