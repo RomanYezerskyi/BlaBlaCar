@@ -9,7 +9,7 @@ namespace BlaBlaCar.DAL.Interfaces
     {
         IRepositoryAsync<ApplicationUser> Users { get; }
         IRepositoryAsync<Trip> Trips { get; }
-        IRepositoryAsync<Seat> TripSeats { get; }
+        IRepositoryAsync<Seat> CarSeats { get; }
         IRepositoryAsync<AvailableSeats> AvailableSeats { get; }
         IRepositoryAsync<Car> Cars { get; }
         IRepositoryAsync<TripUser> TripUser { get; }

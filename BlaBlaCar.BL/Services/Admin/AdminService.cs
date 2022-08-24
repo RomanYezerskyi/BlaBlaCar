@@ -89,7 +89,7 @@ namespace BlaBlaCar.BL.Services.Admin
 
             var changedBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
 
-            await _notificationService.ChangeUserStatusNotificationAsync(
+            await _notificationService.GenerateNotificationAsync(
                 new CreateNotificationViewModel()
                 {
                     NotificationStatus = NotificationModelStatus.SpecificUser,
@@ -110,7 +110,7 @@ namespace BlaBlaCar.BL.Services.Admin
 
             var changedBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
 
-            await _notificationService.ChangeUserStatusNotificationAsync(
+            await _notificationService.GenerateNotificationAsync(
                 new CreateNotificationViewModel()
                 {
                     NotificationStatus = NotificationModelStatus.SpecificUser,

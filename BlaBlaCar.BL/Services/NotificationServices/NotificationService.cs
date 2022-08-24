@@ -51,7 +51,7 @@ namespace BlaBlaCar.BL.Services.NotificationServices
             return await _unitOfWork.SaveAsync(createdBy);
         }
 
-        public async Task ChangeUserStatusNotificationAsync(CreateNotificationViewModel notificationModel)
+        public async Task GenerateNotificationAsync(CreateNotificationViewModel notificationModel)
         {
             var notification = _mapper.Map<Notification>(notificationModel);
 
@@ -61,7 +61,6 @@ namespace BlaBlaCar.BL.Services.NotificationServices
         public async Task<bool> ReadAllNotificationAsync(IEnumerable<NotificationModel> notification, ClaimsPrincipal principal)
         {
             var readNotifications = new List<ReadNotificationModel>();
-
 
             readNotifications.AddRange(
                 notification.Select(n => new ReadNotificationModel() { NotificationId = n.Id, UserId = (Guid)n.UserId }));

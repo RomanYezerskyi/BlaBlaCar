@@ -13,7 +13,7 @@ namespace BlaBlaCar.BL.Interfaces
     {
         Task<IEnumerable<GetNotificationViewModel>> GetUserNotificationsAsync(ClaimsPrincipal principal);
         Task<bool> CreateNotificationAsync(CreateNotificationViewModel notificationModel, ClaimsPrincipal principal);
-        Task ChangeUserStatusNotificationAsync(CreateNotificationViewModel notificationModel);
+        Task GenerateNotificationAsync(CreateNotificationViewModel notificationModel);
         Task<bool> ReadAllNotificationAsync(IEnumerable<NotificationModel> notification, ClaimsPrincipal principal);
     }
 }

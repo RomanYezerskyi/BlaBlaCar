@@ -14,7 +14,7 @@ namespace BlaBlaCar.BL.Interfaces
     {
         Task<IEnumerable<TripModel>> GetUserBookedTripsAsync(ClaimsPrincipal claimsPrincipal);
         Task<bool> AddBookedTripAsync(AddNewBookTrip tripModel, ClaimsPrincipal principal);
-        Task<bool> DeleteBookedTripAsync(IEnumerable<TripUserViewModel> tripUserModel, ClaimsPrincipal principal);
+        Task<bool> DeleteBookedTripAsync(DeleteTripUserViewModel tripUserModel, ClaimsPrincipal principal);
         Task<bool> DeleteBookedSeatAsync(TripUserViewModel tripUserModel, ClaimsPrincipal principal);
         Task<bool> DeleteUserFromTripAsync(TripUserViewModel tripUserModel, ClaimsPrincipal principal);
     }

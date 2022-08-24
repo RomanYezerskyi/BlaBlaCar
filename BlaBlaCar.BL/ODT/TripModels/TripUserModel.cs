@@ -7,10 +7,10 @@ namespace BlaBlaCar.BL.ODT.TripModels
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
-        public UserModel User { get; set; }
+        public UserModel? User { get; set; }
         public Guid SeatId { get; set; }
-        public SeatModel Seat { get; set; }
+        public SeatModel? Seat { get; set; }
         public Guid TripId { get; set; }
-        public TripModel Trip { get; set; }
+        public TripModel? Trip { get; set; }
     }
 }

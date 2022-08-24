@@ -1,15 +1,21 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHandler, HttpHeaders } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { SearchTripModel } from 'src/app/interfaces/search-trip';
 import { Router } from '@angular/router';
 import { TripModel } from 'src/app/interfaces/trip';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { Call } from '@angular/compiler';
+export interface GetItems<T> {
+  (take: number, skip: number): T[];
+}
 @Component({
   selector: 'app-search-trip',
   templateUrl: './search-trip.component.html',
   styleUrls: ['./search-trip.component.scss']
 })
+
+
 export class SearchTripComponent implements OnInit {
   invalidForm: boolean | undefined;
   trips: TripModel[] = [];
@@ -18,15 +24,15 @@ export class SearchTripComponent implements OnInit {
     endPlace: '',
     startPlace: '',
     startTime: new Date('1991.01.01'),
+
   };
   tripRoute: { id: number } | undefined;
 
-  private noOfItemsToShowInitially: number = 5;
+  private Skip: number = 0;
   // itemsToLoad - number of new items to be displayed
-  private itemsToLoad: number = 5;
+  private Take: number = 5;
   // 18 items loaded for demo purposes
   // List that is going to be actually displayed to user
-  public itemsToShow = this.trips.slice(0, this.noOfItemsToShowInitially);
   // No need to call onScroll if full list has already been displayed
   public isFullListDisplayed: boolean = false;
 
@@ -58,26 +64,28 @@ export class SearchTripComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustUrl(img);
   }
   async onScroll(form: NgForm) {
-
-    if (this.noOfItemsToShowInitially <= this.trips.length || this.trips.length == 0) {
-      console.log("aa");
-      this.trip.take = this.itemsToLoad;
-      this.trip.skip = this.trips.length == 0 ? 0 : this.noOfItemsToShowInitially;
-      if (this.trips.length != 0) {
-        this.noOfItemsToShowInitially += this.itemsToLoad;
-      }
-
+    this.trip.take = this.Take;
+    if (this.trips.length == 0) {
+      this.trip.skip = this.Skip;
       let searchTrips = await this.searchTrips(form);
       if (searchTrips != undefined) {
         this.trips = this.trips.concat(searchTrips);
       }
-      this.itemsToShow = this.trips.slice(0, this.noOfItemsToShowInitially);
-      console.log(this.itemsToShow);
-    } else {
+    }
+    else if (this.Skip <= this.trips.length) {
+      this.trip.skip = this.Skip;
+      let searchTrips = await this.searchTrips(form);
+      if (searchTrips != undefined) {
+        this.trips = this.trips.concat(searchTrips);
+      }
+    }
+    else {
 
       this.isFullListDisplayed = true;
     }
+    this.Skip += this.Take;
   }
+
 
   async searchTrips(form: NgForm): Promise<TripModel[] | undefined> {
     if (!form.valid) { return; }

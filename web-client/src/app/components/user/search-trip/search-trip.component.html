@@ -43,7 +43,7 @@
 
     </div>
     <div class="items">
-      <div class="search_item" *ngFor="let trip of itemsToShow" (click)="navigateToTripPage(trip.id)">
+      <div class="search_item" *ngFor="let trip of trips" (click)="navigateToTripPage(trip.id)">
         <div class="header">
           <div class="time">
             <p>{{trip.startTime | date:'hh:mm'}}</p>

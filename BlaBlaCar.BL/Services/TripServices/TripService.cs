@@ -3,6 +3,7 @@ using AutoMapper;
 using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.BL.ODT;
 using BlaBlaCar.BL.ODT.CarModels;
+using BlaBlaCar.BL.ODT.NotificationModels;
 using BlaBlaCar.BL.ODT.TripModels;
 using BlaBlaCar.BL.ViewModels;
 using BlaBlaCar.DAL.Interfaces;
@@ -19,14 +20,18 @@ namespace BlaBlaCar.BL.Services.TripServices
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
         private readonly HostSettings _hostSettings;
-       
-        public TripService(IUnitOfWork unitOfWork,
+        private readonly INotificationService _notificationService;
+        public TripService(
+            IUnitOfWork unitOfWork,
             IMapper mapper,
-             IUserService userService, IOptionsSnapshot<HostSettings> hostSettings)
+            IUserService userService, 
+            IOptionsSnapshot<HostSettings> hostSettings, 
+            INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _userService = userService;
+            _notificationService = notificationService;
             _hostSettings = hostSettings.Value;
         }
         public async Task<TripModel> GetTripAsync(Guid id)
@@ -172,10 +177,21 @@ namespace BlaBlaCar.BL.Services.TripServices
         public async Task<bool> DeleteTripAsync(Guid id, ClaimsPrincipal principal)
         {
             var trip = await _unitOfWork.Trips.GetAsync(includes: null, filter: x => x.Id == id);
-            if (trip == null) throw new Exception("No information about this trip! Trip cannot be deleted!");
-            var availableSeats = await _unitOfWork.AvailableSeats.GetAsync(null, null, x => x.TripId == id);
-            if(availableSeats != null) _unitOfWork.AvailableSeats.Delete(availableSeats);
+            //if (trip == null) throw new Exception("No information about this trip! Trip cannot be deleted!");
+            //var availableSeats = await _unitOfWork.AvailableSeats.GetAsync(null, null, x => x.TripId == id);
+            //if(availableSeats != null) _unitOfWork.AvailableSeats.Delete(availableSeats);
             var tripUsers = await _unitOfWork.TripUser.GetAsync(null, null, x => x.TripId == id);
+
+            tripUsers.ToList().ForEach(u =>
+            {
+                _notificationService.GenerateNotificationAsync(new CreateNotificationViewModel()
+                {
+                    UserId = u.UserId,
+                    NotificationStatus = NotificationModelStatus.SpecificUser,
+                    Text = $"The trip {trip.StartPlace} - {trip.EndPlace} was cancelled!"
+                });
+            });
+
             if (tripUsers != null) _unitOfWork.TripUser.Delete(tripUsers);
             _unitOfWork.Trips.Delete(trip);
 

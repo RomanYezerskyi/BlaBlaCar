@@ -13,7 +13,7 @@ namespace BlaBlaCar.DAL
         private readonly ApplicationDbContext _context;
         private BaseRepositoryAsync<ApplicationUser> _users;
         private BaseRepositoryAsync<Trip> _trips;
-        private BaseRepositoryAsync<Seat> _tripSeats;
+        private BaseRepositoryAsync<Seat> _carSeats;
         private BaseRepositoryAsync<AvailableSeats> _availableSeats;
         private BaseRepositoryAsync<Car> _car;
         private BaseRepositoryAsync<TripUser> _tripUser;
@@ -82,11 +82,11 @@ namespace BlaBlaCar.DAL
             }
         }
 
-        public IRepositoryAsync<Seat> TripSeats
+        public IRepositoryAsync<Seat> CarSeats
         {
             get
             {
-                return _tripSeats ??= new BaseRepositoryAsync<Seat>(_context);
+                return _carSeats ??= new BaseRepositoryAsync<Seat>(_context);
             }
         }
 

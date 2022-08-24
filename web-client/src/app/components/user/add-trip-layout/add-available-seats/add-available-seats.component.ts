@@ -6,10 +6,6 @@ import { CarType } from 'src/app/enums/car-type';
 import { AddAvailableSeats } from 'src/app/interfaces/add-available-seats';
 import { AddTripModel } from 'src/app/interfaces/add-trip';
 import { CarModel } from 'src/app/interfaces/car';
-import { CarStatus } from 'src/app/interfaces/car-status';
-import { SeatModel } from 'src/app/interfaces/seat';
-import { TripModel } from 'src/app/interfaces/trip';
-import { SharedDataService } from 'src/app/services/shared-data.service';
 @Component({
   selector: 'app-add-available-seats',
   templateUrl: './add-available-seats.component.html',

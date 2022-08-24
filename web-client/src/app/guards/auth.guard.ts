@@ -17,7 +17,6 @@ export class AuthGuard implements CanActivate {
       console.log(this.jwtHelper.decodeToken(token))
       return true;
     }
-
     const isRefreshSuccess = await this.tryRefreshingTokens(token as string);
     console.log("try refresh " + isRefreshSuccess);
     if (!isRefreshSuccess) {
@@ -41,7 +40,7 @@ export class AuthGuard implements CanActivate {
         })
       }).subscribe({
         next: (res: AuthenticatedResponse) => resolve(res),
-        error: (_) => { isRefreshSuccess = false; reject; }
+        error: (_: AuthenticatedResponse) => resolve(_)
         // {
         //   reject(_);
         //   isRefreshSuccess = false;
@@ -50,10 +49,10 @@ export class AuthGuard implements CanActivate {
         // }
       });
     });
+    if (refreshRes.token == undefined || refreshRes.refreshToken == undefined) return !isRefreshSuccess
     localStorage.setItem("jwt", refreshRes.token);
     localStorage.setItem("refreshToken", refreshRes.refreshToken);
-    // isRefreshSuccess = true;
-    console.log("aa");
+    isRefreshSuccess = true;
     return isRefreshSuccess;
   }
   private async logOut() {

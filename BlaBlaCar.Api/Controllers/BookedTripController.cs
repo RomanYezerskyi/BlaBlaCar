@@ -64,11 +64,11 @@ namespace BlaBlaCar.API.Controllers
             }
         }
         [HttpDelete("trip")]
-        public async Task<IActionResult> DeleteBookedTrip(IEnumerable<TripUserViewModel> tripUser)
+        public async Task<IActionResult> DeleteBookedTrip(DeleteTripUserViewModel trip)
         {
             try
             {
-                var res = await _tripService.DeleteBookedTripAsync(tripUser, User);
+                var res = await _tripService.DeleteBookedTripAsync(trip, User);
                 if (res) return Ok(new { Result = res });
                 return BadRequest("Fail");
             }

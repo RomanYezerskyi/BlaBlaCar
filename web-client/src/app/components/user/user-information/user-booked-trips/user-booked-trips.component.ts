@@ -36,9 +36,9 @@ export class UserBookedTripsComponent implements OnInit {
 
 
   }
-  deleteBookedTrip = (tripUser: TripUserModel[]) => {
+  deleteBookedTrip = (trip: TripModel) => {
     const url = 'https://localhost:6001/api/BookedTrip/trip';
-    this.http.delete(url, { body: tripUser })
+    this.http.delete(url, { body: trip })
       .subscribe({
         next: (res: any) => {
           console.log(res);

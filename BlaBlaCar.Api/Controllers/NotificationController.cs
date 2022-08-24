@@ -34,10 +34,9 @@ namespace BlaBlaCar.API.Controllers
         {
             try
             {
-                //var res = await _notificationService.ReadAllNotificationAsync(notification, User);
-                //if (res) return Ok();
-                //return BadRequest();
-                return Ok(true);
+                var res = await _notificationService.ReadAllNotificationAsync(notification, User);
+                if (res) return Ok();
+                return BadRequest();
             }
             catch (Exception e)
             {

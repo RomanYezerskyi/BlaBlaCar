@@ -2,6 +2,8 @@
 using AutoMapper;
 using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.BL.ODT.BookTripModels;
+using BlaBlaCar.BL.ODT.CarModels;
+using BlaBlaCar.BL.ODT.NotificationModels;
 using BlaBlaCar.BL.ODT.TripModels;
 using BlaBlaCar.BL.ViewModels;
 using BlaBlaCar.DAL.Entities.TripEntities;
@@ -18,12 +20,13 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
         private readonly HostSettings _hostSettings;
-
-        public BookedTripsService(IUnitOfWork unitOfWork, IMapper mapper,IUserService userService, IOptionsSnapshot<HostSettings> hostSettings)
+        private readonly INotificationService _notificationService;
+        public BookedTripsService(IUnitOfWork unitOfWork, IMapper mapper,IUserService userService, IOptionsSnapshot<HostSettings> hostSettings, INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _userService = userService;
+            _notificationService = notificationService;
             _hostSettings = hostSettings.Value;
         }
 
@@ -71,15 +74,37 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
             }
             await _unitOfWork.TripUser.InsertRangeAsync(_mapper.Map<IEnumerable<TripUser>>(listOfSeats));
 
+            var trip = await _unitOfWork.Trips.GetAsync(null, x => x.Id == tripModel.TripId);
+            var userName = principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.GivenName);
+
+            await _notificationService.GenerateNotificationAsync(
+                new CreateNotificationViewModel()
+                {
+                    NotificationStatus = NotificationModelStatus.SpecificUser,
+                    Text = $"{trip.StartPlace} - {trip.EndPlace}" +
+                           $"\nUser {userName} joined your trip",
+                    UserId = trip.UserId,
+                });
+
             return await _unitOfWork.SaveAsync(userId);
         }
 
-        public async Task<bool> DeleteBookedTripAsync(IEnumerable<TripUserViewModel> tripUserModel, ClaimsPrincipal principal)
+        public async Task<bool> DeleteBookedTripAsync(DeleteTripUserViewModel tripModel, ClaimsPrincipal principal)
         {
             var trip = _mapper.Map<IEnumerable<TripUserModel>>(await _unitOfWork.TripUser.GetAsync(null, null, x =>
-                x.TripId == tripUserModel.FirstOrDefault().TripId && x.UserId == tripUserModel.FirstOrDefault().UserId));
+                x.TripId == tripModel.Id && x.UserId == tripModel.TripUsers.First().UserId));
             if (trip == null) throw new Exception("Trip not found");
             _unitOfWork.TripUser.Delete(_mapper.Map<IEnumerable<TripUser>>(trip));
+
+            var userName = principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.GivenName).Value;
+            await _notificationService.GenerateNotificationAsync(
+                new CreateNotificationViewModel()
+                {
+                    NotificationStatus = NotificationModelStatus.SpecificUser,
+                    Text = $"{tripModel.StartPlace} - {tripModel.EndPlace} " +
+                           $"The {userName} canceled all reservations",
+                    UserId = tripModel.UserId,
+                });
 
             var changedBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
             return await _unitOfWork.SaveAsync(changedBy);
@@ -87,10 +112,26 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
 
         public async Task<bool> DeleteBookedSeatAsync(TripUserViewModel tripUserModel, ClaimsPrincipal principal)
         {
-            var trip = _mapper.Map<TripUserModel>(await _unitOfWork.TripUser.GetAsync(null, x =>
+            var userTrip = _mapper.Map<TripUserModel>(await _unitOfWork.TripUser.GetAsync(null, x =>
                 x.TripId == tripUserModel.TripId && x.UserId == tripUserModel.UserId && x.SeatId == tripUserModel.SeatId));
-            if (trip == null) throw new Exception("Trip not found");
-            _unitOfWork.TripUser.Delete(_mapper.Map<TripUser>(trip));
+            if (userTrip == null) throw new Exception("Trip not found");
+            _unitOfWork.TripUser.Delete(_mapper.Map<TripUser>(userTrip));
+
+            var trip = _mapper.Map<TripModel>(
+                await _unitOfWork.Trips.GetAsync(
+                    null,
+                    x => x.Id == tripUserModel.TripId));
+            var seat = _mapper.Map<SeatModel>(
+                await _unitOfWork.CarSeats.GetAsync(null, x => x.Id == tripUserModel.SeatId));
+            var userName = principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.GivenName).Value;
+            await _notificationService.GenerateNotificationAsync(
+                new CreateNotificationViewModel()
+                {
+                    NotificationStatus = NotificationModelStatus.SpecificUser,
+                    Text = $"{trip.StartPlace} - {trip.EndPlace} " +
+                           $"The {userName} canceled the reservation seat {seat.Num} ",
+                    UserId = trip.UserId,
+                });
 
             var changedBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
             return await _unitOfWork.SaveAsync(changedBy);

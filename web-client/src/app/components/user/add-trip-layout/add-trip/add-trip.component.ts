@@ -8,7 +8,6 @@ import { AddNewCarModel } from 'src/app/interfaces/addnew-car';
 import { AvailableSeatsModel } from 'src/app/interfaces/available-seats';
 import { CarModel } from 'src/app/interfaces/car';
 import { SeatModel } from 'src/app/interfaces/seat';
-import { SharedDataService } from 'src/app/services/shared-data.service';
 @Component({
   selector: 'app-add-trip',
   templateUrl: './add-trip.component.html',
@@ -32,7 +31,7 @@ export class AddTripComponent implements OnInit {
   @Output() tripOutput: EventEmitter<AddTripModel> = new EventEmitter<AddTripModel>;
   @Output() pageOutput: EventEmitter<number> = new EventEmitter<number>;
 
-  constructor(private http: HttpClient, private router: Router, private sharedDataService: SharedDataService) { }
+  constructor(private http: HttpClient, private router: Router,) { }
 
   ngOnInit(): void {
 

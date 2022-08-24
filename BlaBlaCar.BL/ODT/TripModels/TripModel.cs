@@ -13,10 +13,10 @@ namespace BlaBlaCar.BL.ODT.TripModels
         public int PricePerSeat { get; set; }
         public string Description { get; set; }
         public Guid UserId { get; set; }
-        public UserModel User { get; set; }
+        public UserModel? User { get; set; }
         public Guid CarId { get; set; }
-        public CarModel Car { get; set; }
-        public ICollection<TripUserModel> TripUsers { get; set; }
-        public ICollection<AvailableSeatsModel> AvailableSeats { get; set; }
+        public CarModel? Car { get; set; }
+        public ICollection<TripUserModel>? TripUsers { get; set; }
+        public ICollection<AvailableSeatsModel>? AvailableSeats { get; set; }
     }
 }

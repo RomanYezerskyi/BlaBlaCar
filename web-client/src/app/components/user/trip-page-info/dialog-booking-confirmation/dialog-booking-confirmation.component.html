@@ -7,7 +7,7 @@
       </div>
       <div class="seats_list">
         <div *ngFor="let item of  trip.car.seats" class="seat_item">
-          <button class="btn seat booked" (click)="bookSeat(item.id)" disabled *ngIf="!cheackSeat(item); else elseItem">
+          <button class="btn seat booked" (click)="bookSeat(item.id)" disabled *ngIf="cheackSeat(item); else elseItem">
             {{item.num}}
           </button>
           <ng-template #elseItem>
