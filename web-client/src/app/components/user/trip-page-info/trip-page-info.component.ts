@@ -44,7 +44,6 @@ export class TripPageInfoComponent implements OnInit {
 		this.searchData();
 	}
 	sanitaizeImg(img: string): SafeUrl {
-		console.log(img);
 		return this.sanitizer.bypassSecurityTrustUrl(img);
 	}
 
@@ -61,16 +60,19 @@ export class TripPageInfoComponent implements OnInit {
 
 
 	openDialog() {
-
 		const dialogConfig = new MatDialogConfig();
 
-		dialogConfig.disableClose = true;
+		// dialogConfig.disableClose = true;
 		dialogConfig.autoFocus = true;
 		dialogConfig.data = {
 			trip: this.data,
 			requestedSeats: this.requestedSeats
 
 		};
-		this.dialog.open(DialogBookingConfirmationComponent, dialogConfig);
+		const dRef = this.dialog.open(DialogBookingConfirmationComponent, dialogConfig);
+
+		dRef.componentInstance.onSubmitReason.subscribe(() => {
+			this.searchData();
+		});
 	}
 }

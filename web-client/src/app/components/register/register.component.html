@@ -1,25 +1,73 @@
 <div class="container">
-    <form #loginForm="ngForm" (ngSubmit)="register(loginForm)">
-      <h2 class="form-signin-heading">Login</h2>
-        <div *ngIf="invalidLogin" class="alert alert-danger">Invalid username or password.</div>
-        <br/>
-        <label for="firstName" class="sr-only">Name:</label>
-        <input type="text" id="firstName" name="firstName" [(ngModel)]="credentials.firstName" 
-          class="form-control" placeholder="User name" required >
-        <br/>
-        <label for="email" class="sr-only">Email:</label>
-        <input type="email" id="email" name="email" [(ngModel)]="credentials.email" 
-          class="form-control" placeholder="Email" required >
-        <br/>
-        <label for="phoneNum" class="sr-only">Tel:</label>
-        <input type="tel" id="phoneNum" name="phoneNum" [(ngModel)]="credentials.phoneNum" 
-          class="form-control" placeholder="tel" required >
-        <br/>
-        <label for="password" class="sr-only">Password</label>
-        <input type="password" id="password" name="password" [(ngModel)]="credentials.password" 
-          class="form-control" placeholder="Password" required>
-        <br/>
-        <button class="btn btn-lg btn-primary" type="submit" [disabled]="!loginForm.valid">Register</button>
+  <div class="register-form">
+    <div class="login-reference">
+      <h5>Have an account?</h5>
+      <button class="btn" routerLink="/login">Log in</button>
+    </div>
+    <form #loginForm="ngForm" class="form" [formGroup]="form!">
+      <mat-form-field class="example-full-width" appearance="outline">
+        <mat-label>Name</mat-label>
+        <input type="text" matInput placeholder="Ex. John Doe" id="firstName" name="firstName"
+          [(ngModel)]="credentials.firstName" required>
+        <mat-icon matSuffix> person</mat-icon>
+        <!-- <mat-error *ngIf="itemFormControl.hasError('email')">
+          Please enter a valid email address
+        </mat-error> -->
+        <mat-error *ngIf="itemFormControl.hasError('required')">
+          Name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="example-full-width" appearance="outline">
+        <mat-label>Email</mat-label>
+        <input type="email" matInput [formControl]="emailFormControl" placeholder="Ex. pat@example.com" id="email"
+          name="email" [(ngModel)]="credentials.email" required>
+        <mat-icon matSuffix> email</mat-icon>
+        <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+          Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="emailFormControl.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="example-full-width" appearance="outline">
+        <mat-label>Phone number </mat-label>
+        <input type="tel" matInput placeholder="Ex. +380(000)-00-00" id=" phoneNum" name="phoneNum"
+          [(ngModel)]="credentials.phoneNum" required>
+        <mat-icon matSuffix>phone_iphone</mat-icon>
+        <!-- <mat-error *ngIf="itemFormControl.hasError('email')">
+          Please enter a valid email address
+        </mat-error> -->
+        <mat-error *ngIf="itemFormControl.hasError('required')">
+          Phone number is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="example-full-width" appearance="outline">
+        <mat-label>Password</mat-label>
+        <input type="password" matInput formControlName="password" required>
+        <i class="material-icons" matSuffix>key</i>
+        <!-- <mat-error *ngIf="passwordFormControl.hasError('required')">
+        Please enter a valid password
+      </mat-error> -->
+
+        <mat-error *ngIf="passwordFormControl.hasError('required')">
+          Password is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="example-full-width" appearance="outline">
+        <mat-label>Confirm password</mat-label>
+        <input type="password" matInput formControlName="confirmPassword" required>
+        <i class="material-icons" matSuffix>key</i>
+        <!-- <mat-error *ngIf="passwordFormControl.hasError('required')">
+        Please enter a valid password
+      </mat-error> -->
+        <mat-error *ngIf="passwordFormControl.hasError('required')">
+          Confirm password is <strong>required</strong>
+        </mat-error>
+        <mat-error
+          *ngIf="form!.controls['confirmPassword'].pristine || form!.controls['confirmPassword'].errors!['MatchPassword']">
+          Password does not match</mat-error>
+      </mat-form-field>
+      <button class="btn" type="submit" [disabled]="!loginForm.valid">Register</button>
     </form>
   </div>
- 
+</div>

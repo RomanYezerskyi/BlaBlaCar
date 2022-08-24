@@ -1,0 +1,97 @@
+.login-form {
+    border-radius: 10px;
+    display: flex;
+    position: relative;
+    background: rgba(40, 57, 101, 0.9);
+    box-shadow: 0 12px 15px 0 rgb(0 0 0 / 30%), 0 17px 50px 0 rgb(0 0 0 / 30%);
+    width: 55%;
+    padding: 0 0;
+    margin: 50px auto;
+}
+
+.btn {
+    cursor: pointer;
+}
+
+.register-reference {
+    display: flex;
+    flex-flow: column;
+    padding: 10% 0;
+    margin: auto 0;
+    height: 100%;
+    display: flex;
+    width: 40%;
+    text-align: center;
+
+    h5 {
+        width: 90%;
+        display: block;
+        margin: auto;
+        font-size: 30px;
+        font-weight: 500;
+        letter-spacing: normal;
+        word-spacing: 2px;
+        color: #f2f4ff;
+        line-height: 1;
+    }
+
+    .btn {
+        display: inline-block;
+        margin: 20px auto;
+        border-radius: 10px;
+        background-image: linear-gradient(to right, #5C258D 0%, #4389A2 51%, #5C258D 100%);
+        transition: 0.5s;
+        background-size: 200% auto;
+        color: white;
+        padding: 10px 45px;
+        font-size: 20px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        border: 2px #fff solid
+    }
+
+    .btn:hover {
+        background-position: right center;
+        color: #fff;
+        text-decoration: none;
+    }
+}
+
+.form {
+    padding: 70px 50px;
+    border-radius: 10px;
+    box-shadow: 0 12px 15px 0 rgb(0 0 0 / 30%), 0 17px 50px 0 rgb(0 0 0 / 30%);
+    background-color: #fff;
+    position: absolute;
+    right: 10%;
+    top: 50%;
+    transform: translatey(-50%);
+    // background: rgba(40, 57, 101, 0.9);
+    width: 30%;
+    display: flex;
+    flex-flow: column;
+
+    .form-item {
+
+        display: block;
+
+    }
+
+    .btn {
+        border-radius: 10px;
+        background-image: linear-gradient(to right, #5C258D 0%, #4389A2 51%, #5C258D 100%);
+        transition: 0.5s;
+        background-size: 200% auto;
+        color: white;
+        padding: 8px 0;
+        font-size: 17px;
+        font-weight: 600;
+        letter-spacing: 2px;
+    }
+
+    .btn:hover {
+        background-position: right center;
+        color: #fff;
+        text-decoration: none;
+    }
+}

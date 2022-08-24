@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormControl, NgForm, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CarType } from 'src/app/enums/car-type';
 import { AddNewCarModel } from 'src/app/interfaces/addnew-car';
@@ -12,7 +12,7 @@ import { AddNewCarModel } from 'src/app/interfaces/addnew-car';
 })
 export class AddCarComponent implements OnInit {
   newCar: AddNewCarModel = {
-    countOfSeats: 0, modelName: '', registNum: '', carType: 0,
+    countOfSeats: 1, modelName: '', registNum: '', carType: 0,
     techPassportFile: []
   };
   carType = CarType;
@@ -20,9 +20,19 @@ export class AddCarComponent implements OnInit {
   fileSelected?: File;
   imageUrl?: string;
   private formData = new FormData();
-  constructor(private http: HttpClient, private sant: DomSanitizer,) { }
+  CarFormControl = new FormControl('', [Validators.required]);
+  fileControl: FormControl;
+  public files: any;
+  constructor(private http: HttpClient, private sant: DomSanitizer,) {
+    this.fileControl = new FormControl(this.files, [
+      Validators.required,
+    ])
+  }
 
   ngOnInit(): void {
+    this.fileControl.valueChanges.subscribe((files: any) => {
+      this.uploadFile(files);
+    })
   }
 
   uploadFile = (files: any) => {
@@ -30,15 +40,9 @@ export class AddCarComponent implements OnInit {
       return;
     }
     let fileToUpload: Array<any> = files;
-    console.log(fileToUpload);
     for (let item of fileToUpload) {
       this.formData.append('techPassportFile', item, item.name);
     }
-
-    //this.formData.append('TechPassportFile', fileToUpload, fileToUpload.name);
-
-    //this.newCar.techPassportFile = this.formData;
-    // console.log(this.newCar.techPassportFile.get);
   }
 
   addCar = (form: NgForm) => {
@@ -57,3 +61,7 @@ export class AddCarComponent implements OnInit {
   }
 
 }
+function MaxSizeValidator(arg0: number): import("@angular/forms").ValidatorFn {
+  throw new Error('Function not implemented.');
+}
+
