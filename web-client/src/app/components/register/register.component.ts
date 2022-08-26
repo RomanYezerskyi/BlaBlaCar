@@ -4,6 +4,7 @@ import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Valida
 import { Router } from '@angular/router';
 import { AuthenticatedResponse } from 'src/app/interfaces/authenticated-response';
 import { RegisterModel } from 'src/app/interfaces/register';
+import { PasswordValidatorService } from 'src/app/services/password-validator.service';
 
 @Component({
   selector: 'app-register',
@@ -19,7 +20,8 @@ export class RegisterComponent implements OnInit {
   passwordFormControl = new FormControl('', [Validators.required]);
 
   form: FormGroup = new FormGroup({});
-  constructor(private router: Router, private http: HttpClient, private fb: FormBuilder) {
+  constructor(private router: Router, private http: HttpClient, private fb: FormBuilder,
+    private validator: PasswordValidatorService) {
     this.form = fb.group({
       password: ['', [Validators.required]],
       confirm_password: ['', [Validators.required]],
@@ -27,29 +29,12 @@ export class RegisterComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       phoneNumber: ['', [Validators.required]],
     }, {
-      validator: this.ConfirmedPasswordValidator('password', 'confirm_password')
+      validator: this.validator.ConfirmedPasswordValidator('password', 'confirm_password')  // this.ConfirmedPasswordValidator('password', 'confirm_password')
     });
   }
 
   ngOnInit(): void {
 
-  }
-  ConfirmedPasswordValidator(controlName: string, matchingControlName: string) {
-    return (formGroup: FormGroup) => {
-      const control = formGroup.controls[controlName];
-      const matchingControl = formGroup.controls[matchingControlName];
-      if (matchingControl.errors && !matchingControl.errors['confirmedValidator']) {
-        return;
-      }
-      if (control.value !== matchingControl.value) {
-        console.log("aa");
-        // this.form.controls['confirm_password'].setErrors({ confirmedValidator: true });
-        matchingControl.setErrors({ confirmedValidator: true });
-      } else {
-        console.log("bb");
-        matchingControl.setErrors(null);
-      }
-    }
   }
   get f() {
     return this.form.controls;

@@ -73,12 +73,12 @@ namespace IdentityServerJWT.API.Controllers
         }
         [HttpPost("update-password")]
         [Authorize]
-        public async Task<IActionResult> UpdateUserPassword(UpdateUserPassword userModel)
+        public async Task<IActionResult> UpdateUserPassword(UpdateUserPassword newPasswordModel)
         {
             if (!ModelState.IsValid) throw new Exception("All data is required !");
-            var user = await _userManager.FindByIdAsync(userModel.UserId);
+            var user = await _userManager.FindByIdAsync(newPasswordModel.UserId);
             if (user == null) throw new Exception("User not found !");
-            var result = await _userManager.ChangePasswordAsync(user, userModel.CurrentPassword, userModel.NewPassword);
+            var result = await _userManager.ChangePasswordAsync(user, newPasswordModel.CurrentPassword, newPasswordModel.NewPassword);
             if (result.Succeeded)
                 return Ok(result);
             return BadRequest(result.Errors);
