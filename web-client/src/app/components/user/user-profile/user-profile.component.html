@@ -57,31 +57,43 @@
                 </div>
             </div>
             <div class="card_body data_elements">
-                <form *ngIf="editUserData; else elseBlock" #userForm="ngForm" (ngSubmit)="updateUser(userForm)">
-                    <div class="form-group">
-                        <label for="firstName" class="sr-only">User</label>
-                        <div class="input">
-                            <input type="text" id="firstName" name="firstName" [(ngModel)]="user.firstName"
-                                class="form-control" placeholder="" value="{{user.firstName}}" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="email" class="sr-only">Email</label>
-                        <div class="input">
-                            <input type="email" id="email" name="email" [(ngModel)]="user.email" class="form-control"
-                                placeholder="" value="{{user.email}}" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="phoneNumber" class="sr-only">Phone</label>
-                        <div class="input">
-                            <input type="tel" id="phoneNumber" name="phoneNumber" [(ngModel)]="user.phoneNumber"
-                                class="form-control" placeholder="" value="{{user.phoneNumber}}" required>
-                        </div>
-                    </div>
+                <form *ngIf="editUserData; else elseBlock" #userForm="ngForm" (ngSubmit)="updateUser(userForm)"
+                    [formGroup]="userDataForm">
+                    <mat-form-field class="example-full-width" appearance="legacy">
+                        <mat-label>Name</mat-label>
+                        <input type="text" matInput placeholder="Ex. John Doe" id="UserName" name="UserName"
+                            formControlName="userName" [(ngModel)]="user.firstName" required>
+                        <mat-icon matSuffix> person</mat-icon>
+                        <mat-error *ngIf="getUserForm['userName'].touched && getUserForm['userName'].invalid">
+                            Name is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="legacy">
+                        <mat-label>Email</mat-label>
+                        <input type="email" matInput placeholder="Ex. pat@example.com" id="email" name="email"
+                            formControlName="email" [(ngModel)]="user.email" required>
+                        <mat-icon matSuffix> email</mat-icon>
+                        <mat-error *ngIf="getUserForm['email'].touched && getUserForm['email'].invalid">
+                            <mat-error *ngIf="getUserForm['email'].errors!['required']">
+                                Email is <strong>required</strong>
+                            </mat-error>
+                            <mat-error *ngIf="getUserForm['email'].errors!['email']">
+                                Please enter a <strong>valid</strong> address
+                            </mat-error>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="legacy">
+                        <mat-label>Phone number </mat-label>
+                        <input type="tel" matInput placeholder="Ex. +380(000)-00-00" id=" phoneNum" name="phoneNum"
+                            formControlName="phoneNumber" [(ngModel)]="user.phoneNumber" required>
+                        <mat-icon matSuffix>phone_iphone</mat-icon>
+                        <mat-error *ngIf="getUserForm['phoneNumber'].touched && getUserForm['phoneNumber'].invalid">
+                            Phone number is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
                     <div class="actions form_actions">
                         <button type="submit" [disabled]="!userForm.valid">Save</button>
-                        <button type="button" (click)="editData()" [disabled]="!userForm.valid">Cancel</button>
+                        <button type="button" (click)="editData()">Cancel</button>
                     </div>
                 </form>
                 <ng-template #elseBlock>
@@ -109,8 +121,9 @@
                         </div>
                     </div>
                 </ng-template>
-                <form #userPasswordForm="ngForm" class="changePasswordForm">
-                    <h4>Change password</h4>
+                <form #userPasswordForm="ngForm" class="changePasswordForm" [formGroup]="form"
+                    (ngSubmit)="updateUserPassword(userPasswordForm)">
+                    <!-- <h4>Change password</h4>
                     <div class="form-group">
                         <label for="firstName" class="sr-only">Current</label>
                         <div class="input">
@@ -131,7 +144,40 @@
                             <input type="password" id="newPassword1" name="newPassword1" class="form-control"
                                 placeholder="" required>
                         </div>
-                    </div>
+                    </div> -->
+                    <mat-form-field class="example-full-width" appearance="legacy">
+                        <mat-label>Password</mat-label>
+                        <input formControlName="password" id="password" type="password" matInput required
+                            [(ngModel)]="newPasswordModel.currentPassword">
+                        <i class="material-icons" matSuffix>key</i>
+                        <mat-error *ngIf="f['password'].touched && f['password'].invalid">
+                            Password is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="legacy">
+                        <mat-label>New password</mat-label>
+                        <input formControlName="newPassword" id="newPassword" type="password" matInput required
+                            [(ngModel)]="newPasswordModel.newPassword">
+                        <i class="material-icons" matSuffix>key</i>
+                        <mat-error *ngIf="f['newPassword'].touched && f['newPassword'].invalid">
+                            New password is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="legacy">
+                        <mat-label>Confirm password</mat-label>
+                        <input type="password" matInput formControlName="confirm_password" id="confirm_password"
+                            required>
+                        <i class="material-icons" matSuffix>key</i>
+                        <mat-error *ngIf="f['confirm_password'].touched && f['confirm_password'].invalid"
+                            class="alert alert-danger">
+                            <mat-error *ngIf="f['confirm_password'].errors!['required']">Password is
+                                <strong>required.</strong>
+                            </mat-error>
+                            <mat-error *ngIf="f['confirm_password'].errors!['confirmedValidator']">
+                                Password and confirm password<strong> must be match.</strong>
+                            </mat-error>
+                        </mat-error>
+                    </mat-form-field>
                     <div class="actions form_actions">
                         <button type="submit" [disabled]="!userPasswordForm.valid">Change password</button>
                     </div>

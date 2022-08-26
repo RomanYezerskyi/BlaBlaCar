@@ -180,6 +180,11 @@
     margin-bottom: 10px;
 }
 
+form {
+    display: flex;
+    flex-flow: column;
+}
+
 .user_data_info {
     p {
         margin: 0;
@@ -205,6 +210,10 @@
 @media all and (max-width:1000px) {
     .row {
         flex-flow: column;
+    }
+
+    .body_data {
+        max-width: 100%;
     }
 
     .user_main_info {

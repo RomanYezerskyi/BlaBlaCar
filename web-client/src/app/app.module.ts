@@ -15,7 +15,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { TripPageInfoComponent } from './components/user/trip-page-info/trip-page-info.component';
 import { DialogBookingConfirmationComponent } from './components/user/trip-page-info/dialog-booking-confirmation/dialog-booking-confirmation.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AddTripLayoutComponent } from './components/user/add-trip-layout/add-trip-layout.component';
 import { AddCarComponent } from './components/user/add-car/add-car.component';
@@ -40,7 +40,10 @@ import { UserTripsComponent } from './components/user/user-information/user-trip
 import { InfoPageComponent } from './guards/info-page/info-page.component';
 import { NotificationsComponent } from './components/notifications/notifications.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -96,7 +99,12 @@ export function tokenGetter() {
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    InfiniteScrollModule
+    InfiniteScrollModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatRippleModule,
+    NgxMatFileInputModule,
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent],
@@ -105,6 +113,10 @@ export function tokenGetter() {
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatRippleModule,
   ]
 })
 export class AppModule { }
