@@ -6,7 +6,8 @@
     box-shadow: 0 12px 15px 0 rgb(0 0 0 / 30%), 0 17px 50px 0 rgb(0 0 0 / 30%);
     width: 55%;
     padding: 0 0;
-    margin: 50px auto;
+    margin: 100px auto;
+    min-width: 640px;
 }
 
 .btn {
@@ -93,5 +94,42 @@
         background-position: right center;
         color: #fff;
         text-decoration: none;
+    }
+}
+
+@media all and (max-width:768px) {
+
+
+    .login-form {
+        flex-flow: column;
+        margin-top: 50px;
+        margin-bottom: 20px;
+        min-width: 400px;
+
+        .register-reference {
+            width: 300px;
+            margin: 0 auto;
+            padding: 0;
+            padding-top: 300px;
+
+            .btn {
+                margin: 10px 0;
+
+            }
+
+            h5 {
+
+                margin: auto;
+            }
+        }
+
+        .form {
+            padding: 50px 30px;
+            top: 0;
+            transform: translateY(10%);
+            left: 50%;
+            transform: translate(-50%, -5%);
+            min-width: 270px;
+        }
     }
 }

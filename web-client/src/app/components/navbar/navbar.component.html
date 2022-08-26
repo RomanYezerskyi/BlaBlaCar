@@ -110,13 +110,18 @@
             </div>
             <div class="navbar-section-main" *ngIf="isUserAuthenticated() && !isAdmin()">
                 <ul class="navbar-nav main_nav">
-                    <li class="nav-item active"><a href="#" class="nav-link">Home</a></li>
-                    <li class="nav-item"><a [routerLink]="'/search'" class="nav-link">Search</a></li>
-                    <li class="nav-item"><a [routerLink]="'/add-trip'" class="nav-link">New trip</a></li>
-                    <li class="nav-item"><a [routerLink]="'/add-car'" class="nav-link">New car</a></li>
-                    <li class="nav-item"><a [routerLink]="'/driving-license'" class="nav-link">Add driving license</a>
-                    </li>
                     <li class="nav-item"><a href="#" class="nav-link">About us</a></li>
+                    <li class="nav-item active"><a href="#" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a [routerLink]="'/search'" class="nav-link btn-trip">
+                            <i class="material-icons">search</i>
+                            <p>Search</p>
+                        </a></li>
+                    <!-- <li class="nav-item"><a [routerLink]="'/add-trip'" class="nav-link">New trip</a></li> -->
+                    <li class="nav-item"><a class="nav-link btn-trip" routerLink="/add-trip">
+                            <i class="material-icons">add_circle_outline</i>
+                            <p>Post a trip</p>
+                        </a></li>
+
 
                 </ul>
             </div>
@@ -147,6 +152,12 @@
                                 <li class="submenu_item">
                                     <a class="submenu_text" [routerLink]="'/cars'">My cars</a>
                                 </li>
+                                <li class="submenu_item"><a [routerLink]="'/add-car'" class="submenu_text">New car</a>
+                                </li>
+                                <li class="submenu_item"><a [routerLink]="'/driving-license'" class="submenu_text">Add
+                                        driving
+                                        license</a>
+                                </li>
                             </ul>
                         </div>
                     </button></li>
@@ -160,8 +171,8 @@
             <ul class="navbar-nav">
                 <li class="nav-item"><button class="btn btn-main" routerLink="/login">Sign in</button></li>
                 <li class="nav-item"><button class="btn btn-secondary" routerLink="/register">Sing up</button></li>
-                <li class="nav-item toggler" (click)="change()"><button class="btn btn-toggler"><i
-                            class="material-icons">density_medium</i></button></li>
+                <li class="nav-item toggler" *ngIf="isUserAuthenticated()" (click)="change()"><button
+                        class="btn btn-toggler"><i class="material-icons">density_medium</i></button></li>
 
             </ul>
         </div>
