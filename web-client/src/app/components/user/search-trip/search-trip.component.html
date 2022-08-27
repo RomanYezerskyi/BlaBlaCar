@@ -1,6 +1,6 @@
 <div class="container" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
   (scrolled)="onScroll();" [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false"
-  style="height: 87vh; overflow: auto;">
+  style="height: 88.9vh; overflow: auto;">
   <div class="" [ngClass]="{'': isParams, 'title': !isParams}">
     <h2>
       Where do you want to go?
@@ -10,7 +10,11 @@
     <app-search-form class="form" [trip]="trip"></app-search-form>
   </div>
 
-  <div class="main-line"></div>
+  <div class="no-content" *ngIf="isParams && trips.length == 0">
+    <img src="../../../../assets/traveler.png" alt="">
+    <h3>There are no trips yet :)</h3>
+  </div>
+  <!-- <div class="main-line"></div> -->
   <div class="search_results" *ngIf="trips.length > 0">
     <div class="filters">
     </div>

@@ -55,7 +55,6 @@ export class SearchTripComponent implements OnInit {
         this.trip.startTime = new Date(params['startTime']);
         this.trip.countOfSeats = params['seats'];
         this.isParams = true;
-        console.log("aa");
       }
     });
     if (this.isParams) {
