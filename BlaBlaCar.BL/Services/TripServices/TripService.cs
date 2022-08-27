@@ -126,7 +126,10 @@ namespace BlaBlaCar.BL.Services.TripServices
                 includes: x => x.Include(x => x.AvailableSeats)
                     .Include(x => x.TripUsers)
                     .Include(x=>x.User),
-                filter: x => x.StartPlace.Contains(model.StartPlace) && x.EndPlace.Contains(model.EndPlace) && x.StartTime >= model.StartTime,
+                filter: x => x.StartPlace.Contains(model.StartPlace) 
+                             && x.EndPlace.Contains(model.EndPlace) 
+                             && x.StartTime >= model.StartTime
+                             && x.AvailableSeats.Count(s=>x.TripUsers.All(u=>u.SeatId != s.SeatId)) >= model.CountOfSeats,
                 skip: model.Skip,
                 take: model.Take);
 
