@@ -10,13 +10,18 @@
     <app-search-form class="form" [trip]="trip"></app-search-form>
   </div>
 
-  <div class="no-content" *ngIf="isParams && trips.length == 0">
+  <!-- <div class="no-content" *ngIf="isParams && trips.length == 0">
     <img src="../../../../assets/traveler.png" alt="">
     <h3>There are no trips yet :)</h3>
-  </div>
+  </div> -->
   <!-- <div class="main-line"></div> -->
   <div class="search_results" *ngIf="trips.length > 0">
     <div class="filters">
+      <div class="filters__title">
+        <h4>Sort by</h4>
+        <p class="btn-clear" (click)="deleteSelectedSort()">clear</p>
+      </div>
+      <p (click)="sort()">Найнижча ціна</p>
     </div>
     <div class="items">
       <div class="search_item" *ngFor="let trip of trips" (click)="navigateToTripPage(trip.id)">

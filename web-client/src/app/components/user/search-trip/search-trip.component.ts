@@ -44,10 +44,24 @@ export class SearchTripComponent implements OnInit {
     if (this.trip.countOfSeats == 1) return;
     this.trip.countOfSeats -= 1;
   }
+  sort() {
+    this.router.navigate([], {
+      queryParams: {
+        orderBy: '123'
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+  deleteSelectedSort() {
+    this.router.navigate([], {
+      queryParams: {
+        orderBy: null
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
 
   async ngOnInit() {
-
-
     this.route.queryParams.subscribe(params => {
       if (params['startPlace'] && params['endPlace'] && params['startTime'] && params['seats']) {
         this.trip.startPlace = params['startPlace'];
@@ -103,9 +117,17 @@ export class SearchTripComponent implements OnInit {
 
 
   async searchTrips(): Promise<TripModel[] | undefined> {
+    console.log(this.trip);
+
+    const trip = {
+      countOfSeats: this.trip.countOfSeats,
+      endPlace: this.trip.endPlace,
+      startPlace: this.trip.startPlace,
+      startTime: new Date(this.trip.startTime).toLocaleDateString(),
+    };
     const url = 'https://localhost:6001/api/Trips/search/'
     return await new Promise<TripModel[]>((resolve, reject) => {
-      this.http.post<TripModel[]>(url, this.trip, {
+      this.http.post<TripModel[]>(url, trip, {
         headers: new HttpHeaders({ "Content-Type": "application/json" })
       }).subscribe({
         next: (res) => {

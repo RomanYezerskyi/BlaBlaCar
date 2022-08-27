@@ -10,13 +10,13 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class HomeComponent implements OnInit {
   data: any;
   constructor(private jwtHelper: JwtHelperService, private http: HttpClient) { }
-  
+
   ngOnInit(): void {
     this.http.get("https://localhost:6001/api/WeatherForecast")
-    .subscribe({
-      next: (result: any) => this.data = result,
-      error: (err: HttpErrorResponse) => console.log(err)
-    })
+      .subscribe({
+        next: (result: any) => this.data = result,
+        error: (err: HttpErrorResponse) => console.log(err)
+      })
   }
   logOut = () => {
     localStorage.removeItem("jwt");
@@ -24,14 +24,15 @@ export class HomeComponent implements OnInit {
   }
   isUserAuthenticated = (): boolean => {
     const token = localStorage.getItem("jwt");
-    if (token && !this.jwtHelper.isTokenExpired(token)){
+    if (token && !this.jwtHelper.isTokenExpired(token)) {
       return true;
     }
-  return false;
+    return false;
   }
   // }
   // logOut = () => {
   //   localStorage.removeItem("jwt");
   // }
+
 
 }

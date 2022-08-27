@@ -46,6 +46,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 import { SearchFormComponent } from './components/search-form/search-form.component';
 import { MatDatepickerModule } from '@angular/material/datepicker'
+import { GoogleMapsModule } from '@angular/google-maps';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -109,7 +110,8 @@ export function tokenGetter() {
     MatRippleModule,
     NgxMatFileInputModule,
     MatNativeDateModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    GoogleMapsModule
 
   ],
   providers: [AuthGuard],
