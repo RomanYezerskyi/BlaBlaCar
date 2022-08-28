@@ -60,6 +60,10 @@ export class DialogBookingConfirmationComponent implements OnInit {
     return res;
   }
   confirmBook = async () => {
+    if (this.requestedSeats != this.bookedtrip.bookedSeats.length) {
+      alert("book" + this.requestedSeats);
+      return;
+    }
     const url = 'https://localhost:6001/api/BookedTrip'
     const res = await new Promise<any>((resolve, reject) => {
       this.http.post(url, this.bookedtrip, {
@@ -87,12 +91,14 @@ export class DialogBookingConfirmationComponent implements OnInit {
     if (this.bookedtrip.bookedSeats.find(x => x.id == seat.id)) {
       this.bookedtrip.bookedSeats = this.bookedtrip.bookedSeats.filter(x => x.id != seatId);
       this.changeSeatStatus(seatId);
+      console.log("aaa" + JSON.stringify(this.bookedtrip));
       return;
     }
     if (this.bookedtrip.bookedSeats.length == this.requestedSeats) return;
     else {
       this.bookedtrip.bookedSeats.push(seat);
       this.changeSeatStatus(seatId);
+      console.log("bbb" + JSON.stringify(this.bookedtrip));
     }
   }
   changeSeatStatus(seatId: number) {

@@ -120,13 +120,15 @@ namespace BlaBlaCar.BL.Services.TripServices
 
         public async Task<IEnumerable<TripModel>> SearchTripsAsync(SearchTripModel model)
         {
-
             var trip = await _unitOfWork.Trips.GetAsync(
                 orderBy: null,
                 includes: x => x.Include(x => x.AvailableSeats)
                     .Include(x => x.TripUsers)
                     .Include(x=>x.User),
-                filter: x => x.StartPlace.Contains(model.StartPlace) && x.EndPlace.Contains(model.EndPlace) && x.StartTime >= model.StartTime,
+                filter: x => x.StartPlace.Contains(model.StartPlace) 
+                             && x.EndPlace.Contains(model.EndPlace) 
+                             && x.StartTime.Date == model.StartTime.Date
+                             && x.AvailableSeats.Count(s=>x.TripUsers.All(u=>u.SeatId != s.SeatId)) >= model.CountOfSeats,
                 skip: model.Skip,
                 take: model.Take);
 

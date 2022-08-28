@@ -1,8 +1,9 @@
 .container {
     padding-right: 15px;
     padding-left: 15px;
+
     background-color: #131022 !important;
-    max-height: 80px;
+    // max-height: 80px;
 }
 
 nav {
@@ -81,7 +82,7 @@ a {
                 cursor: pointer;
                 display: block;
                 margin: auto 5px;
-                font-size: 16px;
+                font-size: 18px;
                 font-weight: 400;
                 color: rgba(255, 255, 255, .85);
                 position: relative;

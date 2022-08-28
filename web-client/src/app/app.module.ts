@@ -44,6 +44,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
+import { SearchFormComponent } from './components/search-form/search-form.component';
+import { MatDatepickerModule } from '@angular/material/datepicker'
+import { GoogleMapsModule } from '@angular/google-maps';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -78,6 +81,7 @@ export function tokenGetter() {
     UserTripsComponent,
     InfoPageComponent,
     NotificationsComponent,
+    SearchFormComponent,
 
   ],
   imports: [
@@ -105,6 +109,10 @@ export function tokenGetter() {
     MatSelectModule,
     MatRippleModule,
     NgxMatFileInputModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
+    GoogleMapsModule
+
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent],

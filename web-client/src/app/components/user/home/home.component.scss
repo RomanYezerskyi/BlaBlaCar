@@ -1,8 +1,19 @@
-
-.h1item{
+.h1item {
     margin-top: 100px;
 }
-.wrapper{
+
+.wrapper {
     width: 1435px;
     margin: 0 auto;
+}
+
+.my-search-box {
+    align-self: center;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #212529;
+    width: 60%;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
 }

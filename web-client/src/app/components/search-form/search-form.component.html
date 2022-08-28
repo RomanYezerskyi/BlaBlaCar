@@ -1,0 +1,47 @@
+<div class="container">
+    <form #searchForm="ngForm" class="form">
+        <mat-form-field class="input__item" appearance="standard">
+            <!-- <mat-label>Start place</mat-label> -->
+            <input type="text" matInput placeholder="Start place" id="startPlace" name="startPlace"
+                [(ngModel)]="trip.startPlace">
+            <mat-icon matSuffix>my_location</mat-icon>
+        </mat-form-field>
+        <mat-form-field class="input__item" appearance="standard">
+            <!-- <mat-label>End place</mat-label> -->
+            <input type="text" matInput placeholder="End place" id="endPlace" name="endPlace"
+                [(ngModel)]="trip.endPlace">
+            <mat-icon matSuffix> place</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field class="input__item date" appearance="standard">
+            <!-- <mat-label>Choose a date</mat-label> -->
+            <input matInput [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]="trip.startTime"
+                id="startTime" name="startTime">
+            <mat-datepicker-toggle matSuffix [for]="picker">
+                <mat-icon matDatepickerToggleIcon>calendar_month</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="input__item count__item" appearance="standard">
+
+            <input type="number" matInput [(ngModel)]="trip.countOfSeats" name="countOfSeats" [disabled]="true"
+                required>
+            <mat-icon matSuffix (click)="counterAcive()">person_outline</mat-icon>
+            <div class="input__counter " [ngClass]="{'': !counter_active, 'counter_active': counter_active}">
+                <p *ngIf="trip.countOfSeats > 1" class="text">Passengers</p>
+                <p *ngIf="trip.countOfSeats == 1" class="text">Passenger</p>
+                <div class="counter">
+                    <mat-icon class="icon" (click)="counterRemove()">remove</mat-icon>
+                    <p class="counter_value">{{trip.countOfSeats}}</p>
+                    <mat-icon class="icon" (click)="counterAdd()">add</mat-icon>
+                </div>
+            </div>
+        </mat-form-field>
+
+        <button href="" class="btn" [disabled]="!searchForm.valid" (click)="search()">
+            <!-- <mat-icon>search</mat-icon> -->
+            Search
+        </button>
+    </form>
+</div>

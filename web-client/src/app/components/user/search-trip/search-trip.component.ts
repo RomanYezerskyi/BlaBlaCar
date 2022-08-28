@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHandler, HttpHeaders } from '@angula
 import { Component, Input, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { SearchTripModel } from 'src/app/interfaces/search-trip';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TripModel } from 'src/app/interfaces/trip';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Call } from '@angular/compiler';
@@ -23,20 +23,18 @@ export class SearchTripComponent implements OnInit {
     countOfSeats: 1,
     endPlace: '',
     startPlace: '',
-    startTime: new Date('1991.01.01'),
-
+    startTime: new Date(),
   };
-  tripRoute: { id: number } | undefined;
+  isParams = false;
+
 
   private Skip: number = 0;
-  // itemsToLoad - number of new items to be displayed
   private Take: number = 5;
-  // 18 items loaded for demo purposes
-  // List that is going to be actually displayed to user
-  // No need to call onScroll if full list has already been displayed
   public isFullListDisplayed: boolean = false;
 
-  constructor(private http: HttpClient, private router: Router, private sanitizer: DomSanitizer) { }
+  constructor(private http: HttpClient, private router: Router, private sanitizer: DomSanitizer, private route: ActivatedRoute,) {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+  }
 
   counterAdd() {
     if (this.trip.countOfSeats == 8) return;
@@ -46,9 +44,40 @@ export class SearchTripComponent implements OnInit {
     if (this.trip.countOfSeats == 1) return;
     this.trip.countOfSeats -= 1;
   }
+  sort() {
+    this.router.navigate([], {
+      queryParams: {
+        orderBy: '123'
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+  deleteSelectedSort() {
+    this.router.navigate([], {
+      queryParams: {
+        orderBy: null
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
 
-  ngOnInit(): void {
-
+  async ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      if (params['startPlace'] && params['endPlace'] && params['startTime'] && params['seats']) {
+        this.trip.startPlace = params['startPlace'];
+        this.trip.endPlace = params['endPlace'];
+        this.trip.startTime = new Date(params['startTime']);
+        this.trip.countOfSeats = params['seats'];
+        this.isParams = true;
+      }
+    });
+    if (this.isParams) {
+      this.trip.take = this.Take;
+      this.trip.skip = this.Skip;
+      console.log(this.trip);
+      var trips = await this.searchTrips();
+      this.trips = trips == undefined ? [] : trips;
+    }
   }
 
   navigateToTripPage = (id: number) => {
@@ -63,18 +92,18 @@ export class SearchTripComponent implements OnInit {
 
     return this.sanitizer.bypassSecurityTrustUrl(img);
   }
-  async onScroll(form: NgForm) {
+  async onScroll() {
     this.trip.take = this.Take;
     if (this.trips.length == 0) {
       this.trip.skip = this.Skip;
-      let searchTrips = await this.searchTrips(form);
+      let searchTrips = await this.searchTrips();
       if (searchTrips != undefined) {
         this.trips = this.trips.concat(searchTrips);
       }
     }
     else if (this.Skip <= this.trips.length) {
       this.trip.skip = this.Skip;
-      let searchTrips = await this.searchTrips(form);
+      let searchTrips = await this.searchTrips();
       if (searchTrips != undefined) {
         this.trips = this.trips.concat(searchTrips);
       }
@@ -87,11 +116,18 @@ export class SearchTripComponent implements OnInit {
   }
 
 
-  async searchTrips(form: NgForm): Promise<TripModel[] | undefined> {
-    if (!form.valid) { return; }
+  async searchTrips(): Promise<TripModel[] | undefined> {
+    console.log(this.trip);
+
+    const trip = {
+      countOfSeats: this.trip.countOfSeats,
+      endPlace: this.trip.endPlace,
+      startPlace: this.trip.startPlace,
+      startTime: new Date(this.trip.startTime).toLocaleDateString(),
+    };
     const url = 'https://localhost:6001/api/Trips/search/'
     return await new Promise<TripModel[]>((resolve, reject) => {
-      this.http.post<TripModel[]>(url, this.trip, {
+      this.http.post<TripModel[]>(url, trip, {
         headers: new HttpHeaders({ "Content-Type": "application/json" })
       }).subscribe({
         next: (res) => {
