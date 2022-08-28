@@ -8,6 +8,7 @@ using BlaBlaCar.DAL.Data;
 using BlaBlaCar.DAL.Interfaces;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.BL;
+using BlaBlaCar.BL.ExceptionHandler;
 using BlaBlaCar.BL.Services.Admin;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -113,8 +114,9 @@ app.UseStaticFiles(new StaticFileOptions()
 
 app.UseAuthentication(); 
 app.UseAuthorization();
-app.UseCors("EnableCORS");
 
+app.UseCors("EnableCORS");
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.MapControllers();//.RequireAuthorization("ApiScope"); ;
 
 app.Run();

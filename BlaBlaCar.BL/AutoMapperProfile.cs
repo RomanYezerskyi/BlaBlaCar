@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using BlaBlaCar.BL.ODT;
-using BlaBlaCar.BL.ODT.BookTripModels;
-using BlaBlaCar.BL.ODT.CarModels;
-using BlaBlaCar.BL.ODT.NotificationModels;
-using BlaBlaCar.BL.ODT.TripModels;
-using BlaBlaCar.BL.ViewModels;
+using BlaBlaCar.BL.DTOs.BookTripDTOs;
+using BlaBlaCar.BL.DTOs.BookTripModels;
+using BlaBlaCar.BL.DTOs.CarDTOs;
+using BlaBlaCar.BL.DTOs.NotificationDTOs;
+using BlaBlaCar.BL.DTOs.TripDTOs;
+using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Entities.CarEntities;
 using BlaBlaCar.DAL.Entities.NotificationEntities;
@@ -16,30 +16,30 @@ namespace BlaBlaCar.BL
     {
         public AutoMapperProfile()
         {
-            CreateMap<ApplicationUser, UserModel>().ReverseMap();
+            CreateMap<ApplicationUser, UserDTO>().ReverseMap();
 
-            CreateMap<NewTripViewModel, TripModel>().ReverseMap();
-            CreateMap<Trip, TripModel>().ReverseMap();
-            CreateMap<TripAndTripUsersViewModel, TripModel>().ReverseMap();
+            CreateMap<CreateTripDTO, TripDTO>().ReverseMap();
+            CreateMap<Trip, TripDTO>().ReverseMap();
+            CreateMap<GetTripWithTripUsersDTO, TripDTO>().ReverseMap();
 
-            CreateMap<AvailableSeats, AvailableSeatsModel>().ReverseMap();
-            CreateMap<Car, CarModel>().ReverseMap();
-            CreateMap<NewCarViewModel, CarModel>().ReverseMap();
+            CreateMap<AvailableSeats, AvailableSeatDTO>().ReverseMap();
+            CreateMap<Car, CarDTO>().ReverseMap();
+            CreateMap<CreateCarDTO, CarDTO>().ReverseMap();
 
-            CreateMap<AvailableSeatsModel, AvailableSeatViewModel>().ReverseMap();
-            CreateMap<SeatModel, Seat>().ReverseMap();
-            CreateMap<TripUser, TripUserModel>().ReverseMap();
-            CreateMap<AddNewBookTrip, TripUserModel>().ReverseMap();
-            CreateMap<TripUserViewModel, TripUserModel>().ReverseMap();
+            CreateMap<AvailableSeatDTO, NewAvailableSeatDTO>().ReverseMap();
+            CreateMap<SeatDTO, Seat>().ReverseMap();
+            CreateMap<TripUser, TripUserDTO>().ReverseMap();
+            CreateMap<AddNewBookTripDTO, TripUserDTO>().ReverseMap();
+            CreateMap<UpdateTripUserDTO, TripUserDTO>().ReverseMap();
 
-            CreateMap<CarDocuments, CarDocumentsModel>().ReverseMap();
-            CreateMap<UserDocuments, UserDocumentsModel>().ReverseMap();
+            CreateMap<CarDocuments, CarDocumentDTO>().ReverseMap();
+            CreateMap<UserDocuments, UserDocumentDTO>().ReverseMap();
             
-            CreateMap<Notification, NotificationModel>().ReverseMap();
-            CreateMap<ReadNotification, ReadNotificationModel>().ReverseMap();
-            CreateMap<Notification, CreateNotificationViewModel>().ReverseMap();
-            CreateMap<ReadNotification, CreateNotificationViewModel>();
-            CreateMap<Notification, GetNotificationViewModel>().ReverseMap();
+            CreateMap<Notification, NotificationDTO>().ReverseMap();
+            CreateMap<ReadNotification, ReadNotificationDTO>().ReverseMap();
+            CreateMap<Notification, CreateNotificationDTO>().ReverseMap();
+            CreateMap<ReadNotification, CreateNotificationDTO>();
+            CreateMap<Notification, GetNotificationDTO>().ReverseMap();
 
         }
     }

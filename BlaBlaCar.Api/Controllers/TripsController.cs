@@ -1,7 +1,6 @@
 ﻿using System.Security.Claims;
+using BlaBlaCar.BL.DTOs.TripDTOs;
 using BlaBlaCar.BL.Interfaces;
-using BlaBlaCar.BL.ODT.TripModels;
-using BlaBlaCar.BL.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -52,10 +51,14 @@ namespace BlaBlaCar.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost("search")]
-        public async Task<IActionResult> SearchTrips([FromBody]SearchTripModel tripModel)
+        public async Task<IActionResult> SearchTrips([FromBody]SearchTripDTO tripModel)
         {
             try
             {
+                if (!ModelState.IsValid)
+                    throw new Exception(string.Join("; ", ModelState.Values
+                        .SelectMany(x => x.Errors)
+                        .Select(x => x.ErrorMessage)));
                 var res = await _tripService.SearchTripsAsync(tripModel);
                 if(res.Any()) return Ok(res);
                 return NoContent();
@@ -66,12 +69,14 @@ namespace BlaBlaCar.Api.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> CreateTrip([FromBody]NewTripViewModel  tripModel)
+        public async Task<IActionResult> CreateTrip([FromBody]CreateTripDTO  tripModel)
         {
             try
             {
-                if (tripModel == null)
-                    return BadRequest();
+                if (!ModelState.IsValid)
+                    throw new Exception(string.Join("; ", ModelState.Values
+                        .SelectMany(x => x.Errors)
+                        .Select(x => x.ErrorMessage)));
                 var res = await _tripService.AddTripAsync(tripModel, User);
                 if (res) return Ok("Added Successfully");
                 return BadRequest("Fail");
@@ -82,12 +87,10 @@ namespace BlaBlaCar.Api.Controllers
             }
         }
         [HttpPut]
-        public async Task<IActionResult> UpdateTrip([FromBody] TripModel tripModel)
+        public async Task<IActionResult> UpdateTrip([FromBody] TripDTO tripModel)
         {
             try
             {
-                if (tripModel == null)
-                    return BadRequest();
                 var res = await _tripService.UpdateTripAsync(tripModel);
                 if (res) return Ok("Added Successfully");
                 return BadRequest("Fail");

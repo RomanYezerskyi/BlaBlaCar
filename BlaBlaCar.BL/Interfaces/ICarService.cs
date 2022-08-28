@@ -4,15 +4,14 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using BlaBlaCar.BL.ODT.CarModels;
-using BlaBlaCar.BL.ViewModels;
+using BlaBlaCar.BL.DTOs.CarDTOs;
 
 namespace BlaBlaCar.BL.Interfaces
 {
     public interface ICarService
     {
-        Task<IEnumerable<CarModel>> GetUserCarsAsync(ClaimsPrincipal principal);
-        Task<CarModel> GetCarByIdAsync(Guid id);
-        Task<bool> AddCarAsync(NewCarViewModel carModel, ClaimsPrincipal principal);
+        Task<IEnumerable<CarDTO>> GetUserCarsAsync(ClaimsPrincipal principal);
+        Task<CarDTO> GetCarByIdAsync(Guid id);
+        Task<bool> AddCarAsync(CreateCarDTO carModel, ClaimsPrincipal principal);
     }
 }

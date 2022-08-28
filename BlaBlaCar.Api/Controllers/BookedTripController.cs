@@ -1,7 +1,6 @@
-﻿using BlaBlaCar.BL.Interfaces;
-using BlaBlaCar.BL.ODT.BookTripModels;
-using BlaBlaCar.BL.ODT.TripModels;
-using BlaBlaCar.BL.ViewModels;
+﻿using BlaBlaCar.BL.DTOs.BookTripDTOs;
+using BlaBlaCar.BL.DTOs.BookTripModels;
+using BlaBlaCar.BL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,28 +17,16 @@ namespace BlaBlaCar.API.Controllers
         {
             _tripService = tripService;
         }
-
-        [HttpGet]
-        public async Task<IActionResult> GetTrips()
-        {
-            try
-            {
-                //var res = await _tripService.GetBookedTripsAsync();
-                //if (res.Any()) return Ok(res);
-                return NoContent();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
         [HttpPost]
-        public async Task<IActionResult> BookTrip([FromBody] AddNewBookTrip bookedTrip)
+        public async Task<IActionResult> BookTrip([FromBody] AddNewBookTripDTO bookedTrip)
         {
             try
             {
-                if (bookedTrip == null)
-                    return BadRequest();
+                if (!ModelState.IsValid)
+                    throw new Exception(string.Join("; ", ModelState.Values
+                        .SelectMany(x => x.Errors)
+                        .Select(x => x.ErrorMessage)));
+
                 var res = await _tripService.AddBookedTripAsync(bookedTrip, User);
                 if (res) return Ok(new {Result = "Added Successfully"});
                 return BadRequest("Fail");
@@ -64,10 +51,15 @@ namespace BlaBlaCar.API.Controllers
             }
         }
         [HttpDelete("trip")]
-        public async Task<IActionResult> DeleteBookedTrip(DeleteTripUserViewModel trip)
+        public async Task<IActionResult> DeleteBookedTrip(DeleteTripUserDTO trip)
         {
             try
             {
+                if (!ModelState.IsValid)
+                    throw new Exception(string.Join("; ", ModelState.Values
+                        .SelectMany(x => x.Errors)
+                        .Select(x => x.ErrorMessage)));
+
                 var res = await _tripService.DeleteBookedTripAsync(trip, User);
                 if (res) return Ok(new { Result = res });
                 return BadRequest("Fail");
@@ -78,10 +70,14 @@ namespace BlaBlaCar.API.Controllers
             }
         }
         [HttpDelete("seat")]
-        public async Task<IActionResult> DeleteBookedSeat(TripUserViewModel tripUser)
+        public async Task<IActionResult> DeleteBookedSeat(UpdateTripUserDTO tripUser)
         {
             try
             {
+                if (!ModelState.IsValid)
+                    throw new Exception(string.Join("; ", ModelState.Values
+                        .SelectMany(x => x.Errors)
+                        .Select(x => x.ErrorMessage)));
                 var res = await _tripService.DeleteBookedSeatAsync(tripUser, User);
                 if (res) return Ok(new { Result = res });
                 return BadRequest("Fail");
@@ -92,10 +88,14 @@ namespace BlaBlaCar.API.Controllers
             }
         }
         [HttpDelete("user")]
-        public async Task<IActionResult> DeleteUserFromTrip(TripUserViewModel tripUser)
+        public async Task<IActionResult> DeleteUserFromTrip(UpdateTripUserDTO tripUser)
         {
             try
             {
+                if (!ModelState.IsValid)
+                    throw new Exception(string.Join("; ", ModelState.Values
+                        .SelectMany(x => x.Errors)
+                        .Select(x => x.ErrorMessage)));
                 var res = await _tripService.DeleteUserFromTripAsync(tripUser, User);
                 if (res) return Ok(new { Result = res });
                 return BadRequest("Fail");

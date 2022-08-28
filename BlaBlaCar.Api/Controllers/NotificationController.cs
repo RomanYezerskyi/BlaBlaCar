@@ -1,5 +1,5 @@
-﻿using BlaBlaCar.BL.Interfaces;
-using BlaBlaCar.BL.ODT.NotificationModels;
+﻿using BlaBlaCar.BL.DTOs.NotificationDTOs;
+using BlaBlaCar.BL.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,10 +30,14 @@ namespace BlaBlaCar.API.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> ReadUserNotification(IEnumerable<NotificationModel> notification)
+        public async Task<IActionResult> ReadUserNotification(IEnumerable<NotificationDTO> notification)
         {
             try
             {
+                if (!ModelState.IsValid)
+                    throw new Exception(string.Join("; ", ModelState.Values
+                        .SelectMany(x => x.Errors)
+                        .Select(x => x.ErrorMessage)));
                 var res = await _notificationService.ReadAllNotificationAsync(notification, User);
                 if (res) return Ok();
                 return BadRequest();

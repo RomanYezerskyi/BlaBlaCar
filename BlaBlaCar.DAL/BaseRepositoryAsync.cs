@@ -29,22 +29,6 @@ namespace BlaBlaCar.DAL
             queryable = includes is null ? queryable : includes(queryable);
             queryable = orderBy is null ? queryable : orderBy(queryable);
 
-            
-            //if (includes != null)
-            //{
-            //    queryable = includes(queryable);
-            //}
-
-            //if (filter != null)
-            //{
-
-            //    queryable = queryable.Where(filter);
-            //}
-            //if (orderBy != null)
-            //{
-            //    return await orderBy(queryable).ToListAsync();
-            //}
-
             return await queryable.AsNoTracking().ToListAsync();
         }
 
@@ -52,15 +36,8 @@ namespace BlaBlaCar.DAL
             Expression<Func<TEntity, bool>> filter = null)
         {
             IQueryable<TEntity> queryable = _context.Set<TEntity>();
-            if (includes != null)
-            {
-                queryable = includes(queryable);
-            }
-
-            if (filter != null)
-            {
-                queryable = queryable.Where(filter);
-            }
+            queryable = includes is null ? queryable : includes(queryable);
+            queryable = filter is null ? queryable : queryable.Where(filter);
 
             return await queryable.AsNoTracking().FirstOrDefaultAsync();
         }

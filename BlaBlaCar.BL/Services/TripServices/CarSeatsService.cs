@@ -1,5 +1,5 @@
-﻿using BlaBlaCar.BL.Interfaces;
-using BlaBlaCar.BL.ODT.CarModels;
+﻿using BlaBlaCar.BL.DTOs.CarDTOs;
+using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.DAL.Interfaces;
 
 namespace BlaBlaCar.BL.Services.TripServices
@@ -11,12 +11,12 @@ namespace BlaBlaCar.BL.Services.TripServices
         {
             _unitOfWork = unitOfWork;
         }
-        public CarModel AddSeatsToCarAsync(CarModel carModel, int count)
+        public CarDTO AddSeatsToCarAsync(CarDTO carModel, int count)
         {
-            carModel.Seats = new List<SeatModel>();
+            carModel.Seats = new List<SeatDTO>();
             for (int i = 1; i <= count; i++)
             {
-                carModel.Seats.Add(new SeatModel() { Car = carModel, Num = i });
+                carModel.Seats.Add(new SeatDTO() { Car = carModel, Num = i });
             }
 
             return carModel;
