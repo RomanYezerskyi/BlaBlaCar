@@ -22,26 +22,20 @@ namespace BlaBlaCar.API.Controllers
         [HttpPost("license")]
         public async Task<IActionResult> AddDrivingLicense(IEnumerable<IFormFile> fileToUpload)
         {
-            try
-            {
-                if (fileToUpload is null)
-                    return BadRequest();
-                var res = await _userService.RequestForDrivingLicense(User, fileToUpload);
-                if (res != null) return Ok(new {res} );
-                return BadRequest("Fail");
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            if (fileToUpload is null)
+                return BadRequest();
+            var res = await _userService.RequestForDrivingLicense(User, fileToUpload);
+            if (res != null) return Ok(new {res} );
+            return BadRequest("Fail");
+          
         }
         [HttpGet]
         public async Task<IActionResult> GerUserInformation()
         {
             
-                var res = await _userService.GetUserInformationAsync(User);
-                if (res != null) return Ok(res);
-                return BadRequest("Fail");
+            var res = await _userService.GetUserInformationAsync(User);
+            if (res != null) return Ok(res);
+            return BadRequest("Fail");
           
         }
 
@@ -49,36 +43,26 @@ namespace BlaBlaCar.API.Controllers
         [HttpPost("update")]
         public async Task<IActionResult> UpdateUser(UpdateUserDTO userModel)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                    throw new Exception(string.Join("; ", ModelState.Values
-                        .SelectMany(x => x.Errors)
-                        .Select(x => x.ErrorMessage)));
-                var res = await _userService.UpdateUserAsync(userModel, User);
-                if (res)
-                    return Ok();
-                return BadRequest();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+           
+            if (!ModelState.IsValid)
+                throw new Exception(string.Join("; ", ModelState.Values
+                    .SelectMany(x => x.Errors)
+                    .Select(x => x.ErrorMessage)));
+            var res = await _userService.UpdateUserAsync(userModel, User);
+            if (res)
+                return Ok();
+            return BadRequest();
+            
         }
         [HttpPost("updateUserImg")]
         public async Task<IActionResult> UpdateUserImg(IFormFile userImg)
         {
-            try
-            {
-                var res = await _userService.UpdateUserImgAsync(userImg, User);
-                if (res)
-                    return Ok();
-                return BadRequest();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+           
+            var res = await _userService.UpdateUserImgAsync(userImg, User);
+            if (res)
+                return Ok();
+            return BadRequest();
+           
         }
     }
 }
