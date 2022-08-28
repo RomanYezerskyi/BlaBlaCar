@@ -84,6 +84,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddScoped<AuthorizationService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddScoped<IUserService, UserService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

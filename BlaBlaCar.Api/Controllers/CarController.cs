@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authorization;
-using BlaBlaCar.BL.ViewModels;
+using BlaBlaCar.BL.DTOs.CarDTOs;
 
 namespace BlaBlaCar.Api.Controllers
 {
@@ -47,12 +47,14 @@ namespace BlaBlaCar.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCar([FromForm] NewCarViewModel carModel)
+        public async Task<IActionResult> CreateCar([FromForm] CreateCarDTO carModel)
         {
             try
             {
-                if (carModel == null)
-                    return BadRequest();
+                if (!ModelState.IsValid)
+                    throw new Exception(string.Join("; ", ModelState.Values
+                        .SelectMany(x => x.Errors)
+                        .Select(x => x.ErrorMessage)));
                 var res = await _carService.AddCarAsync(carModel, User);
                 if (res) return Ok("Added Successfully");
                 return BadRequest("Fail");

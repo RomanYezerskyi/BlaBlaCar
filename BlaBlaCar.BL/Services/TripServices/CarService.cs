@@ -1,10 +1,11 @@
 ﻿using System.Net.Http.Headers;
 using System.Security.Claims;
 using AutoMapper;
+using BlaBlaCar.BL.DTOs;
+using BlaBlaCar.BL.DTOs.CarDTOs;
+using BlaBlaCar.BL.DTOs.UserDTOs;
+using BlaBlaCar.BL.Exceptions;
 using BlaBlaCar.BL.Interfaces;
-using BlaBlaCar.BL.ODT;
-using BlaBlaCar.BL.ODT.CarModels;
-using BlaBlaCar.BL.ViewModels;
 using BlaBlaCar.DAL.Entities.CarEntities;
 using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
@@ -31,54 +32,55 @@ namespace BlaBlaCar.BL.Services.TripServices
             _fileService = fileService;
         }
 
-        public async Task<IEnumerable<CarModel>> GetUserCarsAsync(ClaimsPrincipal principal)
+        public async Task<IEnumerable<CarDTO>> GetUserCarsAsync(ClaimsPrincipal principal)
         {
             var checkIfUserExist = await _userService.СheckIfUserExistsAsync(principal);
-            if (!checkIfUserExist) throw new Exception("This user cannot create trip!");
+            if (!checkIfUserExist) throw new PermissionException("This user not authorized!");
 
 
             var userId = principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value;
-            var userCars = _mapper.Map<IEnumerable<CarModel>>
+            var userCars = _mapper.Map<IEnumerable<CarDTO>>
                 (await _unitOfWork.Cars.GetAsync(null, x=>
                         x.Include(s=>s.Seats), 
                     x => x.UserId == Guid.Parse((ReadOnlySpan<char>)userId)));
             return userCars;
         }
 
-        public async Task<CarModel> GetCarByIdAsync(Guid id)
+        public async Task<CarDTO> GetCarByIdAsync(Guid id)
         {
-            var car = _mapper.Map<CarModel>(await _unitOfWork.Cars.GetAsync(x => x.Include(z => z.Seats), x => x.Id == id));
+            var car = _mapper.Map<CarDTO>(await _unitOfWork.Cars.GetAsync(
+                x => x.Include(z => z.Seats), 
+                x => x.Id == id));
+            if (car is null)
+                throw new NotFoundException(nameof(CarDTO));
             return car;
         }
 
 
-        public async Task<bool> AddCarAsync(NewCarViewModel carModel, ClaimsPrincipal principal)
+        public async Task<bool> AddCarAsync(CreateCarDTO carModel, ClaimsPrincipal principal)
         {
             var checkIfUserExist = await _userService.СheckIfUserExistsAsync(principal);
-            if (!checkIfUserExist) throw new Exception("This user cannot create trip!");
+            if (!checkIfUserExist) throw new PermissionException("This user cannot create trip!");
             Guid userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
-            var user = _mapper.Map<UserModel>(await _unitOfWork.Users.GetAsync(null,
+            var user = _mapper.Map<UserDTO>(await _unitOfWork.Users.GetAsync(null,
                 x => x.Id == userId)); 
 
-            if (user.UserStatus == ModelStatus.Rejected) throw new Exception("This user cannot add car!");
+            if (user.UserStatus == UserDTOStatus.Rejected) throw new PermissionException("This user cannot add car!");
             
             if (carModel.TechPassportFile.Any())
             {
-                var newCar = _mapper.Map<NewCarViewModel, CarModel>(carModel);
+                var newCar = _mapper.Map<CreateCarDTO, CarDTO>(carModel);
                 
 
                 var files = await _fileService.FilesDbPathListAsync(carModel.TechPassportFile);
 
-                newCar.CarDocuments = files.Select(f => new CarDocumentsModel() { Car = newCar, TechPassport = f }).ToList();
-                newCar.CarStatus = ModelStatus.Pending;
+                newCar.CarDocuments = files.Select(f => new CarDocumentDTO() { Car = newCar, TechPassport = f }).ToList();
+                newCar.CarStatus = CarDTOStatus.Pending;
 
                 _carSeatsService.AddSeatsToCarAsync(newCar, carModel.CountOfSeats);
 
                 newCar.UserId = userId;
-                //user.Cars.Add(newCar);
-
-                //_unitOfWork.Users.Update(_mapper.Map<ApplicationUser>(user));
-
+                
                 var car = _mapper.Map<Car>(newCar);
                 await _unitOfWork.Cars.InsertAsync(car);
                 return await _unitOfWork.SaveAsync(userId);

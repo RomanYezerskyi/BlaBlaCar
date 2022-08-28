@@ -4,16 +4,15 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using BlaBlaCar.BL.ODT.NotificationModels;
-using BlaBlaCar.BL.ViewModels;
+using BlaBlaCar.BL.DTOs.NotificationDTOs;
 
 namespace BlaBlaCar.BL.Interfaces
 {
     public interface INotificationService
     {
-        Task<IEnumerable<GetNotificationViewModel>> GetUserNotificationsAsync(ClaimsPrincipal principal);
-        Task<bool> CreateNotificationAsync(CreateNotificationViewModel notificationModel, ClaimsPrincipal principal);
-        Task GenerateNotificationAsync(CreateNotificationViewModel notificationModel);
-        Task<bool> ReadAllNotificationAsync(IEnumerable<NotificationModel> notification, ClaimsPrincipal principal);
+        Task<IEnumerable<GetNotificationDTO>> GetUserNotificationsAsync(ClaimsPrincipal principal);
+        Task<bool> CreateNotificationAsync(CreateNotificationDTO notificationModel, ClaimsPrincipal principal);
+        Task GenerateNotificationAsync(CreateNotificationDTO notificationModel);
+        Task<bool> ReadAllNotificationAsync(IEnumerable<NotificationDTO> notification, ClaimsPrincipal principal);
     }
 }

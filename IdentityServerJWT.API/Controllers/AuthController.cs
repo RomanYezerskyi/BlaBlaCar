@@ -39,7 +39,6 @@ namespace IdentityServerJWT.API.Controllers
             try
             {
                 var res = await _authorizationService.Login(userModel);
-                //var a = User.FindFirst(JwtClaimTypes.Name).Value;
                 return Ok(res);
             }
             catch (Exception e)
@@ -64,7 +63,6 @@ namespace IdentityServerJWT.API.Controllers
             {
                 return BadRequest(e.Message);
             }
-            //return Redirect("~/");
         }
         [HttpPost("logout")]
         public async Task<IActionResult> LogOut()

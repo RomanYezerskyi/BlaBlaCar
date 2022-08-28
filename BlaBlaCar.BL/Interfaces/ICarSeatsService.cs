@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BlaBlaCar.BL.ODT.CarModels;
-using BlaBlaCar.BL.ODT.TripModels;
-using BlaBlaCar.BL.ViewModels;
+﻿
+using BlaBlaCar.BL.DTOs.CarDTOs;
 
 namespace BlaBlaCar.BL.Interfaces
 {
     public interface ICarSeatsService
     {
-        CarModel AddSeatsToCarAsync(CarModel carModel, int count);
+        CarDTO AddSeatsToCarAsync(CarDTO carModel, int count);
     }
 }

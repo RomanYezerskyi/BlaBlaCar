@@ -4,18 +4,18 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using BlaBlaCar.BL.ODT.BookTripModels;
-using BlaBlaCar.BL.ODT.TripModels;
-using BlaBlaCar.BL.ViewModels;
+using BlaBlaCar.BL.DTOs.BookTripDTOs;
+using BlaBlaCar.BL.DTOs.BookTripModels;
+using BlaBlaCar.BL.DTOs.TripDTOs;
 
 namespace BlaBlaCar.BL.Interfaces
 {
     public interface IBookedTripsService
     {
-        Task<IEnumerable<TripModel>> GetUserBookedTripsAsync(ClaimsPrincipal claimsPrincipal);
-        Task<bool> AddBookedTripAsync(AddNewBookTrip tripModel, ClaimsPrincipal principal);
-        Task<bool> DeleteBookedTripAsync(DeleteTripUserViewModel tripUserModel, ClaimsPrincipal principal);
-        Task<bool> DeleteBookedSeatAsync(TripUserViewModel tripUserModel, ClaimsPrincipal principal);
-        Task<bool> DeleteUserFromTripAsync(TripUserViewModel tripUserModel, ClaimsPrincipal principal);
+        Task<IEnumerable<TripDTO>> GetUserBookedTripsAsync(ClaimsPrincipal claimsPrincipal);
+        Task<bool> AddBookedTripAsync(AddNewBookTripDTO tripModel, ClaimsPrincipal principal);
+        Task<bool> DeleteBookedTripAsync(DeleteTripUserDTO tripUserModel, ClaimsPrincipal principal);
+        Task<bool> DeleteBookedSeatAsync(UpdateTripUserDTO tripUserModel, ClaimsPrincipal principal);
+        Task<bool> DeleteUserFromTripAsync(UpdateTripUserDTO tripUserModel, ClaimsPrincipal principal);
     }
 }

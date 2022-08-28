@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Headers;
+using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.BL.Interfaces;
-using BlaBlaCar.BL.ODT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -38,24 +38,23 @@ namespace BlaBlaCar.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GerUserInformation()
         {
-            try
-            {
+            
                 var res = await _userService.GetUserInformationAsync(User);
                 if (res != null) return Ok(res);
                 return BadRequest("Fail");
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+          
         }
 
 
         [HttpPost("update")]
-        public async Task<IActionResult> UpdateUser(UpdateUserModel userModel)
+        public async Task<IActionResult> UpdateUser(UpdateUserDTO userModel)
         {
             try
             {
+                if (!ModelState.IsValid)
+                    throw new Exception(string.Join("; ", ModelState.Values
+                        .SelectMany(x => x.Errors)
+                        .Select(x => x.ErrorMessage)));
                 var res = await _userService.UpdateUserAsync(userModel, User);
                 if (res)
                     return Ok();

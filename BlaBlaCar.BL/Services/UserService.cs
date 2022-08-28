@@ -6,9 +6,10 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using BlaBlaCar.BL.DTOs;
+using BlaBlaCar.BL.DTOs.UserDTOs;
+using BlaBlaCar.BL.Exceptions;
 using BlaBlaCar.BL.Interfaces;
-using BlaBlaCar.BL.ODT;
-using BlaBlaCar.BL.ODT.TripModels;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
@@ -38,11 +39,11 @@ namespace BlaBlaCar.BL.Services
             _contextAccessor = contextAccessor;
             _hostSettings = hostSettings.Value;
         }
-        public async Task<UserModel> GetUserInformationAsync(ClaimsPrincipal claimsPrincipal)
+        public async Task<UserDTO> GetUserInformationAsync(ClaimsPrincipal claimsPrincipal)
         {
             Guid userId = Guid.Parse(claimsPrincipal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
 
-            var user = _mapper.Map<UserModel>(
+            var user = _mapper.Map<UserDTO>(
                 await _unitOfWork.Users.GetAsync(x => x.Include(i => i.Cars)
                         .ThenInclude(i => i.CarDocuments)
                         .Include(i => i.UserDocuments)
@@ -50,7 +51,8 @@ namespace BlaBlaCar.BL.Services
                         .Include(x=>x.Trips),
                     u => u.Id == userId)
             );
-            if (user == null) throw new Exception("User no found!");
+            if (user is null)
+                throw new NotFoundException(nameof(UserDTO));
 
             if (user.UserImg != null)
                 user.UserImg = user.UserImg.Insert(0, _hostSettings.CurrentHost);
@@ -74,12 +76,12 @@ namespace BlaBlaCar.BL.Services
             return user;
         }
 
-        public Task<IEnumerable<UserModel>> GetUsersAsync()
+        public Task<IEnumerable<UserDTO>> GetUsersAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<UserModel>> SearchUsersAsync(UserModel model)
+        public Task<IEnumerable<UserDTO>> SearchUsersAsync(UserDTO model)
         {
             throw new NotImplementedException();
         }
@@ -89,18 +91,18 @@ namespace BlaBlaCar.BL.Services
         public async Task<bool> RequestForDrivingLicense(ClaimsPrincipal principal, IEnumerable<IFormFile> drivingLicense)
         {
             var userEmail = principal.Identity.Name;
-            var userModel = _mapper.Map<UserModel>(await _unitOfWork.Users
+            var userModel = _mapper.Map<UserDTO>(await _unitOfWork.Users
                 .GetAsync(null, x => x.Email == userEmail));
-            if (userModel.UserStatus == ModelStatus.Rejected) throw new Exception("This user cannot add driving license!");
+            if (userModel.UserStatus == UserDTOStatus.Rejected) throw new PermissionException("This user cannot add driving license!");
 
            
             if (drivingLicense.Any())
             {
                 var files = await _fileService.FilesDbPathListAsync(drivingLicense);
 
-               userModel.UserDocuments = files.Select(f => new UserDocumentsModel() { User = userModel, DrivingLicense = f }).ToList();
+               userModel.UserDocuments = files.Select(f => new UserDocumentDTO() { User = userModel, DrivingLicense = f }).ToList();
 
-                userModel.UserStatus = ModelStatus.Pending;
+                userModel.UserStatus = UserDTOStatus.Pending;
 
 
                 var user = _mapper.Map<ApplicationUser>(userModel);
@@ -108,7 +110,7 @@ namespace BlaBlaCar.BL.Services
                 return await _unitOfWork.SaveAsync(user.Id);
             }
 
-            throw new Exception("Problems with file");
+            throw new NoFileException($"File is required!");
         }
 
         public async Task<bool> СheckIfUserExistsAsync(ClaimsPrincipal principal)
@@ -120,24 +122,24 @@ namespace BlaBlaCar.BL.Services
             {
                 return await AddUserAsync(principal);
             }
-            return true;
+            return false;
         }
 
         public async Task<bool> AddUserAsync(ClaimsPrincipal principal)
         {
-            var user = new UserModel()
+            var user = new UserDTO()
             {
                 Id = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value),
                 Email = principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 FirstName = principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.GivenName).Value,
                 PhoneNumber = principal.Claims.FirstOrDefault(x=>x.Type == JwtClaimTypes.PhoneNumber).Value,
-                UserStatus = ModelStatus.WithoutCar
+                UserStatus = UserDTOStatus.WithoutCar
             };
             await _unitOfWork.Users.InsertAsync(_mapper.Map<ApplicationUser>(user));
             return await _unitOfWork.SaveAsync(user.Id);
         }
 
-        public async Task<bool> UpdateUserAsync(UpdateUserModel newUserData, ClaimsPrincipal principal)
+        public async Task<bool> UpdateUserAsync(UpdateUserDTO newUserData, ClaimsPrincipal principal)
         {
             var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
             var accessToken = _contextAccessor.HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
@@ -159,19 +161,18 @@ namespace BlaBlaCar.BL.Services
                 return await _unitOfWork.SaveAsync(userId);
             }
 
-            return false;
+            throw new PermissionException("This user cannot update data");
         }
 
         public async Task<bool> UpdateUserImgAsync(IFormFile userImg, ClaimsPrincipal principal)
         {
+            if (userImg is null) throw new NoFileException($"File is required!");
             var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
 
-            var user = _mapper.Map<UserModel>(
+            var user = _mapper.Map<UserDTO>(
                 await _unitOfWork.Users.GetAsync(null, x => x.Id == userId));
 
             var img = await _fileService.FilesDbPathListAsync(userImg);
-
-
 
             user.UserImg = img;
             _unitOfWork.Users.Update(_mapper.Map<ApplicationUser>(user));
