@@ -19,17 +19,20 @@ export interface GetItems<T> {
 export class SearchTripComponent implements OnInit {
   invalidForm: boolean | undefined;
   trips: TripModel[] = [];
+  private Skip: number = 0;
+  private Take: number = 5;
   trip: SearchTripModel = {
     countOfSeats: 1,
     endPlace: '',
     startPlace: '',
     startTime: new Date(),
+    skip: this.Skip,
+    take: this.Take
   };
   isParams = false;
 
 
-  private Skip: number = 0;
-  private Take: number = 5;
+
   public isFullListDisplayed: boolean = false;
 
   constructor(private http: HttpClient, private router: Router, private sanitizer: DomSanitizer, private route: ActivatedRoute,) {
@@ -124,6 +127,8 @@ export class SearchTripComponent implements OnInit {
       endPlace: this.trip.endPlace,
       startPlace: this.trip.startPlace,
       startTime: new Date(this.trip.startTime).toLocaleDateString(),
+      take: this.Take,
+      skip: this.Skip
     };
     const url = 'https://localhost:6001/api/Trips/search/'
     return await new Promise<TripModel[]>((resolve, reject) => {

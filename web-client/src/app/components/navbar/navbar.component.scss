@@ -61,10 +61,12 @@ a {
 }
 
 .notification:hover .notification_list {
+    padding: 5px;
     display: block;
     position: absolute;
     right: -1px;
     bottom: -1px;
+
 }
 
 .menu {
@@ -155,7 +157,7 @@ a {
 }
 
 .submenu {
-    // display: none;
+    display: none;
     margin: auto;
     position: absolute;
     width: 150px;
@@ -164,6 +166,7 @@ a {
     border-radius: 10px;
     box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%) !important;
     transition: 2s all ease;
+
 
     ul {
         padding: 0;
@@ -182,9 +185,9 @@ a {
     }
 }
 
-.btn:hover .submenu {
+.nav-item:hover .submenu {
     display: block;
-
+    animation: 300ms ease 0s normal none 1 running zoomIn;
 }
 
 .user_ptofile_items {

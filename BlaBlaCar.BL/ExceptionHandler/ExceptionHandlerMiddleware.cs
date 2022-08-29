@@ -26,7 +26,7 @@ namespace BlaBlaCar.BL.ExceptionHandler
         }
 
         private Task HandleExceptionAsync(HttpContext context, Exception exception)
-        {
+         {
             var code = HttpStatusCode.InternalServerError;
             var result = string.Empty;
             switch (exception)
