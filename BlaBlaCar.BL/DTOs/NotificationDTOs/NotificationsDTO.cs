@@ -5,7 +5,7 @@ using BlaBlaCar.BL.DTOs.UserDTOs;
 
 namespace BlaBlaCar.BL.DTOs.NotificationDTOs
 {
-    public class NotificationDTO
+    public class NotificationsDTO
     {
         [Required]
         public Guid Id { get; set; }
@@ -14,6 +14,6 @@ namespace BlaBlaCar.BL.DTOs.NotificationDTOs
         public Guid UserId { get; set; }
         public UserDTO? User { get; set; }
         public NotificationDTOStatus? NotificationStatus { get; set; }
-        public ICollection<ReadNotificationDTO>? ReadNotifications { get; set; }
+        public ICollection<ReadNotificationsDTO>? ReadNotifications { get; set; }
     }
 }

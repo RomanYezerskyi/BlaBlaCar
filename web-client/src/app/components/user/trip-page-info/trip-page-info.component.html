@@ -2,13 +2,13 @@
     <div class="search_info">
         <div class="date">
             <h4>
-                {{data.startTime | date}}
+                {{trip.startTime | date}}
             </h4>
         </div>
         <div class="header">
             <div class="time">
-                <p>{{data.startTime | date:'hh:mm'}}</p>
-                <p>{{data.endTime | date:'hh:mm'}}</p>
+                <p>{{trip.startTime | date:'hh:mm'}}</p>
+                <p>{{trip.endTime | date:'hh:mm'}}</p>
             </div>
             <div class="line">
             </div>
@@ -16,11 +16,11 @@
                 <div class="cities">
                     <div class="start">
                         <mat-icon class="item_icon">gps_fixed</mat-icon>
-                        <p>{{data.startPlace}}</p>
+                        <p>{{trip.startPlace}}</p>
                     </div>
                     <div class="destination">
                         <mat-icon class="item_icon"> place</mat-icon>
-                        <p>{{data.endPlace}}</p>
+                        <p>{{trip.endPlace}}</p>
                     </div>
                 </div>
             </div>
@@ -29,14 +29,14 @@
     <div class="horizontal_line"></div>
     <div class="price">
         <p>For {{requestedSeats}} passangers</p>
-        <p>{{data.pricePerSeat*requestedSeats | currency:"UAH":"symbol"}}</p>
+        <p>{{trip.pricePerSeat*requestedSeats | currency:"UAH":"symbol"}}</p>
     </div>
     <div class="horizontal_line"></div>
     <div class="user">
         <div class="user_img">
-            <img [src]="sanitaizeImg(data.user?.userImg!)" alt="" class="img">
+            <img [src]="sanitaizeImg(trip.user?.userImg!)" alt="" class="img">
         </div>
-        <p>{{data.user?.firstName}}</p>
+        <p>{{trip.user?.firstName}}</p>
     </div>
     <div class="horizontal_line"></div>
     <button mat-button (click)="openDialog()" class="btn_continue">Continue</button>

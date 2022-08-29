@@ -1,5 +1,6 @@
 ﻿using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Entities.CarEntities;
+using BlaBlaCar.DAL.Entities.NotificationEntities;
 using BlaBlaCar.DAL.Entities.TripEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -21,6 +22,8 @@ namespace BlaBlaCar.DAL.Data
         public DbSet<AvailableSeats> AvailableSeats { get; set; }
         public DbSet<UserDocuments> UserDocuments  { get; set; }
         public DbSet<CarDocuments> CarDocuments { get; set; }
+        public DbSet<Notifications> Notifications { get; set; }
+        public DbSet<ReadNotifications> ReadNotifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

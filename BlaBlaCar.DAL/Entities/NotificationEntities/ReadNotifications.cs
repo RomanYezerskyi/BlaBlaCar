@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace BlaBlaCar.DAL.Entities.NotificationEntities
 {
-    public class ReadNotification: BaseEntity
+    public class ReadNotifications: BaseEntity
     {
         public Guid NotificationId { get; set; }
-        public Notification Notification { get; set; }
+        public Notifications Notification { get; set; }
         public Guid UserId { get; set; }
         public ApplicationUser User { get; set; }
     }

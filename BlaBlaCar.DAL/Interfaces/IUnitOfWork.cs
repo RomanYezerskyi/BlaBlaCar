@@ -15,8 +15,8 @@ namespace BlaBlaCar.DAL.Interfaces
         IRepositoryAsync<TripUser> TripUser { get; }
         IRepositoryAsync<UserDocuments> UserDocuments { get; }
         IRepositoryAsync<CarDocuments> CarDocuments { get; }
-        IRepositoryAsync<Notification> Notifications { get; }
-        IRepositoryAsync<ReadNotification> ReadNotifications { get; }
+        IRepositoryAsync<Notifications> Notifications { get; }
+        IRepositoryAsync<ReadNotifications> ReadNotifications { get; }
         Task<bool> SaveAsync(Guid userId);
     }
 }

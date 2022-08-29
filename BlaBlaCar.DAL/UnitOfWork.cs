@@ -19,8 +19,8 @@ namespace BlaBlaCar.DAL
         private BaseRepositoryAsync<TripUser> _tripUser;
         private BaseRepositoryAsync<UserDocuments> _userDocuments;
         private BaseRepositoryAsync<CarDocuments> _carDocuments;
-        private BaseRepositoryAsync<Notification> _notification;
-        private BaseRepositoryAsync<ReadNotification> _readNotification;
+        private BaseRepositoryAsync<Notifications> _notifications;
+        private BaseRepositoryAsync<ReadNotifications> _readNotifications;
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -91,19 +91,19 @@ namespace BlaBlaCar.DAL
         }
 
 
-        public IRepositoryAsync<Notification> Notifications
+        public IRepositoryAsync<Notifications> Notifications
         {
             get
             {
-                return _notification ??= new BaseRepositoryAsync<Notification>(_context);
+                return _notifications ??= new BaseRepositoryAsync<Notifications>(_context);
             }
         }
 
-        public IRepositoryAsync<ReadNotification> ReadNotifications
+        public IRepositoryAsync<ReadNotifications> ReadNotifications
         {
             get
             {
-                return _readNotification ??= new BaseRepositoryAsync<ReadNotification>(_context);
+                return _readNotifications ??= new BaseRepositoryAsync<ReadNotifications>(_context);
             }
         }
 

@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { UserService } from 'src/app/services/userservice/user.service';
 
 @Component({
   selector: 'app-request-driving-license',
@@ -10,7 +11,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 export class RequestDrivingLicenseComponent implements OnInit {
   private formData = new FormData();
   @Output() public onUploadFinished = new EventEmitter();
-  constructor(private http: HttpClient, private sant: DomSanitizer) { }
+  constructor(private http: HttpClient, private sant: DomSanitizer, private userService: UserService) { }
 
   ngOnInit(): void {
   }
@@ -30,13 +31,19 @@ export class RequestDrivingLicenseComponent implements OnInit {
     return this.sant.bypassSecurityTrustUrl(imageUrl);
   }
   addLicense = () => {
-    this.http.post('https://localhost:6001/api/User/license', this.formData)
-      .subscribe({
-        next: (event: any) => {
-          console.log(event);
-        },
-        error: (err: HttpErrorResponse) => console.log(err)
-      });
+    this.userService.addDrivingLicense(this.formData).pipe().subscribe(
+      response => {
+        console.log(response);
+      },
+      (error: HttpErrorResponse) => { console.error(error.error); }
+    );
+    // this.http.post('https://localhost:6001/api/User/license', this.formData)
+    //   .subscribe({
+    //     next: (event: any) => {
+    //       console.log(event);
+    //     },
+    //     error: (err: HttpErrorResponse) => console.log(err)
+    //   });
   }
 
   // onSelectNewFile(elemnt: any): void {

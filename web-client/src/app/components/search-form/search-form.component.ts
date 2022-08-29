@@ -32,11 +32,12 @@ export class SearchFormComponent implements OnInit {
     this.trip.countOfSeats -= 1;
   }
   search() {
+    console.log(this.trip.startTime)
     this.router.navigate(['search'], {
       queryParams: {
         startPlace: this.trip.startPlace,
         endPlace: this.trip.endPlace,
-        startTime: this.trip.startTime.toLocaleDateString(),
+        startTime: this.trip.startTime,
         seats: this.trip.countOfSeats,
       }
     });

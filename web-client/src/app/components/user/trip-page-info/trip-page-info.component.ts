@@ -6,16 +6,17 @@ import { DialogBookingConfirmationComponent } from './dialog-booking-confirmatio
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CarModel } from 'src/app/interfaces/car';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { TripService } from 'src/app/services/tripservice/trip.service';
 @Component({
 	selector: 'app-trip-page-info',
 	templateUrl: './trip-page-info.component.html',
 	styleUrls: ['./trip-page-info.component.scss', '../search-trip/search-trip.component.scss']
 })
 export class TripPageInfoComponent implements OnInit {
-	private id!: number;
+	private tripId!: number;
 	requestedSeats = 0;
 	carModel: CarModel = { id: 0, carType: 0, modelName: '', registNum: '', seats: [], carStatus: -1, carDocuments: [] }
-	data: TripModel = {
+	trip: TripModel = {
 		id: 0,
 		startPlace: '',
 		endPlace: '',
@@ -30,13 +31,13 @@ export class TripPageInfoComponent implements OnInit {
 		tripUsers: [],
 		user: { id: '', cars: [], email: '', firstName: '', phoneNumber: '', roles: [], userDocuments: [], userStatus: -1, userImg: '' }
 	};
-	private readonly url = 'https://localhost:6001/api/Trips/';
+
 	constructor(private route: ActivatedRoute, private http: HttpClient,
-		private dialog: MatDialog, private sanitizer: DomSanitizer) { }
+		private dialog: MatDialog, private sanitizer: DomSanitizer, private tripService: TripService) { }
 
 	ngOnInit(): void {
 		this.route.params.subscribe(params => {
-			this.id = params['id'];
+			this.tripId = params['id'];
 		});
 		this.route.queryParams.subscribe(params => {
 			this.requestedSeats = params['requestedSeats']
@@ -46,16 +47,23 @@ export class TripPageInfoComponent implements OnInit {
 	sanitaizeImg(img: string): SafeUrl {
 		return this.sanitizer.bypassSecurityTrustUrl(img);
 	}
-
+	private readonly url = 'https://localhost:6001/api/Trips/';
 	searchData = () => {
-		this.http.get(this.url + this.id)
-			.subscribe({
-				next: (res) => {
-					this.data = res as TripModel;
-					console.log(this.data);
-				},
-				error: (err: HttpErrorResponse) => console.error(err),
-			});
+		this.tripService.getTripById(this.tripId).pipe().subscribe(
+			response => {
+				this.trip = response;
+				console.log(response)
+			},
+			(error: HttpErrorResponse) => { console.log(error.error); }
+		);
+		// this.http.get(this.url + this.id)
+		// 	.subscribe({
+		// 		next: (res) => {
+		// 			this.data = res as TripModel;
+		// 			console.log(this.data);
+		// 		},
+		// 		error: (err: HttpErrorResponse) => console.error(err),
+		// 	});
 	}
 
 
@@ -65,9 +73,8 @@ export class TripPageInfoComponent implements OnInit {
 		// dialogConfig.disableClose = true;
 		dialogConfig.autoFocus = true;
 		dialogConfig.data = {
-			trip: this.data,
+			trip: this.trip,
 			requestedSeats: this.requestedSeats
-
 		};
 		const dRef = this.dialog.open(DialogBookingConfirmationComponent, dialogConfig);
 

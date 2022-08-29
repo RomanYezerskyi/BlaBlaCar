@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TripModel } from 'src/app/interfaces/trip';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Call } from '@angular/compiler';
+import { TripService } from 'src/app/services/tripservice/trip.service';
 export interface GetItems<T> {
   (take: number, skip: number): T[];
 }
@@ -35,7 +36,11 @@ export class SearchTripComponent implements OnInit {
 
   public isFullListDisplayed: boolean = false;
 
-  constructor(private http: HttpClient, private router: Router, private sanitizer: DomSanitizer, private route: ActivatedRoute,) {
+  constructor(private http: HttpClient,
+    private router: Router,
+    private sanitizer: DomSanitizer,
+    private route: ActivatedRoute,
+    private tripService: TripService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
@@ -69,11 +74,12 @@ export class SearchTripComponent implements OnInit {
       if (params['startPlace'] && params['endPlace'] && params['startTime'] && params['seats']) {
         this.trip.startPlace = params['startPlace'];
         this.trip.endPlace = params['endPlace'];
-        this.trip.startTime = new Date(params['startTime']);
+        this.trip.startTime = new Date(params['startTime']).toDateString();
         this.trip.countOfSeats = params['seats'];
         this.isParams = true;
       }
     });
+    console.log(this.trip.startTime)
     if (this.isParams) {
       this.trip.take = this.Take;
       this.trip.skip = this.Skip;
@@ -119,31 +125,40 @@ export class SearchTripComponent implements OnInit {
   }
 
 
-  async searchTrips(): Promise<TripModel[] | undefined> {
-    console.log(this.trip);
-
-    const trip = {
-      countOfSeats: this.trip.countOfSeats,
-      endPlace: this.trip.endPlace,
-      startPlace: this.trip.startPlace,
-      startTime: new Date(this.trip.startTime).toLocaleDateString(),
-      take: this.Take,
-      skip: this.Skip
-    };
-    const url = 'https://localhost:6001/api/Trips/search/'
-    return await new Promise<TripModel[]>((resolve, reject) => {
-      this.http.post<TripModel[]>(url, trip, {
-        headers: new HttpHeaders({ "Content-Type": "application/json" })
-      }).subscribe({
-        next: (res) => {
-          console.log(res);
-          resolve(res);
-        },
-        error: (err: HttpErrorResponse) => { console.error(err); reject(err) },
-      });
-    });
-
+  searchTrips() {
+    this.tripService.SearchTrip(this.trip).pipe().subscribe(
+      response => {
+        console.log(response)
+      },
+      (error: HttpErrorResponse) => { console.log(error.error); }
+    )
   }
+  // async searchTrips(): Promise<TripModel[] | undefined> {
+  //   console.log(this.trip);
+
+  //   const trip = {
+  //     countOfSeats: this.trip.countOfSeats,
+  //     endPlace: this.trip.endPlace,
+  //     startPlace: this.trip.startPlace,
+  //     startTime: new Date(this.trip.startTime).toDateString() + 'Z',
+  //     take: this.Take,
+  //     skip: this.Skip
+  //   };
+  //   console.log(trip.startTime);
+  //   const url = 'https://localhost:6001/api/Trips/search/'
+  //   return await new Promise<TripModel[]>((resolve, reject) => {
+  //     this.http.post<TripModel[]>(url, trip, {
+  //       headers: new HttpHeaders({ "Content-Type": "application/json" })
+  //     }).subscribe({
+  //       next: (res) => {
+  //         console.log(res);
+  //         resolve(res);
+  //       },
+  //       error: (err: HttpErrorResponse) => { console.error(err); reject(err) },
+  //     });
+  //   });
+
+  // }
 
 
 }

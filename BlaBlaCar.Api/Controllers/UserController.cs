@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Headers;
+using System.Security.Claims;
 using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.BL.Interfaces;
 using Microsoft.AspNetCore.Authorization;

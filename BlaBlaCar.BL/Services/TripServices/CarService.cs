@@ -11,6 +11,7 @@ using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace BlaBlaCar.BL.Services.TripServices
 {
@@ -21,15 +22,20 @@ namespace BlaBlaCar.BL.Services.TripServices
         private readonly IUserService _userService;
         private readonly ICarSeatsService _carSeatsService;
         private readonly IFileService _fileService;
+        private readonly HostSettings _hostSettings;
         public CarService(IUnitOfWork unitOfWork,
             IMapper mapper,
-           IUserService userService, ICarSeatsService carSeatsService, IFileService fileService)
+            IUserService userService, 
+            ICarSeatsService carSeatsService, 
+            IFileService fileService,
+            IOptionsSnapshot<HostSettings> hostSettings)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _userService = userService;
             _carSeatsService = carSeatsService;
             _fileService = fileService;
+            _hostSettings = hostSettings.Value;
         }
 
         public async Task<IEnumerable<CarDTO>> GetUserCarsAsync(ClaimsPrincipal principal)
@@ -37,12 +43,22 @@ namespace BlaBlaCar.BL.Services.TripServices
             var checkIfUserExist = await _userService.СheckIfUserExistsAsync(principal);
             if (!checkIfUserExist) throw new PermissionException("This user not authorized!");
 
-
-            var userId = principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value;
+            var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
             var userCars = _mapper.Map<IEnumerable<CarDTO>>
                 (await _unitOfWork.Cars.GetAsync(null, x=>
-                        x.Include(s=>s.Seats), 
-                    x => x.UserId == Guid.Parse((ReadOnlySpan<char>)userId)));
+                        x.Include(s=>s.Seats)
+                            .Include(x=>x.CarDocuments), 
+                    x => x.UserId == userId));
+
+            userCars = userCars.Select(c =>
+            {
+                c.CarDocuments = c.CarDocuments.Select(d =>
+                {
+                    d.TechPassport = _hostSettings.CurrentHost + d.TechPassport;
+                    return d;
+                }).ToList();
+                return c;
+            });
             return userCars;
         }
 

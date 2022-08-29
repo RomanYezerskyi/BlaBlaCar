@@ -4,7 +4,7 @@
         <button (click)="readNotifications()">Mark All as Read</button>
     </div>
     <div class="notification__list">
-        <div class="notification_data" *ngFor="let notif of notification">
+        <div class="notification_data" *ngFor="let notif of notifications">
             <div class="date">
                 <p *ngIf="notif.readNotificationStatus == 2" class="mark"></p>
                 <p>{{notif.createdAt | date:'MMM d, y, h:mm a'}}</p>

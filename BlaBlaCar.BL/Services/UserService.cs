@@ -122,7 +122,7 @@ namespace BlaBlaCar.BL.Services
             {
                 return await AddUserAsync(principal);
             }
-            return false;
+            return true;
         }
 
         public async Task<bool> AddUserAsync(ClaimsPrincipal principal)
