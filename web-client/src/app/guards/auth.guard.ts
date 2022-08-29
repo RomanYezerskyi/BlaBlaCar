@@ -11,7 +11,7 @@ export class AuthGuard implements CanActivate {
   constructor(private router: Router, private jwtHelper: JwtHelperService, private http: HttpClient) { }
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-
+    console.log(state.url);
     const token = localStorage.getItem("jwt");
     if (token && !this.jwtHelper.isTokenExpired(token)) {
       console.log(this.jwtHelper.decodeToken(token))
@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
     console.log("try refresh " + isRefreshSuccess);
     if (!isRefreshSuccess) {
       this.logOut();
-      this.router.navigate(["login"]);
+      this.router.navigate(["login"], { queryParams: { returnUrl: state.url } });
     }
     return isRefreshSuccess;
   }

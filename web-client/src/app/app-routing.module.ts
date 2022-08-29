@@ -31,7 +31,7 @@ const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'search', component: SearchTripComponent },
+  { path: 'search', component: SearchTripComponent, canActivate: [AuthGuard] },
 
   { path: 'trip-page-info/:id', component: TripPageInfoComponent, canActivate: [AuthGuard] },
   { path: 'home', component: HomeComponent  /*, canActivate: [AuthGuard]*/ },

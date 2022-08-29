@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoginModel } from '../../interfaces/login';
 import { AuthenticatedResponse } from '../../interfaces/authenticated-response';
 import { FormControl, NgForm, Validators } from '@angular/forms';
@@ -14,9 +14,11 @@ export class LoginComponent implements OnInit {
   credentials: LoginModel = { email: '', password: '' };
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   passwordFormControl = new FormControl('', [Validators.required]);
-  constructor(private router: Router, private http: HttpClient) { }
+  returnUrl: string | undefined;
+  constructor(private router: Router, private http: HttpClient, private route: ActivatedRoute,) { }
 
   ngOnInit(): void {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   login = (form: NgForm) => {
@@ -31,7 +33,7 @@ export class LoginComponent implements OnInit {
             localStorage.setItem("jwt", token);
             localStorage.setItem("refreshToken", refreshToken);
             this.invalidLogin = false;
-            this.router.navigate(["/"]);
+            this.router.navigateByUrl(this.returnUrl!);
           },
           error: (err: HttpErrorResponse) => this.invalidLogin = true
         })
