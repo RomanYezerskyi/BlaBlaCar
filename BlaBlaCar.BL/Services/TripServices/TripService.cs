@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Linq.Expressions;
+using System.Security.Claims;
 using AutoMapper;
 using BlaBlaCar.BL.DTOs.NotificationDTOs;
 using BlaBlaCar.BL.DTOs.TripDTOs;
@@ -55,7 +56,6 @@ namespace BlaBlaCar.BL.Services.TripServices
                 }
                 return x;
             }).ToList();
-
             trip.User.UserImg = _hostSettings.CurrentHost + trip.User.UserImg;
             trip.Car.CarDocuments = trip.Car.CarDocuments.Select(c =>
             {
@@ -121,29 +121,41 @@ namespace BlaBlaCar.BL.Services.TripServices
             return result;
         }
 
-        public async Task<IEnumerable<TripDTO>> SearchTripsAsync(SearchTripDTO model)
+        public async Task<SearchTripsResponseDTO> SearchTripsAsync(SearchTripDTO model)
         {
+            Expression<Func<Trip, bool>> tripFilter = x => x.StartPlace.Contains(model.StartPlace)
+                                                           && x.EndPlace.Contains(model.EndPlace)
+                                                           && x.StartTime.Date == model.StartTime.Date
+                                                           && x.AvailableSeats.Count(s =>
+                                                               x.TripUsers.All(u => u.SeatId != s.SeatId)) >=
+                                                           model.CountOfSeats;
             var trip = await _unitOfWork.Trips.GetAsync(
                 orderBy: null,
                 includes: x => x.Include(x => x.AvailableSeats)
                     .Include(x => x.TripUsers)
                     .Include(x=>x.User),
-                filter: x => x.StartPlace.Contains(model.StartPlace) 
-                             && x.EndPlace.Contains(model.EndPlace) 
-                             && x.StartTime.Date == model.StartTime.Date
-                             && x.AvailableSeats.Count(s=>x.TripUsers.All(u=>u.SeatId != s.SeatId)) >= model.CountOfSeats,
+                filter: tripFilter,
                 skip: model.Skip,
                 take: model.Take);
 
 
             trip = trip.Select(t =>
             {
-                t.User.UserImg = _hostSettings.CurrentHost + t.User.UserImg;
+                if(t.User.UserImg != null)
+                    t.User.UserImg = _hostSettings.CurrentHost + t.User.UserImg;
                 return t;
             });
 
-            var res = _mapper.Map<IEnumerable<Trip>, IEnumerable<TripDTO>>(trip);
-            return res;
+            var result = new SearchTripsResponseDTO()
+            {
+                Trips = _mapper.Map<IEnumerable<Trip>, IEnumerable<TripDTO>>(trip),
+            };
+            if (model.Skip == 0)
+            {
+                result.TotalTrips = await _unitOfWork.Trips.GetCountAsync(tripFilter);
+            }
+            //var res = _mapper.Map<IEnumerable<Trip>, IEnumerable<TripDTO>>(trip);
+            return result;
         }
 
         public async Task<bool> AddTripAsync(CreateTripDTO newTripModel, ClaimsPrincipal principal)

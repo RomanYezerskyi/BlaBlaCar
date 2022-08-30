@@ -24,8 +24,8 @@ namespace BlaBlaCar.DAL
         {
             IQueryable<TEntity> queryable = _context.Set<TEntity>();
 
-            queryable = skip == 0? queryable.Take(take) : queryable.Skip(skip).Take(take);
             queryable = filter is null ? queryable : queryable.Where(filter);
+            queryable = queryable.Skip(skip).Take(take);
             queryable = includes is null ? queryable : includes(queryable);
             queryable = orderBy is null ? queryable : orderBy(queryable);
 
@@ -36,10 +36,18 @@ namespace BlaBlaCar.DAL
             Expression<Func<TEntity, bool>> filter = null)
         {
             IQueryable<TEntity> queryable = _context.Set<TEntity>();
-            queryable = includes is null ? queryable : includes(queryable);
             queryable = filter is null ? queryable : queryable.Where(filter);
+            queryable = includes is null ? queryable : includes(queryable);
+            
 
             return await queryable.AsNoTracking().FirstOrDefaultAsync();
+        }
+        public async Task<int> GetCountAsync(Expression<Func<TEntity, bool>> filter)
+        {
+            IQueryable<TEntity> queryable = _context.Set<TEntity>();
+            queryable = filter is null ? queryable : queryable.Where(filter);
+
+            return await queryable.CountAsync();
         }
 
         public async Task InsertAsync(TEntity entity)

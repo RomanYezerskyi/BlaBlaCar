@@ -49,7 +49,7 @@ namespace BlaBlaCar.Api.Controllers
                     .SelectMany(x => x.Errors)
                     .Select(x => x.ErrorMessage)));
             var res = await _tripService.SearchTripsAsync(tripModel);
-            if(res.Any()) return Ok(res);
+            if(res.Trips.Any()) return Ok(res);
             return NoContent();
           
         }

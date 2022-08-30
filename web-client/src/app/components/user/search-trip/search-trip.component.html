@@ -15,7 +15,7 @@
     <h3>There are no trips yet :)</h3>
   </div> -->
   <!-- <div class="main-line"></div> -->
-  <div class="search_results" *ngIf="trips.length > 0">
+  <div class="search_results" *ngIf="trips.trips.length > 0">
     <div class="filters">
       <div class="filters__title">
         <h4>Sort by</h4>
@@ -24,7 +24,7 @@
       <p (click)="sort()">Найнижча ціна</p>
     </div>
     <div class="items">
-      <div class="search_item" *ngFor="let trip of trips" (click)="navigateToTripPage(trip.id)">
+      <div class="search_item" *ngFor="let trip of trips.trips" (click)="navigateToTripPage(trip.id)">
         <div class="header">
           <div class="time">
             <p>{{trip.startTime | date:'hh:mm'}}</p>

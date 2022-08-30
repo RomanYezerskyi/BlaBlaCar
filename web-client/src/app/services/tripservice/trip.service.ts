@@ -4,6 +4,7 @@ import { map, Observable } from 'rxjs';
 import { AddTripModel } from 'src/app/interfaces/add-trip';
 import { BookedTripModel } from 'src/app/interfaces/booked-trip';
 import { SearchTripModel } from 'src/app/interfaces/search-trip';
+import { SearchTripsResponseModel } from 'src/app/interfaces/search-trips-response-model';
 import { TripModel } from 'src/app/interfaces/trip';
 import { TripUserModel } from 'src/app/interfaces/trip-user-model';
 
@@ -46,9 +47,9 @@ export class TripService {
     const url = 'https://localhost:6001/api/Trips/'
     return this.http.get<TripModel>(url + tripId);
   }
-  SearchTrip(trip: SearchTripModel): Observable<TripModel[]> {
+  SearchTrip(trip: SearchTripModel): Observable<SearchTripsResponseModel> {
     const url = 'https://localhost:6001/api/Trips/search/'
-    return this.http.post<TripModel[]>(url, trip, {
+    return this.http.post<SearchTripsResponseModel>(url, trip, {
       headers: new HttpHeaders({ "Content-Type": "application/json" })
     });
   }

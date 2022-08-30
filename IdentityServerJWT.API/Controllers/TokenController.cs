@@ -12,12 +12,10 @@ namespace IdentityServerJWT.API.Controllers
     [ApiController]
     public class TokenController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITokenService _tokenService;
 
-        public TokenController(UserManager<ApplicationUser> userManager, ITokenService tokenService)
+        public TokenController(ITokenService tokenService)
         {
-            _userManager = userManager;
             _tokenService = tokenService;
         }
 

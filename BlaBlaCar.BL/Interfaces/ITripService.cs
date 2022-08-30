@@ -7,7 +7,7 @@ namespace BlaBlaCar.BL.Interfaces
     {
         Task<TripDTO> GetTripAsync(Guid id);
         Task<IEnumerable<GetTripWithTripUsersDTO>> GetUserTripsAsync(ClaimsPrincipal principal);
-        Task<IEnumerable<TripDTO>> SearchTripsAsync(SearchTripDTO model);
+        Task<SearchTripsResponseDTO> SearchTripsAsync(SearchTripDTO model);
         Task<bool> AddTripAsync(CreateTripDTO tripModel, ClaimsPrincipal principal);
         Task<bool> UpdateTripAsync(TripDTO tripModel);
         Task<bool> DeleteTripAsync(Guid id, ClaimsPrincipal principal);

@@ -15,16 +15,9 @@ namespace IdentityServerJWT.API.Controllers
     [Authorize]
     public class UserController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
-
         private readonly IUserService _userService;
-        public UserController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IUserService userService)
+        public UserController(IUserService userService)
         {
-            _signInManager = signInManager;
-            _userManager = userManager;
-            _roleManager = roleManager;
             _userService = userService;
         }
 
