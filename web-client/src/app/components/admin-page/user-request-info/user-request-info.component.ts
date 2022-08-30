@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CarStatus } from 'src/app/interfaces/car-status';
 import { UserModel } from 'src/app/interfaces/user-model';
 import { UserStatus } from 'src/app/interfaces/user-status';
+import { AdminService } from 'src/app/services/admin/admin.service';
 
 export enum Menu {
   User = 1,
@@ -31,13 +32,13 @@ export class UserRequestInfoComponent implements OnInit {
   result = '';
   page = 0;
   constructor(private route: ActivatedRoute, private http: HttpClient,
-    private sanitizer: DomSanitizer) { }
+    private sanitizer: DomSanitizer, private adminService: AdminService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.userId = params['id'];
     });
-    this.getUser();
+    this.getUserRequest();
     // this.route.queryParams.subscribe(params => {
     //   this.menu = params['type'];
     // });
@@ -53,21 +54,26 @@ export class UserRequestInfoComponent implements OnInit {
   }
 
   sanitaizeImg(img: string): SafeUrl {
-    let file = 'https://localhost:6001/' + img;
-    console.log(file);
-    return this.sanitizer.bypassSecurityTrustUrl(file);
+    return this.sanitizer.bypassSecurityTrustUrl(img);
   }
 
 
-  getUser = () => {
-    const url = 'https://localhost:6001/api/Admin/';
-    this.http.get(url + this.userId)
-      .subscribe({
-        next: (res: any) => {
-          this.user = res as UserModel;
-          console.log(this.user);
-        },
-        error: (err: HttpErrorResponse) => console.error(err),
-      });
+  getUserRequest = () => {
+    this.adminService.getUserRequest(this.userId).pipe().subscribe(
+      response => {
+        this.user = response;
+        console.log(response);
+      },
+      (error: HttpErrorResponse) => { console.error(error.error); }
+    );
+    // const url = 'https://localhost:6001/api/Admin/';
+    // this.http.get(url + this.userId)
+    //   .subscribe({
+    //     next: (res: any) => {
+    //       this.user = res as UserModel;
+    //       console.log(this.user);
+    //     },
+    //     error: (err: HttpErrorResponse) => console.error(err),
+    //   });
   }
 }

@@ -24,17 +24,17 @@ namespace BlaBlaCar.BL.Services.NotificationServices
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<GetNotificationDTO>> GetUserNotificationsAsync(ClaimsPrincipal principal)
+        public async Task<IEnumerable<GetNotificationsDTO>> GetUserNotificationsAsync(ClaimsPrincipal principal)
         {
             var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
-            var notifications = _mapper.Map<IEnumerable<GetNotificationDTO>>(
+            var notifications = _mapper.Map<IEnumerable<GetNotificationsDTO>>(
                 await _unitOfWork.Notifications.GetAsync(
                     x=>x.OrderByDescending(x=>x.CreatedAt),
                     null, x => x.UserId == userId));
             if (!notifications.Any())
-                throw new NotFoundException(nameof(NotificationDTO));
+                throw new NotFoundException(nameof(NotificationsDTO));
 
-            var readNotifications = _mapper.Map<IEnumerable<ReadNotificationDTO>>(
+            var readNotifications = _mapper.Map<IEnumerable<ReadNotificationsDTO>>(
                 await _unitOfWork.ReadNotifications.GetAsync(null, null, x => x.UserId == userId));
 
             notifications = notifications.Select(n =>
@@ -47,7 +47,7 @@ namespace BlaBlaCar.BL.Services.NotificationServices
         }
         public async Task<bool> CreateNotificationAsync(CreateNotificationDTO notificationModel, ClaimsPrincipal principal)
         {
-            var notification = _mapper.Map<Notification>(notificationModel);
+            var notification = _mapper.Map<Notifications>(notificationModel);
 
             await _unitOfWork.Notifications.InsertAsync(notification);
 
@@ -57,19 +57,19 @@ namespace BlaBlaCar.BL.Services.NotificationServices
 
         public async Task GenerateNotificationAsync(CreateNotificationDTO notificationModel)
         {
-            var notification = _mapper.Map<Notification>(notificationModel);
+            var notification = _mapper.Map<Notifications>(notificationModel);
 
             await _unitOfWork.Notifications.InsertAsync(notification);
         }
 
-        public async Task<bool> ReadAllNotificationAsync(IEnumerable<NotificationDTO> notification, ClaimsPrincipal principal)
+        public async Task<bool> ReadAllNotificationAsync(IEnumerable<NotificationsDTO> notification, ClaimsPrincipal principal)
         {
-            var readNotifications = new List<ReadNotificationDTO>();
+            var readNotifications = new List<ReadNotificationsDTO>();
 
             readNotifications.AddRange(
-                notification.Select(n => new ReadNotificationDTO() { NotificationId = n.Id, UserId = n.UserId }));
+                notification.Select(n => new ReadNotificationsDTO() { NotificationId = n.Id, UserId = n.UserId }));
 
-            await _unitOfWork.ReadNotifications.InsertRangeAsync(_mapper.Map<IEnumerable<ReadNotification>>(readNotifications));
+            await _unitOfWork.ReadNotifications.InsertRangeAsync(_mapper.Map<IEnumerable<ReadNotifications>>(readNotifications));
 
             var createdBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
             return await _unitOfWork.SaveAsync(createdBy);

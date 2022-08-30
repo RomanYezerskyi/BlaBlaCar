@@ -7,6 +7,7 @@ import { TripModel } from 'src/app/interfaces/trip';
 import { CarModel } from "src/app/interfaces/car";
 import { AvailableSeatsType } from 'src/app/enums/available-seats-type';
 import { SeatModel } from 'src/app/interfaces/seat';
+import { TripService } from 'src/app/services/tripservice/trip.service';
 @Component({
   selector: 'app-dialog-booking-confirmation',
   templateUrl: './dialog-booking-confirmation.component.html',
@@ -34,7 +35,7 @@ export class DialogBookingConfirmationComponent implements OnInit {
   onSubmitReason = new EventEmitter();
   constructor(
     private dialogRef: MatDialogRef<DialogBookingConfirmationComponent>, private http: HttpClient,
-    @Inject(MAT_DIALOG_DATA) data: any,) {
+    @Inject(MAT_DIALOG_DATA) data: any, private tripService: TripService) {
     this.trip = data.trip as TripModel;
 
     this.trip.car.seats.forEach(x => {
@@ -64,23 +65,31 @@ export class DialogBookingConfirmationComponent implements OnInit {
       alert("book" + this.requestedSeats);
       return;
     }
-    const url = 'https://localhost:6001/api/BookedTrip'
-    const res = await new Promise<any>((resolve, reject) => {
-      this.http.post(url, this.bookedtrip, {
-        headers: new HttpHeaders({ "Content-Type": "application/json" })
-      })
-        .subscribe({
-          next: (res: any) => {
-            this.dialogRef.close();
-            alert(res.result);
-            resolve(res);
-          },
-          error: (err: HttpErrorResponse) => {
-            alert(err.error)
-            reject(err);
-          },
-        });
-    });
+    this.tripService.bookSeatsInTrip(this.bookedtrip).pipe().subscribe(
+      response => {
+        this.dialogRef.close();
+        alert(response.result);
+        console.log(response);
+      },
+      (error: HttpErrorResponse) => { alert(error.error); console.log(error.error); }
+    )
+    // const url = 'https://localhost:6001/api/BookedTrip'
+    // const res = await new Promise<any>((resolve, reject) => {
+    //   this.http.post(url, this.bookedtrip, {
+    //     headers: new HttpHeaders({ "Content-Type": "application/json" })
+    //   })
+    //     .subscribe({
+    //       next: (res: any) => {
+    //         this.dialogRef.close();
+    //         alert(res.result);
+    //         resolve(res);
+    //       },
+    //       error: (err: HttpErrorResponse) => {
+    //         alert(err.error)
+    //         reject(err);
+    //       },
+    //     });
+    // });
     this.onSubmitReason.emit();
   }
   close() {

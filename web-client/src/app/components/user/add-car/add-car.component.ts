@@ -4,6 +4,7 @@ import { FormControl, NgForm, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CarType } from 'src/app/enums/car-type';
 import { AddNewCarModel } from 'src/app/interfaces/addnew-car';
+import { CarService } from 'src/app/services/carservice/car.service';
 
 @Component({
   selector: 'app-add-car',
@@ -23,7 +24,7 @@ export class AddCarComponent implements OnInit {
   CarFormControl = new FormControl('', [Validators.required]);
   fileControl: FormControl;
   public files: any;
-  constructor(private http: HttpClient, private sant: DomSanitizer,) {
+  constructor(private http: HttpClient, private sant: DomSanitizer, private carService: CarService) {
     this.fileControl = new FormControl(this.files, [
       Validators.required,
     ])
@@ -50,18 +51,21 @@ export class AddCarComponent implements OnInit {
       this.formData.append("ModelName", this.newCar.modelName);
       this.formData.append("RegistNum", this.newCar.registNum);
       this.formData.append("CountOfSeats", this.newCar.countOfSeats.toString());
-      this.http.post("https://localhost:6001/api/Car", this.formData)
-        .subscribe({
-          next: (res) => {
-            console.log(res)
-          },
-          error: (err: HttpErrorResponse) => console.error(err)
-        })
+      this.carService.addCar(this.formData).pipe().subscribe(
+        response => {
+          console.log(response);
+        },
+        (error: HttpErrorResponse) => { console.error(error.error); }
+      );
+      //   this.http.post("https://localhost:6001/api/Car", this.formData)
+      //     .subscribe({
+      //       next: (res) => {
+      //         console.log(res)
+      //       },
+      //       error: (err: HttpErrorResponse) => console.error(err)
+      //     })
     }
   }
+}
 
-}
-function MaxSizeValidator(arg0: number): import("@angular/forms").ValidatorFn {
-  throw new Error('Function not implemented.');
-}
 

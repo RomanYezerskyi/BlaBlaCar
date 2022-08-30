@@ -4,6 +4,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { CarStatus } from 'src/app/interfaces/car-status';
 import { UserModel } from 'src/app/interfaces/user-model';
 import { UserStatus } from 'src/app/interfaces/user-status';
+import { AdminService } from 'src/app/services/admin/admin.service';
 
 @Component({
   selector: 'app-main-info',
@@ -19,7 +20,7 @@ export class MainInfoComponent implements OnInit {
     roles: [], userStatus: UserStatus.WithoutCar, cars: [] = []
   };
 
-  constructor(private http: HttpClient, private sanitizer: DomSanitizer) { }
+  constructor(private http: HttpClient, private sanitizer: DomSanitizer, private adminService: AdminService) { }
 
   ngOnInit(): void {
   }
@@ -31,14 +32,21 @@ export class MainInfoComponent implements OnInit {
       status: status,
       userId: this.user.id
     };
-    const url = 'https://localhost:6001/api/Admin/user/status';
-    this.http.post(url, newStatus)
-      .subscribe({
-        next: (res: any) => {
-          window.alert(res);
-          console.log(res);
-        },
-        error: (err: HttpErrorResponse) => console.error(err),
-      });
+    this.adminService.changeUserDrivingLicenseStatus(newStatus).pipe().subscribe(
+      response => {
+        window.alert(response);
+        console.log(response);
+      },
+      (error: HttpErrorResponse) => { console.error(error.error); }
+    );
+    // const url = 'https://localhost:6001/api/Admin/user/status';
+    // this.http.post(url, newStatus)
+    //   .subscribe({
+    //     next: (res: any) => {
+    //       window.alert(res);
+    //       console.log(res);
+    //     },
+    //     error: (err: HttpErrorResponse) => console.error(err),
+    //   });
   }
 }

@@ -10,14 +10,13 @@ namespace BlaBlaCar.BL.DTOs.TripDTOs
         [Required]
         public string EndPlace { get; set; }
         [Required]
-        public DateTime StartTime { get; set; }
+        public DateTimeOffset StartTime { get; set; }
         [Required]
-        public DateTime EndTime { get; set; }
+        public DateTimeOffset EndTime { get; set; }
         [Required]
         public int PricePerSeat { get; set; }
         [Required]
-        public string Description { get; set; }
-        [Required]
+        public string? Description { get; set; }
         public int CountOfSeats { get; set; }
         [Required]
         public Guid CarId { get; set; }

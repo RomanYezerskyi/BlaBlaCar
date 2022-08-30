@@ -16,8 +16,6 @@ import { AddCarComponent } from './components/user/add-car/add-car.component';
 import { RequestDrivingLicenseComponent } from './components/user/request-driving-license/request-driving-license.component';
 import { UsersRequestsComponent } from './components/admin-page/users-requests/users-requests.component';
 import { UserRequestInfoComponent } from './components/admin-page/user-request-info/user-request-info.component';
-import { PendingComponent } from './components/admin-page/users-requests/pending/pending.component';
-import { MainInfoComponent } from './components/admin-page/user-request-info/main-info/main-info.component';
 import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
 import { UserBookedTripsComponent } from './components/user/user-information/user-booked-trips/user-booked-trips.component';
 import { UserInformationComponent } from './components/user/user-information/user-information.component';

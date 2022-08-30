@@ -28,9 +28,7 @@ import { UserRequestInfoComponent } from './components/admin-page/user-request-i
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { PendingComponent } from './components/admin-page/users-requests/pending/pending.component';
 import { MainInfoComponent } from './components/admin-page/user-request-info/main-info/main-info.component';
-import { DrivingLicenseRequestComponent } from './components/admin-page/user-request-info/driving-license-request/driving-license-request.component';
 import { CarRequestsComponent } from './components/admin-page/user-request-info/car-requests/car-requests.component';
 import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
 import { UserBookedTripsComponent } from './components/user/user-information/user-booked-trips/user-booked-trips.component';
@@ -70,9 +68,7 @@ export function tokenGetter() {
     RolesComponent,
     UsersRequestsComponent,
     UserRequestInfoComponent,
-    PendingComponent,
     MainInfoComponent,
-    DrivingLicenseRequestComponent,
     CarRequestsComponent,
     UserProfileComponent,
     UserBookedTripsComponent,

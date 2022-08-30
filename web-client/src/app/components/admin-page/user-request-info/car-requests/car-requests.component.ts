@@ -1,9 +1,11 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { AddNewCarModel } from 'src/app/interfaces/addnew-car';
 import { CarStatus } from 'src/app/interfaces/car-status';
 import { UserModel } from 'src/app/interfaces/user-model';
 import { UserStatus } from 'src/app/interfaces/user-status';
+import { AdminService } from 'src/app/services/admin/admin.service';
 
 @Component({
   selector: 'app-car-requests',
@@ -19,7 +21,7 @@ export class CarRequestsComponent implements OnInit {
     roles: [], userStatus: UserStatus.WithoutCar, cars: [] = []
   };
   @Output() someOutput: EventEmitter<any> = new EventEmitter<any>;
-  constructor(private http: HttpClient, private sanitizer: DomSanitizer) { }
+  constructor(private http: HttpClient, private sanitizer: DomSanitizer, private adminService: AdminService) { }
 
   ngOnInit(): void {
 
@@ -32,13 +34,20 @@ export class CarRequestsComponent implements OnInit {
       status: status,
       carId: carId,
     };
-    const url = 'https://localhost:6001/api/Admin/car/status';
-    this.http.post(url, newStatus)
-      .subscribe({
-        next: (res: any) => {
-          this.someOutput.emit("");
-        },
-        error: (err: HttpErrorResponse) => console.error(err),
-      });
+    this.adminService.changeCarDocumentsStatus(newStatus).pipe().subscribe(
+      response => {
+        this.someOutput.emit("");
+        console.log(response);
+      },
+      (error: HttpErrorResponse) => { console.error(error.error); }
+    );
+    // const url = 'https://localhost:6001/api/Admin/car/status';
+    // this.http.post(url, newStatus)
+    //   .subscribe({
+    //     next: (res: any) => {
+    //       this.someOutput.emit("");
+    //     },
+    //     error: (err: HttpErrorResponse) => console.error(err),
+    //   });
   }
 }

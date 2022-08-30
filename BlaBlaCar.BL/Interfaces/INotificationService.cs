@@ -10,9 +10,9 @@ namespace BlaBlaCar.BL.Interfaces
 {
     public interface INotificationService
     {
-        Task<IEnumerable<GetNotificationDTO>> GetUserNotificationsAsync(ClaimsPrincipal principal);
+        Task<IEnumerable<GetNotificationsDTO>> GetUserNotificationsAsync(ClaimsPrincipal principal);
         Task<bool> CreateNotificationAsync(CreateNotificationDTO notificationModel, ClaimsPrincipal principal);
         Task GenerateNotificationAsync(CreateNotificationDTO notificationModel);
-        Task<bool> ReadAllNotificationAsync(IEnumerable<NotificationDTO> notification, ClaimsPrincipal principal);
+        Task<bool> ReadAllNotificationAsync(IEnumerable<NotificationsDTO> notification, ClaimsPrincipal principal);
     }
 }

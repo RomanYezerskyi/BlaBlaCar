@@ -11,6 +11,7 @@ namespace BlaBlaCar.DAL.Interfaces
         Task<TEntity> GetAsync(
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> includes = null,
             Expression<Func<TEntity, bool>> filter = null);
+        Task<int> GetCountAsync(Expression<Func<TEntity, bool>> filter);
         Task InsertAsync(TEntity entity);
         Task InsertRangeAsync(IEnumerable<TEntity> entities);
         void Update(TEntity entityToUpdate);

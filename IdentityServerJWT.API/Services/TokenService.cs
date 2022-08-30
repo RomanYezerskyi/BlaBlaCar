@@ -31,12 +31,12 @@ namespace IdentityServerJWT.API.Services
             var userEmail = principal.Identity.Name;
             var user = await _userManager.FindByEmailAsync(userEmail);
 
-            if (user is null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+            if (user is null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTimeOffset.Now)
                 throw new Exception("Invalid client request");
             var newAccessToken = GenerateAccessTokenTokenAsync(principal.Claims);
             var newRefreshToken = GenerateRefreshTokenAsync();
             user.RefreshToken = newRefreshToken;
-            user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(_jwtSettings.RefreshInMinutes);
+            user.RefreshTokenExpiryTime = DateTimeOffset.Now.AddMinutes(_jwtSettings.RefreshInMinutes);
             await _userManager.UpdateAsync(user);
 
             return new AuthenticatedResponse()

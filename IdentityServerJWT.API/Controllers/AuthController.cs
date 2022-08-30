@@ -15,15 +15,11 @@ namespace IdentityServerJWT.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly AuthorizationService _authorizationService;
         public AuthController(
-            UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager, AuthorizationService authorizationService)
         {
-            _userManager = userManager;
             _signInManager = signInManager;
             _authorizationService = authorizationService;
         }

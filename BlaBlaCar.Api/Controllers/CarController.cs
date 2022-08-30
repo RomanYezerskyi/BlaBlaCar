@@ -22,10 +22,10 @@ namespace BlaBlaCar.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUserCars()
         {
-            
             var res = await _carService.GetUserCarsAsync(User);
-            return Ok(res);
-            
+            if(res.Any())
+                return Ok(res);
+            return BadRequest("This user don't have a cars!");
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCarById(Guid id)

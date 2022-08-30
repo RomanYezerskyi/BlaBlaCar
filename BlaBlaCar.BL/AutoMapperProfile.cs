@@ -35,11 +35,11 @@ namespace BlaBlaCar.BL
             CreateMap<CarDocuments, CarDocumentDTO>().ReverseMap();
             CreateMap<UserDocuments, UserDocumentDTO>().ReverseMap();
             
-            CreateMap<Notification, NotificationDTO>().ReverseMap();
-            CreateMap<ReadNotification, ReadNotificationDTO>().ReverseMap();
-            CreateMap<Notification, CreateNotificationDTO>().ReverseMap();
-            CreateMap<ReadNotification, CreateNotificationDTO>();
-            CreateMap<Notification, GetNotificationDTO>().ReverseMap();
+            CreateMap<Notifications, NotificationsDTO>().ReverseMap();
+            CreateMap<ReadNotifications, ReadNotificationsDTO>().ReverseMap();
+            CreateMap<Notifications, CreateNotificationDTO>().ReverseMap();
+            CreateMap<ReadNotifications, CreateNotificationDTO>();
+            CreateMap<Notifications, GetNotificationsDTO>().ReverseMap();
 
         }
     }

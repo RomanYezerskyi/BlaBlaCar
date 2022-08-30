@@ -2,11 +2,11 @@
 
 namespace BlaBlaCar.BL.DTOs.NotificationDTOs
 {
-    public class ReadNotificationDTO
+    public class ReadNotificationsDTO
     {
         public Guid Id { get; set; }
         public Guid NotificationId { get; set; }
-        public NotificationDTO Notification { get; set; }
+        public NotificationsDTO Notification { get; set; }
         public Guid UserId { get; set; }
         public UserDTO User { get; set; }
     }

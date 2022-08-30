@@ -1,6 +1,6 @@
 <div class="wrapper">
     <div class="container">
-        <div class="cars_list" *ngFor="let car of user.cars">
+        <div class="cars_list" *ngFor="let car of cars">
             <div class="status">
                 <i *ngIf="car.carStatus == carStatus.Confirmed" class="material-icons">verified</i>
                 <i *ngIf="car.carStatus == carStatus.Pending" class="material-icons">pending_actions</i>

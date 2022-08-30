@@ -25,7 +25,7 @@ namespace BlaBlaCar.API.Controllers
            
         }
         [HttpPost]
-        public async Task<IActionResult> ReadUserNotification(IEnumerable<NotificationDTO> notification)
+        public async Task<IActionResult> ReadUserNotification(IEnumerable<NotificationsDTO> notification)
         {
            
             if (!ModelState.IsValid)

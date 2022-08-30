@@ -18,15 +18,4 @@ export class UserInformationComponent implements OnInit {
   ngOnInit(): void {
     // this.getUser();
   }
-  getUser = () => {
-    const url = 'https://localhost:6001/api/User';
-    this.http.get(url)
-      .subscribe({
-        next: (res: any) => {
-          this.user = res as UserModel;
-          console.log(res);
-        },
-        error: (err: HttpErrorResponse) => console.error(err),
-      });
-  }
 }

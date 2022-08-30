@@ -6,6 +6,7 @@ import { CarType } from 'src/app/enums/car-type';
 import { AddAvailableSeats } from 'src/app/interfaces/add-available-seats';
 import { AddTripModel } from 'src/app/interfaces/add-trip';
 import { CarModel } from 'src/app/interfaces/car';
+import { TripService } from 'src/app/services/tripservice/trip.service';
 @Component({
   selector: 'app-add-available-seats',
   templateUrl: './add-available-seats.component.html',
@@ -28,7 +29,7 @@ export class AddAvailableSeatsComponent implements OnInit {
   @Output() tripOutput: EventEmitter<AddTripModel> = new EventEmitter<AddTripModel>;
   userCar: CarModel = { id: 0, carType: -1, modelName: '', registNum: '', seats: [], carStatus: -1, carDocuments: [] };
   private readonly url = 'https://localhost:6001/api/Trips/';
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private tripService: TripService) { }
 
   async ngOnInit() {
     // this.trip = history.state;
@@ -83,12 +84,18 @@ export class AddAvailableSeatsComponent implements OnInit {
         alert("Add cars!");
         return;
       }
-      console.log(this.trip);
-      const url = 'https://localhost:6001/api/Trips/'
-      this.http.post(url, this.trip)
-        .subscribe((res) => {
-          console.error(res);
-        })
+      this.tripService.addNewtrip(this.trip).pipe().subscribe(
+        response => {
+          console.log(response)
+        },
+        (error: HttpErrorResponse) => { console.error(error.error); }
+      )
+      // console.log(this.trip);
+      // const url = 'https://localhost:6001/api/Trips/'
+      // this.http.post(url, this.trip)
+      //   .subscribe((res) => {
+      //     console.error(res);
+      //   })
     }
   }
 

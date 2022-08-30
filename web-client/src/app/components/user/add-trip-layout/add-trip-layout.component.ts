@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AddTripModel } from 'src/app/interfaces/add-trip';
 import { CarModel } from 'src/app/interfaces/car';
+import { CarService } from 'src/app/services/carservice/car.service';
 
 export enum Menu {
   Info = 1,
@@ -29,10 +30,11 @@ export class AddTripLayoutComponent implements OnInit {
   userCars: CarModel[] = [];
   page = false;
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private carService: CarService) { }
 
   async ngOnInit() {
-    this.userCars = await this.getUserCars();
+    this.getUserCars();
+    console.log(this.userCars);
   }
 
   check = Menu.Info;
@@ -47,14 +49,22 @@ export class AddTripLayoutComponent implements OnInit {
   getPagePut(event: number) {
     this.check = Menu.Car;
   }
-  async getUserCars(): Promise<CarModel[]> {
-    const userCar = await new Promise<CarModel[]>((resolve, reject) => {
-      this.http.get<CarModel[]>("https://localhost:6001/api/Car/")
-        .subscribe({
-          next: (res) => resolve(res),
-          error: (_) => reject(_)
-        })
-    });
-    return userCar
+  getUserCars() {
+    this.carService.getUserCars().pipe().subscribe(
+      response => {
+        this.userCars = response;
+        console.log(response);
+      },
+      (error: HttpErrorResponse) => { console.error(error.error); }
+    );
+
+    // const userCar = await new Promise<CarModel[]>((resolve, reject) => {
+    //   this.http.get<CarModel[]>("https://localhost:6001/api/Car/")
+    //     .subscribe({
+    //       next: (res) => resolve(res),
+    //       error: (_) => reject(_)
+    //     })
+    // });
+    // return userCar
   }
 }

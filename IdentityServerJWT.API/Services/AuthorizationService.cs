@@ -62,7 +62,7 @@ namespace IdentityServerJWT.API.Services
                 var refreshToken = _tokenService.GenerateRefreshTokenAsync();
 
                 user.RefreshToken = refreshToken;
-                user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(_jwtSettings.RefreshInMinutes);
+                user.RefreshTokenExpiryTime = DateTimeOffset.Now.AddMinutes(_jwtSettings.RefreshInMinutes);
 
                 await _userManager.UpdateAsync(user);
                 
