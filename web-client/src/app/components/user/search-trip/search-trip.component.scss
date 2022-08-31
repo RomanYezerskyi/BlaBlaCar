@@ -81,14 +81,14 @@
 .search_results {
     width: 60%;
     margin: auto;
-    min-height: 57.5vh;
+    // min-height: 57.5vh;
     // border: #000 1px solid;
     padding: 49px 40px;
     padding-bottom: 70px;
     border-radius: 10px;
     display: flex;
     flex-flow: row wrap;
-    background-color: #f7fafc;
+
     // box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%) !important;
     // justify-content: space-between;
 }
