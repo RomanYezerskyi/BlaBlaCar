@@ -4,7 +4,7 @@ import { CarModel } from "./car";
 import { TripModel } from "./trip";
 import { UserModel } from "./user-model";
 
-export interface SearchTripsResponseModel {
+export interface TripsResponseModel {
     trips: TripModel[],
     totalTrips: number
 }

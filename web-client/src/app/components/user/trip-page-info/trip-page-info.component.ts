@@ -7,6 +7,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CarModel } from 'src/app/interfaces/car';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TripService } from 'src/app/services/tripservice/trip.service';
+import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
 @Component({
 	selector: 'app-trip-page-info',
 	templateUrl: './trip-page-info.component.html',
@@ -33,7 +34,7 @@ export class TripPageInfoComponent implements OnInit {
 	};
 
 	constructor(private route: ActivatedRoute, private http: HttpClient,
-		private dialog: MatDialog, private sanitizer: DomSanitizer, private tripService: TripService) { }
+		private dialog: MatDialog, private sanitizer: DomSanitizer, private tripService: TripService, private imgSanitaze: ImgSanitizerService) { }
 
 	ngOnInit(): void {
 		this.route.params.subscribe(params => {
@@ -44,8 +45,8 @@ export class TripPageInfoComponent implements OnInit {
 		});
 		this.searchData();
 	}
-	sanitaizeImg(img: string): SafeUrl {
-		return this.sanitizer.bypassSecurityTrustUrl(img);
+	sanitizeUserImg(img: string): SafeUrl {
+		return this.imgSanitaze.sanitiizeUserImg(img);
 	}
 	private readonly url = 'https://localhost:6001/api/Trips/';
 	searchData = () => {
@@ -56,14 +57,6 @@ export class TripPageInfoComponent implements OnInit {
 			},
 			(error: HttpErrorResponse) => { console.log(error.error); }
 		);
-		// this.http.get(this.url + this.id)
-		// 	.subscribe({
-		// 		next: (res) => {
-		// 			this.data = res as TripModel;
-		// 			console.log(this.data);
-		// 		},
-		// 		error: (err: HttpErrorResponse) => console.error(err),
-		// 	});
 	}
 
 

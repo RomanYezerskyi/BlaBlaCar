@@ -6,6 +6,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { UserModel } from 'src/app/interfaces/user-model';
 import { UserStatus } from 'src/app/interfaces/user-status';
+import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
 import { PasswordValidatorService } from 'src/app/services/password-validator/password-validator.service';
 import { UserService } from 'src/app/services/userservice/user.service';
 
@@ -30,9 +31,13 @@ export class UserProfileComponent implements OnInit {
   newPasswordModel = { userId: '', currentPassword: '', newPassword: '' };
   userDataForm: FormGroup = new FormGroup({});
   form: FormGroup = new FormGroup({});
-  constructor(private http: HttpClient, private router: Router, private sanitizer: DomSanitizer,
-    private dialogRef: MatDialogRef<UserProfileComponent>, @Inject(MAT_DIALOG_DATA) data: any, private fb: FormBuilder,
-    private validator: PasswordValidatorService, private userService: UserService) {
+  constructor(
+    private imgSanitaze: ImgSanitizerService,
+    private dialogRef: MatDialogRef<UserProfileComponent>,
+    @Inject(MAT_DIALOG_DATA) data: any,
+    private fb: FormBuilder,
+    private validator: PasswordValidatorService,
+    private userService: UserService) {
     this.userDataForm = fb.group({
       userName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
@@ -102,8 +107,8 @@ export class UserProfileComponent implements OnInit {
       this.imagePath = reader.result;
     }
   }
-  sanitaizeImg(img: string): SafeUrl {
-    return this.sanitizer.bypassSecurityTrustUrl(img);
+  sanitizeUserImg(img: string): SafeUrl {
+    return this.imgSanitaze.sanitiizeUserImg(img);
   }
   close() {
     this.dialogRef.close();

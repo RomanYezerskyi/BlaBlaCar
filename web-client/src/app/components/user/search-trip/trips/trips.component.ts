@@ -4,7 +4,8 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TripOrderBy } from 'src/app/enums/trip-order-by';
 import { SearchTripModel } from 'src/app/interfaces/search-trip';
-import { SearchTripsResponseModel } from 'src/app/interfaces/search-trips-response-model';
+import { TripsResponseModel } from 'src/app/interfaces/trips-response-model';
+import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
 import { TripService } from 'src/app/services/tripservice/trip.service';
 
 @Component({
@@ -13,7 +14,7 @@ import { TripService } from 'src/app/services/tripservice/trip.service';
   styleUrls: ['./trips.component.scss']
 })
 export class TripsComponent implements OnInit {
-  trips: SearchTripsResponseModel = {
+  trips: TripsResponseModel = {
     trips: [],
     totalTrips: 0
   }
@@ -30,7 +31,12 @@ export class TripsComponent implements OnInit {
   isTrips = true;
   isSpinner = false;
   public isFullListDisplayed: boolean = false;
-  constructor(private router: Router, private sanitizer: DomSanitizer, private route: ActivatedRoute, private tripService: TripService) {
+  constructor(
+    private router: Router,
+    private sanitizer: DomSanitizer,
+    private route: ActivatedRoute,
+    private tripService: TripService,
+    private imgSanitaze: ImgSanitizerService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
@@ -55,10 +61,8 @@ export class TripsComponent implements OnInit {
 
     window.open(url, '_blank');
   }
-  sanitaizeImg(img: string): SafeUrl | undefined {
-    if (img != null)
-      return this.sanitizer.bypassSecurityTrustUrl(img);
-    return undefined;
+  sanitizeUserImg(img: string): SafeUrl {
+    return this.imgSanitaze.sanitiizeUserImg(img);
   }
   onScroll() {
     this.Skip += this.Take;

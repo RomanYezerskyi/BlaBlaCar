@@ -2,11 +2,12 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { SearchTripsResponseModel } from 'src/app/interfaces/search-trips-response-model';
+import { TripsResponseModel } from 'src/app/interfaces/trips-response-model';
 import { TripModel } from 'src/app/interfaces/trip';
 import { TripUserModel } from 'src/app/interfaces/trip-user-model';
 import { UserTrips, UserTripsResponse } from 'src/app/interfaces/user-trips';
 import { TripService } from 'src/app/services/tripservice/trip.service';
+import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
 
 @Component({
   selector: 'app-user-trips',
@@ -26,16 +27,15 @@ export class UserTripsComponent implements OnInit {
   totalTrips = 0;
   private Skip: number = 0;
   private Take: number = 5;
-  constructor(private http: HttpClient,
-    private router: Router,
-    private sanitizer: DomSanitizer,
+  constructor(
+    private imgSanitaze: ImgSanitizerService,
     private tripService: TripService) { }
 
   ngOnInit(): void {
     this.getUserTrips();
   }
-  sanitaizeImg(img: string): SafeUrl {
-    return this.sanitizer.bypassSecurityTrustUrl(img);
+  sanitizeUserImg(img: string): SafeUrl {
+    return this.imgSanitaze.sanitiizeUserImg(img);
   }
   onScroll() {
 

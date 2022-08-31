@@ -40,6 +40,7 @@ export class SearchFormComponent implements OnInit {
         endPlace: this.trip.endPlace,
         startTime: this.trip.startTime,
         seats: this.trip.countOfSeats,
+        orderBy: TripOrderBy.EarliestDepartureTime,
       }
     });
   }

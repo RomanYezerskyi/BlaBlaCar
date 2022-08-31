@@ -31,11 +31,11 @@ namespace BlaBlaCar.API.Controllers
             return BadRequest("Fail");
            
         }
-        [HttpGet("trips")]
-        public async Task<IActionResult> GerUserBookedTrips()
+        [HttpGet("trips/{take}/{skip}")]
+        public async Task<IActionResult> GerUserBookedTrips(int take, int skip)
         {
             
-            var res = await _tripService.GetUserBookedTripsAsync(User);
+            var res = await _tripService.GetUserBookedTripsAsync(take, skip, User);
             if (res != null) return Ok(res);
             return BadRequest("Fail");
             

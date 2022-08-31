@@ -1,11 +1,13 @@
-<div class="container">
-    <div class="search_results" *ngIf="trips.length > 0">
+<div class="container" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+    (scrolled)=" getUserBookedTrips();" [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false"
+    style="height: 88.9vh; overflow: auto;">
+    <div class="search_results" *ngIf="trips.trips.length > 0">
         <div class="items">
-            <div class="search_item" *ngFor="let item of trips">
+            <div class="search_item" *ngFor="let item of trips.trips">
                 <div class="header">
                     <div class="body">
                         <div class="profile_img">
-                            <img [src]="sanitaizeImg(item.user?.userImg!)" class="img" alt="">
+                            <img [src]="sanitizeUserImg(item.user?.userImg!)" class="img" alt="">
                         </div>
                         <p class="user_name">{{item.user?.firstName}}</p>
                     </div>

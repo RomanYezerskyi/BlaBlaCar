@@ -8,6 +8,7 @@ using BlaBlaCar.BL.DTOs.TripDTOs;
 using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.BL.Exceptions;
 using BlaBlaCar.BL.Interfaces;
+using BlaBlaCar.BL.ViewModels;
 using BlaBlaCar.DAL.Entities.TripEntities;
 using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
@@ -32,27 +33,40 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
             _hostSettings = hostSettings.Value;
         }
 
-        public async Task<IEnumerable<TripDTO>> GetUserBookedTripsAsync(ClaimsPrincipal claimsPrincipal)
+        public async Task<UserBookedTripsViewModel> GetUserBookedTripsAsync(int take, int skip,
+            ClaimsPrincipal claimsPrincipal)
         {
             var userId = Guid.Parse(claimsPrincipal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
 
-            var trip = _mapper.Map<IEnumerable<TripDTO>>(await _unitOfWork.Trips.GetAsync(x => x.OrderByDescending(x => x.StartTime), 
-                x =>
+            var trips = _mapper.Map<IEnumerable<TripDTO>>(
+                await _unitOfWork.Trips.GetAsync(
+                    orderBy:x => x.OrderByDescending(x => x.StartTime), 
+                includes:x =>
                     x.Include(x => x.TripUsers.Where(x => x.UserId == userId))
-                        .ThenInclude(x => x.Seat)
+                        .ThenInclude( x=> x.Seat)
                         .Include(x=>x.User),
-                x => x.TripUsers
-                    .Any(x => x.UserId == userId)));
+                filter:x => x.TripUsers
+                    .Any(user => user.UserId == userId),
+                    take:take,
+                    skip:skip));
 
-            if (!trip.Any())
+            if (!trips.Any())
                 throw new NotFoundException(nameof(TripDTO));
+            var tripsCount = await _unitOfWork.Trips.GetCountAsync(x => x.TripUsers
+                .Any(user => user.UserId == userId));
 
-            trip = trip.Select(t =>
+            trips = trips.Select(t =>
             {
-                t.User.UserImg = _hostSettings.CurrentHost + t.User.UserImg;
+                if(t.User?.UserImg != null)
+                    t.User.UserImg = _hostSettings.CurrentHost + t.User.UserImg;
                 return t;
             });
-            return trip;
+            var result = new UserBookedTripsViewModel()
+            {
+                TotalTrips = tripsCount,
+                Trips = trips
+            };
+            return result;
         }
 
         public async Task<bool> AddBookedTripAsync(AddNewBookTripDTO tripModel, ClaimsPrincipal principal)
