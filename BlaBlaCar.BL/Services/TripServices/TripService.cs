@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using BlaBlaCar.DAL.Entities.TripEntities;
 using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.BL.Exceptions;
+using BlaBlaCar.BL.ViewModels;
 
 namespace BlaBlaCar.BL.Services.TripServices
 {
@@ -67,60 +68,71 @@ namespace BlaBlaCar.BL.Services.TripServices
 
         }
 
-        public async Task<IEnumerable<GetTripWithTripUsersDTO>> GetUserTripsAsync(ClaimsPrincipal principal)
+        public async Task<UserTripsViewModel> GetUserTripsAsync(int take, int skip,
+            ClaimsPrincipal principal)
         {
-            string userId = principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value;
+            var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
             var trips = _mapper.Map<IEnumerable<TripDTO>>
-                (await _unitOfWork.Trips.GetAsync(null, 
-                    x=>x.Include(i=>i.Car)
+                (await _unitOfWork.Trips.GetAsync(orderBy:null, 
+                    includes:x=>x.Include(i=>i.Car)
                         .Include(x=>x.AvailableSeats)
                         .Include(i=>i.TripUsers).ThenInclude(i=>i.User)
                         .Include(i => i.TripUsers).ThenInclude(x=>x.Seat), 
-                    x=>x.UserId == Guid.Parse((ReadOnlySpan<char>)userId)));
+                    filter:x=>x.UserId == userId, 
+                    take: take,
+                    skip: skip));
 
             if (!trips.Any()) throw new NotFoundException(nameof(UserDTO));
+
+            var tripsCount =await _unitOfWork.Trips.GetCountAsync(x=>x.UserId == userId);
 
             trips = trips.Select(t =>
             {
                 t.Car.CarDocuments = t.Car.CarDocuments.Select(c =>
                 {
-                    c.TechPassport = _hostSettings.CurrentHost + c.TechPassport;
+                    if(c.TechPassport != null)
+                        c.TechPassport = _hostSettings.CurrentHost + c.TechPassport;
                     return c;
                 }).ToList();
 
                 t.TripUsers = t.TripUsers.Select(tu =>
                 {
-                    
-                    tu.User.UserImg = _hostSettings.CurrentHost + tu.User.UserImg;
+                    if(tu.User.UserImg != null)
+                        tu.User.UserImg = _hostSettings.CurrentHost + tu.User.UserImg;
                     return tu;
                 }).ToList();
                 return t;
-            }).ToList();
+            });
 
-            var listGroupByUsers = trips.First().TripUsers
+            var listGroupByUsers = trips.Select(x => x.TripUsers
                 .GroupBy(x => x.UserId)
-                .Select(x=>new GetBookedTripUsersDTO
-                                                            { UserId= x.Key, 
-                                                            User = x.Select(u=>u.User).FirstOrDefault() ,
-                                                            Seats =  x.Select(x=>x.Seat).ToList()
-                                                            }).ToList();
-            var result = _mapper.Map<IEnumerable<GetTripWithTripUsersDTO>>(trips);
-            result = result.Select(trip =>
-            {
-                trip.BookedTripUsers = listGroupByUsers.Select(l =>
+                .Select(x => new GetBookedTripUsersDTO
                 {
-                    if (trip.TripUsers.Any(user=>user.UserId == l.UserId))
+                    UserId = x.Key,
+                    User = x.Select(u => u.User).FirstOrDefault(),
+                    Seats = x.Select(x => x.Seat).ToList(),
+                    
+                }));
+
+            var groupedList = _mapper.Map<IEnumerable<GetTripWithTripUsersDTO>>(trips);
+            groupedList = groupedList.Select(trip =>
+            {
+                trip.BookedTripUsers = new List<GetBookedTripUsersDTO>();
+                foreach (var listUsers in listGroupByUsers)
+                {
+                    foreach (var users in listUsers)
                     {
-                        return l;
+                        if(users.User.TripUsers?.First().TripId == trip.Id)
+                            trip.BookedTripUsers.Add(users);
                     }
-                    return null;
-                }).ToList()!;
+                }
                 return trip;
-            }).ToList();
-            
+            });
+
+            var result = new UserTripsViewModel() { Trips = groupedList, TotalTrips = tripsCount };
             return result;
         }
-
+       
         public async Task<SearchTripsResponseDTO> SearchTripsAsync(SearchTripDTO model)
         {
             Expression<Func<Trip, bool>> tripFilter = trip => trip.StartPlace.Contains(model.StartPlace)

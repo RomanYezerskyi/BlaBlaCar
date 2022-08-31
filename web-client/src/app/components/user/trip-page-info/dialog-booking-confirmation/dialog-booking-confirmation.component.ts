@@ -65,6 +65,7 @@ export class DialogBookingConfirmationComponent implements OnInit {
       alert("book" + this.requestedSeats);
       return;
     }
+    console.log(this.bookedtrip)
     this.tripService.bookSeatsInTrip(this.bookedtrip).pipe().subscribe(
       response => {
         this.dialogRef.close();

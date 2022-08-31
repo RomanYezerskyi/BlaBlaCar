@@ -1,7 +1,9 @@
-<div class="container">
-    <div class="search_results" *ngIf="trips.length > 0">
+<div class="container" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+    (scrolled)="getUserTrips();" [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false"
+    style="height: 88.9vh; overflow: auto;">
+    <div class="search_results" *ngIf="trips.trips.length > 0">
         <div class="items">
-            <div class="search_item" *ngFor="let item of trips">
+            <div class="search_item" *ngFor="let item of trips.trips">
                 <div class="header">
 
                     <div class="time">
@@ -47,8 +49,30 @@
                 </div>
                 <div class="list_users">
                     <hr />
-                    <div class="user" *ngFor="let tripUser of item.bookedTripUsers">
-                        <div class="user_info" *ngIf="tripUser != null">
+                    <div class="user" *ngFor="let user of item.bookedTripUsers">
+                        <!-- {{tripUser.user.id}} -->
+
+                        <!-- <div class="user_info" *ngFor="let user of tripUser"> -->
+                        <!-- {{user.user.id}} -->
+                        <div class="user_info" *ngIf="user != null">
+                            <i class="material-icons cancel"
+                                (click)="deleteUserFromTrip(user.user.id, item.id)">cancel</i>
+                            <div class="body">
+                                <i class="material-icons">telegram</i>
+                                <div class="profile_img">
+                                    <img [src]="sanitaizeImg(user.user.userImg!)" class="img" alt="">
+                                </div>
+                                <p class="user_name">{{user.user.firstName}}</p>
+                            </div>
+                            <div class="bookedSeats">
+                                <p class="title">Booked seats:</p>
+                                <div class="booked_seats_num" *ngFor="let seat of user.seats">
+                                    <p>{{seat?.num}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- </div> -->
+                        <!-- <div class="user_info" *ngIf="tripUser != null">
                             <i class="material-icons cancel"
                                 (click)="deleteUserFromTrip(tripUser!.user!.id, item.id)">cancel</i>
                             <div class="body">
@@ -65,7 +89,7 @@
                                 </div>
                             </div>
 
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

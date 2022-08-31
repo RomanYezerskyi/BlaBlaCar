@@ -62,7 +62,6 @@ export class TripsComponent implements OnInit {
   }
   onScroll() {
     this.Skip += this.Take;
-    console.log(this.Skip);
     if (this.Skip <= this.totalTrips) {
       this.searchTrips();
     }

@@ -7,6 +7,7 @@ import { SearchTripModel } from 'src/app/interfaces/search-trip';
 import { SearchTripsResponseModel } from 'src/app/interfaces/search-trips-response-model';
 import { TripModel } from 'src/app/interfaces/trip';
 import { TripUserModel } from 'src/app/interfaces/trip-user-model';
+import { UserTrips, UserTripsResponse } from 'src/app/interfaces/user-trips';
 
 @Injectable({
   providedIn: 'root'
@@ -39,9 +40,9 @@ export class TripService {
     });
   }
   //
-  getUserTrips(): Observable<TripModel[]> {
-    const url = 'https://localhost:6001/api/Trips/user-trips';
-    return this.http.get<TripModel[]>(url)
+  getUserTrips(take: number, skip: number): Observable<UserTripsResponse> {
+    const url = 'https://localhost:6001/api/Trips/user-trips/' + take + "/" + skip;
+    return this.http.get<UserTripsResponse>(url)
   }
   getTripById(tripId: number): Observable<TripModel> {
     const url = 'https://localhost:6001/api/Trips/'

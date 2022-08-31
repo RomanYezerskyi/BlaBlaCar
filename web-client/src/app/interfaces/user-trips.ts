@@ -1,10 +1,13 @@
 import { AvailableSeatsModel } from "./available-seats";
 import { BookedTripUsers } from "./booked-trip-users";
 import { CarModel } from "./car";
-import { TripUserModel } from "./trip-user-model";
 import { UserModel } from "./user-model";
 
-export interface TripModel {
+export interface UserTripsResponse {
+    trips: Array<UserTrips>;
+    totalTrips?: number;
+}
+export interface UserTrips {
     id: number;
     startPlace: string;
     endPlace: string;
@@ -18,6 +21,6 @@ export interface TripModel {
     car: CarModel
     user?: UserModel;
     tripUsers: any[];
-    bookedTripUsers?: BookedTripUsers[];
-    TotalTrips?: number;
+    bookedTripUsers: Array<BookedTripUsers>
+
 }

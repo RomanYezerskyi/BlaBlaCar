@@ -31,6 +31,9 @@ export class SearchTripComponent implements OnInit {
   };
   isParams = false;
   public isFullListDisplayed: boolean = false;
+  // totalTrips = 0;
+  // private Skip: number = 0;
+  // private Take: number = 5;
   constructor(private http: HttpClient,
     private router: Router,
     private sanitizer: DomSanitizer,
@@ -39,7 +42,7 @@ export class SearchTripComponent implements OnInit {
     //   this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.route.queryParams.subscribe(params => {
       if (params['startPlace'] && params['endPlace'] && params['startTime'] && params['seats']) {
         this.trip.startPlace = params['startPlace'];
