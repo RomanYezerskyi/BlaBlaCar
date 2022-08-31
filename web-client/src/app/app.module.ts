@@ -43,8 +43,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 import { SearchFormComponent } from './components/search-form/search-form.component';
-import { MatDatepickerModule } from '@angular/material/datepicker'
-import { GoogleMapsModule } from '@angular/google-maps';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { SortingPanelComponent } from './components/user/search-trip/sorting-panel/sorting-panel.component';
+import { MatRadioModule } from '@angular/material/radio';
+import { TripsComponent } from './components/user/search-trip/trips/trips.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -78,6 +81,8 @@ export function tokenGetter() {
     InfoPageComponent,
     NotificationsComponent,
     SearchFormComponent,
+    SortingPanelComponent,
+    TripsComponent,
 
   ],
   imports: [
@@ -107,7 +112,8 @@ export function tokenGetter() {
     NgxMatFileInputModule,
     MatNativeDateModule,
     MatDatepickerModule,
-    GoogleMapsModule
+    MatRadioModule,
+    MatProgressSpinnerModule
 
   ],
   providers: [AuthGuard],

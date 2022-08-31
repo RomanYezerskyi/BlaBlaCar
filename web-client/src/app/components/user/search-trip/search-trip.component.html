@@ -1,6 +1,6 @@
 <div class="container" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
   (scrolled)="onScroll();" [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false"
-  style="height: 88.9vh; overflow: auto;">
+  style="height: 88.9vh; overflow: scroll;">
   <div class="" [ngClass]="{'': isParams, 'title': !isParams}">
     <h2>
       Where do you want to go?
@@ -10,20 +10,20 @@
     <app-search-form class="form" [trip]="trip"></app-search-form>
   </div>
 
-  <!-- <div class="no-content" *ngIf="isParams && trips.length == 0">
+  <!-- <div class="no-content" *ngIf="!isTrips">
     <img src="../../../../assets/traveler.png" alt="">
     <h3>There are no trips yet :)</h3>
   </div> -->
   <!-- <div class="main-line"></div> -->
-  <div class="search_results" *ngIf="trips.trips.length > 0">
-    <div class="filters">
-      <div class="filters__title">
-        <h4>Sort by</h4>
-        <p class="btn-clear" (click)="deleteSelectedSort()">clear</p>
-      </div>
-      <p (click)="sort()">Найнижча ціна</p>
+  <div class="search_results">
+    <!-- <div class="filters" [ngClass]="{'': isTrips, 'none': !isTrips}">
+      <app-sorting-panel class="sortingPanel" [trip]="trip"></app-sorting-panel>
+
+    </div> -->
+    <div class="trips">
+      <app-trips></app-trips>
     </div>
-    <div class="items">
+    <!-- <div class="items">
       <div class="search_item" *ngFor="let trip of trips.trips" (click)="navigateToTripPage(trip.id)">
         <div class="header">
           <div class="time">
@@ -55,6 +55,6 @@
           <p class="user_name">{{trip.user?.firstName}}</p>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>

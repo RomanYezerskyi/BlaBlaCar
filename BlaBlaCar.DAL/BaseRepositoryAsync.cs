@@ -25,10 +25,9 @@ namespace BlaBlaCar.DAL
             IQueryable<TEntity> queryable = _context.Set<TEntity>();
 
             queryable = filter is null ? queryable : queryable.Where(filter);
+            queryable = orderBy is null ? queryable : orderBy(queryable);
             queryable = queryable.Skip(skip).Take(take);
             queryable = includes is null ? queryable : includes(queryable);
-            queryable = orderBy is null ? queryable : orderBy(queryable);
-
             return await queryable.AsNoTracking().ToListAsync();
         }
 
