@@ -1,0 +1,63 @@
+.filters__title {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+
+    .sort_header {
+        display: flex;
+        justify-content: space-between;
+
+        h4 {
+            font-size: 30px;
+            font-weight: 500;
+            margin: auto 0;
+        }
+
+        .btn-clear {
+            color: rgb(0, 175, 245);
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin: auto 0;
+        }
+
+        .btn-clear:hover {
+            box-shadow: rgb(0 0 0 / 16%) 0px 1pt 4pt, rgb(0 0 0 / 8%) 0px 2pt 8pt;
+        }
+    }
+
+    mat-radio-group {
+        display: flex;
+        flex-flow: column;
+
+
+
+    }
+
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+
+    p {
+        display: block;
+        margin: auto 0;
+    }
+
+    mat-icon {
+        display: block;
+    }
+}
+
+::ng-deep.mat-radio-label {
+    padding: 10px 0px;
+}
+
+::ng-deep.mat-radio-label-content {
+    width: 100%;
+    font-size: 18px;
+    color: rgb(4, 57, 66);
+    font-size: 18px;
+    line-height: 20px;
+    // text-transform: uppercase;
+}

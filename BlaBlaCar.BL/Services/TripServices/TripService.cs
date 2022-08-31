@@ -123,14 +123,29 @@ namespace BlaBlaCar.BL.Services.TripServices
 
         public async Task<SearchTripsResponseDTO> SearchTripsAsync(SearchTripDTO model)
         {
-            Expression<Func<Trip, bool>> tripFilter = x => x.StartPlace.Contains(model.StartPlace)
-                                                           && x.EndPlace.Contains(model.EndPlace)
-                                                           && x.StartTime.Date == model.StartTime.Date
-                                                           && x.AvailableSeats.Count(s =>
-                                                               x.TripUsers.All(u => u.SeatId != s.SeatId)) >=
-                                                           model.CountOfSeats;
-            var trip = await _unitOfWork.Trips.GetAsync(
-                orderBy: null,
+            Expression<Func<Trip, bool>> tripFilter = trip => trip.StartPlace.Contains(model.StartPlace)
+                                                           && trip.EndPlace.Contains(model.EndPlace)
+                                                           && trip.StartTime.Date == model.StartTime.Date
+                                                           && trip.AvailableSeats.Count(s =>
+                                                               trip.TripUsers.All(u => u.SeatId != s.SeatId)) >= model.CountOfSeats;
+            Func<IQueryable<Trip>, IOrderedQueryable<Trip>> orderBy = null;
+            switch (model.OrderBy)
+            {
+                case TripOrderBy.EarliestDepartureTime:
+                    orderBy = trip => trip.OrderBy(t => t.StartTime);
+                    break;
+                case TripOrderBy.ShortestTrip:
+                    orderBy = trip => trip.OrderBy(t=> new {t.EndTime.Subtract(t.StartTime).Minutes});
+                    break;
+                case TripOrderBy.LowestPrice:
+                    orderBy = trip => trip.OrderBy(t => t.PricePerSeat);
+                    break;
+                default:
+                    orderBy = trip => trip.OrderBy(t => t.StartTime);
+                    break;
+            }
+            var trips = await _unitOfWork.Trips.GetAsync(
+                orderBy: orderBy,
                 includes: x => x.Include(x => x.AvailableSeats)
                     .Include(x => x.TripUsers)
                     .Include(x=>x.User),
@@ -138,8 +153,7 @@ namespace BlaBlaCar.BL.Services.TripServices
                 skip: model.Skip,
                 take: model.Take);
 
-
-            trip = trip.Select(t =>
+            trips = trips.Select(t =>
             {
                 if(t.User.UserImg != null)
                     t.User.UserImg = _hostSettings.CurrentHost + t.User.UserImg;
@@ -148,13 +162,12 @@ namespace BlaBlaCar.BL.Services.TripServices
 
             var result = new SearchTripsResponseDTO()
             {
-                Trips = _mapper.Map<IEnumerable<Trip>, IEnumerable<TripDTO>>(trip),
+                Trips = _mapper.Map<IEnumerable<Trip>, IEnumerable<TripDTO>>(trips),
             };
             if (model.Skip == 0)
             {
                 result.TotalTrips = await _unitOfWork.Trips.GetCountAsync(tripFilter);
             }
-            //var res = _mapper.Map<IEnumerable<Trip>, IEnumerable<TripDTO>>(trip);
             return result;
         }
 

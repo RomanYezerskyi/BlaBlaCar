@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using BlaBlaCar.BL.Services.TripServices;
 
 namespace BlaBlaCar.BL.DTOs.TripDTOs
 {
@@ -14,5 +15,6 @@ namespace BlaBlaCar.BL.DTOs.TripDTOs
         public int CountOfSeats { get; set; }
         public int Skip { get; set; } = 0;
         public int Take { get; set; } = int.MaxValue;
+        public TripOrderBy OrderBy { get; set; } = TripOrderBy.EarliestDepartureTime;
     }
 }

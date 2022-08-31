@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TripOrderBy } from 'src/app/enums/trip-order-by';
 import { SearchTripModel } from 'src/app/interfaces/search-trip';
 
 @Component({
