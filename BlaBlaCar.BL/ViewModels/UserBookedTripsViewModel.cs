@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BlaBlaCar.BL.DTOs.TripDTOs;
 
-namespace BlaBlaCar.BL.DTOs.TripDTOs
+namespace BlaBlaCar.BL.ViewModels
 {
-    public class GetTripWithTripUsersDTO : TripDTO
+    public class UserBookedTripsViewModel
     {
-        public List<GetBookedTripUsersDTO> BookedTripUsers { get; set; }
+        public IEnumerable<TripDTO> Trips { get; set; }
         public int TotalTrips { get; set; }
     }
 }

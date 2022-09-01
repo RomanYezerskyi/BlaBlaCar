@@ -45,7 +45,7 @@ namespace BlaBlaCar.BL.ExceptionHandler
                     code = HttpStatusCode.BadRequest;
                     break;
                 default:
-                    code = HttpStatusCode.BadRequest;
+                    code = HttpStatusCode.InternalServerError;
                     break;
             }
             context.Response.ContentType = "application/json";

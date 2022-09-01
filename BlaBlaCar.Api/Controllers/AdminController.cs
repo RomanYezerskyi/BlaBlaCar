@@ -22,20 +22,20 @@ namespace BlaBlaCar.API.Controllers
             _adminService = adminService;
         }
 
-        [HttpGet("requests/{status}")]
-        public async Task<IActionResult> GetPendingRequests(UserDTOStatus status)
+        [HttpGet("requests/{status}/{take}/{skip}")]
+        public async Task<IActionResult> GetRequests(int take, int skip, UserDTOStatus status)
         {
             
-            var res = await _adminService.GetRequestsAsync(status);
-            if (res.Any()) return Ok(res);
+            var res = await _adminService.GetRequestsAsync(take, skip, status);
+            if (res.Users.Any()) return Ok(res);
             return NoContent();
           
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserRequests(Guid id)
+        public async Task<IActionResult> GetUserRequest(Guid id)
         {
            
-            var res = await _adminService.GetUserRequestsAsync(id);
+            var res = await _adminService.GetUserRequestAsync(id);
             if (res != null) return Ok(res);
             return BadRequest(res);
            

@@ -11,7 +11,7 @@
             <div class="body_data">
                 <div class="card_body user_main_info">
                     <div class="user_img">
-                        <img [src]=" sanitaizeImg(user.userImg!)" alt="" class="img profile_img profile__img"
+                        <img [src]="sanitizeUserImg(user.userImg!)" alt="" class="img profile_img profile__img"
                             *ngIf="imagePath == null; else elseImg">
                         <ng-template #elseImg><img [src]="imagePath" alt="" class="img profile_img profile__img">
                         </ng-template>

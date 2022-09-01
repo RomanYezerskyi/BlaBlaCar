@@ -19,12 +19,12 @@ namespace BlaBlaCar.Api.Controllers
             _tripService = tripService;
         }
 
-        [HttpGet("user-trips")]
-        public async Task<IActionResult> GetUserTrips()
+        [HttpGet("user-trips/{take}/{skip}")]
+        public async Task<IActionResult> GetUserTrips(int take, int skip)
         {
            
-            var res = await _tripService.GetUserTripsAsync(User);
-            if (res.Any()) return Ok(res);
+            var res = await _tripService.GetUserTripsAsync(take, skip, User);
+            if (res.Trips.Any()) return Ok(res);
             return NoContent();
         
         }

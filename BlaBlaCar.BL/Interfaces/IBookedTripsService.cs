@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 using BlaBlaCar.BL.DTOs.BookTripDTOs;
 using BlaBlaCar.BL.DTOs.BookTripModels;
 using BlaBlaCar.BL.DTOs.TripDTOs;
+using BlaBlaCar.BL.ViewModels;
 
 namespace BlaBlaCar.BL.Interfaces
 {
     public interface IBookedTripsService
     {
-        Task<IEnumerable<TripDTO>> GetUserBookedTripsAsync(ClaimsPrincipal claimsPrincipal);
+        Task<UserBookedTripsViewModel> GetUserBookedTripsAsync(int take, int skip, ClaimsPrincipal claimsPrincipal);
         Task<bool> AddBookedTripAsync(AddNewBookTripDTO tripModel, ClaimsPrincipal principal);
         Task<bool> DeleteBookedTripAsync(DeleteTripUserDTO tripUserModel, ClaimsPrincipal principal);
         Task<bool> DeleteBookedSeatAsync(UpdateTripUserDTO tripUserModel, ClaimsPrincipal principal);

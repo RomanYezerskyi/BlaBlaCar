@@ -4,7 +4,9 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { TripModel } from 'src/app/interfaces/trip';
 import { TripUserModel } from 'src/app/interfaces/trip-user-model';
+import { TripsResponseModel } from 'src/app/interfaces/trips-response-model';
 import { UserModel } from 'src/app/interfaces/user-model';
+import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
 import { TripService } from 'src/app/services/tripservice/trip.service';
 
 @Component({
@@ -13,39 +15,43 @@ import { TripService } from 'src/app/services/tripservice/trip.service';
   styleUrls: ['./user-booked-trips.component.scss']
 })
 export class UserBookedTripsComponent implements OnInit {
-  trips: TripModel[] = [];
-  constructor(private http: HttpClient,
-    private router: Router,
-    private sanitizer: DomSanitizer,
-    private tripService: TripService) { }
+  trips: TripsResponseModel = {
+    trips: [] = [],
+    totalTrips: 0
+  }
+  public isFullListDisplayed: boolean = false;
+  totalTrips = 0;
+  private Skip: number = 0;
+  private Take: number = 5;
+  constructor(
+    private tripService: TripService,
+    private imgSanitaze: ImgSanitizerService) { }
 
   ngOnInit(): void {
     this.getUserBookedTrips();
   }
-  sanitaizeImg(img: string): SafeUrl {
-    console.log(img);
-    return this.sanitizer.bypassSecurityTrustUrl(img);
+  sanitizeUserImg(img: string): SafeUrl {
+    return this.imgSanitaze.sanitiizeUserImg(img);
   }
 
   getUserBookedTrips = () => {
-    this.tripService.getUserBookedTrips().pipe().subscribe(
-      response => {
-        this.trips = response;
-        console.log(response)
-      },
-      (error: HttpErrorResponse) => { console.log(error.error); }
-    );
-    // const url = 'https://localhost:6001/api/BookedTrip/trips';
-    // this.http.get(url)
-    //   .subscribe({
-    //     next: (res: any) => {
-    //       this.trips = res as TripModel[];
-    //       console.log(this.trips);
-    //     },
-    //     error: (err: HttpErrorResponse) => console.error(err),
-    //   });
-
-
+    if (this.Skip <= this.totalTrips) {
+      this.tripService.getUserBookedTrips(this.Take, this.Skip).pipe().subscribe(
+        response => {
+          if (response != null) {
+            this.trips.trips = this.trips.trips.concat(response.trips);
+            console.log(response)
+            if (this.totalTrips == 0)
+              this.totalTrips = response.totalTrips!;
+          }
+        },
+        (error: HttpErrorResponse) => { console.log(error.error); }
+      );
+    }
+    else {
+      this.isFullListDisplayed = true;
+    }
+    this.Skip += this.Take;
   }
   deleteBookedTrip = (trip: TripModel) => {
     this.tripService.deleteBookedTrip(trip).pipe().subscribe(

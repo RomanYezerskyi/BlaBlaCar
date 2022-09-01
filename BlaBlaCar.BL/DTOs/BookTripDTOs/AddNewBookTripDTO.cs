@@ -9,7 +9,6 @@ namespace BlaBlaCar.BL.DTOs.BookTripModels
         public int RequestedSeats { get; set; }
         [Required]
         public Guid TripId { get; set; }
-        [Required]
         public Guid? UserId { get; set; }
         [Required]
         public ICollection<BookedSeatDTO> BookedSeats { get; set; }

@@ -8,8 +8,6 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Call } from '@angular/compiler';
 import { TripService } from 'src/app/services/tripservice/trip.service';
 import { Observable } from 'rxjs';
-
-import { SearchTripsResponseModel } from 'src/app/interfaces/search-trips-response-model';
 import { TripsComponent } from './trips/trips.component';
 
 @Component({
@@ -31,15 +29,19 @@ export class SearchTripComponent implements OnInit {
   };
   isParams = false;
   public isFullListDisplayed: boolean = false;
+  // totalTrips = 0;
+  // private Skip: number = 0;
+  // private Take: number = 5;
   constructor(private http: HttpClient,
     private router: Router,
     private sanitizer: DomSanitizer,
     private route: ActivatedRoute,
     private tripService: TripService) {
-    //   this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
-  async ngOnInit() {
+  ngOnInit() {
+
     this.route.queryParams.subscribe(params => {
       if (params['startPlace'] && params['endPlace'] && params['startTime'] && params['seats']) {
         this.trip.startPlace = params['startPlace'];
@@ -52,6 +54,7 @@ export class SearchTripComponent implements OnInit {
         this.isParams = true;
       }
     });
+    console.log(this.trip);
   }
 
   onScroll() {
