@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Linq.Expressions;
+using System.Security.Claims;
 using AutoMapper;
 using BlaBlaCar.BL.DTOs;
 using BlaBlaCar.BL.DTOs.CarDTOs;
@@ -6,6 +7,7 @@ using BlaBlaCar.BL.DTOs.NotificationDTOs;
 using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.BL.Exceptions;
 using BlaBlaCar.BL.Interfaces;
+using BlaBlaCar.BL.ViewModels;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Entities.CarEntities;
 using BlaBlaCar.DAL.Interfaces;
@@ -28,19 +30,30 @@ namespace BlaBlaCar.BL.Services.Admin
             _notificationService = notificationService;
             _hostSettings = hostSettings.Value;
         }
-        public async Task<IEnumerable<UserDTO>> GetRequestsAsync(UserDTOStatus status)
+        public async Task<UserRequestsViewModel> GetRequestsAsync(int take, int skip, UserDTOStatus status)
         {
-            var users = _mapper.Map<IEnumerable<UserDTO>>(await _unitOfWork.Users.GetAsync(null,
-                x=>
-                    x.Include(x=>x.Cars.Where(x=>x.CarStatus == (Status)status)).ThenInclude(x => x.CarDocuments),
-                x=>x.UserStatus == (Status)status || x.Cars.Any(c=>c.CarStatus == (Status)status)));
+            var users = _mapper.Map<IEnumerable<UserDTO>>(
+                await _unitOfWork.Users.GetAsync(
+                    orderBy:null,
+                    includes:x=>
+                        x.Include(x=> x.Cars.Where(x=>x.CarStatus == (Status)status))
+                            .ThenInclude(x => x.CarDocuments),
+                filter:x=>x.UserStatus == (Status)status || x.Cars.Any(c=>c.CarStatus == (Status)status)));
             if (!users.Any())
                 throw new NotFoundException(nameof(UserDTO));
-            return users;
+            var usersCount = await _unitOfWork.Users.GetCountAsync(x=>x.UserStatus == (Status)status 
+                                                                || x.Cars.Any(c => c.CarStatus == (Status)status));
+
+            var result = new UserRequestsViewModel()
+            {
+                Users = users,
+                TotalRequests = usersCount
+            };
+            return result;
 
         }
       
-        public async Task<UserDTO> GetUserRequestsAsync(Guid id)
+        public async Task<UserDTO> GetUserRequestAsync(Guid id)
         {
             var user = _mapper.Map<UserDTO>(await _unitOfWork.Users.GetAsync(
                 x => x.Include(x => x.UserDocuments)

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { CarStatus } from 'src/app/interfaces/car-status';
 import { RoleModel } from 'src/app/interfaces/role';
 import { UserModel } from 'src/app/interfaces/user-model';
+import { UserRequestResponseModel } from 'src/app/interfaces/user-request-response-model';
 import { UserStatus } from 'src/app/interfaces/user-status';
 
 @Injectable({
@@ -24,9 +25,9 @@ export class AdminService {
     const url = 'https://localhost:5001/api/User/'
     return this.http.get<UserModel>(url + email);
   }
-  getUserRequests(status: UserStatus): Observable<UserModel[]> {
+  getUserRequests(status: UserStatus, take: number, skip: number): Observable<UserRequestResponseModel> {
     const url = 'https://localhost:6001/api/Admin/requests/';
-    return this.http.get<UserModel[]>(url + status);
+    return this.http.get<UserRequestResponseModel>(url + status + "/" + take + "/" + skip);
   }
   getUserRequest(userId: string): Observable<UserModel> {
     const url = 'https://localhost:6001/api/Admin/';
