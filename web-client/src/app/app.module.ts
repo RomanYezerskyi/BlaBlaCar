@@ -47,7 +47,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { SortingPanelComponent } from './components/user/search-trip/sorting-panel/sorting-panel.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { TripsComponent } from './components/user/search-trip/trips/trips.component';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MainComponent } from './components/admin-page/main/main.component';
+import { ChartComponent } from './components/admin-page/main/chart/chart.component';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -83,6 +85,9 @@ export function tokenGetter() {
     SearchFormComponent,
     SortingPanelComponent,
     TripsComponent,
+    MainComponent,
+    ChartComponent,
+
 
   ],
   imports: [
@@ -113,7 +118,7 @@ export function tokenGetter() {
     MatNativeDateModule,
     MatDatepickerModule,
     MatRadioModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
 
   ],
   providers: [AuthGuard],

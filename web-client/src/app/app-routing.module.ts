@@ -24,6 +24,7 @@ import { UserTripsComponent } from './components/user/user-information/user-trip
 import { PageAccessGuard } from './guards/page-access/page-access.guard';
 import { InfoPageComponent } from './guards/info-page/info-page.component';
 import { AdminGuard } from './guards/admin-guard/admin.guard';
+import { MainComponent } from './components/admin-page/main/main.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -34,21 +35,7 @@ const routes: Routes = [
   { path: 'trip-page-info/:id', component: TripPageInfoComponent, canActivate: [AuthGuard] },
   { path: 'home', component: HomeComponent  /*, canActivate: [AuthGuard]*/ },
 
-  {
-    path: 'admin', component: AdminPageComponent, canActivate: [AuthGuard, AdminGuard],
-    children: [
-      { path: 'roles', component: RolesComponent, canActivate: [AuthGuard] },
-      { path: 'requests/:id', component: UsersRequestsComponent, canActivate: [AuthGuard], },
-      { path: 'requests-info/:id', component: UserRequestInfoComponent, canActivate: [AuthGuard] }
-    ]
-  },
-  {
-    path: 'add-trip', component: AddTripLayoutComponent, canActivate: [PageAccessGuard],
-    // children: [
-    //   { path: 'add', component: AddTripComponent, canActivate: [AuthGuard] },
-    //   { path: 'add-seats', component: AddAvailableSeatsComponent, canActivate: [AuthGuard] },
-    // ]
-  },
+  { path: 'add-trip', component: AddTripLayoutComponent, canActivate: [PageAccessGuard] },
   { path: 'add-car', component: AddCarComponent, canActivate: [AuthGuard] },
   { path: 'driving-license', component: RequestDrivingLicenseComponent, canActivate: [AuthGuard] },
   { path: 'cars', component: UserCarsComponent, canActivate: [AuthGuard] },
@@ -61,8 +48,16 @@ const routes: Routes = [
       { path: 'user-trips', component: UserTripsComponent, canActivate: [AuthGuard], },
     ]
   },
-  { path: 'info', component: InfoPageComponent, canActivate: [AuthGuard] }
-
+  { path: 'info', component: InfoPageComponent, canActivate: [AuthGuard] },
+  {
+    path: 'admin', component: AdminPageComponent, canActivate: [AuthGuard, AdminGuard],
+    children: [
+      { path: 'roles', component: RolesComponent, canActivate: [AuthGuard] },
+      { path: 'requests/:id', component: UsersRequestsComponent, canActivate: [AuthGuard], },
+      { path: 'requests-info/:id', component: UserRequestInfoComponent, canActivate: [AuthGuard] },
+      { path: 'main-info', component: MainComponent, canActivate: [AuthGuard] },
+    ]
+  },
 ];
 
 
