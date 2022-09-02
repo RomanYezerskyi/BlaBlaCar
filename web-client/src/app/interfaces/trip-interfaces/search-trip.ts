@@ -1,4 +1,4 @@
-import { TripOrderBy } from "../enums/trip-order-by";
+import { TripOrderBy } from "../../enums/trip-order-by";
 
 export interface SearchTripModel {
     startPlace: string;

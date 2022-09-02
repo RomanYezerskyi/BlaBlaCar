@@ -39,7 +39,8 @@
       </mat-form-field>
       <mat-form-field class="example-full-width" appearance="outline">
         <mat-label>Password</mat-label>
-        <input formControlName="password" id="password" type="password" matInput required>
+        <input formControlName="password" id="password" type="password" [(ngModel)]="credentials.password" matInput
+          required>
         <i class="material-icons" matSuffix>key</i>
         <mat-error *ngIf="f['password'].touched && f['password'].invalid">
           Password is <strong>required</strong>

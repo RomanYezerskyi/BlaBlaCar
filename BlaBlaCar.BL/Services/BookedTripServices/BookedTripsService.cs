@@ -8,7 +8,7 @@ using BlaBlaCar.BL.DTOs.TripDTOs;
 using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.BL.Exceptions;
 using BlaBlaCar.BL.Interfaces;
-using BlaBlaCar.BL.ViewModels;
+using BlaBlaCar.BL.ViewModels.AdminViewModels;
 using BlaBlaCar.DAL.Entities.TripEntities;
 using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;

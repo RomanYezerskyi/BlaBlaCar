@@ -2,9 +2,9 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { CarModel } from 'src/app/interfaces/car';
-import { CarStatus } from 'src/app/interfaces/car-status';
-import { UserModel } from 'src/app/interfaces/user-model';
+import { CarModel } from 'src/app/interfaces/car-interfaces/car';
+import { CarStatus } from 'src/app/interfaces/car-interfaces/car-status';
+import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 import { CarService } from 'src/app/services/carservice/car.service';
 import { UserService } from 'src/app/services/userservice/user.service';
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BlaBlaCar.BL.DTOs.UserDTOs;
 
-namespace BlaBlaCar.BL.ViewModels
+namespace BlaBlaCar.BL.ViewModels.AdminViewModels
 {
     public class UserRequestsViewModel
     {

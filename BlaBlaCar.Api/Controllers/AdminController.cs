@@ -4,6 +4,7 @@ using BlaBlaCar.BL.DTOs;
 using BlaBlaCar.BL.DTOs.CarDTOs;
 using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.BL.Interfaces;
+using BlaBlaCar.BL.ViewModels.AdminViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -67,6 +68,19 @@ namespace BlaBlaCar.API.Controllers
             if (res != null) return Ok(new{res="User status changed"});
             return BadRequest(res);
             
+        }
+
+        [HttpGet("statistics")]
+        public async Task<IActionResult> GetStatic() {
+            var res = await _adminService.GetStatisticsDataAsync();
+            return Ok(res);
+        }
+
+        [HttpGet("top-list/{take}/{skip}/{orderBy}")]
+        public async Task<IActionResult> GetUsersTopList(int take, int skip, UsersListOrderByType orderBy)
+         {
+            var res = await _adminService.GetTopUsersListAsync(take,skip, orderBy);
+            return Ok(res);
         }
     }
 }

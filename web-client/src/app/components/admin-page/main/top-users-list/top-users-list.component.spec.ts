@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChartComponent } from './chart.component';
+import { TopUsersListComponent } from './top-users-list.component';
 
-describe('ChartComponent', () => {
-  let component: ChartComponent;
-  let fixture: ComponentFixture<ChartComponent>;
+describe('TopUsersListComponent', () => {
+  let component: TopUsersListComponent;
+  let fixture: ComponentFixture<TopUsersListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ChartComponent ]
+      declarations: [ TopUsersListComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ChartComponent);
+    fixture = TestBed.createComponent(TopUsersListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

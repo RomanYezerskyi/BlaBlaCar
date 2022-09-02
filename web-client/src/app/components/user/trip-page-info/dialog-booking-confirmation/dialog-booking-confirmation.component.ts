@@ -2,11 +2,11 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angul
 import { Component, EventEmitter, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { BookedTripModel } from 'src/app/interfaces/booked-trip';
-import { TripModel } from 'src/app/interfaces/trip';
-import { CarModel } from "src/app/interfaces/car";
+import { BookedTripModel } from 'src/app/interfaces/trip-interfaces/booked-trip';
+import { TripModel } from 'src/app/interfaces/trip-interfaces/trip';
+import { CarModel } from "src/app/interfaces/car-interfaces/car";
 import { AvailableSeatsType } from 'src/app/enums/available-seats-type';
-import { SeatModel } from 'src/app/interfaces/seat';
+import { SeatModel } from 'src/app/interfaces/car-interfaces/seat';
 import { TripService } from 'src/app/services/tripservice/trip.service';
 @Component({
   selector: 'app-dialog-booking-confirmation',

@@ -49,7 +49,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { TripsComponent } from './components/user/search-trip/trips/trips.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MainComponent } from './components/admin-page/main/main.component';
-import { ChartComponent } from './components/admin-page/main/chart/chart.component';
+import { TopUsersListComponent } from './components/admin-page/main/top-users-list/top-users-list.component';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -86,8 +86,7 @@ export function tokenGetter() {
     SortingPanelComponent,
     TripsComponent,
     MainComponent,
-    ChartComponent,
-
+    TopUsersListComponent,
 
   ],
   imports: [

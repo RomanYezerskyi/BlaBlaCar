@@ -1,10 +1,10 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { AddNewCarModel } from 'src/app/interfaces/addnew-car';
-import { CarStatus } from 'src/app/interfaces/car-status';
-import { UserModel } from 'src/app/interfaces/user-model';
-import { UserStatus } from 'src/app/interfaces/user-status';
+import { AddNewCarModel } from 'src/app/interfaces/car-interfaces/addnew-car';
+import { CarStatus } from 'src/app/interfaces/car-interfaces/car-status';
+import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
+import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
 import { AdminService } from 'src/app/services/admin/admin.service';
 
 @Component({

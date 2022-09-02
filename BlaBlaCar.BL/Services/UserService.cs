@@ -175,6 +175,7 @@ namespace BlaBlaCar.BL.Services
             var img = await _fileService.FilesDbPathListAsync(userImg);
 
             user.UserImg = img;
+            
             _unitOfWork.Users.Update(_mapper.Map<ApplicationUser>(user));
             return await _unitOfWork.SaveAsync(userId);
 

@@ -1,4 +1,4 @@
-import { CarType } from "../enums/car-type";
+import { CarType } from "../../enums/car-type";
 
 export interface AddNewCarModel {
     modelName: string;

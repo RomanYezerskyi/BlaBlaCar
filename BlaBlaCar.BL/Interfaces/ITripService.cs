@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 using BlaBlaCar.BL.DTOs.TripDTOs;
-using BlaBlaCar.BL.ViewModels;
+using BlaBlaCar.BL.ViewModels.AdminViewModels;
 
 namespace BlaBlaCar.BL.Interfaces
 {

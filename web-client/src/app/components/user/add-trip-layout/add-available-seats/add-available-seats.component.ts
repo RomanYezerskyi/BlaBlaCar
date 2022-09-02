@@ -3,9 +3,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CarType } from 'src/app/enums/car-type';
-import { AddAvailableSeats } from 'src/app/interfaces/add-available-seats';
-import { AddTripModel } from 'src/app/interfaces/add-trip';
-import { CarModel } from 'src/app/interfaces/car';
+import { AddAvailableSeats } from 'src/app/interfaces/trip-interfaces/add-available-seats';
+import { AddTripModel } from 'src/app/interfaces/trip-interfaces/add-trip';
+import { CarModel } from 'src/app/interfaces/car-interfaces/car';
 import { TripService } from 'src/app/services/tripservice/trip.service';
 @Component({
   selector: 'app-add-available-seats',

@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { CheckboxControlValueAccessor, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RoleModel } from 'src/app/interfaces/role';
-import { UserModel } from 'src/app/interfaces/user-model';
-import { UserStatus } from 'src/app/interfaces/user-status';
+import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
+import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
 import { AdminService } from 'src/app/services/admin/admin.service';
 import { UserService } from 'src/app/services/userservice/user.service';
 

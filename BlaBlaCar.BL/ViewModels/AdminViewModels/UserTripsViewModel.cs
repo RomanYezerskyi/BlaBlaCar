@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using BlaBlaCar.BL.DTOs.TripDTOs;
 
-namespace BlaBlaCar.BL.ViewModels
+namespace BlaBlaCar.BL.ViewModels.AdminViewModels
 {
-    public class UserBookedTripsViewModel
+    public class UserTripsViewModel
     {
-        public IEnumerable<TripDTO> Trips { get; set; }
+        public IEnumerable<GetTripWithTripUsersDTO> Trips { get; set; }
         public int TotalTrips { get; set; }
     }
 }

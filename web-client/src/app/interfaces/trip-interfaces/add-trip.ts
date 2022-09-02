@@ -8,6 +8,6 @@ export interface AddTripModel {
     pricePerSeat: number;
     description: string;
     countOfSeats: number;
-    carId:number; 
+    carId: number;
     availableSeats: AddAvailableSeats[];
 }

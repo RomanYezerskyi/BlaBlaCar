@@ -11,7 +11,7 @@ using Microsoft.Extensions.Options;
 using BlaBlaCar.DAL.Entities.TripEntities;
 using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.BL.Exceptions;
-using BlaBlaCar.BL.ViewModels;
+using BlaBlaCar.BL.ViewModels.AdminViewModels;
 
 namespace BlaBlaCar.BL.Services.TripServices
 {

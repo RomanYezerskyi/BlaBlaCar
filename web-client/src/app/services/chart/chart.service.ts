@@ -1,32 +1,25 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
-@Component({
-  selector: 'app-chart',
-  templateUrl: './chart.component.html',
-  styleUrls: ['./chart.component.scss']
+@Injectable({
+  providedIn: 'root'
 })
-export class ChartComponent implements OnInit {
-  public chart: any;
-  @Input() script: string = "MyChart1";
+export class ChartService {
+
   constructor() { }
 
-  ngOnInit(): void {
-    this.createChart();
-  }
-  createChart() {
-
-    this.chart = new Chart(this.script, {
+  generateChart(chartId: string, label: string, yArray: Array<Date>, xArray: Array<any>): Chart {
+    return new Chart(chartId, {
       type: 'line', //this denotes tha type of chart
 
       data: {// values on X-Axis
-        labels: ['2022-05-10', '2022-05-11', '2022-05-12', '2022-05-13',
-          '2022-05-14', '2022-05-15', '2022-05-16', '2022-05-17',],
+        // labels: ['2022-05-10', '2022-05-11', '2022-05-12', '2022-05-13',
+        //   '2022-05-14', '2022-05-15', '2022-05-16', '2022-05-17',],
+        labels: yArray,
         datasets: [
           {
-            label: "Sales",
-            data: ['467', '576', '572', '79', '92',
-              '574', '573', '576'],
+            label: label,
+            data: xArray,
             backgroundColor: 'blue'
           },
           // {
@@ -79,7 +72,5 @@ export class ChartComponent implements OnInit {
       }
 
     });
-    console.log(this.chart);
   }
-
 }

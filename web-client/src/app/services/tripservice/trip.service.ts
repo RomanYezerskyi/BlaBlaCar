@@ -1,13 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { AddTripModel } from 'src/app/interfaces/add-trip';
-import { BookedTripModel } from 'src/app/interfaces/booked-trip';
-import { SearchTripModel } from 'src/app/interfaces/search-trip';
-import { TripsResponseModel } from 'src/app/interfaces/trips-response-model';
-import { TripModel } from 'src/app/interfaces/trip';
-import { TripUserModel } from 'src/app/interfaces/trip-user-model';
-import { UserTrips, UserTripsResponse } from 'src/app/interfaces/user-trips';
+import { AddTripModel } from 'src/app/interfaces/trip-interfaces/add-trip';
+import { BookedTripModel } from 'src/app/interfaces/trip-interfaces/booked-trip';
+import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip';
+import { TripsResponseModel } from 'src/app/interfaces/trip-interfaces/trips-response-model';
+import { TripModel } from 'src/app/interfaces/trip-interfaces/trip';
+import { TripUserModel } from 'src/app/interfaces/trip-interfaces/trip-user-model';
+import { UserTrips, UserTripsResponse } from 'src/app/interfaces/user-interfaces/user-trips';
 
 @Injectable({
   providedIn: 'root'

@@ -9,9 +9,9 @@
                     <p class="title">users</p>
                 </div>
             </div>
-            <div class="chart-container">
+            <!-- <div class="chart-container">
                 <canvas id="myChart">{{ chart }}</canvas>
-            </div>
+            </div> -->
         </div>
         <div class="info__item">
             <div class="head__item">
@@ -21,9 +21,9 @@
                     <p class="title">cars</p>
                 </div>
             </div>
-            <div class="chart-container">
+            <!-- <div class="chart-container">
                 <canvas id="myChart1">{{ chart1 }}</canvas>
-            </div>
+            </div> -->
         </div>
         <div class="info__item  info_third">
             <div class="head__item">
@@ -34,9 +34,9 @@
                     <p class="title">this week trips</p>
                 </div>
             </div>
-            <div class="chart-container">
+            <!-- <div class="chart-container">
                 <canvas id="myChart2">{{ chart2 }}</canvas>
-            </div>
+            </div> -->
         </div>
         <div class="info__item info_fourth">
             <div class="head__item">
@@ -46,41 +46,13 @@
                     <p class="title">trips</p>
                 </div>
             </div>
-            <div class="chart-container">
+            <!-- <div class="chart-container">
                 <canvas id="myChart3">{{ chart3 }}</canvas>
-            </div>
+            </div> -->
         </div>
     </div>
     <!-- добавити пошук юзерів -->
-    <div class="users-list">
-        <div class="head">
-            Top users
-        </div>
-        <div class="title">
-            <h4>Avatar</h4>
-            <h4>Name</h4>
-            <h4>Email</h4>
-            <h4>Phone</h4>
-            <h4>Date of creation</h4>
-            <h4>Licenses status</h4>
-            <h4>Total trips</h4>
-        </div>
-        <div class="user__item">
-            <div class="img">
-                <p class="user_avatar">
-                    <img src="https://demo.dashboardpack.com/architectui-angular-free/assets/images/avatars/2.jpg"
-                        alt="">
-                </p>
-            </div>
-            <p>Roma Y</p>
-            <p>roman@com</p>
-            <p>+38099099099</p>
-            <p>12 Dec</p>
-            <p>Confirmed</p>
-            <p>100</p>
-            <!-- добавити випадайку на машини -->
-        </div>
-    </div>
+    <app-top-users-list></app-top-users-list>
     <div class="users-list admins">
         <div class="head">
             Admins

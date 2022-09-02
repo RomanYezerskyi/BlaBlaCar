@@ -1,8 +1,8 @@
-import { CarType } from "../enums/car-type";
+import { CarType } from "../../enums/car-type";
 import { CarDocuments } from "./car-documents";
 import { CarStatus } from "./car-status";
 import { SeatModel } from "./seat";
-import { TripModel } from "./trip";
+import { TripModel } from "../trip-interfaces/trip";
 
 export interface CarModel {
     id: number;

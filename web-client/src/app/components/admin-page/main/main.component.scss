@@ -4,7 +4,7 @@
     // background-color: #11998e;
     // display: flex;
     // min-width: 500px;
-    padding: 10px 30px;
+    padding: 10px 100px;
 }
 
 // canvas{
@@ -16,11 +16,12 @@
     width: 100%;
     display: flex;
     flex-flow: row wrap;
-    justify-content: space-evenly;
+    justify-content: space-between;
 
     .info__item {
         margin: 5px 0;
-        width: 18%;
+        width: 250px;
+        height: 150px;
         min-width: 155px;
         display: flex;
         flex-flow: column;
@@ -30,6 +31,8 @@
         border-radius: 10px;
         // padding: 20px 50px 20px 10px;
         padding: 10px;
+        position: relative;
+        overflow: hidden;
 
         .head__item {
             display: flex;
@@ -40,19 +43,27 @@
             display: flex;
             flex-flow: column;
             justify-content: space-between;
+            text-transform: uppercase;
         }
 
         .material-icons {
             color: #fff;
-            font-size: 60px;
-            width: 60px;
-            height: 60px;
-            margin: auto 0;
+            font-size: 180px;
+            width: 180px;
+            height: 180px;
+            // margin: auto 0;
+            position: absolute;
+            right: -30px;
+            bottom: -23px;
+            color: #8a7b7b;
+            opacity: .5;
+            line-height: 1;
+            vertical-align: baseline;
         }
 
         .count {
-            font-size: 26px;
-            font-weight: 300;
+            font-size: 36px;
+            font-weight: 400;
             line-height: 1;
             margin-bottom: 5px;
             color: #fff;
@@ -61,7 +72,7 @@
 
         .title {
             font-size: 18px;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.8);
             font-weight: 300;
             margin: 0;
             padding: 5px 0;
@@ -69,7 +80,7 @@
     }
 
     .info_first {
-        background-image: -webkit-linear-gradient(90deg, #3f5efb 0%, #fc466b 100%);
+        background-image: linear-gradient(239deg, rgb(33, 212, 253) 0%, rgb(183, 33, 255) 100%);
     }
 
     .info_third {

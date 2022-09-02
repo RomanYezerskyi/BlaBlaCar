@@ -1,6 +1,6 @@
-import { CarModel } from "./car";
-import { RoleModel } from "./role";
-import { TripModel } from "./trip";
+import { CarModel } from "../car-interfaces/car";
+import { RoleModel } from "../role";
+import { TripModel } from "../trip-interfaces/trip";
 import { UserDocuments } from "./user-documents";
 import { UserStatus } from "./user-status";
 
@@ -16,4 +16,5 @@ export interface UserModel {
     cars: CarModel[];
     trips?: TripModel[];
     tripUsers?: TripModel[];
+    createdAt?: Date;
 }

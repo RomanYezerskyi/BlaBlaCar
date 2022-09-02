@@ -1,5 +1,9 @@
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
+import { AdminStatistics } from 'src/app/interfaces/admin-interfaces/admin-statistics';
+import { AdminService } from 'src/app/services/admin/admin.service';
+import { ChartService } from 'src/app/services/chart/chart.service';
 Chart.register(...registerables);
 @Component({
   selector: 'app-main',
@@ -11,268 +15,49 @@ export class MainComponent implements OnInit {
   public chart1: any;
   public chart2: any;
   public chart3: any;
-  constructor() {
+  statistics: AdminStatistics = {
+    usersDateTime: [] = [],
+    usersStatisticsCount: [] = [],
+    carsDateTime: [] = [],
+    carsStatisticsCount: [] = [],
+    tripsDateTime: [] = [],
+    tripsStatisticsCount: [] = [],
+    weekTripsDateTime: [] = [],
+    weekStatisticsTripsCount: [] = []
+  };
+  constructor(private http: HttpClient, private adminService: AdminService, private chartService: ChartService) {
 
   }
 
   ngOnInit(): void {
-    this.createChart();
+    this.getStatistics();
+
+
+  }
+  getStatistics() {
+    this.adminService.getStatistics().pipe().subscribe(
+      response => {
+        this.statistics = response;
+        console.log(response)
+        console.log(this.statistics.usersStatisticsCount)
+        this.createChart();
+      },
+      (error: HttpErrorResponse) => { console.error(error.error); }
+    );
   }
   createChart() {
+    // this.chart =
+    //   this.chartService.generateChart("myChart", "Users", this.statistics.usersDateTime, this.statistics.usersStatisticsCount);
 
-    this.chart = new Chart("myChart", {
-      type: 'line', //this denotes tha type of chart
+    // this.chart1 =
+    //   this.chartService.generateChart("myChart1", "Cars", this.statistics.carsDateTime, this.statistics.carsStatisticsCount);
 
-      data: {// values on X-Axis
-        labels: ['2022-05-10', '2022-05-11', '2022-05-12', '2022-05-13',
-          '2022-05-14', '2022-05-15', '2022-05-16', '2022-05-17',],
-        datasets: [
-          {
-            label: "Sales",
-            data: ['467', '576', '572', '79', '92',
-              '574', '573', '576'],
-            backgroundColor: 'blue'
-          },
-          // {
-          //   label: "Profit",
-          //   data: ['542', '542', '536', '327', '17',
-          //     '0.00', '538', '541'],
-          //   backgroundColor: 'limegreen'
-          // }
-        ]
-      },
-      options: {
+    // this.chart2 =
+    //   this.chartService.generateChart("myChart2", "Trips", this.statistics.weekTripsDateTime, this.statistics.weekStatisticsTripsCount);
 
-        scales: {
-          xAxis: {
-            // The axis for this scale is determined from the first letter of the id as `'x'`
-            // It is recommended to specify `position` and / or `axis` explicitly.
-            ticks: {
-              display: false
-            },
-            grid: {
-              display: false
-            }
+    // this.chart3 =
+    //   this.chartService.generateChart("myChart3", "Trips", this.statistics.tripsDateTime, this.statistics.tripsStatisticsCount);
 
-          },
-
-
-          yAxis: {
-            ticks:
-            {
-              display: false
-            },
-            grid: {
-              display: false
-            }
-          }
-
-        },
-        aspectRatio: 2.5,
-        plugins: {
-
-          legend: {
-            display: false,
-
-          },
-
-
-
-        },
-
-      }
-
-    });
-    console.log(this.chart);
-    this.chart1 = new Chart("myChart1", {
-      type: 'line', //this denotes tha type of chart
-
-      data: {// values on X-Axis
-        labels: ['2022-05-10', '2022-05-11', '2022-05-12', '2022-05-13',
-          '2022-05-14', '2022-05-15', '2022-05-16', '2022-05-17',],
-        datasets: [
-          {
-            label: "Sales",
-            data: ['467', '576', '572', '79', '92',
-              '574', '573', '576'],
-            backgroundColor: 'blue'
-          },
-          // {
-          //   label: "Profit",
-          //   data: ['542', '542', '536', '327', '17',
-          //     '0.00', '538', '541'],
-          //   backgroundColor: 'limegreen'
-          // }
-        ]
-      },
-      options: {
-
-        scales: {
-          xAxis: {
-            // The axis for this scale is determined from the first letter of the id as `'x'`
-            // It is recommended to specify `position` and / or `axis` explicitly.
-            ticks: {
-              display: false
-            },
-            grid: {
-              display: false
-            }
-
-          },
-
-
-          yAxis: {
-            ticks:
-            {
-              display: false
-            },
-            grid: {
-              display: false
-            }
-          }
-
-        },
-        aspectRatio: 2.5,
-        plugins: {
-
-          legend: {
-            display: false,
-
-          },
-
-
-
-        },
-
-      }
-
-    });
-    this.chart2 = new Chart("myChart2", {
-      type: 'line', //this denotes tha type of chart
-
-      data: {// values on X-Axis
-        labels: ['2022-05-10', '2022-05-11', '2022-05-12', '2022-05-13',
-          '2022-05-14', '2022-05-15', '2022-05-16', '2022-05-17',],
-        datasets: [
-          {
-            label: "Sales",
-            data: ['467', '576', '572', '79', '92',
-              '574', '573', '576'],
-            backgroundColor: 'blue'
-          },
-          // {
-          //   label: "Profit",
-          //   data: ['542', '542', '536', '327', '17',
-          //     '0.00', '538', '541'],
-          //   backgroundColor: 'limegreen'
-          // }
-        ]
-      },
-      options: {
-
-        scales: {
-          xAxis: {
-            // The axis for this scale is determined from the first letter of the id as `'x'`
-            // It is recommended to specify `position` and / or `axis` explicitly.
-            ticks: {
-              display: false
-            },
-            grid: {
-              display: false
-            }
-
-          },
-
-
-          yAxis: {
-            ticks:
-            {
-              display: false
-            },
-            grid: {
-              display: false
-            }
-          }
-
-        },
-        aspectRatio: 2.5,
-        plugins: {
-
-          legend: {
-            display: false,
-
-          },
-
-
-
-        },
-
-      }
-
-    });
-    this.chart3 = new Chart("myChart3", {
-      type: 'line', //this denotes tha type of chart
-
-      data: {// values on X-Axis
-        labels: ['2022-05-10', '2022-05-11', '2022-05-12', '2022-05-13',
-          '2022-05-14', '2022-05-15', '2022-05-16', '2022-05-17',],
-        datasets: [
-          {
-            label: "Sales",
-            data: ['467', '576', '572', '79', '92',
-              '574', '573', '576'],
-            backgroundColor: 'blue'
-          },
-          // {
-          //   label: "Profit",
-          //   data: ['542', '542', '536', '327', '17',
-          //     '0.00', '538', '541'],
-          //   backgroundColor: 'limegreen'
-          // }
-        ]
-      },
-      options: {
-
-        scales: {
-          xAxis: {
-            // The axis for this scale is determined from the first letter of the id as `'x'`
-            // It is recommended to specify `position` and / or `axis` explicitly.
-            ticks: {
-              display: false
-            },
-            grid: {
-              display: false
-            }
-
-          },
-
-
-          yAxis: {
-            ticks:
-            {
-              display: false
-            },
-            grid: {
-              display: false
-            }
-          }
-
-        },
-        aspectRatio: 2.5,
-        plugins: {
-
-          legend: {
-            display: false,
-
-          },
-
-
-
-        },
-
-      }
-
-    });
   }
 
 }

@@ -5,9 +5,8 @@ using Microsoft.Extensions.FileProviders.Physical;
 
 namespace BlaBlaCar.BL.DTOs.UserDTOs
 {
-    public class UserDTO
+    public class UserDTO:BaseEntity
     {
-        public Guid Id { get; set; }
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
         public string? FirstName { get; set; }
