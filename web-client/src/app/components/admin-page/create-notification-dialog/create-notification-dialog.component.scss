@@ -1,0 +1,38 @@
+.container {
+    width: 100%;
+    // display: flex;
+    text-align: center;
+
+    .title {
+        font-size: 30px;
+        font-weight: 500;
+        color: #495057;
+    }
+
+
+    form {
+        width: 95%;
+        margin: 0;
+    }
+
+    mat-form-field {
+        margin: auto;
+        border-radius: 10px;
+        padding: 10px 14px;
+        display: block;
+        width: 100%;
+        background: #e6e6e6;
+    }
+
+    .btn {
+        border: none;
+        background-color: #495057;
+        text-transform: uppercase;
+        font-size: 15px;
+        margin-top: 10px;
+        border-radius: 10px;
+        padding: 15px 25px;
+        color: white;
+    }
+
+}

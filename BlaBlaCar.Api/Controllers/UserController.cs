@@ -39,6 +39,15 @@ namespace BlaBlaCar.API.Controllers
             return BadRequest("Fail");
           
         }
+        [HttpGet("users/{userData}")]
+        public async Task<IActionResult> SearchUsersInformation(string userData)
+        {
+
+            var res = await _userService.SearchUsersAsync(userData);
+            if (res != null) return Ok(res);
+            return BadRequest("Fail");
+
+        }
 
 
         [HttpPost("update")]

@@ -1,3 +1,7 @@
+.container {
+    padding: 30px 0;
+}
+
 .users-list {
     background-color: #fff;
 }
@@ -84,6 +88,7 @@
     }
 
     .user__item {
+        cursor: pointer;
         padding: 15px 30px;
         display: flex;
         justify-content: space-between;
@@ -143,3 +148,36 @@
     }
 
 }
+
+::ng-deep .mat-form-field-underline,
+::ng-deep .mat-form-field-ripple {
+    background-color: #f5f7fd !important;
+}
+
+mat-form-field {
+    width: 300px;
+    padding: 0 40px;
+    border-radius: 30px;
+    background-color: #f5f7fd;
+
+    input {
+        width: 300px;
+        background-color: #f5f7fd;
+    }
+
+    .material-icons {
+        cursor: pointer;
+        color: #818e94;
+        font-size: 30px;
+        width: 30px;
+        height: 30px;
+        // padding-top: 10px;
+    }
+}
+
+input.mat-input-element {
+    // color: white;
+    font-size: 20px;
+}
+
+//users

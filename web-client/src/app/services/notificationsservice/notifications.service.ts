@@ -9,6 +9,19 @@ import { NotificationsModel } from 'src/app/interfaces/notifications';
 export class NotificationsService {
 
   constructor(private http: HttpClient) { }
+  getGlobalNotifications(take: number, skip: number): Observable<NotificationsModel[]> {
+    const url = 'https://localhost:6001/api/Notification/global/' + take + '/' + skip;
+    return this.http.get<NotificationsModel[]>(url);
+  }
+  getUsersNotifications(take: number, skip: number): Observable<NotificationsModel[]> {
+    const url = 'https://localhost:6001/api/Notification/users/' + take + '/' + skip;
+    return this.http.get<NotificationsModel[]>(url);
+  }
+  createNotification(notification: NotificationsModel): Observable<any> {
+    const url = 'https://localhost:6001/api/Notification/create'
+    return this.http.post(url, notification)
+  }
+  //
   getUserNotifications(): Observable<NotificationsModel[]> {
     const url = 'https://localhost:6001/api/Notification/';
     return this.http.get<NotificationsModel[]>(url);

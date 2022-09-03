@@ -16,7 +16,7 @@ namespace BlaBlaCar.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUserNotification()
+        public async Task<IActionResult> GetUserNotifications()
         {
             
             var res = await _notificationService.GetUserNotificationsAsync(User);
@@ -25,17 +25,49 @@ namespace BlaBlaCar.API.Controllers
            
         }
         [HttpPost]
-        public async Task<IActionResult> ReadUserNotification(IEnumerable<NotificationsDTO> notification)
+        public async Task<IActionResult> ReadUserNotifications(IEnumerable<NotificationsDTO> notifications)
         {
            
             if (!ModelState.IsValid)
                 throw new Exception(string.Join("; ", ModelState.Values
                     .SelectMany(x => x.Errors)
                     .Select(x => x.ErrorMessage)));
-            var res = await _notificationService.ReadAllNotificationAsync(notification, User);
+            var res = await _notificationService.ReadAllNotificationAsync(notifications, User);
             if (res) return Ok();
             return BadRequest();
             
+        }
+        [HttpGet("global/{take}/{skip}/")]
+        public async Task<IActionResult> GetGlobalNotifications(int take, int skip)
+        {
+
+            var res = await _notificationService.GetGlobalNotificationsAsync(take,skip);
+            if (res.Any()) return Ok(res);
+            return NoContent();
+
+        }
+        [HttpGet("users/{take}/{skip}/")]
+        public async Task<IActionResult> GetUsersNotifications(int take, int skip)
+        {
+
+            var res = await _notificationService.GetUsersNotificationsAsync(take, skip);
+            if (res.Any()) return Ok(res);
+            return NoContent();
+
+        }
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateNotification(CreateNotificationDTO notification)
+        {
+
+            if (!ModelState.IsValid)
+                throw new Exception(string.Join("; ", ModelState.Values
+                    .SelectMany(x => x.Errors)
+                    .Select(x => x.ErrorMessage)));
+            var res = await _notificationService.CreateNotificationAsync(notification, User);
+
+            if (res) return Ok();
+            return BadRequest();
+
         }
     }
 }

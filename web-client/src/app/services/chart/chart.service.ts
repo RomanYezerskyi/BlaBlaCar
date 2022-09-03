@@ -37,7 +37,7 @@ export class ChartService {
             // The axis for this scale is determined from the first letter of the id as `'x'`
             // It is recommended to specify `position` and / or `axis` explicitly.
             ticks: {
-              display: false
+              display: true
             },
             grid: {
               display: false
@@ -49,7 +49,7 @@ export class ChartService {
           yAxis: {
             ticks:
             {
-              display: false
+              display: true
             },
             grid: {
               display: false

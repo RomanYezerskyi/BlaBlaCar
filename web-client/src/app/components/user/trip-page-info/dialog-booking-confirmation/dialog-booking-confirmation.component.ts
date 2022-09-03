@@ -41,12 +41,9 @@ export class DialogBookingConfirmationComponent implements OnInit {
     this.trip.car.seats.forEach(x => {
       x.isSelected = false;
     });
-
     this.requestedSeats = data.requestedSeats;
     this.bookedtrip.requestedSeats = this.requestedSeats;
     this.bookedtrip.tripId = this.trip.id;
-    console.log(this.requestedSeats)
-    console.log("aaaa" + JSON.stringify(this.bookedtrip));
   }
 
   ngOnInit() {

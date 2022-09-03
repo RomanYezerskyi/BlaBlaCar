@@ -12,6 +12,8 @@ using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.DAL.Entities.NotificationEntities;
 using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace BlaBlaCar.BL.Services.NotificationServices
 {
@@ -19,10 +21,12 @@ namespace BlaBlaCar.BL.Services.NotificationServices
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public NotificationService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly HostSettings _hostSettings;
+        public NotificationService(IUnitOfWork unitOfWork, IMapper mapper, IOptionsSnapshot<HostSettings> hostSettings)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _hostSettings = hostSettings.Value;
         }
         public async Task<IEnumerable<GetNotificationsDTO>> GetUserNotificationsAsync(ClaimsPrincipal principal)
         {
@@ -74,5 +78,39 @@ namespace BlaBlaCar.BL.Services.NotificationServices
             var createdBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
             return await _unitOfWork.SaveAsync(createdBy);
         }
+        public async Task<IEnumerable<GetNotificationsDTO>> GetGlobalNotificationsAsync(int take,int skip)
+        {
+            var notifications = _mapper.Map<IEnumerable<GetNotificationsDTO>>(
+                await _unitOfWork.Notifications.GetAsync(
+                    x => x.OrderByDescending(x => x.CreatedAt),
+                    null, x => x.NotificationStatus == NotificationStatus.Global, 
+                    take:take,
+                    skip:skip));
+
+            return notifications;
+        }
+        public async Task<IEnumerable<GetNotificationsDTO>> GetUsersNotificationsAsync(int take, int skip)
+        {
+            var notifications = _mapper.Map<IEnumerable<GetNotificationsDTO>>(
+                await _unitOfWork.Notifications.GetAsync(
+                    x => x.OrderByDescending(x => x.CreatedAt),
+                    x=>x.Include(x=>x.User), 
+                    x => x.NotificationStatus == NotificationStatus.SpecificUser,
+                    take: take,
+                    skip: skip));
+
+            notifications = notifications.Select(n =>
+            {
+                if (n.User.UserImg != null)
+                {
+                    n.User.UserImg = _hostSettings.CurrentHost + n.User.UserImg;
+                }
+                return n;
+            });
+
+            return notifications;
+        }
     }
+
+    
 }

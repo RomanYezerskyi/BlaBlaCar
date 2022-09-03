@@ -1,0 +1,85 @@
+<div class="container">
+    <form #notifiForm="ngForm" class="form">
+        <mat-form-field class="example-full-width" appearance="standard">
+            <input type="search" matInput placeholder="Search users here ..." id="email" name="email"
+                [(ngModel)]="userData">
+            <i class="material-icons" matSuffix (click)=" searchUsers()">search</i>
+            <!-- <mat-error *ngIf="textFormControl.hasError('required')">
+                Text is <strong>required</strong>
+            </mat-error> -->
+        </mat-form-field>
+
+        <!-- <button class="btn" type="submit">Send</button> -->
+    </form>
+
+    <div class="users-list admins">
+        <div class="head">
+            Admins
+        </div>
+        <div class="title">
+            <h4 class="userId">#</h4>
+            <h4>Avatar</h4>
+            <h4>Name</h4>
+            <h4>Email</h4>
+            <h4>Phone</h4>
+            <h4>Date of creation</h4>
+            <h4>Licenses status</h4>
+            <h4>Total trips</h4>
+            <h4>Booked seats</h4>
+        </div>
+        <div class="user__item" *ngFor="let user of users;let i = index;" (click)="getUser(user.id)">
+            <p class="userId">#{{i}}</p>
+            <div class="img">
+                <p class="user_avatar">
+                    <img [src]="sanitizeImg(user.userImg!)" alt="">
+                </p>
+            </div>
+
+            <p>{{user.firstName}}</p>
+            <p>{{user.email}}</p>
+            <p>{{user.phoneNumber}}</p>
+            <p>{{user.createdAt | date}}</p>
+            <p>{{user.userStatus}}</p>
+            <p>{{user.trips?.length}}</p>
+            <p>{{user.tripUsers?.length}}</p>
+        </div>
+    </div>
+
+    <div class="users-list">
+        <div class="title">
+            <h4 class="userId">#</h4>
+            <h4>Avatar</h4>
+            <h4>Name</h4>
+            <h4>Email</h4>
+            <h4>Phone</h4>
+            <h4>Date of creation</h4>
+            <h4>Licenses status</h4>
+            <h4>Total trips</h4>
+            <h4>Booked seats</h4>
+        </div>
+        <div>
+            <div class="user__item">
+                <p class="userId">#1</p>
+                <div class="img">
+                    <p class="user_avatar">
+                        <img [src]="sanitizeImg(selectedUser.userImg!)" alt="">
+                    </p>
+                </div>
+                <p>{{selectedUser.firstName}}</p>
+                <p>{{selectedUser.email}}</p>
+                <p>{{selectedUser.phoneNumber}}</p>
+                <p>{{selectedUser.createdAt | date}}</p>
+                <p>{{selectedUser.userStatus}}</p>
+                <p>{{selectedUser.trips?.length}}</p>
+                <p>{{selectedUser.tripUsers?.length}}</p>
+                <!-- добавити випадайку на машини -->
+            </div>
+            <div class="user__documents" *ngFor="let doc of selectedUser.userDocuments">
+                <div class="img">
+                    <p class="user_avatar">
+                        <img [src]="sanitizeImg(doc.drivingLicense!)" alt="">
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,5 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
 import { AdminStatistics } from 'src/app/interfaces/admin-interfaces/admin-statistics';
 import { AdminService } from 'src/app/services/admin/admin.service';
@@ -25,8 +26,8 @@ export class MainComponent implements OnInit {
     weekTripsDateTime: [] = [],
     weekStatisticsTripsCount: [] = []
   };
-  constructor(private http: HttpClient, private adminService: AdminService, private chartService: ChartService) {
-
+  constructor(private http: HttpClient, private adminService: AdminService, private chartService: ChartService, private router: Router,) {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
   ngOnInit(): void {

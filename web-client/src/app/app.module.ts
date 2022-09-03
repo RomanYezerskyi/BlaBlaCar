@@ -50,6 +50,13 @@ import { TripsComponent } from './components/user/search-trip/trips/trips.compon
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MainComponent } from './components/admin-page/main/main.component';
 import { TopUsersListComponent } from './components/admin-page/main/top-users-list/top-users-list.component';
+import { AdminNotificationsComponent } from './components/admin-page/main/admin-notifications/admin-notifications.component';
+import { AdminGuard } from './guards/admin-guard/admin.guard';
+import { PageAccessGuard } from './guards/page-access/page-access.guard';
+import { CreateNotificationDialogComponent } from './components/admin-page/create-notification-dialog/create-notification-dialog.component';
+import { AdminPanelComponent } from './components/admin-page/admin-panel/admin-panel.component';
+import { ChartsComponent } from './components/admin-page/charts/charts.component';
+import { UsersManagementComponent } from './components/admin-page/users-management/users-management.component';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -87,6 +94,11 @@ export function tokenGetter() {
     TripsComponent,
     MainComponent,
     TopUsersListComponent,
+    AdminNotificationsComponent,
+    CreateNotificationDialogComponent,
+    AdminPanelComponent,
+    ChartsComponent,
+    UsersManagementComponent,
 
   ],
   imports: [
@@ -120,9 +132,9 @@ export function tokenGetter() {
     MatProgressSpinnerModule,
 
   ],
-  providers: [AuthGuard],
+  providers: [AuthGuard, AdminGuard, PageAccessGuard],
   bootstrap: [AppComponent],
-  entryComponents: [DialogBookingConfirmationComponent, UserProfileComponent],
+  entryComponents: [DialogBookingConfirmationComponent, UserProfileComponent, CreateNotificationDialogComponent],
   exports: [
     MatToolbarModule,
     MatButtonModule,

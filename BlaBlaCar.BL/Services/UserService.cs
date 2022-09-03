@@ -81,9 +81,25 @@ namespace BlaBlaCar.BL.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<UserDTO>> SearchUsersAsync(UserDTO model)
+        public async Task<IEnumerable<UserDTO>> SearchUsersAsync(string userData)
         {
-            throw new NotImplementedException();
+            var users = _mapper.Map<IEnumerable<UserDTO>>(
+                await _unitOfWork.Users.GetAsync(
+                    null, 
+                    x=>x.Include(x=>x.TripUsers).Include(x=>x.Trips), 
+                    x=>x.FirstName.Contains(userData) || 
+                       x.Email.Contains(userData) || x.PhoneNumber.Contains(userData))
+                );
+            users = users.Select(u =>
+            {
+                if (u.UserImg != null)
+                {
+                    u.UserImg = u.UserImg.Insert(0, _hostSettings.CurrentHost);
+                }
+                return u;
+            });
+
+            return users;
         }
 
         

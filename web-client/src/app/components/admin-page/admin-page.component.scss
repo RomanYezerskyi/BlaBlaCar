@@ -1,0 +1,16 @@
+.wrapper {
+    display: flex;
+
+    .panel {
+        background-color: #fff;
+        // border: 1px #000 solid;
+        min-width: 250px;
+        min-height: 84vh;
+    }
+
+    .content {
+        padding: 0 20px;
+        flex: auto;
+        min-width: 60%;
+    }
+}
