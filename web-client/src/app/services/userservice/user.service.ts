@@ -9,12 +9,16 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  searchUser(userData: string): Observable<UserModel[]> {
+  searchUsers(userData: string): Observable<UserModel[]> {
     const url = 'https://localhost:6001/api/User/users/' + userData;
     return this.http.get<UserModel[]>(url);
   }
+  getUserFromApi(userId: string): Observable<UserModel> {
+    const url = 'https://localhost:6001/api/User/';
+    return this.http.get<UserModel>(url + userId);
+  }
 
-  getUser(): Observable<UserModel> {
+  getCurrentUser(): Observable<UserModel> {
     const url = 'https://localhost:6001/api/User';
     return this.http.get<UserModel>(url);
   }

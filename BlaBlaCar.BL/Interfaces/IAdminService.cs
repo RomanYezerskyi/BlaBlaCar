@@ -15,10 +15,10 @@ namespace BlaBlaCar.BL.Interfaces
     public interface IAdminService
     {
         Task<UserRequestsViewModel> GetRequestsAsync(int take, int skip, UserDTOStatus status);
-        Task<UserDTO> GetUserRequestAsync(Guid id);
+      
         Task<bool> ChangeUserStatusAsync(ChangeUserStatusDTO changeUserStatus, ClaimsPrincipal principal);
         Task<bool> ChangeCarStatusAsync(ChangeCarStatusDTO changeCarStatus, ClaimsPrincipal principal);
-        Task<AdminStaticViewModel> GetStatisticsDataAsync();
+        Task<AdminStaticViewModel> GetStatisticsDataAsync(DateTimeOffset searchDate);
         Task<IEnumerable<UsersStatisticsDTO>> GetTopUsersListAsync(int take, int skip, UsersListOrderByType orderBy);
     }
 }

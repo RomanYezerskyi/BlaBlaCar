@@ -31,20 +31,20 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getStatistics();
+    // this.getStatistics();
 
 
   }
   getStatistics() {
-    this.adminService.getStatistics().pipe().subscribe(
-      response => {
-        this.statistics = response;
-        console.log(response)
-        console.log(this.statistics.usersStatisticsCount)
-        this.createChart();
-      },
-      (error: HttpErrorResponse) => { console.error(error.error); }
-    );
+    // this.adminService.getStatistics().pipe().subscribe(
+    //   response => {
+    //     this.statistics = response;
+    //     console.log(response)
+    //     console.log(this.statistics.usersStatisticsCount)
+    //     this.createChart();
+    //   },
+    //   (error: HttpErrorResponse) => { console.error(error.error); }
+    // );
   }
   createChart() {
     // this.chart =

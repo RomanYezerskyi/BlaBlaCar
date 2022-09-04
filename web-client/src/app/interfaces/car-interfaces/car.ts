@@ -12,5 +12,6 @@ export interface CarModel {
     seats: SeatModel[];
     carDocuments: CarDocuments[]
     carStatus: CarStatus;
-    trips?: TripModel[]
+    trips?: TripModel[],
+    createdAt?: Date
 }

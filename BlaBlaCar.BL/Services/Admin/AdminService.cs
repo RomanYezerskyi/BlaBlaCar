@@ -56,40 +56,7 @@ namespace BlaBlaCar.BL.Services.Admin
 
         }
       
-        public async Task<UserDTO> GetUserRequestAsync(Guid id)
-        {
-            var user = _mapper.Map<UserDTO>(await _unitOfWork.Users.GetAsync(
-                x => x.Include(x => x.UserDocuments)
-                    .Include(x => x.Cars)
-                    .ThenInclude(x => x.CarDocuments)
-                    .Include(x=>x.Trips)
-                    .Include(x=>x.TripUsers),
-                x => x.Id == id));
-            if (user is null)
-                throw new NotFoundException(nameof(UserDTO));
-
-            if (user.UserImg != null)
-                user.UserImg = user.UserImg.Insert(0, _hostSettings.CurrentHost);
-
-            user.UserDocuments = user.UserDocuments.Select(x =>
-            {
-                x.DrivingLicense = _hostSettings.CurrentHost + x.DrivingLicense;
-                return x;
-
-            }).ToList();
-
-            user.Cars = user.Cars.Select(x =>
-            {
-                x.CarDocuments.Select(c =>
-                {
-                    c.TechPassport = _hostSettings.CurrentHost + c.TechPassport;
-                    return c;
-                }).ToList();
-                return x;
-            }).ToList();
-
-            return user;
-        }
+       
         public async Task<bool> ChangeUserStatusAsync(ChangeUserStatusDTO changeUserStatus, ClaimsPrincipal principal)
         {
             var user = _mapper.Map<UserDTO>(
@@ -133,23 +100,20 @@ namespace BlaBlaCar.BL.Services.Admin
             return await _unitOfWork.SaveAsync(changedBy);
         }
 
-        public async Task<AdminStaticViewModel> GetStatisticsDataAsync()
+        public async Task<AdminStaticViewModel> GetStatisticsDataAsync(DateTimeOffset searchDate)
         {
             var users = _mapper.Map<IEnumerable<UsersStatisticsDTO>>(
-                await _unitOfWork.Users.GetAsync(null, null, null));
-
+                await _unitOfWork.Users.GetAsync(null, null, 
+                    x=>x.CreatedAt.Value.Month == searchDate.Month));
             var groupedUsers = users.GroupBy(x => x.CreatedAt.Value.Date);
-            
             var cars = _mapper.Map<IEnumerable<CarStatisticsDTO>>(
-                await _unitOfWork.Cars.GetAsync(null, null, null));
+                await _unitOfWork.Cars.GetAsync(null, null, x=> x.CreatedAt.Value.Month == searchDate.Month));
             var groupedCars = cars.GroupBy(x => x.CreatedAt.Value.Date);
-
             var trips = _mapper.Map<IEnumerable<TripsStatisticsDTO>>(
-                await _unitOfWork.Trips.GetAsync(null, null, null));
+                await _unitOfWork.Trips.GetAsync(null, null,
+                    x=>x.CreatedAt.Value.Month == searchDate.Month));
             var groupedWeekTrips = trips.GroupBy(x => x.CreatedAt.Value.DayOfWeek);
-
             var groupedTrips = trips.GroupBy(x => x.CreatedAt.Value.Date);
-
             var res = new AdminStaticViewModel()
             {
                 UsersStatisticsCount = groupedUsers.Select(x=>x.ToList().Count()),
@@ -164,7 +128,6 @@ namespace BlaBlaCar.BL.Services.Admin
                 WeekStatisticsTripsCount = groupedWeekTrips.Select(x=>x.ToList().Count),
                 WeekTripsDateTime = groupedWeekTrips.Select(x=>x.Key)
             };
-
             return res;
         }
 

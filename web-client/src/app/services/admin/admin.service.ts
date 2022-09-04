@@ -19,8 +19,8 @@ export class AdminService {
     const url = 'https://localhost:6001/api/Admin/top-list/' + request.take + "/" + request.skip + "/" + request.orderBy;
     return this.http.get<UserModel[]>(url);
   }
-  getStatistics(): Observable<AdminStatistics> {
-    const url = 'https://localhost:6001/api/Admin/statistics';
+  getStatistics(searchDate: string): Observable<AdminStatistics> {
+    const url = 'https://localhost:6001/api/Admin/statistics/' + searchDate;
     return this.http.get<AdminStatistics>(url);
   }
   //
@@ -40,10 +40,7 @@ export class AdminService {
     const url = 'https://localhost:6001/api/Admin/requests/';
     return this.http.get<UserRequestResponseModel>(url + status + "/" + take + "/" + skip);
   }
-  getUserRequest(userId: string): Observable<UserModel> {
-    const url = 'https://localhost:6001/api/Admin/';
-    return this.http.get<UserModel>(url + userId);
-  }
+
   changeUserDrivingLicenseStatus(newStatus: { status: UserStatus, userId: string }): Observable<any> {
     const url = 'https://localhost:6001/api/Admin/user/status';
     return this.http.post(url, newStatus);

@@ -32,15 +32,7 @@ namespace BlaBlaCar.API.Controllers
             return NoContent();
           
         }
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserRequest(Guid id)
-        {
-           
-            var res = await _adminService.GetUserRequestAsync(id);
-            if (res != null) return Ok(res);
-            return BadRequest(res);
-           
-        }
+        
         [HttpPost("user/status")]
         public async Task<IActionResult> ChangeUserRequest([FromBody]ChangeUserStatusDTO status)
         {
@@ -70,9 +62,10 @@ namespace BlaBlaCar.API.Controllers
             
         }
 
-        [HttpGet("statistics")]
-        public async Task<IActionResult> GetStatic() {
-            var res = await _adminService.GetStatisticsDataAsync();
+        [HttpGet("statistics/{searchDate}")]
+        public async Task<IActionResult> GetStatic(DateTimeOffset searchDate) 
+        {
+            var res = await _adminService.GetStatisticsDataAsync(searchDate);
             return Ok(res);
         }
 

@@ -76,9 +76,39 @@ namespace BlaBlaCar.BL.Services
             return user;
         }
 
-        public Task<IEnumerable<UserDTO>> GetUsersAsync()
+        public async Task<UserDTO> GetUserByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var user = _mapper.Map<UserDTO>(await _unitOfWork.Users.GetAsync(
+                x => x.Include(x => x.UserDocuments)
+                    .Include(x => x.Cars)
+                    .ThenInclude(x => x.CarDocuments)
+                    .Include(x => x.Trips)
+                    .Include(x => x.TripUsers),
+                x => x.Id == id));
+            if (user is null)
+                throw new NotFoundException(nameof(UserDTO));
+
+            if (user.UserImg != null)
+                user.UserImg = user.UserImg.Insert(0, _hostSettings.CurrentHost);
+
+            user.UserDocuments = user.UserDocuments.Select(x =>
+            {
+                x.DrivingLicense = _hostSettings.CurrentHost + x.DrivingLicense;
+                return x;
+
+            }).ToList();
+
+            user.Cars = user.Cars.Select(x =>
+            {
+                x.CarDocuments.Select(c =>
+                {
+                    c.TechPassport = _hostSettings.CurrentHost + c.TechPassport;
+                    return c;
+                }).ToList();
+                return x;
+            }).ToList();
+
+            return user;
         }
 
         public async Task<IEnumerable<UserDTO>> SearchUsersAsync(string userData)

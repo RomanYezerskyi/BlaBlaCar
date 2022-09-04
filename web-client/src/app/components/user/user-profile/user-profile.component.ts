@@ -158,7 +158,7 @@ export class UserProfileComponent implements OnInit {
     // return res;
   }
   getUser() {
-    this.userService.getUser().pipe().subscribe(
+    this.userService.getCurrentUser().pipe().subscribe(
       response => {
         this.user = response;
         console.log(response)

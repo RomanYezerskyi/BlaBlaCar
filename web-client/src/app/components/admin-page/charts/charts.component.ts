@@ -11,10 +11,10 @@ Chart.register(...registerables);
   styleUrls: ['./charts.component.scss']
 })
 export class ChartsComponent implements OnInit {
-  public chart: any;
-  public chart1: any;
-  public chart2: any;
-  public chart3: any;
+  public chart?: Chart;
+  public chart1?: Chart;
+  public chart2?: Chart;
+  public chart3?: Chart;
   statistics: AdminStatistics = {
     usersDateTime: [] = [],
     usersStatisticsCount: [] = [],
@@ -25,13 +25,21 @@ export class ChartsComponent implements OnInit {
     weekTripsDateTime: [] = [],
     weekStatisticsTripsCount: [] = []
   };
+  searchDate = new Date();
   constructor(private chartService: ChartService, private adminService: AdminService) { }
 
   ngOnInit(): void {
     this.getStatistics();
   }
+  searchByDate() {
+    this.chart!.destroy();
+    this.chart1!.destroy();
+    this.chart2!.destroy();
+    this.chart3!.destroy();
+    this.getStatistics();
+  }
   getStatistics() {
-    this.adminService.getStatistics().pipe().subscribe(
+    this.adminService.getStatistics(this.searchDate.toDateString()).pipe().subscribe(
       response => {
         this.statistics = response;
         console.log(response)
@@ -53,7 +61,6 @@ export class ChartsComponent implements OnInit {
 
     this.chart3 =
       this.chartService.generateChart("myChart3", "Trips", this.statistics.tripsDateTime, this.statistics.tripsStatisticsCount);
-
   }
 
 }

@@ -1,5 +1,6 @@
 .container {
     padding: 30px 0;
+    margin: 0;
 }
 
 .users-list {
@@ -61,6 +62,7 @@
 
 
     .title {
+        border-radius: 10px;
         display: flex;
         justify-content: space-between;
         padding: 20px 30px;
@@ -181,3 +183,79 @@ input.mat-input-element {
 }
 
 //users
+.head {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.documents__item {
+    display: flex;
+    flex-flow: row wrap;
+    margin: 10px 0;
+
+    .document {
+        padding: 5px;
+        box-shadow: 0px 2px 5px 0px rgb(0 0 0 / 10%);
+        margin: 5px auto;
+        width: 150px;
+        height: 150px;
+        overflow: hidden;
+        cursor: pointer;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+
+}
+
+.actions {
+    .material-icons {
+        margin: 10px 20px;
+        font-size: 50px;
+        width: 50px;
+        height: 50px;
+
+    }
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    margin-bottom: 10px;
+}
+
+.user__cars {
+    border-radius: 10px;
+    text-align: center;
+    width: 100%;
+
+    .cars__item {
+
+
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        padding: 20px 30px;
+        margin-bottom: 0;
+        color: inherit;
+        background-color: #fff;
+
+        p {
+            // border: 1px #000 solid;
+            color: #495057;
+            width: 150px;
+            font-size: 15px;
+            font-weight: 500;
+            margin: 0;
+            // padding: 10px;
+            // text-align: center
+        }
+
+        .userId {
+            width: 40px;
+            font-size: 15px;
+            font-weight: 500;
+        }
+    }
+}
