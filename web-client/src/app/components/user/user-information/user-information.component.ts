@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserModel } from 'src/app/interfaces/user-model';
+import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 
 @Component({
   selector: 'app-user-information',

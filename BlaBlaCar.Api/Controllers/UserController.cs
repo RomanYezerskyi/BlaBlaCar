@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.BL.Interfaces;
+using BlaBlaCar.BL.Services.Admin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -39,7 +40,24 @@ namespace BlaBlaCar.API.Controllers
             return BadRequest("Fail");
           
         }
+        [HttpGet("users/{userData}")]
+        public async Task<IActionResult> SearchUsersInformation(string userData)
+        {
 
+            var res = await _userService.SearchUsersAsync(userData);
+            if (res != null) return Ok(res);
+            return BadRequest("Fail");
+
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserById(Guid id)
+        {
+
+            var res = await _userService.GetUserByIdAsync(id);
+            if (res != null) return Ok(res);
+            return BadRequest(res);
+
+        }
 
         [HttpPost("update")]
         public async Task<IActionResult> UpdateUser(UpdateUserDTO userModel)

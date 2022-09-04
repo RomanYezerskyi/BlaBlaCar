@@ -1,11 +1,15 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { CarStatus } from 'src/app/interfaces/car-status';
-import { UserModel } from 'src/app/interfaces/user-model';
-import { UserStatus } from 'src/app/interfaces/user-status';
+import { Observable, Subscription } from 'rxjs';
+import { CarType } from 'src/app/enums/car-type';
+import { CarStatus } from 'src/app/interfaces/car-interfaces/car-status';
+import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
+import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
 import { AdminService } from 'src/app/services/admin/admin.service';
+import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
+import { UserService } from 'src/app/services/userservice/user.service';
 
 export enum Menu {
   User = 1,
@@ -18,62 +22,74 @@ export enum Menu {
   templateUrl: './user-request-info.component.html',
   styleUrls: ['./user-request-info.component.scss']
 })
-export class UserRequestInfoComponent implements OnInit {
-  menu = Menu;
+export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
   userStatus = UserStatus;
   carStatus = CarStatus;
-  userId = '';
-  user: UserModel = {
-    id: '', userDocuments: [], email: '', firstName: '', phoneNumber: '',
-    roles: [], userStatus: UserStatus.WithoutCar, cars: [] = []
+  carType = CarType;
+  selectedUser: UserModel = {
+    id: '', cars: [], email: '', firstName: '', phoneNumber: '', roles: [], userDocuments: [], userStatus: -1,
   };
-  private formData = new FormData();
-  img = 'data:image/jpeg;base64,';
-  result = '';
-  page = 0;
-  constructor(private route: ActivatedRoute, private http: HttpClient,
-    private sanitizer: DomSanitizer, private adminService: AdminService) { }
-
+  usersSubscription!: Subscription;
+  constructor(private userService: UserService,
+    private sanitizeImgService: ImgSanitizerService,
+    private route: ActivatedRoute,
+    private http: HttpClient, private adminService: AdminService) { }
+  @Input() userId = '';
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.userId = params['id'];
-    });
-    this.getUserRequest();
-    // this.route.queryParams.subscribe(params => {
-    //   this.menu = params['type'];
-    // });
-
+    if (this.userId == '') {
+      this.route.params.subscribe(params => {
+        this.userId = params['id'];
+      });
+    }
+    this.getUser(this.userId);
   }
-  getOutPut(event: any) {
-    this.ngOnInit();
+  ngOnDestroy(): void {
+    this.usersSubscription.unsubscribe();
   }
-  check = 1;
-  changePage(item: Menu) {
-    this.check = item as number;
-    console.log(this.check);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['userId'] && changes['userId']?.previousValue != changes['userId']?.currentValue) {
+      if (this.userId != '') this.getUser(this.userId)
+    }
   }
-
-  sanitaizeImg(img: string): SafeUrl {
-    return this.sanitizer.bypassSecurityTrustUrl(img);
+  sanitizeImg(img: string): SafeUrl {
+    return this.sanitizeImgService.sanitiizeUserImg(img);
   }
-
-
-  getUserRequest = () => {
-    this.adminService.getUserRequest(this.userId).pipe().subscribe(
+  getUser(userId: string) {
+    this.usersSubscription = this.userService.getUserFromApi(userId).subscribe(
       response => {
-        this.user = response;
+        console.log(response);
+        this.selectedUser = response;
+      },
+      (error: HttpErrorResponse) => { console.error(error.error); }
+    );
+  }
+  changeUserStatus = (status: UserStatus) => {
+    if (this.selectedUser.userStatus == status) return;
+    const newStatus = {
+      status: status,
+      userId: this.selectedUser.id
+    };
+    this.adminService.changeUserDrivingLicenseStatus(newStatus).pipe().subscribe(
+      response => {
+        window.alert(response);
         console.log(response);
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
-    // const url = 'https://localhost:6001/api/Admin/';
-    // this.http.get(url + this.userId)
-    //   .subscribe({
-    //     next: (res: any) => {
-    //       this.user = res as UserModel;
-    //       console.log(this.user);
-    //     },
-    //     error: (err: HttpErrorResponse) => console.error(err),
-    //   });
   }
+  changeCarStatus = (status: CarStatus, carId: number) => {
+    if (this.selectedUser.cars.find(x => x.id == carId)?.carStatus == status) return;
+    const newStatus = {
+      status: status,
+      carId: carId,
+    };
+    this.adminService.changeCarDocumentsStatus(newStatus).pipe().subscribe(
+      response => {
+        console.log(response);
+      },
+      (error: HttpErrorResponse) => { console.error(error.error); }
+    );
+
+  }
+
 }

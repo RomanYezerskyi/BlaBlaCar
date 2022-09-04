@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { UserStatus } from 'src/app/interfaces/user-status';
+import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
 import { HttpClient, HttpHeaders, HttpStatusCode } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';

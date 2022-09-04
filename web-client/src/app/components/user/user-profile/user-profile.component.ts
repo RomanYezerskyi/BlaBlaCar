@@ -4,8 +4,8 @@ import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Valida
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { UserModel } from 'src/app/interfaces/user-model';
-import { UserStatus } from 'src/app/interfaces/user-status';
+import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
+import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
 import { PasswordValidatorService } from 'src/app/services/password-validator/password-validator.service';
 import { UserService } from 'src/app/services/userservice/user.service';
@@ -158,7 +158,7 @@ export class UserProfileComponent implements OnInit {
     // return res;
   }
   getUser() {
-    this.userService.getUser().pipe().subscribe(
+    this.userService.getCurrentUser().pipe().subscribe(
       response => {
         this.user = response;
         console.log(response)

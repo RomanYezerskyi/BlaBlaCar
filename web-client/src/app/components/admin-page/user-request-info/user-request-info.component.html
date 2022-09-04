@@ -1,28 +1,109 @@
-<!-- <p>user-request-info works!</p> -->
+<div class="container">
+    <div class="users-list" *ngIf="selectedUser.email != ''">
+        <div class="title">
+            <h4 class="userId">#</h4>
+            <h4>Avatar</h4>
+            <h4>Name</h4>
+            <h4>Email</h4>
+            <h4>Phone</h4>
+            <h4>Date of creation</h4>
+            <h4>Licenses status</h4>
+            <h4>Total trips</h4>
+            <h4>Booked seats</h4>
+        </div>
+        <div>
+            <div class="user__item">
+                <p class="userId">#1</p>
+                <div class="img">
+                    <p class="user_avatar">
+                        <img [src]="sanitizeImg(selectedUser.userImg!)" alt="">
+                    </p>
+                </div>
+                <p>{{selectedUser.firstName}}</p>
+                <p>{{selectedUser.email}}</p>
+                <p>{{selectedUser.phoneNumber}}</p>
+                <p>{{selectedUser.createdAt | date}}</p>
+                <p *ngIf="selectedUser.userStatus == userStatus.Confirmed"> <i
+                        class="material-icons btn btn_actions">thumb_up</i></p>
+                <p *ngIf="selectedUser.userStatus == userStatus.Rejected"> <i
+                        class="material-icons btn btn_actions">thumb_down</i></p>
+                <p *ngIf="selectedUser.userStatus == userStatus.NeedMoreData"> <i
+                        class="material-icons btn btn_actions">thumb_up_down</i></p>
+                <p *ngIf="selectedUser.userStatus == userStatus.Pending"> <i class="material-icons">access_time</i></p>
+                <p>{{selectedUser.trips?.length}}</p>
+                <p>{{selectedUser.tripUsers?.length}}</p>
+            </div>
+            <div class="user__documents" *ngIf="selectedUser.userDocuments.length > 0">
+                <h3 class=" head">Documents</h3>
+                <div class="documents__item">
+                    <div class="document" *ngFor="let doc of selectedUser.userDocuments">
+                        <img [src]="sanitizeImg(doc.drivingLicense!)" alt="">
+                    </div>
 
-
-<!-- {{user.firstName}}
-
-<p><img style="width: 30%;" [src]="convertImg(user.drivingLicense)" alt=""></p>
-
-<button (click)="changeUserStatus(userStatus.Confirmed)">Confirm</button>
-<button (click)="changeUserStatus(userStatus.Rejected)">Reject</button>
-<button (click)="changeUserStatus(userStatus.NeedMoreData)">Again</button>
-<div *ngFor="let car of user.cars">
-    <p>{{car.modelName}}</p>
-    <p><img style="width: 30%;" [src]="convertImg(car.techPassport)" alt=""></p>
-    <button (click)="changeCarStatus(carStatus.Confirmed, car.id)">Confirm</button>
-    <button (click)="changeCarStatus(carStatus.Rejected, car.id)">Reject</button>
-    <button (click)="changeCarStatus(carStatus.NeedMoreData, car.id)">Again</button>
-</div> -->
-<div class="tabs">
-    <img (click)="changePage(menu.User)" class="tabs__actions icon_resume" src="../../../../assets/images/resume1.png"
-        alt="">
-    <!-- <img (click)="changePage(menu.Licenses)" class="tabs__actions icon_license"
-        src="../../../../assets/images/driver-license1.png" alt=""> -->
-    <img (click)="changePage(menu.Cars)" class="tabs__actions icon_car" src="../../../../assets/images/car1.png" alt="">
-</div>
-
-<app-main-info [user]="user" *ngIf="check == 1"></app-main-info>
-<!-- <app-driving-license-request [user]="user" *ngIf="check == menu.Licenses"></app-driving-license-request> -->
-<app-car-requests [user]="user" *ngIf="check == 3" (someOutput)=getOutPut($event)></app-car-requests>
+                </div>
+                <div class="actions">
+                    <i class="material-icons btn btn_actions"
+                        [ngClass]="{'': !(selectedUser.userStatus == userStatus.Confirmed), 'active': selectedUser.userStatus == userStatus.Confirmed}"
+                        (click)="changeUserStatus(userStatus.Confirmed)">thumb_up</i>
+                    <i class="material-icons btn btn_actions"
+                        [ngClass]="{'': !(selectedUser.userStatus == userStatus.NeedMoreData), 'active': selectedUser.userStatus == userStatus.NeedMoreData}"
+                        (click)="changeUserStatus(userStatus.NeedMoreData)">thumbs_up_down</i>
+                    <i class="material-icons btn btn_actions"
+                        [ngClass]="{'': !(selectedUser.userStatus == userStatus.Rejected), 'active': selectedUser.userStatus == userStatus.Rejected}"
+                        (click)="changeUserStatus(userStatus.Rejected)">thumb_down</i>
+                </div>
+            </div>
+        </div>
+        <div class="user__cars" *ngIf="selectedUser.cars.length > 0">
+            <h3 class="head">Cars</h3>
+            <div class="title">
+                <h4 class="userId">#</h4>
+                <h4>Model</h4>
+                <h4>Registration number</h4>
+                <h4>Type</h4>
+                <h4>Status</h4>
+                <h4>Date of creation</h4>
+                <h4>Seats</h4>
+            </div>
+            <div class="cars_list" *ngFor="let car of selectedUser.cars; let i = index">
+                <div class="cars__item">
+                    <p class="userId">#{{i}}</p>
+                    <p>{{car.modelName}}</p>
+                    <p>{{car.registNum}}</p>
+                    <p *ngIf="car.carType == carType.Sedan">
+                        <mat-icon>drive_eta</mat-icon>
+                    </p>
+                    <p *ngIf="car.carType == carType.Bus">
+                        <mat-icon>airport_shuttle</mat-icon>
+                    </p>
+                    <!-- <p>{{car.carStatus}}</p> -->
+                    <p *ngIf="car.carStatus == carStatus.NeedMoreData"> <i
+                            class="material-icons btn btn_actions">thumb_up_down</i></p>
+                    <p *ngIf="car.carStatus == carStatus.Confirmed"> <i
+                            class="material-icons btn btn_actions">thumb_up</i></p>
+                    <p *ngIf="car.carStatus == carStatus.Rejected"> <i
+                            class="material-icons btn btn_actions">thumb_down</i></p>
+                    <p *ngIf="car.carStatus == carStatus.Pending"> <i
+                            class=" material-icons btn btn_actions">access_time</i></p>
+                    <p>{{car.createdAt | date}}</p>
+                    <p>{{car.seats.length}}</p>
+                </div>
+                <div class="documents__item">
+                    <div class="document" *ngFor="let doc of car.carDocuments">
+                        <img [src]="sanitizeImg(doc.techPassport!)" alt="">
+                    </div>
+                </div>
+                <div class="actions">
+                    <i class="material-icons btn btn_actions"
+                        [ngClass]="{'': !(car.carStatus == carStatus.Confirmed), 'active': car.carStatus == carStatus.Confirmed}"
+                        (click)="changeCarStatus(carStatus.Confirmed, car.id)">thumb_up</i>
+                    <i class="material-icons btn btn_actions"
+                        [ngClass]="{'': !(car.carStatus == carStatus.Confirmed), 'active': car.carStatus == carStatus.NeedMoreData}"
+                        (click)="changeCarStatus(carStatus.NeedMoreData, car.id)">thumbs_up_down</i>
+                    <i class="material-icons btn btn_actions"
+                        [ngClass]="{'': !(car.carStatus == carStatus.Confirmed), 'active': car.carStatus == carStatus.Rejected}"
+                        (click)="changeCarStatus(carStatus.Rejected, car.id)">thumb_down</i>
+                </div>
+            </div>
+        </div>
+    </div>

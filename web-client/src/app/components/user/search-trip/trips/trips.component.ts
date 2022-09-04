@@ -3,8 +3,8 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TripOrderBy } from 'src/app/enums/trip-order-by';
-import { SearchTripModel } from 'src/app/interfaces/search-trip';
-import { TripsResponseModel } from 'src/app/interfaces/trips-response-model';
+import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip';
+import { TripsResponseModel } from 'src/app/interfaces/trip-interfaces/trips-response-model';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
 import { TripService } from 'src/app/services/tripservice/trip.service';
 

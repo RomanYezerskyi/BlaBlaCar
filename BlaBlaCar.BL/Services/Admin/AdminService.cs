@@ -2,14 +2,17 @@
 using System.Security.Claims;
 using AutoMapper;
 using BlaBlaCar.BL.DTOs;
+using BlaBlaCar.BL.DTOs.AdminDTOs;
 using BlaBlaCar.BL.DTOs.CarDTOs;
 using BlaBlaCar.BL.DTOs.NotificationDTOs;
 using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.BL.Exceptions;
 using BlaBlaCar.BL.Interfaces;
-using BlaBlaCar.BL.ViewModels;
+using BlaBlaCar.BL.Services.TripServices;
+using BlaBlaCar.BL.ViewModels.AdminViewModels;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Entities.CarEntities;
+using BlaBlaCar.DAL.Entities.TripEntities;
 using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
 using Microsoft.EntityFrameworkCore;
@@ -53,40 +56,7 @@ namespace BlaBlaCar.BL.Services.Admin
 
         }
       
-        public async Task<UserDTO> GetUserRequestAsync(Guid id)
-        {
-            var user = _mapper.Map<UserDTO>(await _unitOfWork.Users.GetAsync(
-                x => x.Include(x => x.UserDocuments)
-                    .Include(x => x.Cars)
-                    .ThenInclude(x => x.CarDocuments)
-                    .Include(x=>x.Trips)
-                    .Include(x=>x.TripUsers),
-                x => x.Id == id));
-            if (user is null)
-                throw new NotFoundException(nameof(UserDTO));
-
-            if (user.UserImg != null)
-                user.UserImg = user.UserImg.Insert(0, _hostSettings.CurrentHost);
-
-            user.UserDocuments = user.UserDocuments.Select(x =>
-            {
-                x.DrivingLicense = _hostSettings.CurrentHost + x.DrivingLicense;
-                return x;
-
-            }).ToList();
-
-            user.Cars = user.Cars.Select(x =>
-            {
-                x.CarDocuments.Select(c =>
-                {
-                    c.TechPassport = _hostSettings.CurrentHost + c.TechPassport;
-                    return c;
-                }).ToList();
-                return x;
-            }).ToList();
-
-            return user;
-        }
+       
         public async Task<bool> ChangeUserStatusAsync(ChangeUserStatusDTO changeUserStatus, ClaimsPrincipal principal)
         {
             var user = _mapper.Map<UserDTO>(
@@ -128,6 +98,74 @@ namespace BlaBlaCar.BL.Services.Admin
                     UserId = car.UserId,
                 });
             return await _unitOfWork.SaveAsync(changedBy);
+        }
+
+        public async Task<AdminStaticViewModel> GetStatisticsDataAsync(DateTimeOffset searchDate)
+        {
+            var users = _mapper.Map<IEnumerable<UsersStatisticsDTO>>(
+                await _unitOfWork.Users.GetAsync(null, null, 
+                    x=>x.CreatedAt.Value.Month == searchDate.Month));
+            var groupedUsers = users.GroupBy(x => x.CreatedAt.Value.Date);
+            var cars = _mapper.Map<IEnumerable<CarStatisticsDTO>>(
+                await _unitOfWork.Cars.GetAsync(null, null, x=> x.CreatedAt.Value.Month == searchDate.Month));
+            var groupedCars = cars.GroupBy(x => x.CreatedAt.Value.Date);
+            var trips = _mapper.Map<IEnumerable<TripsStatisticsDTO>>(
+                await _unitOfWork.Trips.GetAsync(null, null,
+                    x=>x.CreatedAt.Value.Month == searchDate.Month));
+            var groupedWeekTrips = trips.GroupBy(x => x.CreatedAt.Value.DayOfWeek);
+            var groupedTrips = trips.GroupBy(x => x.CreatedAt.Value.Date);
+            var res = new AdminStaticViewModel()
+            {
+                UsersStatisticsCount = groupedUsers.Select(x=>x.ToList().Count()),
+                UsersDateTime = groupedUsers.Select(x=>x.Key),
+
+                CarsStatisticsCount = groupedCars.Select(x=>x.ToList().Count),
+                CarsDateTime = groupedCars.Select(x=>x.Key),
+
+                TripsStatisticsCount = groupedTrips.Select(x=>x.ToList().Count),
+                TripsDateTime = groupedTrips.Select(x=>x.Key),
+
+                WeekStatisticsTripsCount = groupedWeekTrips.Select(x=>x.ToList().Count),
+                WeekTripsDateTime = groupedWeekTrips.Select(x=>x.Key)
+            };
+            return res;
+        }
+
+        public async Task<IEnumerable<UsersStatisticsDTO>> GetTopUsersListAsync(int take, int skip, UsersListOrderByType orderBy)
+        {
+            Func<IQueryable<ApplicationUser>, IOrderedQueryable<ApplicationUser>> usersOrderBy = null;
+            switch (orderBy)
+            {
+                case UsersListOrderByType.Trips:
+                    usersOrderBy = user => 
+                        user.OrderByDescending(u=>u.Trips.Count).ThenByDescending(u=>u.TripUsers.Count);
+                    break;
+                case UsersListOrderByType.UserTrips:
+                    usersOrderBy = user =>
+                        user.OrderByDescending(u => u.TripUsers.Count);
+                    break;
+
+                default:
+                    usersOrderBy = user =>
+                        user.OrderByDescending(u => u.Trips.Count).ThenByDescending(u => u.TripUsers.Count); ;
+                    break;
+            }
+            var users = _mapper.Map<IEnumerable<UsersStatisticsDTO>>(
+                await _unitOfWork.Users.GetAsync(
+                    usersOrderBy, 
+                    x=>x.Include(x=>x.Trips).Include(x=>x.TripUsers), 
+                    null,
+                    take:take,
+                    skip:skip));
+            users = users.Select(u =>
+            {
+                if (u.UserImg != null)
+                {
+                    u.UserImg = u.UserImg.Insert(0, _hostSettings.CurrentHost);
+                }
+                return u;
+            });
+            return users;
         }
     }
 }

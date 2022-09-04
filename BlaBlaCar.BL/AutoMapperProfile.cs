@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BlaBlaCar.BL.DTOs.AdminDTOs;
 using BlaBlaCar.BL.DTOs.BookTripDTOs;
 using BlaBlaCar.BL.DTOs.BookTripModels;
 using BlaBlaCar.BL.DTOs.CarDTOs;
@@ -17,14 +18,17 @@ namespace BlaBlaCar.BL
         public AutoMapperProfile()
         {
             CreateMap<ApplicationUser, UserDTO>().ReverseMap();
+            CreateMap<UsersStatisticsDTO, ApplicationUser>().ReverseMap();
 
             CreateMap<CreateTripDTO, TripDTO>().ReverseMap();
             CreateMap<Trip, TripDTO>().ReverseMap();
             CreateMap<GetTripWithTripUsersDTO, TripDTO>().ReverseMap();
+            CreateMap<TripsStatisticsDTO,Trip>().ReverseMap();
 
             CreateMap<AvailableSeats, AvailableSeatDTO>().ReverseMap();
             CreateMap<Car, CarDTO>().ReverseMap();
             CreateMap<CreateCarDTO, CarDTO>().ReverseMap();
+            CreateMap<CarStatisticsDTO, Car>().ReverseMap();
 
             CreateMap<AvailableSeatDTO, NewAvailableSeatDTO>().ReverseMap();
             CreateMap<SeatDTO, Seat>().ReverseMap();

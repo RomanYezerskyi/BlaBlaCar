@@ -76,14 +76,60 @@ namespace BlaBlaCar.BL.Services
             return user;
         }
 
-        public Task<IEnumerable<UserDTO>> GetUsersAsync()
+        public async Task<UserDTO> GetUserByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var user = _mapper.Map<UserDTO>(await _unitOfWork.Users.GetAsync(
+                x => x.Include(x => x.UserDocuments)
+                    .Include(x => x.Cars)
+                    .ThenInclude(x => x.CarDocuments)
+                    .Include(x => x.Trips)
+                    .Include(x => x.TripUsers),
+                x => x.Id == id));
+            if (user is null)
+                throw new NotFoundException(nameof(UserDTO));
+
+            if (user.UserImg != null)
+                user.UserImg = user.UserImg.Insert(0, _hostSettings.CurrentHost);
+
+            user.UserDocuments = user.UserDocuments.Select(x =>
+            {
+                x.DrivingLicense = _hostSettings.CurrentHost + x.DrivingLicense;
+                return x;
+
+            }).ToList();
+
+            user.Cars = user.Cars.Select(x =>
+            {
+                x.CarDocuments.Select(c =>
+                {
+                    c.TechPassport = _hostSettings.CurrentHost + c.TechPassport;
+                    return c;
+                }).ToList();
+                return x;
+            }).ToList();
+
+            return user;
         }
 
-        public Task<IEnumerable<UserDTO>> SearchUsersAsync(UserDTO model)
+        public async Task<IEnumerable<UserDTO>> SearchUsersAsync(string userData)
         {
-            throw new NotImplementedException();
+            var users = _mapper.Map<IEnumerable<UserDTO>>(
+                await _unitOfWork.Users.GetAsync(
+                    null, 
+                    x=>x.Include(x=>x.TripUsers).Include(x=>x.Trips), 
+                    x=>x.FirstName.Contains(userData) || 
+                       x.Email.Contains(userData) || x.PhoneNumber.Contains(userData))
+                );
+            users = users.Select(u =>
+            {
+                if (u.UserImg != null)
+                {
+                    u.UserImg = u.UserImg.Insert(0, _hostSettings.CurrentHost);
+                }
+                return u;
+            });
+
+            return users;
         }
 
         
@@ -175,6 +221,7 @@ namespace BlaBlaCar.BL.Services
             var img = await _fileService.FilesDbPathListAsync(userImg);
 
             user.UserImg = img;
+            
             _unitOfWork.Users.Update(_mapper.Map<ApplicationUser>(user));
             return await _unitOfWork.SaveAsync(userId);
 

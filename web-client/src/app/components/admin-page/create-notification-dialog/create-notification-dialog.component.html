@@ -1,0 +1,26 @@
+<!-- <mat-dialog-actions>
+    <div class="actions">
+        <button class="btn_action">Close</button>
+
+    </div>
+</mat-dialog-actions> -->
+<mat-dialog-content>
+    <div class="container">
+        <h2 class="title">{{title}}</h2>
+
+        <form #notifiForm="ngForm" class="form" (ngSubmit)="createNotification(notifiForm)">
+            <mat-form-field class="example-full-width" appearance="legacy">
+                <mat-label>Notification text</mat-label>
+                <!-- <input type="text" matInput required placeholder="Ex. pat@example.com" id="email" name="email"
+            [(ngModel)]="notification.text"> -->
+                <textarea [formControl]="textFormControl" [(ngModel)]="notification.text" matInput required
+                    placeholder="Ex. hi!" id="email" name="email" cols="10" rows="10"></textarea>
+                <mat-error *ngIf="textFormControl.hasError('required')">
+                    Text is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+
+            <button class="btn" type="submit" [disabled]="!textFormControl.valid">Send</button>
+        </form>
+    </div>
+</mat-dialog-content>

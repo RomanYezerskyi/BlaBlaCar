@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using BlaBlaCar.BL.DTOs.BookTripDTOs;
 using BlaBlaCar.BL.DTOs.BookTripModels;
 using BlaBlaCar.BL.DTOs.TripDTOs;
-using BlaBlaCar.BL.ViewModels;
+using BlaBlaCar.BL.ViewModels.AdminViewModels;
 
 namespace BlaBlaCar.BL.Interfaces
 {

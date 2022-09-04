@@ -1,10 +1,10 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TripModel } from 'src/app/interfaces/trip';
+import { TripModel } from 'src/app/interfaces/trip-interfaces/trip';
 import { DialogBookingConfirmationComponent } from './dialog-booking-confirmation/dialog-booking-confirmation.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { CarModel } from 'src/app/interfaces/car';
+import { CarModel } from 'src/app/interfaces/car-interfaces/car';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TripService } from 'src/app/services/tripservice/trip.service';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';

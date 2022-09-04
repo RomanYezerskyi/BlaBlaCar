@@ -1,8 +1,8 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AddTripModel } from 'src/app/interfaces/add-trip';
-import { CarModel } from 'src/app/interfaces/car';
+import { AddTripModel } from 'src/app/interfaces/trip-interfaces/add-trip';
+import { CarModel } from 'src/app/interfaces/car-interfaces/car';
 import { CarService } from 'src/app/services/carservice/car.service';
 
 export enum Menu {

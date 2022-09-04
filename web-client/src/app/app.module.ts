@@ -28,8 +28,6 @@ import { UserRequestInfoComponent } from './components/admin-page/user-request-i
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MainInfoComponent } from './components/admin-page/user-request-info/main-info/main-info.component';
-import { CarRequestsComponent } from './components/admin-page/user-request-info/car-requests/car-requests.component';
 import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
 import { UserBookedTripsComponent } from './components/user/user-information/user-booked-trips/user-booked-trips.component';
 import { UserInformationComponent } from './components/user/user-information/user-information.component';
@@ -47,7 +45,16 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { SortingPanelComponent } from './components/user/search-trip/sorting-panel/sorting-panel.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { TripsComponent } from './components/user/search-trip/trips/trips.component';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MainComponent } from './components/admin-page/main/main.component';
+import { TopUsersListComponent } from './components/admin-page/main/top-users-list/top-users-list.component';
+import { AdminNotificationsComponent } from './components/admin-page/main/admin-notifications/admin-notifications.component';
+import { AdminGuard } from './guards/admin-guard/admin.guard';
+import { PageAccessGuard } from './guards/page-access/page-access.guard';
+import { CreateNotificationDialogComponent } from './components/admin-page/create-notification-dialog/create-notification-dialog.component';
+import { AdminPanelComponent } from './components/admin-page/admin-panel/admin-panel.component';
+import { ChartsComponent } from './components/admin-page/charts/charts.component';
+import { UsersManagementComponent } from './components/admin-page/users-management/users-management.component';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -71,8 +78,6 @@ export function tokenGetter() {
     RolesComponent,
     UsersRequestsComponent,
     UserRequestInfoComponent,
-    MainInfoComponent,
-    CarRequestsComponent,
     UserProfileComponent,
     UserBookedTripsComponent,
     UserInformationComponent,
@@ -83,6 +88,13 @@ export function tokenGetter() {
     SearchFormComponent,
     SortingPanelComponent,
     TripsComponent,
+    MainComponent,
+    TopUsersListComponent,
+    AdminNotificationsComponent,
+    CreateNotificationDialogComponent,
+    AdminPanelComponent,
+    ChartsComponent,
+    UsersManagementComponent,
 
   ],
   imports: [
@@ -113,12 +125,12 @@ export function tokenGetter() {
     MatNativeDateModule,
     MatDatepickerModule,
     MatRadioModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
 
   ],
-  providers: [AuthGuard],
+  providers: [AuthGuard, AdminGuard, PageAccessGuard],
   bootstrap: [AppComponent],
-  entryComponents: [DialogBookingConfirmationComponent, UserProfileComponent],
+  entryComponents: [DialogBookingConfirmationComponent, UserProfileComponent, CreateNotificationDialogComponent],
   exports: [
     MatToolbarModule,
     MatButtonModule,

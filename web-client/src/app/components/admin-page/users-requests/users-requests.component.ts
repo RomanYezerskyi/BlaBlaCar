@@ -1,10 +1,10 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CarStatus } from 'src/app/interfaces/car-status';
-import { UserModel } from 'src/app/interfaces/user-model';
-import { UserRequestResponseModel } from 'src/app/interfaces/user-request-response-model';
-import { UserStatus } from 'src/app/interfaces/user-status';
+import { CarStatus } from 'src/app/interfaces/car-interfaces/car-status';
+import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
+import { UserRequestResponseModel } from 'src/app/interfaces/user-interfaces/user-request-response-model';
+import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
 import { AdminService } from 'src/app/services/admin/admin.service';
 
 @Component({

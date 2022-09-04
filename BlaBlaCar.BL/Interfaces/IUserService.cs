@@ -14,8 +14,8 @@ namespace BlaBlaCar.BL.Interfaces
     public interface IUserService
     {
         Task<UserDTO> GetUserInformationAsync(ClaimsPrincipal claimsPrincipal);
-        Task<IEnumerable<UserDTO>> GetUsersAsync();
-        Task<IEnumerable<UserDTO>> SearchUsersAsync(UserDTO model);
+        Task<UserDTO> GetUserByIdAsync(Guid id);
+        Task<IEnumerable<UserDTO>> SearchUsersAsync(string userData);
         Task<bool> RequestForDrivingLicense(ClaimsPrincipal principal, IEnumerable<IFormFile> drivingLicense);
         Task<bool> СheckIfUserExistsAsync(ClaimsPrincipal user);
         Task<bool> AddUserAsync(ClaimsPrincipal user);

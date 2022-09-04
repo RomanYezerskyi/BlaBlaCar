@@ -2,10 +2,10 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { TripModel } from 'src/app/interfaces/trip';
-import { TripUserModel } from 'src/app/interfaces/trip-user-model';
-import { TripsResponseModel } from 'src/app/interfaces/trips-response-model';
-import { UserModel } from 'src/app/interfaces/user-model';
+import { TripModel } from 'src/app/interfaces/trip-interfaces/trip';
+import { TripUserModel } from 'src/app/interfaces/trip-interfaces/trip-user-model';
+import { TripsResponseModel } from 'src/app/interfaces/trip-interfaces/trips-response-model';
+import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
 import { TripService } from 'src/app/services/tripservice/trip.service';
 

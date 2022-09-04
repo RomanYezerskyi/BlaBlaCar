@@ -4,6 +4,7 @@ using BlaBlaCar.BL.DTOs;
 using BlaBlaCar.BL.DTOs.CarDTOs;
 using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.BL.Interfaces;
+using BlaBlaCar.BL.ViewModels.AdminViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,15 +32,7 @@ namespace BlaBlaCar.API.Controllers
             return NoContent();
           
         }
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserRequest(Guid id)
-        {
-           
-            var res = await _adminService.GetUserRequestAsync(id);
-            if (res != null) return Ok(res);
-            return BadRequest(res);
-           
-        }
+        
         [HttpPost("user/status")]
         public async Task<IActionResult> ChangeUserRequest([FromBody]ChangeUserStatusDTO status)
         {
@@ -67,6 +60,20 @@ namespace BlaBlaCar.API.Controllers
             if (res != null) return Ok(new{res="User status changed"});
             return BadRequest(res);
             
+        }
+
+        [HttpGet("statistics/{searchDate}")]
+        public async Task<IActionResult> GetStatic(DateTimeOffset searchDate) 
+        {
+            var res = await _adminService.GetStatisticsDataAsync(searchDate);
+            return Ok(res);
+        }
+
+        [HttpGet("top-list/{take}/{skip}/{orderBy}")]
+        public async Task<IActionResult> GetUsersTopList(int take, int skip, UsersListOrderByType orderBy)
+         {
+            var res = await _adminService.GetTopUsersListAsync(take,skip, orderBy);
+            return Ok(res);
         }
     }
 }

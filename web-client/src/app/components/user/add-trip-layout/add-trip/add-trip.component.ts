@@ -3,11 +3,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CarType } from 'src/app/enums/car-type';
-import { AddTripModel } from 'src/app/interfaces/add-trip';
-import { AddNewCarModel } from 'src/app/interfaces/addnew-car';
-import { AvailableSeatsModel } from 'src/app/interfaces/available-seats';
-import { CarModel } from 'src/app/interfaces/car';
-import { SeatModel } from 'src/app/interfaces/seat';
+import { AddTripModel } from 'src/app/interfaces/trip-interfaces/add-trip';
+import { AddNewCarModel } from 'src/app/interfaces/car-interfaces/addnew-car';
+import { AvailableSeatsModel } from 'src/app/interfaces/trip-interfaces/available-seats';
+import { CarModel } from 'src/app/interfaces/car-interfaces/car';
+import { SeatModel } from 'src/app/interfaces/car-interfaces/seat';
 @Component({
   selector: 'app-add-trip',
   templateUrl: './add-trip.component.html',

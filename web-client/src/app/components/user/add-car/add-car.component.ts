@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, NgForm, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CarType } from 'src/app/enums/car-type';
-import { AddNewCarModel } from 'src/app/interfaces/addnew-car';
+import { AddNewCarModel } from 'src/app/interfaces/car-interfaces/addnew-car';
 import { CarService } from 'src/app/services/carservice/car.service';
 
 @Component({

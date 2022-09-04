@@ -3,9 +3,8 @@ using BlaBlaCar.BL.DTOs.UserDTOs;
 
 namespace BlaBlaCar.BL.DTOs.CarDTOs
 {
-    public class CarDTO
+    public class CarDTO:BaseEntity
     {
-        public Guid Id { get; set; }
         public string ModelName { get; set; }
         public string RegistNum { get; set; }
         public CarTypeDTO CarType { get; set; }
