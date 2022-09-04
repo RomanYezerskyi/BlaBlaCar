@@ -18,6 +18,7 @@ export class CreateNotificationDialogComponent implements OnInit, OnDestroy {
   title = '';
   notification: NotificationsModel = {
     text: '',
+
   };
   onSubmitReason = new EventEmitter();
   constructor(private dialogRef: MatDialogRef<CreateNotificationDialogComponent>, @Inject(MAT_DIALOG_DATA) data: any, private notificationsService: NotificationsService) {

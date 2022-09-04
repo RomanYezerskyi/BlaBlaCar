@@ -53,6 +53,18 @@ a {
 
 .notification {
     position: relative;
+
+    .notifi__count {
+        position: absolute;
+        color: #fff;
+        font-size: 15px;
+        padding: 2px;
+        border-radius: 7px;
+        margin: 0;
+        background-color: rgb(197 49 49);
+        top: -7px;
+        left: -6px;
+    }
 }
 
 .notification_list {
@@ -68,6 +80,8 @@ a {
     bottom: -1px;
 
 }
+
+
 
 .menu {
     display: flex;

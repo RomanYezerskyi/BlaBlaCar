@@ -9,18 +9,21 @@ using BlaBlaCar.DAL.Interfaces;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.BL;
 using BlaBlaCar.BL.ExceptionHandler;
+using BlaBlaCar.BL.Hubs;
 using BlaBlaCar.BL.Services.Admin;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication;
 using BlaBlaCar.BL.Services.BookedTripServices;
+using BlaBlaCar.BL.Services.ChatServices;
 using BlaBlaCar.BL.Services.NotificationServices;
 using BlaBlaCar.BL.Services.TripServices;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
-
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Builder;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -54,7 +57,7 @@ builder.Services.AddScoped<ICarSeatsService, CarSeatsService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
-
+builder.Services.AddScoped<IChatService, ChatService>();
 
 
 builder.Services.AddAuthentication(opt => {
@@ -81,10 +84,13 @@ builder.Services.AddCors(options =>
     {
         builder.AllowAnyOrigin()
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .WithOrigins("http://localhost:4200");
     });
 });
 
+builder.Services.AddSignalR();
 //app.UseCors(builder => builder.WithOrigins("https://localhost:44321")
 //    .AllowAnyHeader()
 //    .AllowAnyMethod());
@@ -111,12 +117,14 @@ app.UseStaticFiles(new StaticFileOptions()
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"DriverDocuments")),
     RequestPath = new PathString("/DriverDocuments")
 });
+app.UseRouting();
 
 app.UseAuthentication(); 
 app.UseAuthorization();
 
 app.UseCors("EnableCORS");
 app.UseMiddleware<ExceptionHandlerMiddleware>();
-app.MapControllers();//.RequireAuthorization("ApiScope"); ;
+app.MapHub<BroadcastHub>("/notify");
+app.MapControllers();//.RequireAuthorization("ApiScope");
 
 app.Run();

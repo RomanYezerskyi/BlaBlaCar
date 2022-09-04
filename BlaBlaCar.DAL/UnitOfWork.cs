@@ -1,6 +1,7 @@
 ﻿using BlaBlaCar.DAL.Data;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Entities.CarEntities;
+using BlaBlaCar.DAL.Entities.ChatEntities;
 using BlaBlaCar.DAL.Entities.NotificationEntities;
 using BlaBlaCar.DAL.Entities.TripEntities;
 using BlaBlaCar.DAL.Interfaces;
@@ -21,6 +22,9 @@ namespace BlaBlaCar.DAL
         private BaseRepositoryAsync<CarDocuments> _carDocuments;
         private BaseRepositoryAsync<Notifications> _notifications;
         private BaseRepositoryAsync<ReadNotifications> _readNotifications;
+        private BaseRepositoryAsync<Chat> _chats;
+        private BaseRepositoryAsync<Message> _messages;
+        private BaseRepositoryAsync<UsersInChats> _usersInChats;
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -104,6 +108,30 @@ namespace BlaBlaCar.DAL
             get
             {
                 return _readNotifications ??= new BaseRepositoryAsync<ReadNotifications>(_context);
+            }
+        }
+
+        public IRepositoryAsync<Chat> Chats
+        {
+            get
+            {
+                return _chats ??= new BaseRepositoryAsync<Chat>(_context);
+            }
+        }
+
+        public IRepositoryAsync<Message> Messages
+        {
+            get
+            {
+                return _messages ??= new BaseRepositoryAsync<Message>(_context);
+            }
+        }
+
+        public IRepositoryAsync<UsersInChats> UsersInChats
+        {
+            get
+            {
+                return _usersInChats ??= new BaseRepositoryAsync<UsersInChats>(_context);
             }
         }
 

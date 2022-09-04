@@ -3,6 +3,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 import { Subject, Subscription } from 'rxjs';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
+import { ChatService } from 'src/app/services/chatservice/chat.service';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
 import { UserService } from 'src/app/services/userservice/user.service';
 import { UserRequestInfoComponent } from '../user-request-info/user-request-info.component';
@@ -19,7 +20,7 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
   userData = '';
   usersSubscription!: Subscription;
 
-  constructor(private userService: UserService, private sanitizeImgService: ImgSanitizerService,) { }
+  constructor(private userService: UserService, private sanitizeImgService: ImgSanitizerService, private chat: ChatService) { }
 
   ngOnInit(): void {
   }
@@ -44,5 +45,11 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
 
   getUser(userId: string) {
     this.userId = userId;
+  }
+
+  createChat() {
+    this.chat.createPrivateChat("545249b0-187b-4e65-ad86-d262f0785a43").subscribe(
+      res => console.log(res)
+    );
   }
 }

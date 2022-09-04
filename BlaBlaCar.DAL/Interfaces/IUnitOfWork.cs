@@ -1,5 +1,6 @@
 ﻿using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Entities.CarEntities;
+using BlaBlaCar.DAL.Entities.ChatEntities;
 using BlaBlaCar.DAL.Entities.NotificationEntities;
 using BlaBlaCar.DAL.Entities.TripEntities;
 
@@ -17,6 +18,9 @@ namespace BlaBlaCar.DAL.Interfaces
         IRepositoryAsync<CarDocuments> CarDocuments { get; }
         IRepositoryAsync<Notifications> Notifications { get; }
         IRepositoryAsync<ReadNotifications> ReadNotifications { get; }
+        IRepositoryAsync<Chat> Chats { get; }
+        IRepositoryAsync<Message> Messages { get; }
+        IRepositoryAsync<UsersInChats> UsersInChats { get; }
         Task<bool> SaveAsync(Guid userId);
     }
 }

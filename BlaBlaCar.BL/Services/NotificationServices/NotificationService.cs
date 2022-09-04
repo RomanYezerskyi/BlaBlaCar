@@ -8,10 +8,12 @@ using AutoMapper;
 using BlaBlaCar.BL.DTOs.NotificationDTOs;
 using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.BL.Exceptions;
+using BlaBlaCar.BL.Hubs;
 using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.DAL.Entities.NotificationEntities;
 using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -22,10 +24,12 @@ namespace BlaBlaCar.BL.Services.NotificationServices
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly HostSettings _hostSettings;
-        public NotificationService(IUnitOfWork unitOfWork, IMapper mapper, IOptionsSnapshot<HostSettings> hostSettings)
+        private readonly IHubContext<BroadcastHub, IHubClient> _hubContext;
+        public NotificationService(IUnitOfWork unitOfWork, IMapper mapper, IOptionsSnapshot<HostSettings> hostSettings, IHubContext<BroadcastHub, IHubClient> hubContext)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _hubContext = hubContext;
             _hostSettings = hostSettings.Value;
         }
         public async Task<IEnumerable<GetNotificationsDTO>> GetUserNotificationsAsync(ClaimsPrincipal principal)
@@ -54,9 +58,15 @@ namespace BlaBlaCar.BL.Services.NotificationServices
             var notification = _mapper.Map<Notifications>(notificationModel);
 
             await _unitOfWork.Notifications.InsertAsync(notification);
-
             var createdBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
-            return await _unitOfWork.SaveAsync(createdBy);
+            var result = await _unitOfWork.SaveAsync(createdBy);
+            if (notificationModel.UserId != null && result)
+            {
+
+                await _hubContext.Clients.Group(notificationModel.UserId.ToString()).BroadcastMessage();
+            }
+
+            return result;
         }
 
         public async Task GenerateNotificationAsync(CreateNotificationDTO notificationModel)

@@ -55,6 +55,9 @@ import { CreateNotificationDialogComponent } from './components/admin-page/creat
 import { AdminPanelComponent } from './components/admin-page/admin-panel/admin-panel.component';
 import { ChartsComponent } from './components/admin-page/charts/charts.component';
 import { UsersManagementComponent } from './components/admin-page/users-management/users-management.component';
+import { ChatLayoutComponent } from './components/chat-layout/chat-layout.component';
+import { ChatListComponent } from './components/chat-layout/chat-list/chat-list.component';
+import { ChatComponent } from './components/chat-layout/chat/chat.component';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -95,6 +98,9 @@ export function tokenGetter() {
     AdminPanelComponent,
     ChartsComponent,
     UsersManagementComponent,
+    ChatLayoutComponent,
+    ChatListComponent,
+    ChatComponent,
 
   ],
   imports: [

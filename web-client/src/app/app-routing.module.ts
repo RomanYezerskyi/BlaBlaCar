@@ -27,6 +27,7 @@ import { AdminGuard } from './guards/admin-guard/admin.guard';
 import { MainComponent } from './components/admin-page/main/main.component';
 import { ChartsComponent } from './components/admin-page/charts/charts.component';
 import { UsersManagementComponent } from './components/admin-page/users-management/users-management.component';
+import { ChatLayoutComponent } from './components/chat-layout/chat-layout.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -50,6 +51,7 @@ const routes: Routes = [
       { path: 'user-trips', component: UserTripsComponent, canActivate: [AuthGuard], },
     ]
   },
+  { path: 'chat', component: ChatLayoutComponent, canActivate: [AuthGuard] },
   { path: 'info', component: InfoPageComponent, canActivate: [AuthGuard] },
   {
     path: 'admin', component: AdminPageComponent, canActivate: [AuthGuard, AdminGuard],
@@ -60,6 +62,7 @@ const routes: Routes = [
       { path: 'main-info', component: MainComponent, canActivate: [AuthGuard] },
       { path: 'charts', component: ChartsComponent, canActivate: [AuthGuard] },
       { path: 'users', component: UsersManagementComponent, canActivate: [AuthGuard] },
+      { path: 'chat', component: ChatLayoutComponent, canActivate: [AuthGuard] },
     ]
   },
 ];

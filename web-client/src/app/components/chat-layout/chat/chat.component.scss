@@ -1,0 +1,119 @@
+.chat {
+    width: 50vw;
+
+    padding: 30px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    // height: 900px;
+
+    .message__item {
+        display: flex;
+        margin: 10px;
+
+        .message-user {
+            display: flex;
+            flex-flow: row wrap;
+
+            .user__img {
+                width: 55px;
+                height: 55px;
+                overflow: hidden;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+
+            .data {
+                // width: 100%;
+                padding: 0 10px;
+                // display: flex;
+                // flex-flow: row wrap;
+                // justify-content: space-between;
+
+                .user-name {
+                    margin: auto 0;
+                    font-size: 14px;
+                    font-weight: 500;
+                    color: #222222;
+                    margin-bottom: 6px;
+                    // width: 50%;
+                }
+
+                .date {
+                    margin: auto 0;
+                    font-size: 12px;
+                    font-weight: 300;
+                    color: #cec1c2;
+                    white-space: nowrap;
+                }
+
+            }
+
+            .message {
+                margin: 10px 0;
+                border: 1px solid #2DAAB8;
+                background: #fff7f8;
+                border-radius: 10px;
+                padding: 30px;
+                width: 100%;
+
+                .text {
+                    font-size: 13px;
+                    font-weight: 300;
+                    color: #676B84;
+                    margin: 0;
+                }
+            }
+        }
+
+    }
+
+    .messages__list {
+        overflow: auto;
+        height: 70vh;
+        display: flex;
+        flex-flow: column;
+    }
+
+    .write-message-box {
+        margin: auto;
+        display: flex;
+
+        .form {
+            width: 100%;
+            flex: auto;
+            display: flex;
+
+            .field {
+                flex: auto;
+                margin-right: 10px;
+            }
+        }
+
+        .btn-send {
+            margin: auto;
+            background-color: #2DAAB8;
+            border: 1px solid #2DAAB8;
+            color: #fff;
+            display: inline-block;
+            margin-bottom: 22px;
+            padding: 17px 20px;
+            text-transform: capitalize;
+            line-height: 16px;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 5px;
+            white-space: nowrap;
+            transition: 0.5s;
+        }
+
+        .btn-send:hover {
+            background-color: #fff;
+            border: 1px solid #313f5a;
+            color: #2DAAB8;
+        }
+    }
+}
