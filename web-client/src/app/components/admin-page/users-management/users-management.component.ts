@@ -20,7 +20,7 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
   userData = '';
   usersSubscription!: Subscription;
 
-  constructor(private userService: UserService, private sanitizeImgService: ImgSanitizerService, private chat: ChatService) { }
+  constructor(private userService: UserService, private sanitizeImgService: ImgSanitizerService,) { }
 
   ngOnInit(): void {
   }
@@ -45,11 +45,5 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
 
   getUser(userId: string) {
     this.userId = userId;
-  }
-
-  createChat() {
-    this.chat.createPrivateChat("545249b0-187b-4e65-ad86-d262f0785a43").subscribe(
-      res => console.log(res)
-    );
   }
 }

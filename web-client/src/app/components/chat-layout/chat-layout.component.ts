@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-chat-layout',
@@ -6,10 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./chat-layout.component.scss']
 })
 export class ChatLayoutComponent implements OnInit {
+  token = localStorage.getItem("jwt");
+  currentUserId = '';
 
-  constructor() { }
+  constructor(private jwtHelper: JwtHelperService) { }
 
   ngOnInit(): void {
+    this.currentUserId = this.jwtHelper.decodeToken(this.token!).id;
   }
 
 }

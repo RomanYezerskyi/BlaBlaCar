@@ -3,19 +3,20 @@
         <h3 class="title">Chat list</h3>
         <!-- search -->
         <ul class="chats">
-            <li class="chat__item" *ngFor="let chat of chats">
+            <li class="chat__item" *ngFor="let chat of chats" (click)=" goToChat(chat.id!)">
                 <div class="user__img">
-                    <img src="https://demo.dashboardpack.com/hospital-html/img/messages/1.png" alt="">
+                    <img [src]="sanitizeImg(chat.users![0].user!.userImg!)" alt="">
                 </div>
                 <div class="data">
                     <h4 class="user-name">{{chat.users![0].user!.firstName}}</h4>
-                    <p class="date"> 28th Nov</p>
-                    <p class="message">Lorem ipsum dolor sit amet consectetur.</p>
+                    <p class="date"> {{chat.messages![0].createdAt}}</p>
+                    <p class="message">{{chat.messages![0].text}}</p>
                 </div>
             </li>
             <!-- <li class="chat__item">
                 <div class="user__img">
-                    <img src="https://demo.dashboardpack.com/hospital-html/img/messages/1.png" alt="">
+                    <img src="https://demo.dashboard
+                    pack.com/hospital-html/img/messages/1.png" alt="">
                 </div>
                 <div class="data">
                     <h4 class="user-name">John Doe</h4>

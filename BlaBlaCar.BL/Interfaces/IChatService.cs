@@ -13,5 +13,6 @@ namespace BlaBlaCar.BL.Interfaces
         Task<bool> CreatePrivateChatAsync(Guid userId, ClaimsPrincipal principal);
         Task<IEnumerable<ChatDTO>> GetUserChatsAsync(ClaimsPrincipal principal);
         Task<bool> CreateMessageAsync(CreateMessageDTO messageModel, ClaimsPrincipal principal);
+        Task<ChatDTO> GetChatByIdAsync(Guid chatId);
     }
 }

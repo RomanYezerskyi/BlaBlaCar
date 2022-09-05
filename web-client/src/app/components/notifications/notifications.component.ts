@@ -32,7 +32,7 @@ export class NotificationsComponent implements OnInit {
     }).catch(function (err) {
       return console.error(err.toString());
     });
-    connection.on("BroadcastMessage", () => {
+    connection.on("BroadcastNotification", () => {
       console.log("Hi man!!!");
       this.getUserNotifications();
     });

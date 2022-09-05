@@ -28,6 +28,7 @@ import { MainComponent } from './components/admin-page/main/main.component';
 import { ChartsComponent } from './components/admin-page/charts/charts.component';
 import { UsersManagementComponent } from './components/admin-page/users-management/users-management.component';
 import { ChatLayoutComponent } from './components/chat-layout/chat-layout.component';
+import { AdministratorsComponent } from './components/admin-page/administrators/administrators.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -63,6 +64,7 @@ const routes: Routes = [
       { path: 'charts', component: ChartsComponent, canActivate: [AuthGuard] },
       { path: 'users', component: UsersManagementComponent, canActivate: [AuthGuard] },
       { path: 'chat', component: ChatLayoutComponent, canActivate: [AuthGuard] },
+      { path: 'admins', component: AdministratorsComponent, canActivate: [AuthGuard] },
     ]
   },
 ];

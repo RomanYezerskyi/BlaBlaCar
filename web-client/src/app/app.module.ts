@@ -58,6 +58,7 @@ import { UsersManagementComponent } from './components/admin-page/users-manageme
 import { ChatLayoutComponent } from './components/chat-layout/chat-layout.component';
 import { ChatListComponent } from './components/chat-layout/chat-list/chat-list.component';
 import { ChatComponent } from './components/chat-layout/chat/chat.component';
+import { AdministratorsComponent } from './components/admin-page/administrators/administrators.component';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -101,6 +102,7 @@ export function tokenGetter() {
     ChatLayoutComponent,
     ChatListComponent,
     ChatComponent,
+    AdministratorsComponent,
 
   ],
   imports: [

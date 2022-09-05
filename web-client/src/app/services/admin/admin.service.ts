@@ -28,6 +28,10 @@ export class AdminService {
     const url = 'https://localhost:5001/api/User/roles'
     return this.http.get<RoleModel[]>(url);
   }
+  getAdmins(): Observable<UserModel[]> {
+    const url = 'https://localhost:5001/api/User/admins'
+    return this.http.get<UserModel[]>(url);
+  }
   changeUserRole(data: { roleName: string, userId: string }): Observable<any> {
     const url = 'https://localhost:5001/api/User/'
     return this.http.post(url, data);

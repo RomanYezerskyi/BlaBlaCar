@@ -27,6 +27,17 @@ namespace IdentityServerJWT.API.Services
             var roles = await _roleManager.Roles.ToListAsync();
             return roles;
         }
+        public async Task<List<UserWithRolesModel>> GetAdminsAsync()
+        {
+            var users = await _userManager.GetUsersInRoleAsync("blablacar.admin");
+            List<UserWithRolesModel> admins = new List<UserWithRolesModel>();
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                admins.Add(new UserWithRolesModel(user){ Roles = new List<IdentityRole>() { new IdentityRole(roles.First()) } });
+            }
+            return admins;
+        }
 
         public async Task<UserWithRolesModel> GetUser(string email)
         {

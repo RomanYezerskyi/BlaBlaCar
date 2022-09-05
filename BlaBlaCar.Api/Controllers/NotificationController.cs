@@ -12,8 +12,8 @@ namespace BlaBlaCar.API.Controllers
     public class NotificationController : ControllerBase
     {
         private readonly INotificationService _notificationService;
-        private readonly IHubContext<BroadcastHub, IHubClient> _hubContext;
-        public NotificationController(INotificationService notificationService, IHubContext<BroadcastHub, IHubClient> hubContext)
+        private readonly IHubContext<NotificationHub, INotificationsHubClient> _hubContext;
+        public NotificationController(INotificationService notificationService, IHubContext<NotificationHub, INotificationsHubClient> hubContext)
         {
             _notificationService = notificationService;
             _hubContext = hubContext;

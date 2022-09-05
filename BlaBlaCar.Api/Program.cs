@@ -124,7 +124,8 @@ app.UseAuthorization();
 
 app.UseCors("EnableCORS");
 app.UseMiddleware<ExceptionHandlerMiddleware>();
-app.MapHub<BroadcastHub>("/notify");
+app.MapHub<NotificationHub>("/notify");
+app.MapHub<ChatHub>("/chatHub");
 app.MapControllers();//.RequireAuthorization("ApiScope");
 
 app.Run();

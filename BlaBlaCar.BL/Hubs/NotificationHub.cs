@@ -2,7 +2,7 @@
 
 namespace BlaBlaCar.BL.Hubs
 {
-    public class BroadcastHub:Hub<IHubClient>
+    public class NotificationHub:Hub<INotificationsHubClient>
     {
         public async Task<string> GetConnectionId(string userId)
         {
