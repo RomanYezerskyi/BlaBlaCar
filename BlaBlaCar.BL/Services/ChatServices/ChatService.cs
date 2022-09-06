@@ -108,7 +108,17 @@ namespace BlaBlaCar.BL.Services.ChatServices
             var res =  await _unitOfWork.SaveAsync(currentUserId);
             if (!res) return res;
             newMessage.User = messageModel.User;
+            newMessage.User.UserImg = _hostSettings.CurrentHost + messageModel.User.UserImg;
             await _hubContext.Clients.Groups(messageModel.ChatId.ToString()).BroadcastChatMessage(newMessage);
+            //await _hubContext.Clients.Groups(currentUserId.ToString()).BroadcastMessagesFormAllChats();
+            var chatUsers = await _unitOfWork.UsersInChats.GetAsync(null, null,
+                x => x.UserId != currentUserId && x.ChatId == messageModel.ChatId
+            );
+            foreach (var user in chatUsers)
+            {
+                await _hubContext.Clients.Groups(user.UserId.ToString())
+                    .BroadcastMessagesFormAllChats(newMessage.ChatId);
+            }
             return res;
         }
 

@@ -38,7 +38,7 @@ namespace BlaBlaCar.BL.Services.NotificationServices
             var notifications = _mapper.Map<IEnumerable<GetNotificationsDTO>>(
                 await _unitOfWork.Notifications.GetAsync(
                     x=>x.OrderByDescending(x=>x.CreatedAt),
-                    null, x => x.UserId == userId));
+                    null, x => x.UserId == userId || x.NotificationStatus == NotificationStatus.Global) );
             if (!notifications.Any())
                 throw new NotFoundException(nameof(NotificationsDTO));
 

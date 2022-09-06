@@ -9,10 +9,13 @@ namespace BlaBlaCar.BL.Hubs
 {
     public class ChatHub: Hub<IChatHubClient>
     {
-        public async Task<string> GetChatConnectionId(string chatId)
+        public async Task JoinToChat(string chatId)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, chatId);
-            return Context.ConnectionId;
+        }
+        public async Task JoinToChatMessagesNotifications(string userId)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, userId);
         }
     }
 }

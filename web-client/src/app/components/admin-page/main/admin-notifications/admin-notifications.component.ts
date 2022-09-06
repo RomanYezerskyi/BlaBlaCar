@@ -1,9 +1,10 @@
+import { NoopScrollStrategy } from '@angular/cdk/overlay';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { skip, Subscription } from 'rxjs';
 import { NotificationStatus } from 'src/app/enums/notification-status';
 import { NotificationsModel } from 'src/app/interfaces/notifications';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
@@ -31,7 +32,8 @@ export class AdminNotificationsComponent implements OnInit, OnDestroy {
   usersTripsSubscription!: Subscription;
   usersNotifications: Array<NotificationsModel> = [];
   notifiStatus = NotificationStatus;
-  constructor(private notificationsService: NotificationsService, private router: Router, private imgSanitizer: ImgSanitizerService, private dialog: MatDialog) {
+  constructor(private notificationsService: NotificationsService, private router: Router,
+    private imgSanitizer: ImgSanitizerService, private dialog: MatDialog) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
   ngOnInit(): void {
@@ -48,8 +50,11 @@ export class AdminNotificationsComponent implements OnInit, OnDestroy {
   private openNotificationDialog(notificationStatus: NotificationStatus, userId: string | null) {
     const dialogConfig = new MatDialogConfig();
 
+
     // dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
+    // dialogConfig.autoFocus = true;
+    dialogConfig.scrollStrategy = new NoopScrollStrategy()
     dialogConfig.data = {
       notificationStatus: notificationStatus,
       userId: userId,
@@ -58,8 +63,16 @@ export class AdminNotificationsComponent implements OnInit, OnDestroy {
     const dRef = this.dialog.open(CreateNotificationDialogComponent, dialogConfig);
 
     dRef.componentInstance.onSubmitReason.subscribe(() => {
-      this.ngOnInit();
+
+      this.globalNotifications = [];
+      this.globalNotificationsProp.skip = 0;
+      this.globalNotificationsProp.take = 5;
+      this.usersNotificationsProp.skip = 0;
+      this.usersNotificationsProp.take = 5
+      this.getGlobalNotitifications();
+      this.getUsersNotitifications();
     });
+
   }
   sanitizeImg(img: string): SafeUrl {
     return this.imgSanitizer.sanitiizeUserImg(img);

@@ -55,7 +55,7 @@ const routes: Routes = [
   { path: 'chat', component: ChatLayoutComponent, canActivate: [AuthGuard] },
   { path: 'info', component: InfoPageComponent, canActivate: [AuthGuard] },
   {
-    path: 'admin', component: AdminPageComponent, canActivate: [AuthGuard, AdminGuard],
+    path: 'admin', component: AdminPageComponent, canActivate: [AuthGuard],
     children: [
       { path: 'roles', component: RolesComponent, canActivate: [AuthGuard] },
       { path: 'requests/:id', component: UsersRequestsComponent, canActivate: [AuthGuard], },

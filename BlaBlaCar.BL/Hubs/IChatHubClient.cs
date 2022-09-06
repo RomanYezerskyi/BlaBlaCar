@@ -10,5 +10,6 @@ namespace BlaBlaCar.BL.Hubs
     public interface IChatHubClient
     {
         Task BroadcastChatMessage(MessageDTO message);
+        Task BroadcastMessagesFormAllChats(Guid chatId);
     }
 }
