@@ -1,3 +1,4 @@
+using System.Configuration;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,8 @@ using BlaBlaCar.BL.Services.BookedTripServices;
 using BlaBlaCar.BL.Services.ChatServices;
 using BlaBlaCar.BL.Services.NotificationServices;
 using BlaBlaCar.BL.Services.TripServices;
+using Hangfire;
+using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
@@ -33,9 +36,20 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
+builder.Services.AddHangfire(configuration => configuration
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"), new SqlServerStorageOptions
+    {
+        CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+        SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+        QueuePollInterval = TimeSpan.Zero,
+        UseRecommendedIsolationLevel = true,
+        DisableGlobalLocks = true
+    }));
+builder.Services.AddHangfireServer();
 
 builder.Services.Configure<HostSettings>(builder.Configuration.GetSection("ApiHostSettings"));
 
@@ -58,7 +72,7 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IChatService, ChatService>();
-
+builder.Services.AddScoped<IChatHubService, ChatHubService>();
 
 builder.Services.AddAuthentication(opt => {
         opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -126,6 +140,13 @@ app.UseCors("EnableCORS");
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.MapHub<NotificationHub>("/notify");
 app.MapHub<ChatHub>("/chatHub");
-app.MapControllers();//.RequireAuthorization("ApiScope");
+app.UseHangfireDashboard();
+BackgroundJob.Enqueue(() => Console.WriteLine("Hello world from Hangfire!"));
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapHangfireDashboard();
+});//.RequireAuthorization("ApiScope");
 
 app.Run();

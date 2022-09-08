@@ -33,9 +33,18 @@ namespace BlaBlaCar.API.Controllers
         public async Task<IActionResult> GetPrivateChat(Guid userId)
         {
             var chat = await _chatService.CreatePrivateChatAsync(userId, User);
-            if (chat) return Ok(chat);
+            if (chat != Guid.Empty) return Ok(chat);
             return BadRequest();
         }
+
+        [HttpPost("read-messages")]
+        public async Task<IActionResult> ReadChatMessages(IEnumerable<MessageDTO> messages)
+        {
+            var result = await _chatService.ReadMessagesFromChat(messages, User);
+            if (result) return Ok(result);
+            return BadRequest();
+        }
+
         [HttpPost("message")]
         public async Task<IActionResult> CreateMessageChat(CreateMessageDTO message)
         {

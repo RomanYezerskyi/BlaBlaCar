@@ -1,14 +1,16 @@
 <div class="col2">
     <div class="chat">
         <div class="messages__list">
-            <div class="message__item" *ngFor="let message of chat.messages">
+            <div class="message__item" [ngClass]="{'active': message.userId == currentUserId}"
+                *ngFor="let message of chat.messages;let i = index">
+                <p class="unread-messages-line" *ngIf="i == getUnreadMessageIndex()">New</p>
                 <div class="message-user">
                     <div class="user__img">
                         <img [src]="sanitizeImg(message.user!.userImg!)" alt="">
                     </div>
                     <div class="data">
                         <h4 class="user-name">{{message.user.firstName}}</h4>
-                        <p class="date">{{message.createdAt |date}}</p>
+                        <p class="date">{{message?.createdAt |date}}</p>
                     </div>
                     <div class="message">
                         <p class="text">{{message.text}}</p>

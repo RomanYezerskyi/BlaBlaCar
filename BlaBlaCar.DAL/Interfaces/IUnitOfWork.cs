@@ -21,6 +21,7 @@ namespace BlaBlaCar.DAL.Interfaces
         IRepositoryAsync<Chat> Chats { get; }
         IRepositoryAsync<Message> Messages { get; }
         IRepositoryAsync<UsersInChats> UsersInChats { get; }
+        IRepositoryAsync<ReadMessages> ReadMessages { get; }
         Task<bool> SaveAsync(Guid userId);
     }
 }

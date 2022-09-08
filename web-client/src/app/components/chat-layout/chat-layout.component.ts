@@ -12,7 +12,7 @@ export class ChatLayoutComponent implements OnInit {
   currentUserId = '';
   role = '';
   constructor(private jwtHelper: JwtHelperService, private router: Router) {
-    // this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
   ngOnInit(): void {

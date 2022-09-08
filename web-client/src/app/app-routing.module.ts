@@ -29,12 +29,13 @@ import { ChartsComponent } from './components/admin-page/charts/charts.component
 import { UsersManagementComponent } from './components/admin-page/users-management/users-management.component';
 import { ChatLayoutComponent } from './components/chat-layout/chat-layout.component';
 import { AdministratorsComponent } from './components/admin-page/administrators/administrators.component';
+import { UserGuard } from './guards/user-guard/user.guard';
 
 const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'search', component: SearchTripComponent, canActivate: [AuthGuard] },
+  { path: 'search', component: SearchTripComponent, canActivate: [AuthGuard, UserGuard] },
 
   { path: 'trip-page-info/:id', component: TripPageInfoComponent, canActivate: [AuthGuard] },
   { path: 'home', component: HomeComponent  /*, canActivate: [AuthGuard]*/ },

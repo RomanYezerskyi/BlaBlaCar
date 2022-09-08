@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { SafeUrl } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { RoleModel } from 'src/app/interfaces/role';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
@@ -27,7 +28,7 @@ export class AdministratorsComponent implements OnInit, OnDestroy {
   searchSubscription!: Subscription;
   chatSubscription!: Subscription;
   isCheckedName = '';
-  constructor(private sanitizeImgService: ImgSanitizerService, private adminService: AdminService, private chatService: ChatService) { }
+  constructor(private sanitizeImgService: ImgSanitizerService, private adminService: AdminService, private chatService: ChatService, private router: Router,) { }
 
   ngOnInit(): void {
     this.getAdmins();
@@ -64,8 +65,11 @@ export class AdministratorsComponent implements OnInit, OnDestroy {
   getChat(userId: string) {
     this.chatSubscription = this.chatService.createPrivateChat(userId).pipe().subscribe(
       response => {
-        this.searchUser = response;
-        this.isCheckedName = this.searchUser.roles[0].name;
+        this.router.navigate(['/chat'], {
+          queryParams: {
+            chatId: response
+          }
+        });
         console.log(response);
       },
       (error: HttpErrorResponse) => { console.error(error.error); }

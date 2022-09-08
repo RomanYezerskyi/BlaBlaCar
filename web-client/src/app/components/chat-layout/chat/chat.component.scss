@@ -1,24 +1,40 @@
 .chat {
+    margin: 0 10px;
     width: 45vw;
 
-    padding: 30px;
+    padding: 20px;
     background-color: #FFFFFF;
     border-radius: 10px;
     // height: 900px;
 
     .message__item {
-
-        display: flex;
+        position: relative;
+        display: flex wrap;
         margin: 10px;
+
+        // flex-direction: row-reverse;
+        .unread-messages-line {
+            text-align: center;
+            border-bottom: 1px solid #ff5b5b;
+            // position: absolute;
+            width: 100%;
+            color: #94C2ED;
+            top: 0;
+        }
 
         .message-user {
 
             display: flex;
+            // flex-flow: row-reverse wrap;
             flex-flow: row wrap;
+            // flex-direction: row-reverse;
+
 
             .user__img {
-                width: 55px;
-                height: 55px;
+                margin: auto 0;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
                 overflow: hidden;
 
                 img {
@@ -34,17 +50,19 @@
                 // display: flex;
                 // flex-flow: row wrap;
                 // justify-content: space-between;
+                width: 70%;
 
                 .user-name {
-                    margin: auto 0;
+                    margin: 0;
                     font-size: 14px;
                     font-weight: 500;
                     color: #222222;
-                    margin-bottom: 6px;
+                    // margin-bottom: 6px;
                     // width: 50%;
                 }
 
                 .date {
+
                     margin: auto 0;
                     font-size: 12px;
                     font-weight: 300;
@@ -55,17 +73,26 @@
             }
 
             .message {
+
                 margin: 10px 0;
-                border: 1px solid #2DAAB8;
-                background: #fff7f8;
+                // border: 1px solid #2DAAB8;
+                background: #94C2ED;
                 border-radius: 10px;
                 padding: 15px;
-                width: 100%;
+                // width: 100%;
+                color: white;
+                // padding: 18px 20px;
+                line-height: 26px;
+                font-size: 16px;
+                border-radius: 7px;
+                margin-bottom: 30px;
+                width: 50%;
+                position: relative;
 
                 .text {
-                    font-size: 13px;
-                    font-weight: 300;
-                    color: #676B84;
+                    // font-size: 13px;
+                    // font-weight: 300;
+                    // color: #676B84;
                     margin: 0;
                 }
             }
@@ -73,9 +100,25 @@
 
     }
 
+    .active {
+        flex-direction: row-reverse;
+
+        .message-user {
+            flex-flow: row-reverse wrap;
+
+            .data {
+                /* width: 46%; */
+                // display: flex;
+                // flex-direction: row-reverse;
+                text-align: right;
+
+            }
+        }
+    }
+
     .messages__list {
         overflow: auto;
-        height: 70vh;
+        height: 68vh;
         display: flex;
         flex-flow: column;
     }

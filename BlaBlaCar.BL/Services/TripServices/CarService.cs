@@ -40,9 +40,6 @@ namespace BlaBlaCar.BL.Services.TripServices
 
         public async Task<IEnumerable<CarDTO>> GetUserCarsAsync(ClaimsPrincipal principal)
         {
-            var checkIfUserExist = await _userService.СheckIfUserExistsAsync(principal);
-            if (!checkIfUserExist) throw new PermissionException("This user not authorized!");
-
             var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
             var userCars = _mapper.Map<IEnumerable<CarDTO>>
                 (await _unitOfWork.Cars.GetAsync(null, x=>
@@ -75,8 +72,6 @@ namespace BlaBlaCar.BL.Services.TripServices
 
         public async Task<bool> AddCarAsync(CreateCarDTO carModel, ClaimsPrincipal principal)
         {
-            var checkIfUserExist = await _userService.СheckIfUserExistsAsync(principal);
-            if (!checkIfUserExist) throw new PermissionException("This user cannot create trip!");
             Guid userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
             var user = _mapper.Map<UserDTO>(await _unitOfWork.Users.GetAsync(null,
                 x => x.Id == userId)); 

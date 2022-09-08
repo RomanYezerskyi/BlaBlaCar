@@ -3,7 +3,7 @@ import { Message } from "./message";
 import { UsersInChats } from "./users-in-chats";
 
 export interface Chat {
-    id?: string
+    id: string
     chatName?: string,
     chatImage?: string,
     messages?: Array<Message>,

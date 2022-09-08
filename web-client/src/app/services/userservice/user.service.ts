@@ -8,7 +8,16 @@ import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 export class UserService {
 
   constructor(private http: HttpClient) { }
-
+  async chekIfUserExist(): Promise<any> {
+    const url = 'https://localhost:6001/api/User/user';
+    // return this.http.get<any>(url);
+    return await new Promise<any>((resolve, reject) => {
+      this.http.get<any>(url).subscribe({
+        next: (res) => resolve(res),
+        error: (_) => resolve(_)
+      });
+    });
+  }
   searchUsers(userData: string): Observable<UserModel[]> {
     const url = 'https://localhost:6001/api/User/users/' + userData;
     return this.http.get<UserModel[]>(url);

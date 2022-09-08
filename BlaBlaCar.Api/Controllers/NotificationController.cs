@@ -1,5 +1,6 @@
 ﻿using BlaBlaCar.BL.DTOs.NotificationDTOs;
 using BlaBlaCar.BL.Hubs;
+using BlaBlaCar.BL.Hubs.Interfaces;
 using BlaBlaCar.BL.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

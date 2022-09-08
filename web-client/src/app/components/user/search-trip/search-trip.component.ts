@@ -40,7 +40,7 @@ export class SearchTripComponent implements OnInit {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
 
     this.route.queryParams.subscribe(params => {
       if (params['startPlace'] && params['endPlace'] && params['startTime'] && params['seats']) {

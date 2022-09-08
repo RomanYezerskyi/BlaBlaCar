@@ -59,6 +59,7 @@ import { ChatLayoutComponent } from './components/chat-layout/chat-layout.compon
 import { ChatListComponent } from './components/chat-layout/chat-list/chat-list.component';
 import { ChatComponent } from './components/chat-layout/chat/chat.component';
 import { AdministratorsComponent } from './components/admin-page/administrators/administrators.component';
+import { UserGuard } from './guards/user-guard/user.guard';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -136,7 +137,7 @@ export function tokenGetter() {
     MatProgressSpinnerModule,
 
   ],
-  providers: [AuthGuard, AdminGuard, PageAccessGuard],
+  providers: [AuthGuard, AdminGuard, PageAccessGuard, UserGuard],
   bootstrap: [AppComponent],
   entryComponents: [DialogBookingConfirmationComponent, UserProfileComponent, CreateNotificationDialogComponent],
   exports: [

@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using BlaBlaCar.BL.DTOs.ChatDTOs;
 
-namespace BlaBlaCar.BL.Hubs
+namespace BlaBlaCar.BL.Hubs.Interfaces
 {
     public interface IChatHubClient
     {
         Task BroadcastChatMessage(MessageDTO message);
-        Task BroadcastMessagesFormAllChats(Guid chatId);
+        Task BroadcastMessagesFromChats(Guid chatId);
     }
 }

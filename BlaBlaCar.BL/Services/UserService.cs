@@ -159,21 +159,14 @@ namespace BlaBlaCar.BL.Services
             throw new NoFileException($"File is required!");
         }
 
-        public async Task<bool> СheckIfUserExistsAsync(ClaimsPrincipal principal)
-        {
-            var userEmail = principal.Identity.Name;
-            var user = await _unitOfWork.Users
-                .GetAsync(null, x => x.Email == userEmail);
-            if (user == null)
-            {
-                return await AddUserAsync(principal);
-            }
-            return true;
-        }
-
         public async Task<bool> AddUserAsync(ClaimsPrincipal principal)
         {
-            var user = new UserDTO()
+            var userEmail = principal.Identity.Name;
+            var user =_mapper.Map<UserDTO>( await _unitOfWork.Users
+                .GetAsync(null, x => x.Email == userEmail));
+            if (user != null) return true;
+            
+            user = new UserDTO()
             {
                 Id = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value),
                 Email = principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,

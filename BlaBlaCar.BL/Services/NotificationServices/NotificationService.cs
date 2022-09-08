@@ -9,6 +9,7 @@ using BlaBlaCar.BL.DTOs.NotificationDTOs;
 using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.BL.Exceptions;
 using BlaBlaCar.BL.Hubs;
+using BlaBlaCar.BL.Hubs.Interfaces;
 using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.DAL.Entities.NotificationEntities;
 using BlaBlaCar.DAL.Interfaces;

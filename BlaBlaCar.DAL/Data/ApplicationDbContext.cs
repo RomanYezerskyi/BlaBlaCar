@@ -29,6 +29,7 @@ namespace BlaBlaCar.DAL.Data
         public DbSet<Chat> Chats { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<UsersInChats> UsersInChats { get; set; }
+        public DbSet<ReadMessages> ReadMessages { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
 

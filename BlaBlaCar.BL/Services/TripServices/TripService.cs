@@ -185,10 +185,6 @@ namespace BlaBlaCar.BL.Services.TripServices
 
         public async Task<bool> AddTripAsync(CreateTripDTO newTripModel, ClaimsPrincipal principal)
         {
-        
-            var checkIfUserExist = await _userService.СheckIfUserExistsAsync(principal);
-            if (!checkIfUserExist) throw new Exception("This user cannot create trip!");
-
             var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
 
             var tripModel = _mapper.Map<CreateTripDTO, TripDTO>(newTripModel);

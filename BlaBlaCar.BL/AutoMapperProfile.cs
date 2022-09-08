@@ -51,6 +51,7 @@ namespace BlaBlaCar.BL
             CreateMap<Message, MessageDTO>().ReverseMap();
             CreateMap<UsersInChats, UsersInChatsDTO>().ReverseMap();
             CreateMap<Message, CreateMessageDTO> ().ReverseMap();
+            CreateMap<ReadMessages, ReadMessagesDTO>().ReverseMap();
         }
     }
 }

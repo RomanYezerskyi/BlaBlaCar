@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using AutoMapper;
 using BlaBlaCar.BL.DTOs.ChatDTOs;
 using BlaBlaCar.BL.Hubs;
+using BlaBlaCar.BL.Hubs.Interfaces;
 using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.DAL.Entities.ChatEntities;
 using BlaBlaCar.DAL.Interfaces;
+using Hangfire;
 using IdentityModel;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -22,12 +24,17 @@ namespace BlaBlaCar.BL.Services.ChatServices
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly HostSettings _hostSettings;
-        private readonly IHubContext<ChatHub, IChatHubClient> _hubContext;
-        public ChatService(IUnitOfWork unitOfWork, IMapper mapper, IOptionsSnapshot<HostSettings> hostSettings, IHubContext<ChatHub, IChatHubClient> hubContext)
+        private readonly IBackgroundJobClient _backgroundJobs;
+        private readonly IChatHubService _chatHubService;
+        public ChatService(IUnitOfWork unitOfWork, 
+            IMapper mapper, 
+            IOptionsSnapshot<HostSettings> hostSettings, 
+            IBackgroundJobClient backgroundJobs, IChatHubService chatHubService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _hubContext = hubContext;
+            _backgroundJobs = backgroundJobs;
+            _chatHubService = chatHubService;
             _hostSettings = hostSettings.Value;
         }
         public async Task<IEnumerable<ChatDTO>> GetUserChatsAsync(ClaimsPrincipal principal)
@@ -37,7 +44,7 @@ namespace BlaBlaCar.BL.Services.ChatServices
                 await _unitOfWork.Chats.GetAsync(null, 
                     x=>x.Include(x=>x.Users.Where(x=>x.UserId != currentUserId))
                         .ThenInclude(x=>x.User)
-                        .Include(x=>x.Messages.Take(1)),
+                        .Include(x=>x.Messages.OrderByDescending(x=>x.CreatedAt).Take(1)),
                     x=>x.Users.Any(x=>x.UserId == currentUserId)));
             chats = chats.Select(c =>
             {
@@ -53,31 +60,34 @@ namespace BlaBlaCar.BL.Services.ChatServices
             });
             return chats.ToList();
         }
-        public async Task<bool> CreatePrivateChatAsync(Guid userId, ClaimsPrincipal principal)
+        public async Task<Guid> CreatePrivateChatAsync(Guid userId, ClaimsPrincipal principal)
         {
-
+            var checkIfChatExist =await GetPrivateChatAsync(userId, principal);
+            if (checkIfChatExist != Guid.Empty) return checkIfChatExist;
             var currentUserId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
-            var newChat = new ChatDTO()
+            var chatDto = new ChatDTO()
             {
                 Type = ChatDTOType.Private,
             };
             var usersInChat = new List<UsersInChatsDTO>()
             {
-                new UsersInChatsDTO() { Chat = newChat, UserId = userId, Role = UserRoleInChatTypeDTO.Member},
-                new UsersInChatsDTO() { Chat = newChat, UserId = currentUserId, Role = UserRoleInChatTypeDTO.Owner},
+                new UsersInChatsDTO() { Chat = chatDto, UserId = userId, Role = UserRoleInChatTypeDTO.Member},
+                new UsersInChatsDTO() { Chat = chatDto, UserId = currentUserId, Role = UserRoleInChatTypeDTO.Owner},
             };
-            //newChat.Users = usersInChat;
-
-            await _unitOfWork.Chats.InsertAsync(_mapper.Map<Chat>(newChat));
-            return await _unitOfWork.SaveAsync(currentUserId);
+            chatDto.Users = usersInChat;
+            var chat = _mapper.Map<Chat>(chatDto);
+            await _unitOfWork.Chats.InsertAsync(chat);
+            await _unitOfWork.SaveAsync(currentUserId);
+            return chat.Id;
         }
-        public async Task<ChatDTO> GetPrivateChatAsync(Guid userId, ClaimsPrincipal principal)
+        public async Task<Guid> GetPrivateChatAsync(Guid userId, ClaimsPrincipal principal)
         {
             var currentUserId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
             var chat = _mapper.Map<ChatDTO>(await _unitOfWork.Chats.GetAsync(null,
                 x => x.Users.Any(x => x.UserId == currentUserId) &&
                      x.Users.Any(x => x.UserId == userId) && x.Type == ChatType.Private));
-            return chat;
+            if(chat != null) return chat.Id;
+            return Guid.Empty;
         }
         public async Task<ChatDTO> GetChatByIdAsync(Guid chatId)
         {
@@ -85,15 +95,34 @@ namespace BlaBlaCar.BL.Services.ChatServices
                 x=>x.Include(x=>x.Messages).ThenInclude(x=>x.User)
                     .Include(x=>x.Users).ThenInclude(x=>x.User),
                 x => x.Id == chatId));
-
+            var readMessages =
+              await  _unitOfWork.ReadMessages.GetAsync(null, null, x => x.ChatId == chatId);
             chat.Messages = chat.Messages.Select(m =>
             {
                 if (m.User.UserImg != null)
                     m.User.UserImg = _hostSettings.CurrentHost + m.User.UserImg;
+
+                if (readMessages.Any(x => x.MessageId == m.Id))
+                {
+                    m.Status = MessageStatus.Read;
+                }
                 return m;
             }).ToList();
+
+            
+            
             return chat;
         }
+
+        public async Task<bool> ReadMessagesFromChat(IEnumerable<MessageDTO> messages, ClaimsPrincipal principal)
+        {
+            var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
+            var readMessages = messages.Select(m => 
+                new ReadMessagesDTO() { MessageId = m.Id, ChatId = m.ChatId, UserId = m.UserId });
+            await _unitOfWork.ReadMessages.InsertRangeAsync(_mapper.Map<IEnumerable<ReadMessages>>(readMessages));
+            return await _unitOfWork.SaveAsync(userId);
+        }
+
         public async Task<bool> CreateMessageAsync(CreateMessageDTO messageModel, ClaimsPrincipal principal)
         {
             var currentUserId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
@@ -109,16 +138,11 @@ namespace BlaBlaCar.BL.Services.ChatServices
             if (!res) return res;
             newMessage.User = messageModel.User;
             newMessage.User.UserImg = _hostSettings.CurrentHost + messageModel.User.UserImg;
-            await _hubContext.Clients.Groups(messageModel.ChatId.ToString()).BroadcastChatMessage(newMessage);
-            //await _hubContext.Clients.Groups(currentUserId.ToString()).BroadcastMessagesFormAllChats();
-            var chatUsers = await _unitOfWork.UsersInChats.GetAsync(null, null,
-                x => x.UserId != currentUserId && x.ChatId == messageModel.ChatId
-            );
-            foreach (var user in chatUsers)
-            {
-                await _hubContext.Clients.Groups(user.UserId.ToString())
-                    .BroadcastMessagesFormAllChats(newMessage.ChatId);
-            }
+
+            await _chatHubService.NotifyChat(newMessage.ChatId, newMessage);
+            _backgroundJobs.Enqueue<IChatHubService>(
+                s => s.NotifyAllChatUsers(newMessage.ChatId, currentUserId));
+
             return res;
         }
 

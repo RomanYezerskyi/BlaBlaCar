@@ -4,6 +4,7 @@ using BlaBlaCar.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlaBlaCar.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220907100330_ReadMessages")]
+    partial class ReadMessages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -269,7 +271,7 @@ namespace BlaBlaCar.DAL.Migrations
                     b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("UsersInChatsId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -278,7 +280,7 @@ namespace BlaBlaCar.DAL.Migrations
 
                     b.HasIndex("MessageId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UsersInChatsId");
 
                     b.ToTable("ReadMessages");
                 });
@@ -610,17 +612,17 @@ namespace BlaBlaCar.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BlaBlaCar.DAL.Entities.ApplicationUser", "User")
+                    b.HasOne("BlaBlaCar.DAL.Entities.ChatEntities.UsersInChats", "ChatInChats")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UsersInChatsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Chat");
 
-                    b.Navigation("Message");
+                    b.Navigation("ChatInChats");
 
-                    b.Navigation("User");
+                    b.Navigation("Message");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.ChatEntities.UsersInChats", b =>
