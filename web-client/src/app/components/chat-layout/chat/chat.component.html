@@ -1,0 +1,47 @@
+<div class="col2">
+    <div class="chat">
+        <div class="messages__list">
+            <div class="message__item" [ngClass]="{'active': message.userId == currentUserId}"
+                *ngFor="let message of chat.messages;let i = index">
+                <p class="unread-messages-line" *ngIf="i == getUnreadMessageIndex()">New</p>
+                <div class="message-user">
+                    <div class="user__img">
+                        <img [src]="sanitizeImg(message.user!.userImg!)" alt="">
+                    </div>
+                    <div class="data">
+                        <h4 class="user-name">{{message.user.firstName}}</h4>
+                        <p class="date">{{message?.createdAt |date}}</p>
+                    </div>
+                    <div class="message">
+                        <p class="text">{{message.text}}</p>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="message__item">
+                <div class="message-user">
+                    <div class="user__img">
+                        <img src="https://demo.dashboardpack.com/hospital-html/img/messages/1.png" alt="">
+                    </div>
+                    <div class="data">
+                        <h4 class="user-name">John Doe</h4>
+                        <p class="date"> 28th Nov</p>
+                    </div>
+                    <div class="message">
+                        <p class="text">Lorem ipsum dolor sit amet consectetur.</p>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+        <div class="write-message-box">
+            <form #notifiForm="ngForm" class="form">
+                <mat-form-field class="field" appearance="outline">
+
+                    <input type="text" matInput placeholder="Write your message" id="text" name="text"
+                        [(ngModel)]="text">
+                </mat-form-field>
+
+                <button class="btn btn-send" type="submit" (click)="sendMessage()">Send</button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -176,6 +176,149 @@ namespace BlaBlaCar.DAL.Migrations
                     b.ToTable("Seats");
                 });
 
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.ChatEntities.Chat", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ChatImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ChatName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Chats");
+                });
+
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.ChatEntities.Message", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ChatId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.ChatEntities.ReadMessages", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ChatId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("MessageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.HasIndex("MessageId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ReadMessages");
+                });
+
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.ChatEntities.UsersInChats", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ChatId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UsersInChats");
+                });
+
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.NotificationEntities.Notifications", b =>
                 {
                     b.Property<Guid>("Id")
@@ -434,6 +577,71 @@ namespace BlaBlaCar.DAL.Migrations
                     b.Navigation("Car");
                 });
 
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.ChatEntities.Message", b =>
+                {
+                    b.HasOne("BlaBlaCar.DAL.Entities.ChatEntities.Chat", "Chat")
+                        .WithMany("Messages")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BlaBlaCar.DAL.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chat");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.ChatEntities.ReadMessages", b =>
+                {
+                    b.HasOne("BlaBlaCar.DAL.Entities.ChatEntities.Chat", "Chat")
+                        .WithMany()
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BlaBlaCar.DAL.Entities.ChatEntities.Message", "Message")
+                        .WithMany()
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BlaBlaCar.DAL.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chat");
+
+                    b.Navigation("Message");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.ChatEntities.UsersInChats", b =>
+                {
+                    b.HasOne("BlaBlaCar.DAL.Entities.ChatEntities.Chat", "Chat")
+                        .WithMany("Users")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BlaBlaCar.DAL.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chat");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.NotificationEntities.Notifications", b =>
                 {
                     b.HasOne("BlaBlaCar.DAL.Entities.ApplicationUser", "User")
@@ -567,6 +775,13 @@ namespace BlaBlaCar.DAL.Migrations
                     b.Navigation("AvailableSeats");
 
                     b.Navigation("TripUsers");
+                });
+
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.ChatEntities.Chat", b =>
+                {
+                    b.Navigation("Messages");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.NotificationEntities.Notifications", b =>

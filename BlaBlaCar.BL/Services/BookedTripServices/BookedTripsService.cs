@@ -71,9 +71,6 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
 
         public async Task<bool> AddBookedTripAsync(AddNewBookTripDTO tripModel, ClaimsPrincipal principal)
         {
-
-            var checkIfUserExist = await _userService.СheckIfUserExistsAsync(principal);
-            if (!checkIfUserExist) throw new PermissionException("This user cannot book trip!");
             Guid userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
 
             var usersBookedTrip = await _unitOfWork.TripUser

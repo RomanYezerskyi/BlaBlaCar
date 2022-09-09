@@ -8,10 +8,13 @@ using AutoMapper;
 using BlaBlaCar.BL.DTOs.NotificationDTOs;
 using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.BL.Exceptions;
+using BlaBlaCar.BL.Hubs;
+using BlaBlaCar.BL.Hubs.Interfaces;
 using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.DAL.Entities.NotificationEntities;
 using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -22,10 +25,12 @@ namespace BlaBlaCar.BL.Services.NotificationServices
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly HostSettings _hostSettings;
-        public NotificationService(IUnitOfWork unitOfWork, IMapper mapper, IOptionsSnapshot<HostSettings> hostSettings)
+        private readonly IHubContext<NotificationHub, INotificationsHubClient> _hubContext;
+        public NotificationService(IUnitOfWork unitOfWork, IMapper mapper, IOptionsSnapshot<HostSettings> hostSettings, IHubContext<NotificationHub, INotificationsHubClient> hubContext)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _hubContext = hubContext;
             _hostSettings = hostSettings.Value;
         }
         public async Task<IEnumerable<GetNotificationsDTO>> GetUserNotificationsAsync(ClaimsPrincipal principal)
@@ -34,7 +39,7 @@ namespace BlaBlaCar.BL.Services.NotificationServices
             var notifications = _mapper.Map<IEnumerable<GetNotificationsDTO>>(
                 await _unitOfWork.Notifications.GetAsync(
                     x=>x.OrderByDescending(x=>x.CreatedAt),
-                    null, x => x.UserId == userId));
+                    null, x => x.UserId == userId || x.NotificationStatus == NotificationStatus.Global) );
             if (!notifications.Any())
                 throw new NotFoundException(nameof(NotificationsDTO));
 
@@ -54,15 +59,25 @@ namespace BlaBlaCar.BL.Services.NotificationServices
             var notification = _mapper.Map<Notifications>(notificationModel);
 
             await _unitOfWork.Notifications.InsertAsync(notification);
-
             var createdBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
-            return await _unitOfWork.SaveAsync(createdBy);
+            var result = await _unitOfWork.SaveAsync(createdBy);
+            if (notificationModel.NotificationStatus == NotificationDTOStatus.SpecificUser && result)
+            {
+
+                await _hubContext.Clients.Group(notificationModel.UserId.ToString()).BroadcastNotification();
+            }
+            else
+            {
+                await _hubContext.Clients.All.BroadcastNotification();
+            }
+
+            return result;
         }
 
         public async Task GenerateNotificationAsync(CreateNotificationDTO notificationModel)
         {
             var notification = _mapper.Map<Notifications>(notificationModel);
-
+            await _hubContext.Clients.Group(notificationModel.UserId.ToString()).BroadcastNotification();
             await _unitOfWork.Notifications.InsertAsync(notification);
         }
 

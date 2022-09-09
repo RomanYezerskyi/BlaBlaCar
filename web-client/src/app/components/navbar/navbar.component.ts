@@ -16,6 +16,7 @@ export class NavbarComponent implements OnInit {
   userStatus = UserStatus;
   toggle: boolean = true;
   notification: boolean = false;
+  notifiNotReadCount = 0;
   constructor(private jwtHelper: JwtHelperService, private http: HttpClient, private router: Router, private dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -34,10 +35,12 @@ export class NavbarComponent implements OnInit {
     this.dialog.open(UserProfileComponent, dialogConfig);
   }
 
-
-  openNotification() {
-    this.notification = !this.notification;
+  countNotify($event: number) {
+    this.notifiNotReadCount = $event;
   }
+  // openNotification() {
+  //   this.notification = !this.notification;
+  // }
   change() {
     this.toggle = !this.toggle;
   }

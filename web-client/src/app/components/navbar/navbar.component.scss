@@ -53,6 +53,18 @@ a {
 
 .notification {
     position: relative;
+
+    .notifi__count {
+        position: absolute;
+        color: #fff;
+        font-size: 15px;
+        padding: 2px;
+        border-radius: 7px;
+        margin: 0;
+        background-color: rgb(197 49 49);
+        top: -7px;
+        left: -6px;
+    }
 }
 
 .notification_list {
@@ -68,6 +80,8 @@ a {
     bottom: -1px;
 
 }
+
+
 
 .menu {
     display: flex;
@@ -98,7 +112,7 @@ a {
                 // border-color: #6366f1;
                 border-radius: 10px;
                 // transition: all 0.15s ease;
-                background-image: linear-gradient(to right, #5C258D 0%, #4389A2 51%, #5C258D 100%);
+                background-image: linear-gradient(to right, #851ce0 0%, #4389A2 51%, #8a20e6 100%);
                 transition: .5s;
                 background-size: 200% auto;
                 // text-transform: uppercase;

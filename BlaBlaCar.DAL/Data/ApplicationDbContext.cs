@@ -1,5 +1,6 @@
 ﻿using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Entities.CarEntities;
+using BlaBlaCar.DAL.Entities.ChatEntities;
 using BlaBlaCar.DAL.Entities.NotificationEntities;
 using BlaBlaCar.DAL.Entities.TripEntities;
 using Microsoft.AspNetCore.Identity;
@@ -24,7 +25,11 @@ namespace BlaBlaCar.DAL.Data
         public DbSet<CarDocuments> CarDocuments { get; set; }
         public DbSet<Notifications> Notifications { get; set; }
         public DbSet<ReadNotifications> ReadNotifications { get; set; }
-
+            
+        public DbSet<Chat> Chats { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<UsersInChats> UsersInChats { get; set; }
+        public DbSet<ReadMessages> ReadMessages { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
 

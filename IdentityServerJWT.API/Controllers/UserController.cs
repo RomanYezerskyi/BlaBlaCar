@@ -36,6 +36,21 @@ namespace IdentityServerJWT.API.Controllers
             }
 
         }
+        [HttpGet("admins")]
+        [Authorize(Roles = "blablacar.admin")]
+        public async Task<IActionResult> GetAdmins()
+        {
+            try
+            {
+                var roles = await _userService.GetAdminsAsync();
+                return Ok(roles);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+
+        }
         [HttpGet("{email}")]
         [Authorize(Roles = "blablacar.admin")]
         public async Task<IActionResult> GetUser(string email)
@@ -46,7 +61,7 @@ namespace IdentityServerJWT.API.Controllers
                 return Ok(user);
             }
             catch (Exception e)
-            {
+            { 
                 return BadRequest(e);
             }
            

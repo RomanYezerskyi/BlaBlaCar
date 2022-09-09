@@ -1,15 +1,19 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { CarType } from 'src/app/enums/car-type';
+import { NotificationStatus } from 'src/app/enums/notification-status';
 import { CarStatus } from 'src/app/interfaces/car-interfaces/car-status';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
 import { AdminService } from 'src/app/services/admin/admin.service';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
+import { NotificationsService } from 'src/app/services/notificationsservice/notifications.service';
 import { UserService } from 'src/app/services/userservice/user.service';
+import { CreateNotificationDialogComponent } from '../create-notification-dialog/create-notification-dialog.component';
 
 export enum Menu {
   User = 1,
@@ -33,7 +37,8 @@ export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
   constructor(private userService: UserService,
     private sanitizeImgService: ImgSanitizerService,
     private route: ActivatedRoute,
-    private http: HttpClient, private adminService: AdminService) { }
+    private http: HttpClient, private adminService: AdminService,
+    private dialog: MatDialog, private notificationsService: NotificationsService,) { }
   @Input() userId = '';
   ngOnInit(): void {
     if (this.userId == '') {
@@ -50,6 +55,26 @@ export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
     if (changes['userId'] && changes['userId']?.previousValue != changes['userId']?.currentValue) {
       if (this.userId != '') this.getUser(this.userId)
     }
+  }
+  addNotitfication(userId: string) {
+    this.openNotificationDialog(NotificationStatus.Global, userId);
+  }
+  private openNotificationDialog(notificationStatus: NotificationStatus, userId: string | null) {
+    const dialogConfig = new MatDialogConfig();
+
+    // dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = {
+      notificationStatus: notificationStatus,
+      userId: userId,
+      title: "Notification"
+    };
+    const dRef = this.dialog.open(CreateNotificationDialogComponent, dialogConfig);
+
+    dRef.componentInstance.onSubmitReason.subscribe(() => {
+
+    });
+
   }
   sanitizeImg(img: string): SafeUrl {
     return this.sanitizeImgService.sanitiizeUserImg(img);

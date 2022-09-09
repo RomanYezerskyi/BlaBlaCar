@@ -7,6 +7,7 @@ namespace IdentityServerJWT.API.Interfaces
     public interface IUserService
     {
         Task<List<IdentityRole>> GetRoles();
+        Task<List<UserWithRolesModel>> GetAdminsAsync();
         public Task<UserWithRolesModel> GetUser(string email);
         Task<IdentityResult> ChangeUserRole(UserChangeRoleModel roleModel);
         Task<IdentityResult> UpdateUser(UpdateUser userModel);

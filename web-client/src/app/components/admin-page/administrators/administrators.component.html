@@ -1,0 +1,72 @@
+<div class="container">
+    <form #searchForm="ngForm" class="form">
+        <mat-form-field class="example-full-width" appearance="standard">
+            <input type="search" matInput placeholder="Search users here ..." id="email" name="email"
+                [(ngModel)]="userEmail">
+            <i class="material-icons" matSuffix (click)="getUser(searchForm)">search</i>
+            <!-- <mat-error *ngIf="textFormControl.hasError('required')">
+                Text is <strong>required</strong>
+            </mat-error> -->
+        </mat-form-field>
+
+        <!-- <button class="btn" type="submit">Send</button> -->
+    </form>
+    <div class="users-list admins" *ngIf="searchUser.email != ''">
+        <div class="head">
+            Users
+        </div>
+        <div class="title">
+            <h4 class="userId"><i class="material-icons" (click)=" getChat(searchUser.id)">chat</i></h4>
+            <h4>Avatar</h4>
+            <h4>Name</h4>
+            <h4>Email</h4>
+            <h4>Phone</h4>
+            <h4>Role</h4>
+            <h4> - </h4>
+
+        </div>
+        <div class="user__item">
+            <p class="userId">#</p>
+            <div class="img">
+                <p class="user_avatar">
+                    <img [src]="sanitizeImg(searchUser.userImg!)" alt="">
+                </p>
+            </div>
+
+            <p>{{searchUser.firstName}}</p>
+            <p>{{searchUser.email}}</p>
+            <p>{{searchUser.phoneNumber}}</p>
+            <p>{{searchUser.roles[0].name}}</p>
+            <p></p>
+        </div>
+    </div>
+    <div class="users-list admins">
+        <div class="head">
+            Admins
+        </div>
+        <div class="title">
+            <h4 class="userId">#</h4>
+            <h4>Avatar</h4>
+            <h4>Name</h4>
+            <h4>Email</h4>
+            <h4>Phone</h4>
+            <h4>Role</h4>
+            <h4> - </h4>
+
+        </div>
+        <div class="user__item" *ngFor="let user of admins;let i = index;">
+            <p class="userId"><i class="material-icons" (click)=" getChat(user.id)">chat</i></p>
+            <div class="img">
+                <p class="user_avatar">
+                    <img [src]="sanitizeImg(user.userImg!)" alt="">
+                </p>
+            </div>
+
+            <p>{{user.firstName}}</p>
+            <p>{{user.email}}</p>
+            <p>{{user.phoneNumber}}</p>
+            <p>{{user.roles[0].name}}</p>
+            <p></p>
+        </div>
+    </div>
+</div>

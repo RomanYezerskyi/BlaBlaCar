@@ -55,6 +55,11 @@ import { CreateNotificationDialogComponent } from './components/admin-page/creat
 import { AdminPanelComponent } from './components/admin-page/admin-panel/admin-panel.component';
 import { ChartsComponent } from './components/admin-page/charts/charts.component';
 import { UsersManagementComponent } from './components/admin-page/users-management/users-management.component';
+import { ChatLayoutComponent } from './components/chat-layout/chat-layout.component';
+import { ChatListComponent } from './components/chat-layout/chat-list/chat-list.component';
+import { ChatComponent } from './components/chat-layout/chat/chat.component';
+import { AdministratorsComponent } from './components/admin-page/administrators/administrators.component';
+import { UserGuard } from './guards/user-guard/user.guard';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -95,6 +100,10 @@ export function tokenGetter() {
     AdminPanelComponent,
     ChartsComponent,
     UsersManagementComponent,
+    ChatLayoutComponent,
+    ChatListComponent,
+    ChatComponent,
+    AdministratorsComponent,
 
   ],
   imports: [
@@ -128,7 +137,7 @@ export function tokenGetter() {
     MatProgressSpinnerModule,
 
   ],
-  providers: [AuthGuard, AdminGuard, PageAccessGuard],
+  providers: [AuthGuard, AdminGuard, PageAccessGuard, UserGuard],
   bootstrap: [AppComponent],
   entryComponents: [DialogBookingConfirmationComponent, UserProfileComponent, CreateNotificationDialogComponent],
   exports: [

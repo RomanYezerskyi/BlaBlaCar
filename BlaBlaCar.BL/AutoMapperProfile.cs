@@ -3,11 +3,13 @@ using BlaBlaCar.BL.DTOs.AdminDTOs;
 using BlaBlaCar.BL.DTOs.BookTripDTOs;
 using BlaBlaCar.BL.DTOs.BookTripModels;
 using BlaBlaCar.BL.DTOs.CarDTOs;
+using BlaBlaCar.BL.DTOs.ChatDTOs;
 using BlaBlaCar.BL.DTOs.NotificationDTOs;
 using BlaBlaCar.BL.DTOs.TripDTOs;
 using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Entities.CarEntities;
+using BlaBlaCar.DAL.Entities.ChatEntities;
 using BlaBlaCar.DAL.Entities.NotificationEntities;
 using BlaBlaCar.DAL.Entities.TripEntities;
 
@@ -45,6 +47,11 @@ namespace BlaBlaCar.BL
             CreateMap<ReadNotifications, CreateNotificationDTO>();
             CreateMap<Notifications, GetNotificationsDTO>().ReverseMap();
 
+            CreateMap<Chat, ChatDTO>().ReverseMap();
+            CreateMap<Message, MessageDTO>().ReverseMap();
+            CreateMap<UsersInChats, UsersInChatsDTO>().ReverseMap();
+            CreateMap<Message, CreateMessageDTO> ().ReverseMap();
+            CreateMap<ReadMessages, ReadMessagesDTO>().ReverseMap();
         }
     }
 }

@@ -1,7 +1,10 @@
 ﻿using BlaBlaCar.BL.DTOs.NotificationDTOs;
+using BlaBlaCar.BL.Hubs;
+using BlaBlaCar.BL.Hubs.Interfaces;
 using BlaBlaCar.BL.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace BlaBlaCar.API.Controllers
 {
@@ -10,9 +13,11 @@ namespace BlaBlaCar.API.Controllers
     public class NotificationController : ControllerBase
     {
         private readonly INotificationService _notificationService;
-        public NotificationController(INotificationService notificationService)
+        private readonly IHubContext<NotificationHub, INotificationsHubClient> _hubContext;
+        public NotificationController(INotificationService notificationService, IHubContext<NotificationHub, INotificationsHubClient> hubContext)
         {
             _notificationService = notificationService;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -64,7 +69,7 @@ namespace BlaBlaCar.API.Controllers
                     .SelectMany(x => x.Errors)
                     .Select(x => x.ErrorMessage)));
             var res = await _notificationService.CreateNotificationAsync(notification, User);
-
+            //await _hubContext.Clients.All.BroadcastMessage();
             if (res) return Ok();
             return BadRequest();
 

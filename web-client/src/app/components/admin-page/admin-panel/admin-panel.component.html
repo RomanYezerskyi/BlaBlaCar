@@ -28,11 +28,12 @@
         </li>
         <li class="list__item">
             <i class="material-icons">admin_panel_settings</i>
-            <a class="btn btn-link" href="">Admins</a>
+            <a class="btn btn-link" [routerLink]="['admins']">Admins</a>
         </li>
-        <li class="list__item">
+        <li class="list__item chat-item">
+            <p class="messages-count" *ngIf="unreadMessages > 0">{{unreadMessages}}</p>
             <i class="material-icons">chat</i>
-            <a class="btn btn-link" href=""> Chats</a>
+            <a class="btn btn-link" [routerLink]="['chat']"> Chats</a>
         </li>
     </ul>
 </div>

@@ -1,3 +1,4 @@
+using System.Configuration;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,18 +10,23 @@ using BlaBlaCar.DAL.Interfaces;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.BL;
 using BlaBlaCar.BL.ExceptionHandler;
+using BlaBlaCar.BL.Hubs;
 using BlaBlaCar.BL.Services.Admin;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication;
 using BlaBlaCar.BL.Services.BookedTripServices;
+using BlaBlaCar.BL.Services.ChatServices;
 using BlaBlaCar.BL.Services.NotificationServices;
 using BlaBlaCar.BL.Services.TripServices;
+using Hangfire;
+using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
-
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Builder;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -30,9 +36,20 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
+builder.Services.AddHangfire(configuration => configuration
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"), new SqlServerStorageOptions
+    {
+        CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+        SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+        QueuePollInterval = TimeSpan.Zero,
+        UseRecommendedIsolationLevel = true,
+        DisableGlobalLocks = true
+    }));
+builder.Services.AddHangfireServer();
 
 builder.Services.Configure<HostSettings>(builder.Configuration.GetSection("ApiHostSettings"));
 
@@ -54,8 +71,8 @@ builder.Services.AddScoped<ICarSeatsService, CarSeatsService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
-
-
+builder.Services.AddScoped<IChatService, ChatService>();
+builder.Services.AddScoped<IChatHubService, ChatHubService>();
 
 builder.Services.AddAuthentication(opt => {
         opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -81,10 +98,13 @@ builder.Services.AddCors(options =>
     {
         builder.AllowAnyOrigin()
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .WithOrigins("http://localhost:4200");
     });
 });
 
+builder.Services.AddSignalR();
 //app.UseCors(builder => builder.WithOrigins("https://localhost:44321")
 //    .AllowAnyHeader()
 //    .AllowAnyMethod());
@@ -111,12 +131,22 @@ app.UseStaticFiles(new StaticFileOptions()
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"DriverDocuments")),
     RequestPath = new PathString("/DriverDocuments")
 });
+app.UseRouting();
 
 app.UseAuthentication(); 
 app.UseAuthorization();
 
 app.UseCors("EnableCORS");
 app.UseMiddleware<ExceptionHandlerMiddleware>();
-app.MapControllers();//.RequireAuthorization("ApiScope"); ;
+app.MapHub<NotificationHub>("/notify");
+app.MapHub<ChatHub>("/chatHub");
+app.UseHangfireDashboard();
+BackgroundJob.Enqueue(() => Console.WriteLine("Hello world from Hangfire!"));
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapHangfireDashboard();
+});//.RequireAuthorization("ApiScope");
 
 app.Run();

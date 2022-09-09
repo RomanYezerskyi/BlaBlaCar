@@ -1,0 +1,152 @@
+.container {
+    padding: 30px 0;
+    margin: 0;
+}
+
+.users-list {
+    background-color: #fff;
+}
+
+.head {
+    padding: 20px 30px;
+    font-size: 17px;
+    font-weight: 400 !important;
+    color: #495057;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    position: relative;
+
+    .actions {
+        display: flex;
+        position: absolute;
+        right: 17px;
+        top: -21px;
+        transform: translateY(50%);
+        background: rgb(172, 165, 165);
+        padding: 10px;
+        border-radius: 10px;
+
+        // margin: auto;    
+        .btn-orderBy {
+            color: #007bff;
+            background-color: white;
+            background-image: none;
+            border-color: #007bff;
+            border-radius: 5px;
+            padding: 5px 15px;
+            font-size: 15px;
+            font-weight: 500;
+            margin: 0 5px;
+
+        }
+
+        p {
+            color: #fff;
+
+            margin: auto 5px;
+        }
+    }
+
+}
+
+.btn {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.users-list {
+    margin: 50px 0;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 10px;
+    text-align: center;
+
+
+
+    .title {
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+        padding: 20px 30px;
+        margin-bottom: 0;
+        color: inherit;
+        background-color: #fff;
+
+
+        h4 {
+            // border: 1px #000 solid;
+            // width: 100px;
+            // margin: 0 20px;
+            // padding: 10px;
+            color: #495057;
+            width: 150px;
+            font-size: 15px;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .userId {
+            width: 40px;
+            font-weight: 600;
+        }
+    }
+
+    .user__item {
+        cursor: pointer;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+
+        p {
+            width: 150px;
+            // border: 1px #000 solid;
+            margin: auto 0;
+            // padding: 10px;
+            // text-align: center
+        }
+
+        .userId {
+            width: 40px;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .img {
+            width: 150px;
+        }
+
+        .user_avatar {
+            width: 50px;
+            // padding: 0 50px;
+            // height: 50px;
+            margin: auto;
+            overflow: hidden;
+
+        }
+
+        img {
+            border-radius: 10px;
+            width: 100%;
+            height: 100%;
+            display: block;
+            margin: auto;
+            object-fit: cover;
+            overflow: hidden;
+        }
+    }
+
+    .actions {
+        border-top: 1px solid rgba(0, 0, 0, 0.125);
+
+        padding: 10px 0;
+
+        .btn-load-more {
+            border-radius: 5px;
+            border: none;
+            background: #808080;
+            padding: 10px 40px;
+            font-size: 15px;
+            color: #fff;
+            text-transform: uppercase;
+        }
+    }
+
+}

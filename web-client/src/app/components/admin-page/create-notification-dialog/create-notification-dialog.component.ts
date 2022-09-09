@@ -18,6 +18,7 @@ export class CreateNotificationDialogComponent implements OnInit, OnDestroy {
   title = '';
   notification: NotificationsModel = {
     text: '',
+
   };
   onSubmitReason = new EventEmitter();
   constructor(private dialogRef: MatDialogRef<CreateNotificationDialogComponent>, @Inject(MAT_DIALOG_DATA) data: any, private notificationsService: NotificationsService) {
@@ -27,7 +28,7 @@ export class CreateNotificationDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.dialogRef.updateSize('40%', '55%');
+    this.dialogRef.updateSize('45%', '55%');
   }
   ngOnDestroy(): void {
     this.notificationsSubscription.unsubscribe();
@@ -38,6 +39,7 @@ export class CreateNotificationDialogComponent implements OnInit, OnDestroy {
       response => {
         console.log(response);
         this.onSubmitReason.emit();
+        // this.dialogRef.close();
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
