@@ -10,7 +10,6 @@ export class UserService {
   constructor(private http: HttpClient) { }
   async chekIfUserExist(): Promise<any> {
     const url = 'https://localhost:6001/api/User/user';
-    // return this.http.get<any>(url);
     return await new Promise<any>((resolve, reject) => {
       this.http.get<any>(url).subscribe({
         next: (res) => resolve(res),
@@ -47,5 +46,8 @@ export class UserService {
   }
   addDrivingLicense(formData: FormData): Observable<any> {
     return this.http.post('https://localhost:6001/api/User/license', formData)
+  }
+  getUserStatistics(): Observable<any> {
+    return this.http.get<any>('https://localhost:6001/api/User/statistics');
   }
 }

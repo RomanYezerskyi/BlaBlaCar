@@ -5,7 +5,7 @@
 </mat-dialog-actions> -->
 <mat-dialog-content>
     <div class="body">
-        <img src="../../../../assets/close.png" class="close_btn" (click)="close()" alt="">
+        <!-- <img src="../../../../assets/close.png" class="close_btn" alt=""> -->
 
         <div class="row">
             <div class="body_data">
@@ -38,7 +38,7 @@
                         <div class="icon_img">
                             <img src="../../../../assets/car.png" alt="">
                         </div>
-                        <p>{{user.cars.length}}</p>
+                        <p>{{user.cars?.length}}</p>
                     </div>
                     <hr>
                     <div class="user_info">
@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="card_body data_elements">
-                <form *ngIf="editUserData; else elseBlock" #userForm="ngForm" (ngSubmit)="updateUser(userForm)"
+                <!-- <form *ngIf="editUserData; else elseBlock" #userForm="ngForm" (ngSubmit)="updateUser(userForm)"
                     [formGroup]="userDataForm">
                     <mat-form-field class="example-full-width" appearance="legacy">
                         <mat-label>Name</mat-label>
@@ -95,56 +95,33 @@
                         <button type="submit" [disabled]="!userForm.valid">Save</button>
                         <button type="button" (click)="editData()">Cancel</button>
                     </div>
-                </form>
-                <ng-template #elseBlock>
-                    <div class="user_data_info">
-                        <div class="form-group">
-                            <label for="firstName" class="sr-only">Name</label>
-                            <div class="input">
-                                <p>{{user.firstName}}</p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="email" class="sr-only">Email</label>
-                            <div class="input">
-                                <p>{{user.email}}</p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="phoneNumber" class="sr-only">Phone</label>
-                            <div class="input">
-                                <p>{{user.phoneNumber}}</p>
-                            </div>
-                        </div>
-                        <div class="actions">
-                            <input type="button" (click)="editData()" value="Edit">
+                </form> -->
+                <div class="user_data_info">
+                    <div class="form-group">
+                        <label for="firstName" class="sr-only">Name</label>
+                        <div class="input">
+                            <p>{{user.firstName}}</p>
                         </div>
                     </div>
-                </ng-template>
+                    <div class="form-group">
+                        <label for="email" class="sr-only">Email</label>
+                        <div class="input">
+                            <p>{{user.email}}</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneNumber" class="sr-only">Phone</label>
+                        <div class="input">
+                            <p>{{user.phoneNumber}}</p>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <input type="button" (click)="editData()" value="Edit">
+                    </div>
+                </div>
                 <form #userPasswordForm="ngForm" class="changePasswordForm" [formGroup]="form"
                     (ngSubmit)="updateUserPassword(userPasswordForm)">
-                    <!-- <h4>Change password</h4>
-                    <div class="form-group">
-                        <label for="firstName" class="sr-only">Current</label>
-                        <div class="input">
-                            <input type="password" id="currentPassword" name="currentPassword"
-                                [(ngModel)]="newPassword.currentPassword" class="form-control" placeholder="" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="email" class="sr-only">New</label>
-                        <div class="input">
-                            <input type="password" id="newPassword" name="newPassword"
-                                [(ngModel)]="newPassword.newPassword" class="form-control" placeholder="" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="phoneNumber" class="sr-only">New</label>
-                        <div class="input">
-                            <input type="password" id="newPassword1" name="newPassword1" class="form-control"
-                                placeholder="" required>
-                        </div>
-                    </div> -->
+
                     <mat-form-field class="example-full-width" appearance="legacy">
                         <mat-label>Password</mat-label>
                         <input formControlName="password" id="password" type="password" matInput required
@@ -182,6 +159,15 @@
                         <button type="submit" [disabled]="!userPasswordForm.valid">Change password</button>
                     </div>
                 </form>
+
+            </div>
+            <div class="charts">
+                <div class="chart-item">
+                    <h4 class="title">Your trips charts</h4>
+                    <div class="chart-container">
+                        <canvas id="myChart">{{ chart }}</canvas>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

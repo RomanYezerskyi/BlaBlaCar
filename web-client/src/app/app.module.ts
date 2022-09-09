@@ -60,6 +60,7 @@ import { ChatListComponent } from './components/chat-layout/chat-list/chat-list.
 import { ChatComponent } from './components/chat-layout/chat/chat.component';
 import { AdministratorsComponent } from './components/admin-page/administrators/administrators.component';
 import { UserGuard } from './guards/user-guard/user.guard';
+import { EditModalDialogComponent } from './components/user/user-profile/edit-modal-dialog/edit-modal-dialog.component';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -104,6 +105,7 @@ export function tokenGetter() {
     ChatListComponent,
     ChatComponent,
     AdministratorsComponent,
+    EditModalDialogComponent,
 
   ],
   imports: [
@@ -139,7 +141,8 @@ export function tokenGetter() {
   ],
   providers: [AuthGuard, AdminGuard, PageAccessGuard, UserGuard],
   bootstrap: [AppComponent],
-  entryComponents: [DialogBookingConfirmationComponent, UserProfileComponent, CreateNotificationDialogComponent],
+  entryComponents: [DialogBookingConfirmationComponent,
+    CreateNotificationDialogComponent, EditModalDialogComponent],
   exports: [
     MatToolbarModule,
     MatButtonModule,

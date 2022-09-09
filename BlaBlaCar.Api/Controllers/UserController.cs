@@ -92,5 +92,15 @@ namespace BlaBlaCar.API.Controllers
             return BadRequest();
            
         }
+        [HttpGet("statistics")]
+        public async Task<IActionResult> GerUserStatistics()
+        {
+
+            var res = await _userService.GetUserStatisticsAsync(User);
+            if (res != null) return Ok(res);
+            return BadRequest("Fail");
+
+        }
+
     }
 }

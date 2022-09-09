@@ -1,6 +1,7 @@
 .body {
     background-color: #fff;
     position: relative;
+    padding: 20px 30px;
 }
 
 .close_btn {
@@ -22,11 +23,15 @@
 
 .row {
     display: flex;
-    justify-content: space-between;
+    // justif-y-content: space-between;
+}
+
+.user_main_info {
+    width: 250px;
 }
 
 .card_body {
-    flex: 1 1 auto;
+    // flex: 1 1 auto;
     min-height: 1px;
     padding: 1.25rem;
     box-shadow: 0 2px 6px 0 rgb(218 218 253 / 65%), 0 2px 6px 0 rgb(206 206 238 / 54%);
@@ -79,16 +84,16 @@
         border: none;
         display: block;
         margin: auto;
-
-        background-image: linear-gradient(to right, #5C258D 0%, #4389A2 51%, #5C258D 100%);
+        color: #2226f3; // background-image: linear-gradient(to right, #5C258D 0%, #4389A2 51%, #5C258D 100%);
         border-radius: 10px;
+        border: 1px solid #2226f3;
         // margin: 10px;
-        padding: 15px 20px;
+        padding: 10px 10px;
         text-align: center;
         text-transform: uppercase;
         transition: .5s;
         background-size: 200% auto;
-        color: #fff;
+        // color: #fff;
         box-shadow: 0 0 20px #eee;
         border-radius: 10px;
 
@@ -103,8 +108,8 @@
     input:hover,
     p:hover,
     button:hover {
-        background-position: right center;
-        color: #fff;
+        // background-position: right center;
+        // color: #fff;
         text-decoration: none;
     }
 }
@@ -120,10 +125,10 @@
 
 
 
-.body_data {
-    flex: 0 0 33.333333%;
-    max-width: 33.333333%;
-}
+// .body_data {
+//     flex: 0 0 33.333333%;
+//     max-width: 33.333333%;
+// }
 
 .user {
     text-align: center;
@@ -186,6 +191,9 @@ form {
 }
 
 .user_data_info {
+    padding: 0 10px;
+    width: 400px;
+
     p {
         margin: 0;
     }
@@ -207,6 +215,21 @@ form {
     }
 }
 
+.charts {
+    .chart-item {
+        box-sizing: border-box;
+        width: 500px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 2px 6px 0 rgb(218 218 253 / 65%), 0 2px 6px 0 rgb(206 206 238 / 54%);
+
+        .title {
+            font-size: 20px;
+            font-weight: 500;
+        }
+    }
+}
+
 @media all and (max-width:1000px) {
     .row {
         flex-flow: column;
@@ -221,6 +244,8 @@ form {
         max-width: 100%;
     }
 }
+
+
 
 // .container {
 //     padding: 10px 0;

@@ -4,9 +4,9 @@ using BlaBlaCar.BL.DTOs.UserDTOs;
 
 namespace BlaBlaCar.BL.DTOs.TripDTOs
 {
-    public class TripDTO
+    public class TripDTO:BaseEntity
     {
-        public Guid Id { get; set; }
+       
         public string StartPlace { get; set; }
         public string EndPlace { get; set; }
         public DateTimeOffset StartTime { get; set; }
