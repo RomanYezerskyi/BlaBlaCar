@@ -7,12 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using BlaBlaCar.BL.DTOs;
-using BlaBlaCar.BL.DTOs.AdminDTOs;
-using BlaBlaCar.BL.DTOs.TripDTOs;
 using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.BL.Exceptions;
 using BlaBlaCar.BL.Interfaces;
-using BlaBlaCar.BL.ViewModels.UserViewModel;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
@@ -223,26 +220,6 @@ namespace BlaBlaCar.BL.Services
 
         }
 
-        public async Task<UserStatisticsViewModel> GetUserStatisticsAsync(ClaimsPrincipal principal)
-        {
-            var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
-            var trips = _mapper.Map<IEnumerable<TripDTO>>(
-                await _unitOfWork.Trips.GetAsync(null, null, 
-                    x=>x.UserId == userId )
-                );
-            var groupedTrips = trips.GroupBy(x => x.StartTime.Date);
-
-            var res = new UserStatisticsViewModel()
-            {
-                TripsStatisticsCount = groupedTrips.Select(x => x.ToList().Count()),
-                TripsDateTime = groupedTrips.Select(x => x.Key)
-            };
-            return res; 
-        }
-
-        public Task<bool> DeleteUserAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

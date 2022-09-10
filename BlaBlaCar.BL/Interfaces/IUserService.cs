@@ -5,7 +5,6 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using BlaBlaCar.BL.DTOs.UserDTOs;
-using BlaBlaCar.BL.ViewModels.UserViewModel;
 using BlaBlaCar.DAL.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.FileProviders.Physical;
@@ -21,7 +20,5 @@ namespace BlaBlaCar.BL.Interfaces
         Task<bool> AddUserAsync(ClaimsPrincipal user);
         Task<bool> UpdateUserAsync(UpdateUserDTO userModel, ClaimsPrincipal principal);
         Task<bool> UpdateUserImgAsync(IFormFile userImg, ClaimsPrincipal principal);
-        Task<UserStatisticsViewModel> GetUserStatisticsAsync(ClaimsPrincipal principal);
-        Task<bool> DeleteUserAsync(int id);
     }
 }
