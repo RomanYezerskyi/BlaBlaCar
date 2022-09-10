@@ -1,0 +1,76 @@
+<button class="btn-close" mat-button><i class="material-icons">highlight_remove</i></button>
+<div class="container">
+    <form #carForm="ngForm" class="form">
+        <mat-form-field class="form-item" appearance="outline">
+            <mat-label>Car model</mat-label>
+            <input type="text" matInput required id="modelName" name="modelName" [(ngModel)]="car.modelName"
+                placeholder="Ex. BMW">
+            <mat-icon matSuffix>drive_eta</mat-icon>
+            <mat-error *ngIf="CarFormControl.hasError('required')">
+                Car model is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field class="form-item" appearance="outline">
+            <mat-label>Registration number</mat-label>
+            <input type="text" matInput required type="text" id="registNum" name="registNum" [(ngModel)]="car.registNum"
+                placeholder="Ex. AA0000AA">
+            <mat-icon matSuffix>mode_edit</mat-icon>
+            <mat-error *ngIf="CarFormControl.hasError('required')">
+                Registration number is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field class="form-item" appearance="outline">
+            <mat-label>Count of seats</mat-label>
+            <!-- <input matInput type="number" min="1" id=" countOfSeats" name="countOfSeats" [(ngModel)]="car.countOfSeats"
+                placeholder="Ex. 4" required> -->
+            <input matInput type="number" min="1" id=" countOfSeats" name="countOfSeats" [(ngModel)]="car.seats.length"
+                placeholder="Ex. 4" required>
+            <mat-icon matSuffix>airline_seat_recline_normal</mat-icon>
+            <mat-error *ngIf="CarFormControl.hasError('required')">
+                Count of seats is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field class="form-item" appearance="outline">
+            <mat-label>Car type</mat-label>
+            <mat-select name="carId" id="carId" [(ngModel)]="car.carType" required>
+                <mat-option [value]="carType.Sedan">
+                    Sedan
+                </mat-option>
+                <mat-option [value]="carType.Bus">
+                    Bus
+                </mat-option>
+            </mat-select>
+            <mat-icon matSuffix *ngIf="car.carType == carType.Sedan">drive_eta</mat-icon>
+            <mat-icon matSuffix *ngIf="car.carType == carType.Bus">airport_shuttle</mat-icon>
+            <mat-error *ngIf="CarFormControl.hasError('required')">
+                Car type is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+
+        <button class="btn-save" type="submit" [disabled]="!carForm.valid">Save</button>
+    </form>
+    <!-- <div class="documents">
+        <button class="btn-edit" (click)="edit()">
+            <i class="material-icons">create</i>
+            <p>Edit</p>
+        </button>
+
+        <div class="doc-list" [ngStyle]="{'display': !editImages ? 'none':'flex' }">
+            <div class="doc-item" *ngFor="let doc of car.carDocuments">
+                <button class="btn-remove"><i class="material-icons">highlight_remove</i></button>
+                <img [src]="sanitizeImg(doc.techPassport)" alt="">
+            </div>
+        </div>
+        <lightgallery class="doc-list" [ngStyle]="{'display': editImages ? 'none':'flex' }" [settings]="settings"
+            [onInit]="onInit">
+
+            <a class="gallery-item" *ngFor="let doc of car.carDocuments" [attr.data-src]="doc.techPassport">
+                <div class="doc-item">
+                    <img [src]="sanitizeImg(doc.techPassport)" alt="">
+                </div>
+            </a>
+        </lightgallery>
+    </div> -->
+    <app-images-gallery [images]="images" (addedFile)="getImages($event)" (removeImg)="deleteImg($event)">
+    </app-images-gallery>
+</div>

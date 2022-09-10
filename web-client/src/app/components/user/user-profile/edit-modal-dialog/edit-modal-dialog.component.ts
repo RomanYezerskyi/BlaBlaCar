@@ -11,15 +11,16 @@ import { UserService } from 'src/app/services/userservice/user.service';
   styleUrls: ['./edit-modal-dialog.component.scss']
 })
 export class EditModalDialogComponent implements OnInit {
-  @Input() user: UserModel = {} as UserModel;
+  user: UserModel = {} as UserModel;
   onSubmitReason: any;
   private formData = new FormData();
   userDataForm: FormGroup = new FormGroup({});
-  constructor
-    (private dialogRef: MatDialogRef<EditModalDialogComponent>,
-      @Inject(MAT_DIALOG_DATA) data: any,
-      private fb: FormBuilder,
-      private userService: UserService) {
+  constructor(
+    private dialogRef: MatDialogRef<EditModalDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) data: any,
+    private fb: FormBuilder,
+    private userService: UserService) {
+    this.user = data.user;
     this.userDataForm = fb.group({
       userName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
@@ -34,7 +35,9 @@ export class EditModalDialogComponent implements OnInit {
   get getUserForm() {
     return this.userDataForm.controls;
   }
-
+  close() {
+    this.dialogRef.close();
+  }
   updateUser(form: FormGroupDirective) {
     if (!form.valid) return;
     let userModel = {

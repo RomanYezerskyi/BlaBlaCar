@@ -20,7 +20,7 @@ Chart.register(...registerables);
   styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
-  @Input() user: UserModel = {} as UserModel;
+  user: UserModel = {} as UserModel;
   private statistics: UserStatisticsModel = {} as UserStatisticsModel
 
 
@@ -98,7 +98,9 @@ export class UserProfileComponent implements OnInit {
 
     // dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.data = {};
+    dialogConfig.data = {
+      user: this.user
+    }
     const dRef = this.dialog.open(EditModalDialogComponent, dialogConfig);
 
     // dRef.componentInstance.onSubmitReason.subscribe(() => {
@@ -153,7 +155,7 @@ export class UserProfileComponent implements OnInit {
       (error: HttpErrorResponse) => { console.log(error.error); }
     );
   }
-  async updateUserPassword(form: FormGroupDirective): Promise<any> {
+  updateUserPassword(form: FormGroupDirective): void {
     if (!form.valid) return;
     this.newPasswordModel.userId = this.user.id;
     this.userService.updateUserPassword(this.newPasswordModel).pipe().subscribe(

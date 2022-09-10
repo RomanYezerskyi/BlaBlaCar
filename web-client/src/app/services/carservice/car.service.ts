@@ -16,4 +16,9 @@ export class CarService {
   addCar(formData: FormData): Observable<any> {
     return this.http.post("https://localhost:6001/api/Car", formData)
   }
+  deleteDoc(file: string): Observable<any> {
+    var filePath = new FormData()
+    filePath.append("filePath", file)
+    return this.http.post<any>("https://localhost:6001/api/Files", filePath)
+  }
 }

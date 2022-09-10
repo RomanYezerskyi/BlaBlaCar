@@ -61,6 +61,9 @@ import { ChatComponent } from './components/chat-layout/chat/chat.component';
 import { AdministratorsComponent } from './components/admin-page/administrators/administrators.component';
 import { UserGuard } from './guards/user-guard/user.guard';
 import { EditModalDialogComponent } from './components/user/user-profile/edit-modal-dialog/edit-modal-dialog.component';
+import { EditCarModalDialogComponent } from './components/user/user-cars/edit-car-modal-dialog/edit-car-modal-dialog.component';
+import { LightgalleryModule } from 'lightgallery/angular';
+import { ImagesGalleryComponent } from './components/images-gallery/images-gallery.component';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -106,6 +109,8 @@ export function tokenGetter() {
     ChatComponent,
     AdministratorsComponent,
     EditModalDialogComponent,
+    EditCarModalDialogComponent,
+    ImagesGalleryComponent,
 
   ],
   imports: [
@@ -137,12 +142,12 @@ export function tokenGetter() {
     MatDatepickerModule,
     MatRadioModule,
     MatProgressSpinnerModule,
-
+    LightgalleryModule
   ],
   providers: [AuthGuard, AdminGuard, PageAccessGuard, UserGuard],
   bootstrap: [AppComponent],
   entryComponents: [DialogBookingConfirmationComponent,
-    CreateNotificationDialogComponent, EditModalDialogComponent],
+    CreateNotificationDialogComponent, EditModalDialogComponent, EditCarModalDialogComponent],
   exports: [
     MatToolbarModule,
     MatButtonModule,

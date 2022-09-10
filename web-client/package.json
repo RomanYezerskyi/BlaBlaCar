@@ -25,6 +25,7 @@
     "@auth0/angular-jwt": "^5.0.2",
     "@microsoft/signalr": "^6.0.8",
     "chart.js": "^3.9.1",
+    "lightgallery": "^2.6.0",
     "ngx-infinite-scroll": "^14.0.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

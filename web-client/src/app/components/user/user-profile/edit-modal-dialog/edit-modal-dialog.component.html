@@ -1,40 +1,43 @@
 <mat-dialog-content>
-    <form #userForm="ngForm" (ngSubmit)="updateUser(userForm)" [formGroup]="userDataForm">
-        <mat-form-field class="example-full-width" appearance="legacy">
-            <mat-label>Name</mat-label>
-            <input type="text" matInput placeholder="Ex. John Doe" id="UserName" name="UserName"
-                formControlName="userName" [(ngModel)]="user.firstName" required>
-            <mat-icon matSuffix> person</mat-icon>
-            <mat-error *ngIf="getUserForm['userName'].touched && getUserForm['userName'].invalid">
-                Name is <strong>required</strong>
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="legacy">
-            <mat-label>Email</mat-label>
-            <input type="email" matInput placeholder="Ex. pat@example.com" id="email" name="email"
-                formControlName="email" [(ngModel)]="user.email" required>
-            <mat-icon matSuffix> email</mat-icon>
-            <mat-error *ngIf="getUserForm['email'].touched && getUserForm['email'].invalid">
-                <mat-error *ngIf="getUserForm['email'].errors!['required']">
-                    Email is <strong>required</strong>
+    <div class="container">
+        <h2 class="title">Enter new data</h2>
+        <form #userForm="ngForm" (ngSubmit)="updateUser(userForm)" [formGroup]="userDataForm">
+            <mat-form-field class="example-full-width" appearance="legacy">
+                <mat-label>Name</mat-label>
+                <input type="text" matInput placeholder="Ex. John Doe" id="UserName" name="UserName"
+                    formControlName="userName" [(ngModel)]="user.firstName" required>
+                <mat-icon matSuffix> person</mat-icon>
+                <mat-error *ngIf="getUserForm['userName'].touched && getUserForm['userName'].invalid">
+                    Name is <strong>required</strong>
                 </mat-error>
-                <mat-error *ngIf="getUserForm['email'].errors!['email']">
-                    Please enter a <strong>valid</strong> address
+            </mat-form-field>
+            <mat-form-field class="example-full-width" appearance="legacy">
+                <mat-label>Email</mat-label>
+                <input type="email" matInput placeholder="Ex. pat@example.com" id="email" name="email"
+                    formControlName="email" [(ngModel)]="user.email" required>
+                <mat-icon matSuffix> email</mat-icon>
+                <mat-error *ngIf="getUserForm['email'].touched && getUserForm['email'].invalid">
+                    <mat-error *ngIf="getUserForm['email'].errors!['required']">
+                        Email is <strong>required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="getUserForm['email'].errors!['email']">
+                        Please enter a <strong>valid</strong> address
+                    </mat-error>
                 </mat-error>
-            </mat-error>
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="legacy">
-            <mat-label>Phone number </mat-label>
-            <input type="tel" matInput placeholder="Ex. +380(000)-00-00" id=" phoneNum" name="phoneNum"
-                formControlName="phoneNumber" [(ngModel)]="user.phoneNumber" required>
-            <mat-icon matSuffix>phone_iphone</mat-icon>
-            <mat-error *ngIf="getUserForm['phoneNumber'].touched && getUserForm['phoneNumber'].invalid">
-                Phone number is <strong>required</strong>
-            </mat-error>
-        </mat-form-field>
-        <div class="actions form_actions">
-            <button type="submit" [disabled]="!userForm.valid">Save</button>
-            <button type="button">Cancel</button>
-        </div>
-    </form>
+            </mat-form-field>
+            <mat-form-field class="example-full-width" appearance="legacy">
+                <mat-label>Phone number </mat-label>
+                <input type="tel" matInput placeholder="Ex. +380(000)-00-00" id=" phoneNum" name="phoneNum"
+                    formControlName="phoneNumber" [(ngModel)]="user.phoneNumber" required>
+                <mat-icon matSuffix>phone_iphone</mat-icon>
+                <mat-error *ngIf="getUserForm['phoneNumber'].touched && getUserForm['phoneNumber'].invalid">
+                    Phone number is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+            <div class="actions form_actions">
+                <button class="btn  submit" type="submit" [disabled]="!userForm.valid">Save</button>
+                <button class="btn  button" type="button" (click)="close()">Cancel</button>
+            </div>
+        </form>
+    </div>
 </mat-dialog-content>

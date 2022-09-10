@@ -1,11 +1,23 @@
 ﻿using System.Linq.Expressions;
 using BlaBlaCar.DAL.Data;
+using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace BlaBlaCar.DAL
 {
+    //public static class Test
+    //{
+    //    public static IEnumerable<ApplicationUser> Select<TSource>(this IEnumerable<TSource> list) where TSource : BaseEntity
+    //    {
+    //        return list.Select(t => new ApplicationUser
+    //        {
+
+    //        });
+    //    }
+    //}
+
     public class BaseRepositoryAsync<TEntity> : IRepositoryAsync<TEntity> where TEntity : class
     {
         private ApplicationDbContext _context;
@@ -30,6 +42,8 @@ namespace BlaBlaCar.DAL
             queryable = includes is null ? queryable : includes(queryable);
             return await queryable.AsNoTracking().ToListAsync();
         }
+
+        
 
         public async Task<TEntity> GetAsync(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> includes = null,
             Expression<Func<TEntity, bool>> filter = null)
