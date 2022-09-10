@@ -197,17 +197,6 @@ namespace BlaBlaCar.BL.Services.TripServices
             
         }
 
-        public async Task<bool> UpdateTripAsync(TripDTO tripModel)
-        {
-            //if (tripModel != null)
-            //{
-            //    var trip = _mapper.Map<TripModel, TripModel>(tripModel);
-            //    _unitOfWork.Trips.Update(trip);
-            //    return await _unitOfWork.SaveAsync();
-            //}
-            return false;
-        }
-
         public async Task<bool> DeleteTripAsync(Guid id, ClaimsPrincipal principal)
         {
             var trip = await _unitOfWork.Trips.GetAsync(

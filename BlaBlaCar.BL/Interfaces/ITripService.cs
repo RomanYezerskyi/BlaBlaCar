@@ -10,7 +10,6 @@ namespace BlaBlaCar.BL.Interfaces
         Task<UserTripsViewModel> GetUserTripsAsync(int take, int skip, ClaimsPrincipal principal);
         Task<SearchTripsResponseDTO> SearchTripsAsync(SearchTripDTO model);
         Task<bool> AddTripAsync(CreateTripDTO tripModel, ClaimsPrincipal principal);
-        Task<bool> UpdateTripAsync(TripDTO tripModel);
         Task<bool> DeleteTripAsync(Guid id, ClaimsPrincipal principal);
 
     }

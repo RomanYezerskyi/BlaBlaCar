@@ -66,15 +66,7 @@ namespace BlaBlaCar.Api.Controllers
             return BadRequest("Fail");
            
         }
-        [HttpPut]
-        public async Task<IActionResult> UpdateTrip([FromBody] TripDTO tripModel)
-        {
-           
-            var res = await _tripService.UpdateTripAsync(tripModel);
-            if (res) return Ok("Added Successfully");
-            return BadRequest("Fail");
-           
-        }
+        
         [HttpDelete("trip/{id}")]
         public async Task<IActionResult> DeleteTrip(Guid id)
         {
