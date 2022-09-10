@@ -20,6 +20,5 @@ namespace BlaBlaCar.BL.Interfaces
         Task<bool> AddUserAsync(ClaimsPrincipal user);
         Task<bool> UpdateUserAsync(UpdateUserDTO userModel, ClaimsPrincipal principal);
         Task<bool> UpdateUserImgAsync(IFormFile userImg, ClaimsPrincipal principal);
-        Task<bool> DeleteUserAsync(int id);
     }
 }

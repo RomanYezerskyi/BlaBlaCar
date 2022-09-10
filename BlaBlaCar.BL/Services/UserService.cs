@@ -220,9 +220,6 @@ namespace BlaBlaCar.BL.Services
 
         }
 
-        public Task<bool> DeleteUserAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }
