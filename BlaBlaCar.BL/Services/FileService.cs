@@ -45,9 +45,12 @@ namespace BlaBlaCar.BL.Services
             return res.FirstOrDefault();
         }
 
-        public void DeleteFileFormApi(string img)
+        public void DeleteFileFormApi(IEnumerable<string> files)
         {
-            File.Delete(img);
+            foreach (var file in files)
+            {
+                File.Delete(file);
+            }
         }
     }
 }

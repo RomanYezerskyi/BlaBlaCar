@@ -1,5 +1,15 @@
 <mat-dialog-content>
-    <div class="container">
+    <div class="pages">
+        <button class="btn-page" type="button" (click)="changePage(1)">
+            <i class="material-icons">manage_accounts</i>
+            <p>Profile</p>
+        </button>
+        <button class="btn-page" type="button" (click)="changePage(2)">
+            <i class="material-icons">key</i>
+            <p>Password</p>
+        </button>
+    </div>
+    <div class="container" *ngIf="page == 1">
         <h2 class="title">Enter new data</h2>
         <form #userForm="ngForm" (ngSubmit)="updateUser(userForm)" [formGroup]="userDataForm">
             <mat-form-field class="example-full-width" appearance="legacy">
@@ -37,6 +47,49 @@
             <div class="actions form_actions">
                 <button class="btn  submit" type="submit" [disabled]="!userForm.valid">Save</button>
                 <button class="btn  button" type="button" (click)="close()">Cancel</button>
+            </div>
+        </form>
+    </div>
+    <div class="container" *ngIf="page == 2">
+        <h2 class="title">Change password</h2>
+        <form #userPasswordForm="ngForm" class="changePasswordForm" [formGroup]="passwordForm"
+            (ngSubmit)="updateUserPassword(userPasswordForm)">
+
+            <mat-form-field class="example-full-width" appearance="legacy">
+                <mat-label>Password</mat-label>
+                <input formControlName="password" id="password" type="password" matInput required
+                    [(ngModel)]="newPasswordModel.currentPassword">
+                <i class="material-icons" matSuffix>key</i>
+                <mat-error *ngIf="getPasswordForm['password'].touched && getPasswordForm['password'].invalid">
+                    Password is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="example-full-width" appearance="legacy">
+                <mat-label>New password</mat-label>
+                <input formControlName="newPassword" id="newPassword" type="password" matInput required
+                    [(ngModel)]="newPasswordModel.newPassword">
+                <i class="material-icons" matSuffix>key</i>
+                <mat-error *ngIf="getPasswordForm['newPassword'].touched && getPasswordForm['newPassword'].invalid">
+                    New password is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="example-full-width" appearance="legacy">
+                <mat-label>Confirm password</mat-label>
+                <input type="password" matInput formControlName="confirm_password" id="confirm_password" required>
+                <i class="material-icons" matSuffix>key</i>
+                <mat-error
+                    *ngIf="getPasswordForm['confirm_password'].touched && getPasswordForm['confirm_password'].invalid"
+                    class="alert alert-danger">
+                    <mat-error *ngIf="getPasswordForm['confirm_password'].errors!['required']">Password is
+                        <strong>required.</strong>
+                    </mat-error>
+                    <mat-error *ngIf="getPasswordForm['confirm_password'].errors!['confirmedValidator']">
+                        Password and confirm password<strong> must be match.</strong>
+                    </mat-error>
+                </mat-error>
+            </mat-form-field>
+            <div class="actions form_actions">
+                <button type="submit" [disabled]="!userPasswordForm.valid">Change password</button>
             </div>
         </form>
     </div>

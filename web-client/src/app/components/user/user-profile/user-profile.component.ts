@@ -63,28 +63,28 @@ export class UserProfileComponent implements OnInit {
 
   async ngOnInit() {
     this.getUser();
-    this.getUserStatistic();
+    // this.getUserStatistic();
   }
   createChart() {
 
-    this.chart =
-      this.chartService.generateChart("myChart", "Trips", this.statistics.tripsDateTime, this.statistics.tripsStatisticsCount);
+    // this.chart =
+    //   this.chartService.generateChart("myChart", "Trips", this.statistics.tripsDateTime, this.statistics.tripsStatisticsCount);
 
     // this.chart1 =
     //   this.chartService.generateChart("myChart1", "Cars", this.statistics.carsDateTime, this.statistics.carsStatisticsCount);
 
   }
-  getUserStatistic() {
-    this.userService.getUserStatistics().pipe().subscribe(
-      response => {
-        this.statistics.tripsStatisticsCount = response.tripsStatisticsCount;
-        this.statistics.tripsDateTime = response.tripsDateTime;
-        console.log(this.statistics);
-        this.createChart();
-      },
-      (error: HttpErrorResponse) => { console.log(error.error); }
-    );
-  }
+  // getUserStatistic() {
+  //   this.userService.getUserStatistics().pipe().subscribe(
+  //     response => {
+  //       this.statistics.tripsStatisticsCount = response.tripsStatisticsCount;
+  //       this.statistics.tripsDateTime = response.tripsDateTime;
+  //       console.log(this.statistics);
+  //       this.createChart();
+  //     },
+  //     (error: HttpErrorResponse) => { console.log(error.error); }
+  //   );
+  // }
 
 
   get getUserForm() {

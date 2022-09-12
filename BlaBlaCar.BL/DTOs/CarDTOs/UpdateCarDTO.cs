@@ -1,15 +1,17 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 
 namespace BlaBlaCar.BL.DTOs.CarDTOs
 {
-    public class CreateCarDTO
+    public class UpdateCarDTO
     {
+        [Required]
+        public Guid Id { get; set; }
         [Required]
         public string ModelName { get; set; }
         [Required]
@@ -18,7 +20,8 @@ namespace BlaBlaCar.BL.DTOs.CarDTOs
         public int CountOfSeats { get; set; }
         [Required]
         public CarTypeDTO CarType { get; set; }
-        [Required]
-        public IEnumerable<IFormFile> TechPassportFile { get; set; }
+       // [Required]
+        public IEnumerable<IFormFile>? TechPassportFile { get; set; }
+        public IEnumerable<CarDocumentDTO>? DeletedDocuments { get; set; }
     }
 }

@@ -39,6 +39,7 @@ export class ImagesGalleryComponent implements OnInit {
   }
   ngAfterViewChecked(): void {
     if (this.needRefresh) {
+      console.log("refresh");
       this.lightGallery.refresh();
       this.needRefresh = false;
     }
@@ -48,10 +49,12 @@ export class ImagesGalleryComponent implements OnInit {
       this.fileToUpload = this.fileToUpload.filter(x => x.id != img);
       let sendFiles: File[] = [];
       this.fileToUpload.forEach(x => sendFiles.push(x.File));
+      this.images = this.images.filter(x => x != img);
       this.addedFile.emit(sendFiles);
     }
     else {
       this.images = this.images.filter(x => x != img);
+      console.log(this.images);
       this.removeImg.emit(img);
     }
     this.needRefresh = true;
@@ -66,11 +69,9 @@ export class ImagesGalleryComponent implements OnInit {
     this.editImages = !this.editImages;
   }
   uploadFile = (files: any) => {
-
     if (files.length === 0) {
       return;
     }
-
     for (let item of files) {
       let reader = new FileReader();
       reader.readAsDataURL(item);

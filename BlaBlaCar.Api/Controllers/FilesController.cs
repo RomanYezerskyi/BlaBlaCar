@@ -14,11 +14,11 @@ namespace BlaBlaCar.API.Controllers
             _fileService = fileService;
         }
 
-        [HttpPost()]
-        public async Task<IActionResult> DeleteFile([FromForm] string filePath)
-        {
-            _fileService.DeleteFileFormApi(filePath);
-            return Ok();
-        }
+        //[HttpPost()]
+        //public async Task<IActionResult> DeleteFile([FromForm] string filePath)
+        //{
+        //    _fileService.DeleteFileFormApi(filePath);
+        //    return Ok();
+        //}
     }
 }

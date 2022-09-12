@@ -1,3 +1,31 @@
+.pages {
+    margin: auto;
+    width: 70%;
+    display: flex;
+    justify-content: space-evenly;
+
+    .btn-page {
+        border: none;
+        background: none;
+        box-sizing: border-box;
+        display: flex;
+        width: 100px;
+        margin: auto 0;
+
+        .material-icons {
+            font-size: 30px;
+            width: 30px;
+            height: 30px;
+        }
+
+        p {
+
+            font-size: 18px;
+            margin: auto 10px;
+        }
+    }
+}
+
 .container {
     padding: 30px;
     width: 500px;

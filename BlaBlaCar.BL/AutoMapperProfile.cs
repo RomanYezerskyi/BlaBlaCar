@@ -31,6 +31,7 @@ namespace BlaBlaCar.BL
             CreateMap<Car, CarDTO>().ReverseMap();
             CreateMap<CreateCarDTO, CarDTO>().ReverseMap();
             CreateMap<CarStatisticsDTO, Car>().ReverseMap();
+            CreateMap<CarDTO, UpdateCarDTO>().ReverseMap();
 
             CreateMap<AvailableSeatDTO, NewAvailableSeatDTO>().ReverseMap();
             CreateMap<SeatDTO, Seat>().ReverseMap();
