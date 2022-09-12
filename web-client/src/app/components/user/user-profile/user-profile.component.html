@@ -6,15 +6,12 @@
             <div class="head">
                 <div class="user">
                     <h4>{{user.firstName}}</h4>
-
                 </div>
-
                 <div class="img">
                     <img [src]="sanitizeUserImg(user.userImg!)" alt="" class="profile_img"
                         *ngIf="imagePath == null; else elseImg">
                     <ng-template #elseImg><img [src]="imagePath" alt="" class="profile_img">
                     </ng-template>
-
                 </div>
 
 
@@ -69,7 +66,19 @@
                     <p>Edit profile data</p>
                 </button>
             </div>
+            <hr>
+            <div class="actions">
+                <button class="btn btn-change-photo" type="button">
+                    <i class="material-icons">summarize</i>
+                    <p>Edit user documents</p>
+                </button>
+            </div>
+            <hr>
+            <div class="user-cars">
+                <app-user-cars></app-user-cars>
+            </div>
         </div>
+
         <!-- <div class="card_body data_elements">
             <div class="user_data_info">
                 <div class="form-group">

@@ -93,9 +93,17 @@ hr {
     }
 }
 
+// .actions:hover {
+//     background: rgb(237, 237, 237);
+// }
+
 .change {
     width: 70%;
     margin: 0 auto;
     display: flex;
     justify-content: space-evenly;
+}
+
+.user-cars {
+    padding: 12px 24px;
 }

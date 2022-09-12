@@ -1,3 +1,4 @@
+<button class="btn-close" mat-button (click)="close()"><i class="material-icons">highlight_remove</i></button>
 <mat-dialog-content>
     <div class="pages">
         <button class="btn-page" type="button" (click)="changePage(1)">
@@ -46,7 +47,6 @@
             </mat-form-field>
             <div class="actions form_actions">
                 <button class="btn  submit" type="submit" [disabled]="!userForm.valid">Save</button>
-                <button class="btn  button" type="button" (click)="close()">Cancel</button>
             </div>
         </form>
     </div>
@@ -88,8 +88,8 @@
                     </mat-error>
                 </mat-error>
             </mat-form-field>
-            <div class="actions form_actions">
-                <button type="submit" [disabled]="!userPasswordForm.valid">Change password</button>
+            <div class="actions">
+                <button class="btn-password" type="button" [disabled]="!userPasswordForm.valid">Change password</button>
             </div>
         </form>
     </div>

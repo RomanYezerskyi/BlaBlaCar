@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { CarType } from 'src/app/enums/car-type';
 import { CarModel } from 'src/app/interfaces/car-interfaces/car';
 import { CarStatus } from 'src/app/interfaces/car-interfaces/car-status';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
@@ -18,6 +19,7 @@ import { EditCarModalDialogComponent } from './edit-car-modal-dialog/edit-car-mo
 export class UserCarsComponent implements OnInit {
   cars: CarModel[] = [];
   carStatus = CarStatus;
+  carType = CarType;
   constructor(private http: HttpClient, private router: Router, private sanitizer: DomSanitizer,
     private userService: UserService, private carService: CarService, private dialog: MatDialog,) { }
 
