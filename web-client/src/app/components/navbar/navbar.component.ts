@@ -17,22 +17,10 @@ export class NavbarComponent implements OnInit {
   toggle: boolean = true;
   notification: boolean = false;
   notifiNotReadCount = 0;
-  constructor(private jwtHelper: JwtHelperService, private http: HttpClient, private router: Router, private dialog: MatDialog) { }
+  constructor(private jwtHelper: JwtHelperService, private http: HttpClient, private router: Router) { }
 
   ngOnInit(): void {
 
-  }
-
-  openDialog() {
-
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.data = {
-
-    };
-    this.dialog.open(UserProfileComponent, dialogConfig);
   }
 
   countNotify($event: number) {

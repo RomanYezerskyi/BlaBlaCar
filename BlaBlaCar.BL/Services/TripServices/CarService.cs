@@ -70,32 +70,29 @@ namespace BlaBlaCar.BL.Services.TripServices
         }
 
 
-        public async Task<bool> AddCarAsync(CreateCarDTO carModel, ClaimsPrincipal principal)
+        public async Task AddCarAsync(CreateCarDTO carModel, ClaimsPrincipal principal)
         {
             Guid userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
             var user = _mapper.Map<UserDTO>(await _unitOfWork.Users.GetAsync(null,
                 x => x.Id == userId)); 
 
-            if (user.UserStatus == UserDTOStatus.Rejected) throw new PermissionException("This user cannot add car!");
-            
-            if (carModel.TechPassportFile.Any())
-            {
-                var newCar = _mapper.Map<CreateCarDTO, CarDTO>(carModel);
+            if (user.UserStatus == UserStatusDTO.Rejected) throw new PermissionException("This user cannot add car!");
+
+            if (!carModel.TechPassportFile.Any()) throw new Exception("Problems with file");
+
+            var newCar = _mapper.Map<CreateCarDTO, CarDTO>(carModel);
+            var files = await _fileService.FilesDbPathListAsync(carModel.TechPassportFile);
+
+            newCar.CarDocuments = files.Select(f => new CarDocumentDTO() { Car = newCar, TechPassport = f }).ToList();
+            newCar.CarStatus = CarDTOStatus.Pending;
+
+            _carSeatsService.AddSeatsToCarAsync(newCar, carModel.CountOfSeats);
+
+            newCar.UserId = userId;
                 
-
-                var files = await _fileService.FilesDbPathListAsync(carModel.TechPassportFile);
-
-                newCar.CarDocuments = files.Select(f => new CarDocumentDTO() { Car = newCar, TechPassport = f }).ToList();
-                newCar.CarStatus = CarDTOStatus.Pending;
-
-                _carSeatsService.AddSeatsToCarAsync(newCar, carModel.CountOfSeats);
-
-                newCar.UserId = userId;
-                
-                var car = _mapper.Map<Car>(newCar);
-                await _unitOfWork.Cars.InsertAsync(car);
-                return await _unitOfWork.SaveAsync(userId);
-            }
+            var car = _mapper.Map<Car>(newCar);
+            await _unitOfWork.Cars.InsertAsync(car); 
+            await _unitOfWork.SaveAsync(userId);
             throw new Exception("Problems with file");
         }
 
@@ -105,7 +102,7 @@ namespace BlaBlaCar.BL.Services.TripServices
             var user = _mapper.Map<UserDTO>(await _unitOfWork.Users.GetAsync(null,
                 x => x.Id == userId));
 
-            if (user.UserStatus == UserDTOStatus.Rejected) throw new PermissionException("This user cannot add car!");
+            if (user.UserStatus == UserStatusDTO.Rejected) throw new PermissionException("This user cannot add car!");
             var car = _mapper.Map<CarDTO>(await _unitOfWork.Cars.GetAsync(x=>
                 x.Include(x=>x.Seats).Include(x=>x.CarDocuments), 
                 x => x.Id == carModel.Id));

@@ -35,8 +35,9 @@ namespace BlaBlaCar.BL.Services.TripServices
             _notificationService = notificationService;
             _hostSettings = hostSettings.Value;
         }
-        public async Task<TripDTO> GetTripAsync(Guid id)
+        public async Task<TripDTO> GetTripAsync(Guid id, ClaimsPrincipal principal)
         {
+            var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
             var usersBookedTrip = await _unitOfWork.TripUser
                 .GetAsync(null, null, x => x.TripId == id);
             var trip = _mapper.Map<Trip, TripDTO>(await _unitOfWork.Trips.GetAsync(
@@ -44,10 +45,12 @@ namespace BlaBlaCar.BL.Services.TripServices
                                                                         .ThenInclude(x => x.Seat)
                                                                         .Include(x=>x.User)
                                                                         .Include(x=>x.Car)
-                                                                        .ThenInclude(x=>x.Seats),
-                                        x => x.Id == id));
+                                                                        .ThenInclude(x => x.Seats)
+                                                                        .Include(
+                                                                            x=>x.TripUsers.Where(x=>x.UserId == userId)),
+                                                                    x => x.Id == id));
             if (trip is null)
-                throw new NotFoundException(nameof(TripDTO));
+                throw new NotFoundException("Trip");
 
             trip.AvailableSeats.Select(x =>
             {
@@ -60,10 +63,15 @@ namespace BlaBlaCar.BL.Services.TripServices
             trip.User.UserImg = _hostSettings.CurrentHost + trip.User.UserImg;
             trip.Car.CarDocuments = trip.Car.CarDocuments.Select(c =>
             {
+             
                 c.TechPassport = _hostSettings.CurrentHost + c.TechPassport;
                 return c;
             }).ToList();
-            
+
+            if (trip.UserId == userId) trip.UserPermission = UserPermission.Owner;
+            else if(trip.TripUsers != null 
+                    && trip.TripUsers.Any(u=>u.UserId == userId)) trip.UserPermission = UserPermission.СanSeeTheOwnersData;
+            else trip.UserPermission = UserPermission.OnlyBook;
             return trip;
 
         }
@@ -147,7 +155,7 @@ namespace BlaBlaCar.BL.Services.TripServices
                     orderBy = trip => trip.OrderBy(t => t.StartTime);
                     break;
                 case TripOrderBy.ShortestTrip:
-                    orderBy = trip => trip.OrderBy(t=> new {t.EndTime.Subtract(t.StartTime).Minutes});
+                    orderBy = trip => trip.OrderBy(x => new {res= x.EndTime-x.StartTime });
                     break;
                 case TripOrderBy.LowestPrice:
                     orderBy = trip => trip.OrderBy(t => t.PricePerSeat);

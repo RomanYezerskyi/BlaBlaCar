@@ -13,6 +13,6 @@ namespace BlaBlaCar.BL.DTOs.UserDTOs
         [Required]
         public Guid UserId { get; set; }
         [Required]
-        public UserDTOStatus Status { get; set; }
+        public UserStatusDTO Status { get; set; }
     }
 }

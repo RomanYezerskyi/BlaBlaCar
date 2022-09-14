@@ -5,7 +5,7 @@ import { AddTripModel } from 'src/app/interfaces/trip-interfaces/add-trip';
 import { BookedTripModel } from 'src/app/interfaces/trip-interfaces/booked-trip';
 import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip';
 import { TripsResponseModel } from 'src/app/interfaces/trip-interfaces/trips-response-model';
-import { TripModel } from 'src/app/interfaces/trip-interfaces/trip';
+import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
 import { TripUserModel } from 'src/app/interfaces/trip-interfaces/trip-user-model';
 import { UserTrips, UserTripsResponse } from 'src/app/interfaces/user-interfaces/user-trips';
 

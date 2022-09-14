@@ -33,7 +33,7 @@ namespace BlaBlaCar.BL.Services.Admin
             _notificationService = notificationService;
             _hostSettings = hostSettings.Value;
         }
-        public async Task<UserRequestsViewModel> GetRequestsAsync(int take, int skip, UserDTOStatus status)
+        public async Task<UserRequestsViewModel> GetRequestsAsync(int take, int skip, UserStatusDTO status)
         {
             var users = _mapper.Map<IEnumerable<UserDTO>>(
                 await _unitOfWork.Users.GetAsync(

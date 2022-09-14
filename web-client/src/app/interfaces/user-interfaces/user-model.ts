@@ -1,6 +1,6 @@
 import { CarModel } from "../car-interfaces/car";
 import { RoleModel } from "../role";
-import { TripModel } from "../trip-interfaces/trip";
+import { TripModel } from "../trip-interfaces/trip-model";
 import { UserDocuments } from "./user-documents";
 import { UserStatus } from "./user-status";
 

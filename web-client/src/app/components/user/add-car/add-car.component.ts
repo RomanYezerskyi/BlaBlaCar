@@ -1,7 +1,7 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpErrorResponse, } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, NgForm, Validators } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { CarType } from 'src/app/enums/car-type';
 import { AddNewCarModel } from 'src/app/interfaces/car-interfaces/addnew-car';
 import { CarService } from 'src/app/services/carservice/car.service';
@@ -12,19 +12,15 @@ import { CarService } from 'src/app/services/carservice/car.service';
   styleUrls: ['./add-car.component.scss']
 })
 export class AddCarComponent implements OnInit {
-  newCar: AddNewCarModel = {
-    countOfSeats: 1, modelName: '', registNum: '', carType: 0,
-    techPassportFile: []
-  };
+  newCar: AddNewCarModel = {} as AddNewCarModel;
   carType = CarType;
-  imageBase64 = '';
-  fileSelected?: File;
-  imageUrl?: string;
   private formData = new FormData();
   CarFormControl = new FormControl('', [Validators.required]);
   fileControl: FormControl;
   public files: any;
-  constructor(private http: HttpClient, private sant: DomSanitizer, private carService: CarService) {
+  constructor(
+    private carService: CarService,
+    private router: Router) {
     this.fileControl = new FormControl(this.files, [
       Validators.required,
     ])
@@ -53,17 +49,10 @@ export class AddCarComponent implements OnInit {
       this.formData.append("CountOfSeats", this.newCar.countOfSeats.toString());
       this.carService.addCar(this.formData).pipe().subscribe(
         response => {
-          console.log(response);
+          this.router.navigate(['/profile']);
         },
         (error: HttpErrorResponse) => { console.error(error.error); }
       );
-      //   this.http.post("https://localhost:6001/api/Car", this.formData)
-      //     .subscribe({
-      //       next: (res) => {
-      //         console.log(res)
-      //       },
-      //       error: (err: HttpErrorResponse) => console.error(err)
-      //     })
     }
   }
 }

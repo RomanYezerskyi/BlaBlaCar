@@ -33,7 +33,7 @@ namespace BlaBlaCar.Api.Controllers
         public async Task<IActionResult> GetTrip(Guid id)
         {
            
-            var res = await _tripService.GetTripAsync(id);
+            var res = await _tripService.GetTripAsync(id, User);
             if (res != null) return Ok(res);
             return NoContent();
            

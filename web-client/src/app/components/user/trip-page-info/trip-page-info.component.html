@@ -31,6 +31,12 @@
         <p>For {{requestedSeats}} passangers</p>
         <p>{{trip.pricePerSeat*requestedSeats | currency:"UAH":"symbol"}}</p>
     </div>
+    <div class="owner-info" *ngIf="trip.userPermission == userPermission.canSeeTheOwnersData">
+        <p>{{trip.user?.phoneNumber}}</p>
+    </div>
+    <div class="owner-info" *ngIf="trip.userPermission == userPermission.owner">
+        <p>{{trip.user?.phoneNumber}}</p>
+    </div>
     <div class="horizontal_line"></div>
     <div class="user">
         <div class="user_img">

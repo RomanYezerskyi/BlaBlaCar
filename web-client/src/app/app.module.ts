@@ -64,6 +64,7 @@ import { EditModalDialogComponent } from './components/user/user-profile/edit-mo
 import { EditCarModalDialogComponent } from './components/user/user-cars/edit-car-modal-dialog/edit-car-modal-dialog.component';
 import { LightgalleryModule } from 'lightgallery/angular';
 import { ImagesGalleryComponent } from './components/images-gallery/images-gallery.component';
+import { AlertsComponent } from './components/alerts/alerts.component';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -111,6 +112,7 @@ export function tokenGetter() {
     EditModalDialogComponent,
     EditCarModalDialogComponent,
     ImagesGalleryComponent,
+    AlertsComponent,
 
   ],
   imports: [

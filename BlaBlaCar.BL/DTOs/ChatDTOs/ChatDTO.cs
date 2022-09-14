@@ -4,7 +4,7 @@ using BlaBlaCar.DAL.Entities.ChatEntities;
 namespace BlaBlaCar.BL.DTOs.ChatDTOs
 {
     
-    public class ChatDTO:BaseEntity
+    public class ChatDTO:BaseDTO
     {
         public string ChatName { get; set; }
         public string ChatImage { get; set; }

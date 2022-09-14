@@ -46,10 +46,9 @@ namespace BlaBlaCar.Api.Controllers
                 throw new Exception(string.Join("; ", ModelState.Values
                     .SelectMany(x => x.Errors)
                     .Select(x => x.ErrorMessage)));
-            var res = await _carService.AddCarAsync(carModel, User);
-            if (res) return Ok("Added Successfully");
-            return BadRequest("Fail");
-            
+            await _carService.AddCarAsync(carModel, User);
+            return NoContent();
+
         }
         [HttpPost("update-car")]
         public async Task<IActionResult> UpdateCar([FromForm] UpdateCarDTO carModel)

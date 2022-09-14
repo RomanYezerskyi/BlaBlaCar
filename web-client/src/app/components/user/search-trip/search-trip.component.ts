@@ -3,7 +3,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TripModel } from 'src/app/interfaces/trip-interfaces/trip';
+import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Call } from '@angular/compiler';
 import { TripService } from 'src/app/services/tripservice/trip.service';

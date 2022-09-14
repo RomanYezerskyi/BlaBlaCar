@@ -24,7 +24,7 @@ namespace BlaBlaCar.API.Controllers
         }
 
         [HttpGet("requests/{status}/{take}/{skip}")]
-        public async Task<IActionResult> GetRequests(int take, int skip, UserDTOStatus status)
+        public async Task<IActionResult> GetRequests(int take, int skip, UserStatusDTO status)
         {
             
             var res = await _adminService.GetRequestsAsync(take, skip, status);
