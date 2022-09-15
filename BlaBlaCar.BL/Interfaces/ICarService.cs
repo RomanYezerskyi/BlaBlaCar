@@ -15,5 +15,6 @@ namespace BlaBlaCar.BL.Interfaces
         Task AddCarAsync(CreateCarDTO carModel, ClaimsPrincipal principal);
         Task<bool> UpdateCarAsync(UpdateCarDTO carModel, ClaimsPrincipal principal);
         Task<bool> UpdateCarDocumentsAsync(UpdateCarDocumentsDTO carModel, ClaimsPrincipal principal);
+        Task<bool> DeleteCarAsync(Guid carId, Guid userId);
     }
 }

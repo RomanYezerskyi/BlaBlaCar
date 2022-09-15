@@ -43,11 +43,6 @@ namespace BlaBlaCar.Api.Controllers
         [HttpPost("search")]
         public async Task<IActionResult> SearchTrips([FromBody]SearchTripDTO tripModel)
         {
-        
-            if (!ModelState.IsValid)
-                throw new Exception(string.Join("; ", ModelState.Values
-                    .SelectMany(x => x.Errors)
-                    .Select(x => x.ErrorMessage)));
             var res = await _tripService.SearchTripsAsync(tripModel);
             if(res.Trips.Any()) return Ok(res);
             return NoContent();
@@ -56,11 +51,6 @@ namespace BlaBlaCar.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTrip([FromBody]CreateTripDTO  tripModel)
         {
-            
-            if (!ModelState.IsValid)
-                throw new Exception(string.Join("; ", ModelState.Values
-                    .SelectMany(x => x.Errors)
-                    .Select(x => x.ErrorMessage)));
             var res = await _tripService.AddTripAsync(tripModel, User);
             if (res) return Ok("Added Successfully");
             return BadRequest("Fail");

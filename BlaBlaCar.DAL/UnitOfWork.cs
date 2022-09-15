@@ -26,6 +26,7 @@ namespace BlaBlaCar.DAL
         private BaseRepositoryAsync<Message> _messages;
         private BaseRepositoryAsync<UsersInChats> _usersInChats;
         private BaseRepositoryAsync<ReadMessages> _readMessages;
+        private BaseRepositoryAsync<FeedBack> _feedBacks;
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -141,6 +142,14 @@ namespace BlaBlaCar.DAL
             get
             {
                 return _readMessages ??= new BaseRepositoryAsync<ReadMessages>(_context);
+            }
+        }
+
+        public IRepositoryAsync<FeedBack> FeedBacks
+        {
+            get
+            {
+                return _feedBacks ??= new BaseRepositoryAsync<FeedBack>(_context);
             }
         }
 

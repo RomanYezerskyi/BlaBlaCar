@@ -60,7 +60,7 @@ namespace BlaBlaCar.BL.Services.TripServices
                 }
                 return x;
             }).ToList();
-            trip.User.UserImg = _hostSettings.CurrentHost + trip.User.UserImg;
+            if (trip.User.UserImg != null) trip.User.UserImg = _hostSettings.CurrentHost + trip.User.UserImg;
             trip.Car.CarDocuments = trip.Car.CarDocuments.Select(c =>
             {
              
@@ -96,12 +96,15 @@ namespace BlaBlaCar.BL.Services.TripServices
 
             trips = trips.Select(t =>
             {
-                t.Car.CarDocuments = t.Car.CarDocuments.Select(c =>
+                if (t.Car != null)
                 {
-                    if(c.TechPassport != null)
-                        c.TechPassport = _hostSettings.CurrentHost + c.TechPassport;
-                    return c;
-                }).ToList();
+                    t.Car.CarDocuments = t.Car.CarDocuments.Select(c =>
+                    {
+                        if (c.TechPassport != null)
+                            c.TechPassport = _hostSettings.CurrentHost + c.TechPassport;
+                        return c;
+                    }).ToList();
+                }
 
                 t.TripUsers = t.TripUsers.Select(tu =>
                 {

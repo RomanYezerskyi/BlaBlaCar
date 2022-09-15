@@ -104,7 +104,7 @@ namespace BlaBlaCar.BL.Services.Admin
         {
             var users = _mapper.Map<IEnumerable<UsersStatisticsDTO>>(
                 await _unitOfWork.Users.GetAsync(null, null, 
-                    x=>x.CreatedAt.Value.Month == searchDate.Month));
+                    x=>x.CreatedAt. Value.Month == searchDate.Month));
             var groupedUsers = users.GroupBy(x => x.CreatedAt.Value.Date);
             var cars = _mapper.Map<IEnumerable<CarStatisticsDTO>>(
                 await _unitOfWork.Cars.GetAsync(null, null, x=> x.CreatedAt.Value.Month == searchDate.Month));

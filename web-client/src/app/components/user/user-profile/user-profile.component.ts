@@ -1,14 +1,11 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Component, Inject, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
-import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { SafeUrl } from '@angular/platform-browser';
 import { Chart, registerables } from 'chart.js';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
-import { UserStatisticsModel } from 'src/app/interfaces/user-interfaces/user-statistics-model';
-import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
-import { ChartService } from 'src/app/services/chart/chart.service';
+import { CarService } from 'src/app/services/carservice/car.service';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
 import { PasswordValidatorService } from 'src/app/services/password-validator/password-validator.service';
 import { UserService } from 'src/app/services/userservice/user.service';
@@ -21,12 +18,7 @@ Chart.register(...registerables);
 })
 export class UserProfileComponent implements OnInit {
   user: UserModel = {} as UserModel;
-  private statistics: UserStatisticsModel = {} as UserStatisticsModel
 
-
-  public chart?: Chart;
-  public chart1?: Chart;
-  editUserData = false;
   imagePath: any;
   changeUserPhoto = false;
   message: string | undefined;
@@ -40,7 +32,6 @@ export class UserProfileComponent implements OnInit {
   form: FormGroup = new FormGroup({});
   constructor(
     private dialog: MatDialog,
-    private chartService: ChartService,
     private imgSanitaze: ImgSanitizerService,
     private fb: FormBuilder,
     private validator: PasswordValidatorService,
@@ -63,29 +54,7 @@ export class UserProfileComponent implements OnInit {
 
   async ngOnInit() {
     this.getUser();
-    // this.getUserStatistic();
   }
-  createChart() {
-
-    // this.chart =
-    //   this.chartService.generateChart("myChart", "Trips", this.statistics.tripsDateTime, this.statistics.tripsStatisticsCount);
-
-    // this.chart1 =
-    //   this.chartService.generateChart("myChart1", "Cars", this.statistics.carsDateTime, this.statistics.carsStatisticsCount);
-
-  }
-  // getUserStatistic() {
-  //   this.userService.getUserStatistics().pipe().subscribe(
-  //     response => {
-  //       this.statistics.tripsStatisticsCount = response.tripsStatisticsCount;
-  //       this.statistics.tripsDateTime = response.tripsDateTime;
-  //       console.log(this.statistics);
-  //       this.createChart();
-  //     },
-  //     (error: HttpErrorResponse) => { console.log(error.error); }
-  //   );
-  // }
-
 
   get getUserForm() {
     return this.userDataForm.controls;
@@ -174,4 +143,5 @@ export class UserProfileComponent implements OnInit {
       (error: HttpErrorResponse) => { console.log(error.error); }
     );
   }
+
 }

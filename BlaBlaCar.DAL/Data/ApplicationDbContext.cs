@@ -30,6 +30,7 @@ namespace BlaBlaCar.DAL.Data
         public DbSet<Message> Messages { get; set; }
         public DbSet<UsersInChats> UsersInChats { get; set; }
         public DbSet<ReadMessages> ReadMessages { get; set; }
+        public DbSet<FeedBack> FeedBacks { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
@@ -39,6 +40,14 @@ namespace BlaBlaCar.DAL.Data
             builder.Entity<ApplicationUser>().HasIndex(x => x.PhoneNumber).IsUnique();
            // builder.Entity<ApplicationUser>().Property(x=>x.DrivingLicense).IsRequired(false);
            builder.Entity<Car>().HasIndex(x => x.RegistNum);
+
+           builder.Entity<Seat>()
+               .HasMany<TripUser>(x=>x.TripUsers)
+               .WithOne(x=>x.Seat).HasForeignKey(x=>x.SeatId).OnDelete(DeleteBehavior.SetNull);
+
+           builder.Entity<Car>()
+               .HasMany<Trip>(x=>x.Trips)
+               .WithOne(x=>x.Car).HasForeignKey(x=>x.CarId).OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

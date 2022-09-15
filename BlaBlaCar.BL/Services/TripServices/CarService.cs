@@ -156,5 +156,18 @@ namespace BlaBlaCar.BL.Services.TripServices
 
             return await _unitOfWork.SaveAsync(userId);
         }
+
+        public async Task<bool> DeleteCarAsync(Guid carId, Guid userId)
+        {
+            var car = await _unitOfWork.Cars.GetAsync(x=>
+            x.Include(x=>x.Seats).ThenInclude(x=>x.AvailableSeats).Include(x=>x.Trips), x => x.Id == carId);
+
+            var trips = await _unitOfWork.Trips.GetAsync(null,null,x => x.CarId == carId 
+                && x.StartTime > DateTimeOffset.Now || x.EndTime > DateTimeOffset.Now);
+            if (trips.Any()) throw new CarException("You need to complete trips with this car");
+            
+            _unitOfWork.Cars.Delete(car);
+            return await _unitOfWork.SaveAsync(userId);
+        }
     }
 }

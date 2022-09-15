@@ -4,6 +4,7 @@ using BlaBlaCar.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlaBlaCar.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220915073351_Trip-Car-setnull")]
+    partial class TripCarsetnull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,7 +68,7 @@ namespace BlaBlaCar.DAL.Migrations
                     b.HasIndex("PhoneNumber")
                         .IsUnique();
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.CarEntities.Car", b =>
@@ -110,7 +112,7 @@ namespace BlaBlaCar.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Cars", (string)null);
+                    b.ToTable("Cars");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.CarEntities.CarDocuments", b =>
@@ -142,7 +144,7 @@ namespace BlaBlaCar.DAL.Migrations
 
                     b.HasIndex("CarId");
 
-                    b.ToTable("CarDocuments", (string)null);
+                    b.ToTable("CarDocuments");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.CarEntities.Seat", b =>
@@ -173,7 +175,7 @@ namespace BlaBlaCar.DAL.Migrations
 
                     b.HasIndex("CarId");
 
-                    b.ToTable("Seats", (string)null);
+                    b.ToTable("Seats");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.ChatEntities.Chat", b =>
@@ -205,7 +207,7 @@ namespace BlaBlaCar.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Chats", (string)null);
+                    b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.ChatEntities.Message", b =>
@@ -242,7 +244,7 @@ namespace BlaBlaCar.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.ChatEntities.ReadMessages", b =>
@@ -280,7 +282,7 @@ namespace BlaBlaCar.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ReadMessages", (string)null);
+                    b.ToTable("ReadMessages");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.ChatEntities.UsersInChats", b =>
@@ -316,7 +318,7 @@ namespace BlaBlaCar.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UsersInChats", (string)null);
+                    b.ToTable("UsersInChats");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.NotificationEntities.Notifications", b =>
@@ -351,7 +353,7 @@ namespace BlaBlaCar.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications", (string)null);
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.NotificationEntities.ReadNotifications", b =>
@@ -384,7 +386,7 @@ namespace BlaBlaCar.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ReadNotifications", (string)null);
+                    b.ToTable("ReadNotifications");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.TripEntities.AvailableSeats", b =>
@@ -417,7 +419,7 @@ namespace BlaBlaCar.DAL.Migrations
 
                     b.HasIndex("TripId");
 
-                    b.ToTable("AvailableSeats", (string)null);
+                    b.ToTable("AvailableSeats");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.TripEntities.Trip", b =>
@@ -470,7 +472,7 @@ namespace BlaBlaCar.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Trips", (string)null);
+                    b.ToTable("Trips");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.TripEntities.TripUser", b =>
@@ -508,7 +510,7 @@ namespace BlaBlaCar.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TripUsers", (string)null);
+                    b.ToTable("TripUsers");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.UserDocuments", b =>
@@ -540,7 +542,7 @@ namespace BlaBlaCar.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserDocuments", (string)null);
+                    b.ToTable("UserDocuments");
                 });
 
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.CarEntities.Car", b =>
@@ -692,7 +694,8 @@ namespace BlaBlaCar.DAL.Migrations
                 {
                     b.HasOne("BlaBlaCar.DAL.Entities.CarEntities.Car", "Car")
                         .WithMany("Trips")
-                        .HasForeignKey("CarId");
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("BlaBlaCar.DAL.Entities.ApplicationUser", "User")
                         .WithMany("Trips")

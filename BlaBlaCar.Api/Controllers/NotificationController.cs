@@ -32,11 +32,6 @@ namespace BlaBlaCar.API.Controllers
         [HttpPost]
         public async Task<IActionResult> ReadUserNotifications(IEnumerable<NotificationsDTO> notifications)
         {
-           
-            if (!ModelState.IsValid)
-                throw new Exception(string.Join("; ", ModelState.Values
-                    .SelectMany(x => x.Errors)
-                    .Select(x => x.ErrorMessage)));
             var res = await _notificationService.ReadAllNotificationAsync(notifications, User);
             if (res) return Ok();
             return BadRequest();
@@ -63,13 +58,7 @@ namespace BlaBlaCar.API.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateNotification(CreateNotificationDTO notification)
         {
-
-            if (!ModelState.IsValid)
-                throw new Exception(string.Join("; ", ModelState.Values
-                    .SelectMany(x => x.Errors)
-                    .Select(x => x.ErrorMessage)));
             var res = await _notificationService.CreateNotificationAsync(notification, User);
-            //await _hubContext.Clients.All.BroadcastMessage();
             if (res) return Ok();
             return BadRequest();
 

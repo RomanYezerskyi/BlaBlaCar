@@ -6,6 +6,8 @@ using IdentityModel.Client;
 using Microsoft.AspNetCore.Authorization;
 using BlaBlaCar.BL.DTOs.CarDTOs;
 using BlaBlaCar.BL.ModelStateValidationAttribute;
+using BlaBlaCar.BL.Services.TripServices;
+using IdentityModel;
 
 namespace BlaBlaCar.Api.Controllers
 {
@@ -41,11 +43,6 @@ namespace BlaBlaCar.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCar([FromForm] CreateCarDTO carModel)
         {
-           
-            if (!ModelState.IsValid)
-                throw new Exception(string.Join("; ", ModelState.Values
-                    .SelectMany(x => x.Errors)
-                    .Select(x => x.ErrorMessage)));
             await _carService.AddCarAsync(carModel, User);
             return NoContent();
 
@@ -53,11 +50,6 @@ namespace BlaBlaCar.Api.Controllers
         [HttpPost("update-car")]
         public async Task<IActionResult> UpdateCar([FromForm] UpdateCarDTO carModel)
         {
-
-            //if (!ModelState.IsValid)
-            //    throw new Exception(string.Join("; ", ModelState.Values
-            //        .SelectMany(x => x.Errors)
-            //        .Select(x => x.ErrorMessage)));
             var res = await _carService.UpdateCarAsync(carModel, User);
             if (res) return Ok("Updated Successfully");
             return BadRequest("Fail");
@@ -66,13 +58,17 @@ namespace BlaBlaCar.Api.Controllers
         [HttpPost("update-doc")]
         public async Task<IActionResult> UpdateCarDocuments([FromForm] UpdateCarDocumentsDTO carModel)
         {
-
-            if (!ModelState.IsValid)
-                throw new Exception(string.Join("; ", ModelState.Values
-                    .SelectMany(x => x.Errors)
-                    .Select(x => x.ErrorMessage)));
             var res = await _carService.UpdateCarDocumentsAsync(carModel, User);
             if (res) return Ok("Updated Successfully");
+            return BadRequest("Fail");
+
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCar(Guid id)
+        {
+            var userId = Guid.Parse(User.Claims.First(x => x.Type == JwtClaimTypes.Id).Value);
+            var res = await _carService.DeleteCarAsync(id, userId);
+            if (res) return Ok(new { result = "Deleted Successfully" });
             return BadRequest("Fail");
 
         }

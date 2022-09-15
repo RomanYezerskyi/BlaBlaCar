@@ -8,6 +8,7 @@ import { CarModel } from 'src/app/interfaces/car-interfaces/car';
 import { CarStatus } from 'src/app/interfaces/car-interfaces/car-status';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 import { CarService } from 'src/app/services/carservice/car.service';
+import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
 import { UserService } from 'src/app/services/userservice/user.service';
 import { EditCarModalDialogComponent } from './edit-car-modal-dialog/edit-car-modal-dialog.component';
 
@@ -20,14 +21,14 @@ export class UserCarsComponent implements OnInit {
   cars: CarModel[] = [];
   carStatus = CarStatus;
   carType = CarType;
-  constructor(private http: HttpClient, private router: Router, private sanitizer: DomSanitizer,
-    private userService: UserService, private carService: CarService, private dialog: MatDialog,) { }
+  constructor(private imgSanitize: ImgSanitizerService,
+    private carService: CarService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.getUserCars()
   }
   sanitaizeImg(img: string): SafeUrl {
-    return this.sanitizer.bypassSecurityTrustUrl(img);
+    return this.imgSanitize.sanitiizeImg(img);
   }
   getUserCars() {
     this.carService.getUserCars().pipe().subscribe(
@@ -51,5 +52,13 @@ export class UserCarsComponent implements OnInit {
     // dRef.componentInstance.onSubmitReason.subscribe(() => {
     //   this.searchData();
     // });
+  }
+  deleteCar(carId: number) {
+    this.carService.deleteCar(carId).pipe().subscribe(
+      response => {
+        console.log(response)
+      },
+      (error: HttpErrorResponse) => { console.log(error.error); }
+    );
   }
 }

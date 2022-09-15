@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
 import { DialogBookingConfirmationComponent } from './dialog-booking-confirmation/dialog-booking-confirmation.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -9,6 +9,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { TripService } from 'src/app/services/tripservice/trip.service';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
 import { UserPermissionsTrip } from 'src/app/enums/user-permissions-trip';
+import { ChatService } from 'src/app/services/chatservice/chat.service';
 @Component({
 	selector: 'app-trip-page-info',
 	templateUrl: './trip-page-info.component.html',
@@ -20,8 +21,13 @@ export class TripPageInfoComponent implements OnInit {
 	carModel: CarModel = {} as CarModel;
 	trip: TripModel = {} as TripModel;
 	userPermission = UserPermissionsTrip;
-	constructor(private route: ActivatedRoute, private http: HttpClient,
-		private dialog: MatDialog, private sanitizer: DomSanitizer, private tripService: TripService, private imgSanitaze: ImgSanitizerService) { }
+	constructor(
+		private route: ActivatedRoute,
+		private dialog: MatDialog,
+		private tripService: TripService,
+		private imgSanitaze: ImgSanitizerService,
+		private chatService: ChatService,
+		private router: Router) { }
 
 	ngOnInit(): void {
 		this.route.params.subscribe(params => {
@@ -35,7 +41,7 @@ export class TripPageInfoComponent implements OnInit {
 	sanitizeUserImg(img: string): SafeUrl {
 		return this.imgSanitaze.sanitiizeUserImg(img);
 	}
-	private readonly url = 'https://localhost:6001/api/Trips/';
+
 	searchData = () => {
 		this.tripService.getTripById(this.tripId).pipe().subscribe(
 			response => {
@@ -50,7 +56,6 @@ export class TripPageInfoComponent implements OnInit {
 	openDialog() {
 		const dialogConfig = new MatDialogConfig();
 
-		// dialogConfig.disableClose = true;
 		dialogConfig.autoFocus = true;
 		dialogConfig.data = {
 			trip: this.trip,
@@ -61,5 +66,18 @@ export class TripPageInfoComponent implements OnInit {
 		dRef.componentInstance.onSubmitReason.subscribe(() => {
 			this.searchData();
 		});
+	}
+	getChat(userId: string) {
+		this.chatService.createPrivateChat(userId).pipe().subscribe(
+			response => {
+				this.router.navigate(['/chat'], {
+					queryParams: {
+						chatId: response
+					}
+				});
+				console.log(response);
+			},
+			(error: HttpErrorResponse) => { console.error(error.error); }
+		);
 	}
 }
