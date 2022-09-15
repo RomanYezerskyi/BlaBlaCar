@@ -16,5 +16,6 @@ namespace BlaBlaCar.BL.Interfaces
         Task<bool> ReadAllNotificationAsync(IEnumerable<NotificationsDTO> notification, ClaimsPrincipal principal);
         Task<IEnumerable<GetNotificationsDTO>> GetGlobalNotificationsAsync(int take, int skip);
         Task<IEnumerable<GetNotificationsDTO>> GetUsersNotificationsAsync(int take, int skip);
+        Task GenerateFeedBackNotificationAsync(Guid tripId);
     }
 }

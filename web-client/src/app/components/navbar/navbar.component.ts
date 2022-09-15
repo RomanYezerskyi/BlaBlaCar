@@ -7,6 +7,7 @@ import { HttpClient, HttpHeaders, HttpStatusCode } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { UserProfileComponent } from '../user/user-profile/user-profile.component';
+import { UserService } from 'src/app/services/userservice/user.service';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -17,18 +18,18 @@ export class NavbarComponent implements OnInit {
   toggle: boolean = true;
   notification: boolean = false;
   notifiNotReadCount = 0;
-  constructor(private jwtHelper: JwtHelperService, private http: HttpClient, private router: Router) { }
+  constructor(
+    private jwtHelper: JwtHelperService,
+    private http: HttpClient,
+    private router: Router,
+    public userService: UserService) { }
 
   ngOnInit(): void {
 
   }
-
   countNotify($event: number) {
     this.notifiNotReadCount = $event;
   }
-  // openNotification() {
-  //   this.notification = !this.notification;
-  // }
   change() {
     this.toggle = !this.toggle;
   }

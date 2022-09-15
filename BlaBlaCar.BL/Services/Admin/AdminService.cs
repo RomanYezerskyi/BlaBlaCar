@@ -72,7 +72,7 @@ namespace BlaBlaCar.BL.Services.Admin
             await _notificationService.GenerateNotificationAsync(
                 new CreateNotificationDTO()
                 {
-                    NotificationStatus = NotificationDTOStatus.SpecificUser,
+                    NotificationStatus = NotificationStatusDTO.SpecificUser,
                     Text = $"Your driving license status changed - {user.UserStatus}",
                     UserId = user.Id
                 });
@@ -93,7 +93,7 @@ namespace BlaBlaCar.BL.Services.Admin
             await _notificationService.GenerateNotificationAsync(
                 new CreateNotificationDTO()
                 {
-                    NotificationStatus = NotificationDTOStatus.SpecificUser,
+                    NotificationStatus = NotificationStatusDTO.SpecificUser,
                     Text = $"Your car {car.RegistNum} status changed - {car.CarStatus}",
                     UserId = car.UserId,
                 });

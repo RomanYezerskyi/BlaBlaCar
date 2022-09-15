@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
@@ -6,8 +6,15 @@ import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
   providedIn: 'root'
 })
 export class UserService {
-
-  constructor(private http: HttpClient) { }
+  public userProfile: UserModel = {} as UserModel;
+  constructor(private http: HttpClient) {
+    this.getCurrentUser().subscribe(
+      response => {
+        this.userProfile = response;
+      },
+      (error: HttpErrorResponse) => { console.log(error.error); }
+    );
+  }
   async chekIfUserExist(): Promise<any> {
     const url = 'https://localhost:6001/api/User/user';
     return await new Promise<any>((resolve, reject) => {

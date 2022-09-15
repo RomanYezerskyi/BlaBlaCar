@@ -128,15 +128,80 @@
         </div>
         <div class="navbar-section-main actions" *ngIf="isUserAuthenticated()">
             <ul class="navbar-nav">
-                <li class="nav-item notification"><button class="btn btn-toggler">
+                <li class="nav-item notification">
+                    <i class="material-icons">notifications</i>
+
+                    <!-- <button class="btn btn-toggler">
                         <p class="notifi__count" *ngIf="notifiNotReadCount > 0">{{notifiNotReadCount}}</p>
                         <i class="material-icons">notifications_none</i>
                         <app-notifications class="notification_list" (notReadedNotifiEvent)="countNotify($event)">
                         </app-notifications>
-                    </button>
+                    </button> -->
 
                 </li>
-                <li class="nav-item user_ptofile_items"><button class="btn btn-toggler">
+                <li class="nav-item user-profile">
+                    <div class="profile-menu">
+                        <div class="profile-img">
+                            <img [src]="userService.userProfile.userImg" alt="">
+                        </div>
+                        <p class="user-name">{{userService.userProfile.firstName}}</p>
+                        <i class="material-icons">arrow_forward_ios</i>
+                    </div>
+                    <div class="user-profile-submenu">
+                        <div class="user-info">
+                            <div class="profile-img">
+                                <img [src]="userService.userProfile.userImg" alt="">
+                            </div>
+                            <div class="info">
+                                <h4 class="user-name">{{userService.userProfile.firstName}}</h4>
+                                <p class="user-email">{{userService.userProfile.email}}</p>
+                            </div>
+                        </div>
+                        <ul>
+                            <li>
+                                <a [routerLink]="'/profile'" class="submenu_item">
+                                    <i class="material-icons">person</i>
+                                    <a class="submenu_text">Account</a>
+                                </a>
+                            </li>
+                            <li>
+                                <a [routerLink]="'/user-information'" class="submenu_item">
+                                    <i class="material-icons">location_on</i>
+                                    <a class="submenu_text">My trips</a>
+                                </a>
+                            </li>
+                            <li>
+                                <a [routerLink]="'/user-information/booked-trips'" class="submenu_item">
+                                    <i class="material-icons">card_travel</i>
+                                    <a class="submenu_text">Booked trips</a>
+                                </a>
+                            </li>
+                            <li class="logout">
+                                <a (click)="logOut()" class="submenu_item">
+                                    <i class="material-icons">logout</i>
+                                    <a class="submenu_text">Logout</a>
+                                </a>
+                            </li>
+                            <!-- <li class="submenu_item">
+                                <a class="submenu_text" [routerLink]="'/user-information'">My trips</a>
+                            </li>
+                            <li class="submenu_item">
+                                <a class="submenu_text" [routerLink]="'/user-information/booked-trips'">Reserved
+                                    trips</a>
+                            </li>
+                            <li class="submenu_item">
+                                <a class="submenu_text" [routerLink]="'/cars'">My cars</a>
+                            </li>
+                            <li class="submenu_item"><a [routerLink]="'/add-car'" class="submenu_text">New car</a>
+                            </li>
+                            <li class="submenu_item"><a [routerLink]="'/driving-license'" class="submenu_text">Add
+                                    driving
+                                    license</a>
+                            </li> -->
+                        </ul>
+                    </div>
+                </li>
+                <!-- <li class=" nav-item user_ptofile_items"><button class="btn btn-toggler">
                         <i class="material-icons">perm_identity</i>
                         <div class="submenu">
                             <ul>
@@ -161,11 +226,12 @@
                                 </li>
                             </ul>
                         </div>
-                    </button></li>
+                    </button></li> -->
+
                 <li class="nav-item toggler" (click)="change()"><button class="btn btn-toggler"><i
                             class="material-icons">density_medium</i></button></li>
-                <li class="nav-item"><button class="btn btn-toggler" (click)="logOut()"><i
-                            class="material-icons">logout</i></button></li>
+                <!-- <li class="nav-item"><button class="btn btn-toggler" (click)="logOut()"><i
+                            class="material-icons">logout</i></button></li> -->
             </ul>
         </div>
         <div class="navbar-section-main actions" *ngIf="!isUserAuthenticated()">

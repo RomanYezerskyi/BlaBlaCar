@@ -12,6 +12,6 @@ namespace BlaBlaCar.BL.DTOs.NotificationDTOs
         [Required]
         public string Text { get; set; }
         public Guid? UserId { get; set; }
-        public NotificationDTOStatus NotificationStatus { get; set; }
+        public NotificationStatusDTO NotificationStatus { get; set; }
     }
 }

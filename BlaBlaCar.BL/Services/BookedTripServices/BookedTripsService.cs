@@ -95,7 +95,7 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
             await _notificationService.GenerateNotificationAsync(
                 new CreateNotificationDTO()
                 {
-                    NotificationStatus = NotificationDTOStatus.SpecificUser,
+                    NotificationStatus = NotificationStatusDTO.SpecificUser,
                     Text = $"{trip.StartPlace} - {trip.EndPlace}" +
                            $"\nUser {userName} joined your trip",
                     UserId = trip.UserId,
@@ -116,7 +116,7 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
             await _notificationService.GenerateNotificationAsync(
                 new CreateNotificationDTO()
                 {
-                    NotificationStatus = NotificationDTOStatus.SpecificUser,
+                    NotificationStatus = NotificationStatusDTO.SpecificUser,
                     Text = $"{tripModel.StartPlace} - {tripModel.EndPlace} " +
                            $"The {userName} canceled all reservations",
                     UserId = tripModel.UserId,
@@ -144,7 +144,7 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
             await _notificationService.GenerateNotificationAsync(
                 new CreateNotificationDTO()
                 {
-                    NotificationStatus = NotificationDTOStatus.SpecificUser,
+                    NotificationStatus = NotificationStatusDTO.SpecificUser,
                     Text = $"{trip.StartPlace} - {trip.EndPlace} " +
                            $"The {userName} canceled the reservation seat {seat.Num} ",
                     UserId = trip.UserId,

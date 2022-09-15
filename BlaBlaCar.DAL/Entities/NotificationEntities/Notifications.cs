@@ -12,6 +12,7 @@ namespace BlaBlaCar.DAL.Entities.NotificationEntities
         public Guid? UserId { get; set; }
         public ApplicationUser? User { get; set; }
         public NotificationStatus NotificationStatus { get; set; }
+        public Guid? FeedBackOnUser { get; set; }
         public ICollection<ReadNotifications> ReadNotifications { get; set; }
     }
 }

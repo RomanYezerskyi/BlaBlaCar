@@ -10,8 +10,9 @@ namespace BlaBlaCar.BL.DTOs.NotificationDTOs
         public string Text { get; set; }
         public Guid? UserId { get; set; }
         public UserDTO? User { get; set; }
-        public NotificationDTOStatus NotificationStatus { get; set; }
-        public NotificationStatusDTO ReadNotificationStatus { get; set; } = NotificationStatusDTO.NotRead;
+        public NotificationStatusDTO NotificationStatus { get; set; }
+        public ReadNotificationStatusDTO ReadNotificationStatus { get; set; } = ReadNotificationStatusDTO.NotRead;
         public DateTimeOffset CreatedAt { get; set; }
+        public Guid? FeedBackOnUser { get; set; }
     }
 }

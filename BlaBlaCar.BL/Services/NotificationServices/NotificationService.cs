@@ -49,7 +49,7 @@ namespace BlaBlaCar.BL.Services.NotificationServices
             notifications = notifications.Select(n =>
             {
                 if (readNotifications.Any(x => x.NotificationId == n.Id))
-                    n.ReadNotificationStatus = NotificationStatusDTO.Read;
+                    n.ReadNotificationStatus = ReadNotificationStatusDTO.Read;
                 return n;
             });
             return notifications;
@@ -61,7 +61,7 @@ namespace BlaBlaCar.BL.Services.NotificationServices
             await _unitOfWork.Notifications.InsertAsync(notification);
             var createdBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
             var result = await _unitOfWork.SaveAsync(createdBy);
-            if (notificationModel.NotificationStatus == NotificationDTOStatus.SpecificUser && result)
+            if (notificationModel.NotificationStatus == NotificationStatusDTO.SpecificUser && result)
             {
 
                 await _hubContext.Clients.Group(notificationModel.UserId.ToString()).BroadcastNotification();
@@ -72,6 +72,7 @@ namespace BlaBlaCar.BL.Services.NotificationServices
             }
 
             return result;
+            
         }
 
         public async Task GenerateNotificationAsync(CreateNotificationDTO notificationModel)
@@ -79,6 +80,33 @@ namespace BlaBlaCar.BL.Services.NotificationServices
             var notification = _mapper.Map<Notifications>(notificationModel);
             await _hubContext.Clients.Group(notificationModel.UserId.ToString()).BroadcastNotification();
             await _unitOfWork.Notifications.InsertAsync(notification);
+        }
+        public async Task GenerateFeedBackNotificationAsync(Guid tripId)
+        {
+            tripId = Guid.Parse("48C94FEF-168E-4E4B-A46C-08DA97271DA5");
+
+            var trip = await _unitOfWork.Trips
+                .GetAsync( x=>x.Include(x=>x.TripUsers)
+                    .Include(x=>x.User), x => x.Id == tripId);
+            if (trip == null) throw new NotFoundException($"Trips with id {tripId}");
+            var users = trip.TripUsers.Distinct();
+
+            foreach (var user in users)
+            {
+                var notificationDTO = new NotificationsDTO()
+                {
+                    UserId = user.UserId,
+                    NotificationStatus = NotificationStatusDTO.ForFeedBack,
+                    Text = $"Please write a feedback about the driver {trip.User.FirstName}." +
+                           $"\nDescribe how your trip {trip.StartPlace} - {trip.EndPlace} went.",
+                    FeedBackOnUser = trip.UserId,
+                };
+                await _unitOfWork.Notifications.InsertAsync(_mapper.Map<Notifications>(notificationDTO));
+                await _unitOfWork.SaveAsync(trip.UserId);
+                await _hubContext.Clients.Group(user.Id.ToString()).BroadcastNotification();
+            }
+
+            
         }
 
         public async Task<bool> ReadAllNotificationAsync(IEnumerable<NotificationsDTO> notification, ClaimsPrincipal principal)

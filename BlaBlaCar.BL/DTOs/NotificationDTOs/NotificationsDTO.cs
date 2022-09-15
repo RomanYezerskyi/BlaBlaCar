@@ -13,7 +13,8 @@ namespace BlaBlaCar.BL.DTOs.NotificationDTOs
         [Required]
         public Guid UserId { get; set; }
         public UserDTO? User { get; set; }
-        public NotificationDTOStatus? NotificationStatus { get; set; }
+        public NotificationStatusDTO? NotificationStatus { get; set; }
+        public Guid? FeedBackOnUser { get; set; }
         public ICollection<ReadNotificationsDTO>? ReadNotifications { get; set; }
     }
 }

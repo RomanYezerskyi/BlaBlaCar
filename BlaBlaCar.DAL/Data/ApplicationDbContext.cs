@@ -45,9 +45,13 @@ namespace BlaBlaCar.DAL.Data
                .HasMany<TripUser>(x=>x.TripUsers)
                .WithOne(x=>x.Seat).HasForeignKey(x=>x.SeatId).OnDelete(DeleteBehavior.SetNull);
 
-           builder.Entity<Car>()
-               .HasMany<Trip>(x=>x.Trips)
-               .WithOne(x=>x.Car).HasForeignKey(x=>x.CarId).OnDelete(DeleteBehavior.SetNull);
+           builder.Entity<ApplicationUser>()
+               .HasMany<Notifications>(x=>x.Notifications)
+               .WithOne(x=>x.User)
+               .HasForeignKey(x=>x.UserId).OnDelete(DeleteBehavior.Restrict);
+           //builder.Entity<Car>()
+           //    .HasMany<Trip>(x=>x.Trips)
+           //    .WithOne(x=>x.Car).HasForeignKey(x=>x.CarId).OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
