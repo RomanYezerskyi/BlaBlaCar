@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { TripModel } from 'src/app/interfaces/trip-interfaces/trip';
+import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
 import { TripUserModel } from 'src/app/interfaces/trip-interfaces/trip-user-model';
 import { TripsResponseModel } from 'src/app/interfaces/trip-interfaces/trips-response-model';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';

@@ -1,277 +1,58 @@
-<!-- <mat-dialog-actions>
-    <div class="actions">
-        <button class="btn_action" (click)="close()">Close</button>
-    </div>
-</mat-dialog-actions> -->
-<mat-dialog-content>
-    <div class="body">
-        <img src="../../../../assets/close.png" class="close_btn" (click)="close()" alt="">
+<div class="body">
+    <!-- <img src="../../../../assets/close.png" class="close_btn" alt=""> -->
 
-        <div class="row">
-            <div class="body_data">
-                <div class="card_body user_main_info">
-                    <div class="user_img">
-                        <img [src]="sanitizeUserImg(user.userImg!)" alt="" class="img profile_img profile__img"
-                            *ngIf="imagePath == null; else elseImg">
-                        <ng-template #elseImg><img [src]="imagePath" alt="" class="img profile_img profile__img">
-                        </ng-template>
-
-                    </div>
-                    <div class="user">
-                        <h4>{{user.firstName}}</h4>
-                    </div>
-                    <div class="actions">
-                        <input style="display: none" type="file" (change)="onFileChanged($event)" #fileInput>
-                        <button class="photo_button" (click)="fileInput.click(); changePhoto()"
-                            *ngIf="!changeUserPhoto; else elsePhoto">Change
-                            photo</button>
-                    </div>
-                    <ng-template #elsePhoto>
-
-                        <div class="actions form_actions">
-                            <button type="button" (click)="updateUserPhoto()">Save</button>
-                            <button type="button" (click)="changePhoto()">Cancel</button>
-                        </div>
+    <div class="row">
+        <div class="body_data">
+            <div class="head">
+                <div class="user">
+                    <h4>{{user.firstName}}</h4>
+                </div>
+                <div class="img">
+                    <img [src]="sanitizeUserImg(user.userImg!)" alt="" class="profile_img"
+                        *ngIf="imagePath == null; else elseImg">
+                    <ng-template #elseImg><img [src]="imagePath" alt="" class="profile_img">
                     </ng-template>
-                    <hr>
-                    <div class="user_info">
-                        <div class="icon_img">
-                            <img src="../../../../assets/car.png" alt="">
-                        </div>
-                        <p>{{user.cars.length}}</p>
-                    </div>
-                    <hr>
-                    <div class="user_info">
-                        <div class="icon_img">
-                            <img src="../../../../assets/destination.png" alt="">
-                        </div>
-                        <p>{{user.trips?.length}}</p>
-                    </div>
-                    <hr>
-                    <div class="user_info">
-                        <div class="icon_img">
-                            <img src="../../../../assets/tourist.png" alt="">
-                        </div>
-                        <p>{{user.tripUsers?.length}}</p>
-                    </div>
                 </div>
             </div>
-            <div class="card_body data_elements">
-                <form *ngIf="editUserData; else elseBlock" #userForm="ngForm" (ngSubmit)="updateUser(userForm)"
-                    [formGroup]="userDataForm">
-                    <mat-form-field class="example-full-width" appearance="legacy">
-                        <mat-label>Name</mat-label>
-                        <input type="text" matInput placeholder="Ex. John Doe" id="UserName" name="UserName"
-                            formControlName="userName" [(ngModel)]="user.firstName" required>
-                        <mat-icon matSuffix> person</mat-icon>
-                        <mat-error *ngIf="getUserForm['userName'].touched && getUserForm['userName'].invalid">
-                            Name is <strong>required</strong>
-                        </mat-error>
-                    </mat-form-field>
-                    <mat-form-field class="example-full-width" appearance="legacy">
-                        <mat-label>Email</mat-label>
-                        <input type="email" matInput placeholder="Ex. pat@example.com" id="email" name="email"
-                            formControlName="email" [(ngModel)]="user.email" required>
-                        <mat-icon matSuffix> email</mat-icon>
-                        <mat-error *ngIf="getUserForm['email'].touched && getUserForm['email'].invalid">
-                            <mat-error *ngIf="getUserForm['email'].errors!['required']">
-                                Email is <strong>required</strong>
-                            </mat-error>
-                            <mat-error *ngIf="getUserForm['email'].errors!['email']">
-                                Please enter a <strong>valid</strong> address
-                            </mat-error>
-                        </mat-error>
-                    </mat-form-field>
-                    <mat-form-field class="example-full-width" appearance="legacy">
-                        <mat-label>Phone number </mat-label>
-                        <input type="tel" matInput placeholder="Ex. +380(000)-00-00" id=" phoneNum" name="phoneNum"
-                            formControlName="phoneNumber" [(ngModel)]="user.phoneNumber" required>
-                        <mat-icon matSuffix>phone_iphone</mat-icon>
-                        <mat-error *ngIf="getUserForm['phoneNumber'].touched && getUserForm['phoneNumber'].invalid">
-                            Phone number is <strong>required</strong>
-                        </mat-error>
-                    </mat-form-field>
-                    <div class="actions form_actions">
-                        <button type="submit" [disabled]="!userForm.valid">Save</button>
-                        <button type="button" (click)="editData()">Cancel</button>
-                    </div>
-                </form>
-                <ng-template #elseBlock>
-                    <div class="user_data_info">
-                        <div class="form-group">
-                            <label for="firstName" class="sr-only">Name</label>
-                            <div class="input">
-                                <p>{{user.firstName}}</p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="email" class="sr-only">Email</label>
-                            <div class="input">
-                                <p>{{user.email}}</p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="phoneNumber" class="sr-only">Phone</label>
-                            <div class="input">
-                                <p>{{user.phoneNumber}}</p>
-                            </div>
-                        </div>
-                        <div class="actions">
-                            <input type="button" (click)="editData()" value="Edit">
-                        </div>
+            <hr>
+            <div class="actions">
+                <input style="display: none" type="file" (change)="onFileChanged($event)" #fileInput>
+                <button class="btn btn-change-photo" type="button" (click)="fileInput.click(); changePhoto()"
+                    *ngIf="!changeUserPhoto; else elsePhoto">
+                    <i class="material-icons">portrait</i>
+                    <p>Change profile photo</p>
+                </button>
+                <ng-template #elsePhoto>
+                    <div class="change">
+                        <button class="btn btn-change-photo" type="button" (click)="updateUserPhoto()">
+                            <i class="material-icons">check_circle_outline</i>
+                            <p>Save</p>
+                        </button>
+                        <button class="btn btn-change-photo" type="button" (click)="changePhoto()">
+                            <i class="material-icons">delete_outline</i>
+                            <p>Cancle</p>
+                        </button>
                     </div>
                 </ng-template>
-                <form #userPasswordForm="ngForm" class="changePasswordForm" [formGroup]="form"
-                    (ngSubmit)="updateUserPassword(userPasswordForm)">
-                    <!-- <h4>Change password</h4>
-                    <div class="form-group">
-                        <label for="firstName" class="sr-only">Current</label>
-                        <div class="input">
-                            <input type="password" id="currentPassword" name="currentPassword"
-                                [(ngModel)]="newPassword.currentPassword" class="form-control" placeholder="" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="email" class="sr-only">New</label>
-                        <div class="input">
-                            <input type="password" id="newPassword" name="newPassword"
-                                [(ngModel)]="newPassword.newPassword" class="form-control" placeholder="" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="phoneNumber" class="sr-only">New</label>
-                        <div class="input">
-                            <input type="password" id="newPassword1" name="newPassword1" class="form-control"
-                                placeholder="" required>
-                        </div>
-                    </div> -->
-                    <mat-form-field class="example-full-width" appearance="legacy">
-                        <mat-label>Password</mat-label>
-                        <input formControlName="password" id="password" type="password" matInput required
-                            [(ngModel)]="newPasswordModel.currentPassword">
-                        <i class="material-icons" matSuffix>key</i>
-                        <mat-error *ngIf="f['password'].touched && f['password'].invalid">
-                            Password is <strong>required</strong>
-                        </mat-error>
-                    </mat-form-field>
-                    <mat-form-field class="example-full-width" appearance="legacy">
-                        <mat-label>New password</mat-label>
-                        <input formControlName="newPassword" id="newPassword" type="password" matInput required
-                            [(ngModel)]="newPasswordModel.newPassword">
-                        <i class="material-icons" matSuffix>key</i>
-                        <mat-error *ngIf="f['newPassword'].touched && f['newPassword'].invalid">
-                            New password is <strong>required</strong>
-                        </mat-error>
-                    </mat-form-field>
-                    <mat-form-field class="example-full-width" appearance="legacy">
-                        <mat-label>Confirm password</mat-label>
-                        <input type="password" matInput formControlName="confirm_password" id="confirm_password"
-                            required>
-                        <i class="material-icons" matSuffix>key</i>
-                        <mat-error *ngIf="f['confirm_password'].touched && f['confirm_password'].invalid"
-                            class="alert alert-danger">
-                            <mat-error *ngIf="f['confirm_password'].errors!['required']">Password is
-                                <strong>required.</strong>
-                            </mat-error>
-                            <mat-error *ngIf="f['confirm_password'].errors!['confirmedValidator']">
-                                Password and confirm password<strong> must be match.</strong>
-                            </mat-error>
-                        </mat-error>
-                    </mat-form-field>
-                    <div class="actions form_actions">
-                        <button type="submit" [disabled]="!userPasswordForm.valid">Change password</button>
-                    </div>
-                </form>
+            </div>
+            <hr>
+            <div class="actions">
+                <button class="btn btn-change-photo" type="button" (click)="editData()">
+                    <i class="material-icons">fact_check</i>
+                    <p>Edit profile data</p>
+                </button>
+            </div>
+            <hr>
+            <div class="actions">
+                <button class="btn btn-change-photo" type="button">
+                    <i class="material-icons">summarize</i>
+                    <p>Edit user documents</p>
+                </button>
+            </div>
+            <hr>
+            <div class="user-cars">
+                <app-user-cars></app-user-cars>
             </div>
         </div>
     </div>
-    <!-- <div class="container">
-        <div class="user_info">
-            <div class="user_container">
-                <div class="header">
-                    <img [src]="sanitaizeImg(user.userImg!)" alt="" class="img profile_img profile__img">
-                </div>
-                <div class="name">
-                    <h3 class="user_name first_title">{{user.firstName}}</h3>
-                </div>
-                <button class="btn save__btn messages">Messages</button>
-                <div class="car_info">
-                    <div class="info__data">
-                        <p>{{user.cars.length}}</p>
-                        <p class="btn info_btn">Cars</p>
-                    </div>
-                    <div class="info__data">
-                        <p>{{user.trips?.length}}</p>
-                        <p class="btn info_btn">My trips</p>
-                    </div>
-                    <div class="info__data">
-                        <p>{{user.tripUsers?.length}}</p>
-                        <p class="btn info_btn">Trips</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <div class="settings">
-
-            <div class="user_information">
-                <h6 class="second_title">USER INFORMATION </h6>
-                <div class="body main_body">
-                    <div class="header">
-                        <img [src]="sanitaizeImg(user.userImg!)" alt="" class="img profile_img profile__img">
-                    </div>
-                    <div class="form-group">
-                        <label for="firstName" class="sr-only">User name</label>
-                        <div class="input">
-                            <input type="text" id="firstName" name="firstName" [(ngModel)]="user.firstName"
-                                class="form-control" placeholder="" value="{{user.firstName}}" required>
-                            <mat-icon>create</mat-icon>
-                            <p (click)="changeUserName()">
-                                <mat-icon>check</mat-icon>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="email" class="sr-only">Email</label>
-                        <div class="input">
-                            <input type="email" id="email" name="email" [(ngModel)]="user.email" class="form-control"
-                                placeholder="" value="{{user.email}}" required>
-                            <mat-icon>create</mat-icon>
-                            <mat-icon>check</mat-icon>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="phoneNumber" class="sr-only">Phone number</label>
-                        <div class="input">
-                            <input type="tel" id="phoneNumber" name="phoneNumber" [(ngModel)]="user.phoneNumber"
-                                class="form-control" placeholder="" value="{{user.phoneNumber}}" required>
-                            <mat-icon>create</mat-icon>
-                            <mat-icon>check</mat-icon>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="user_information">
-                <h6 class="second_title">Change password</h6>
-                <div class="body password">
-                    <div class="form-group">
-                        <label for="password" class="sr-only">Current password</label>
-                        <input type="password" id="password" name="password" class="form-control" placeholder=""
-                            required>
-                    </div>
-                    <div class="form-group">
-                        <label for="newPassword" class="sr-only">New password</label>
-                        <input type="password" id="newPassword" name="newPassword" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phoneNumber" class="sr-only">New password</label>
-                        <input type="password" id="" name="" required>
-                    </div>
-                    <div class="form-group">
-                        <button class="btn save__btn save_password">Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-</mat-dialog-content>
+</div>

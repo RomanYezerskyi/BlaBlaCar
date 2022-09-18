@@ -3,6 +3,7 @@ import { BookedTripUsers } from "./booked-trip-users";
 import { CarModel } from "../car-interfaces/car";
 import { TripUserModel } from "./trip-user-model";
 import { UserModel } from "../user-interfaces/user-model";
+import { UserPermissionsTrip } from "src/app/enums/user-permissions-trip";
 
 export interface TripModel {
     id: number;
@@ -20,4 +21,5 @@ export interface TripModel {
     tripUsers: any[];
     bookedTripUsers?: BookedTripUsers[];
     TotalTrips?: number;
+    userPermission?: UserPermissionsTrip;
 }

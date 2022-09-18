@@ -2,7 +2,7 @@
 
 namespace BlaBlaCar.BL.DTOs.ChatDTOs
 {
-    public class MessageDTO:BaseEntity
+    public class MessageDTO:BaseDTO
     {
        
         public string Text { get; set; }

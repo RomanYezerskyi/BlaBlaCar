@@ -1,3 +1,4 @@
+import { NotificationStatus } from "../enums/notification-status";
 import { UserModel } from "./user-interfaces/user-model";
 
 export interface NotificationsModel {
@@ -5,7 +6,8 @@ export interface NotificationsModel {
     text: string;
     userId?: string;
     user?: UserModel
-    notificationStatus?: number;
+    notificationStatus?: NotificationStatus;
     readNotificationStatus?: number;
     createdAt?: Date;
+    feedBackOnUser?: string;
 }

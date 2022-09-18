@@ -1,22 +1,24 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Component, Inject, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { SafeUrl } from '@angular/platform-browser';
+import { Chart, registerables } from 'chart.js';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
-import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
+import { CarService } from 'src/app/services/carservice/car.service';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
 import { PasswordValidatorService } from 'src/app/services/password-validator/password-validator.service';
 import { UserService } from 'src/app/services/userservice/user.service';
-
+import { EditModalDialogComponent } from './edit-modal-dialog/edit-modal-dialog.component';
+Chart.register(...registerables);
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
-  editUserData = false;
+  user: UserModel = {} as UserModel;
+
   imagePath: any;
   changeUserPhoto = false;
   message: string | undefined;
@@ -24,17 +26,13 @@ export class UserProfileComponent implements OnInit {
   private formData = new FormData();
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   userFormControl = new FormControl('', [Validators.required]);
-  @Input() user: UserModel = {
-    id: '', email: '', firstName: '', phoneNumber: '',
-    roles: [], cars: [] = [], userDocuments: [] = [], userStatus: -1, trips: [], tripUsers: []
-  };
+
   newPasswordModel = { userId: '', currentPassword: '', newPassword: '' };
   userDataForm: FormGroup = new FormGroup({});
   form: FormGroup = new FormGroup({});
   constructor(
+    private dialog: MatDialog,
     private imgSanitaze: ImgSanitizerService,
-    private dialogRef: MatDialogRef<UserProfileComponent>,
-    @Inject(MAT_DIALOG_DATA) data: any,
     private fb: FormBuilder,
     private validator: PasswordValidatorService,
     private userService: UserService) {
@@ -56,8 +54,8 @@ export class UserProfileComponent implements OnInit {
 
   async ngOnInit() {
     this.getUser();
-    this.dialogRef.updateSize('60%', '80%');
   }
+
   get getUserForm() {
     return this.userDataForm.controls;
   }
@@ -65,9 +63,20 @@ export class UserProfileComponent implements OnInit {
     return this.form.controls;
   }
   editData() {
-    this.editUserData = !this.editUserData;
+    const dialogConfig = new MatDialogConfig();
 
+    // dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = {
+      user: this.user
+    }
+    const dRef = this.dialog.open(EditModalDialogComponent, dialogConfig);
+
+    // dRef.componentInstance.onSubmitReason.subscribe(() => {
+    //   this.searchData();
+    // });
   }
+
   changePhoto() {
     this.changeUserPhoto = !this.changeUserPhoto;
     if (this.imagePath != null) this.imagePath = null;
@@ -80,17 +89,6 @@ export class UserProfileComponent implements OnInit {
       },
       (error: HttpErrorResponse) => { console.log(error.error); }
     );
-    // const updateUser = new Promise<HttpHeaders>((resolve, reject) => {
-    //   this.http.post('https://localhost:6001/api/User/updateUserImg', this.formData)
-    //     .subscribe({
-    //       next: (res: any) => {
-    //         resolve(res);
-    //         this.ngOnInit();
-    //         console.log(res);
-    //       },
-    //       error: (err: HttpErrorResponse) => { console.log(err); reject(err) }
-    //     });
-    // })
   }
 
   onFileChanged(event: any) {
@@ -110,9 +108,7 @@ export class UserProfileComponent implements OnInit {
   sanitizeUserImg(img: string): SafeUrl {
     return this.imgSanitaze.sanitiizeUserImg(img);
   }
-  close() {
-    this.dialogRef.close();
-  }
+
   updateUser(form: FormGroupDirective) {
     if (!form.valid) return;
     let userModel = {
@@ -127,18 +123,8 @@ export class UserProfileComponent implements OnInit {
       },
       (error: HttpErrorResponse) => { console.log(error.error); }
     );
-    // const res = await new Promise<HttpHeaders>((resolve, reject) => {
-
-    //   this.http.post("https://localhost:6001/api/User/update", userModel).subscribe({
-    //     next: (res: any) => { resolve(res); console.log(res) },
-    //     error: (_) => {
-    //       reject(_);
-    //     }
-    //   });
-    // });
-    // return res;
   }
-  async updateUserPassword(form: FormGroupDirective): Promise<any> {
+  updateUserPassword(form: FormGroupDirective): void {
     if (!form.valid) return;
     this.newPasswordModel.userId = this.user.id;
     this.userService.updateUserPassword(this.newPasswordModel).pipe().subscribe(
@@ -147,15 +133,6 @@ export class UserProfileComponent implements OnInit {
       },
       (error: HttpErrorResponse) => { console.log(error.error); }
     );
-    // const res = await new Promise<HttpHeaders>((resolve, reject) => {
-    //   this.http.post("https://localhost:5001/api/User/update-password", this.newPasswordModel).subscribe({
-    //     next: (res: any) => { resolve(res); console.log(res) },
-    //     error: (_) => {
-    //       reject(_);
-    //     }
-    //   });
-    // });
-    // return res;
   }
   getUser() {
     this.userService.getCurrentUser().pipe().subscribe(
@@ -165,17 +142,6 @@ export class UserProfileComponent implements OnInit {
       },
       (error: HttpErrorResponse) => { console.log(error.error); }
     );
-    // const url = 'https://localhost:6001/api/User';
-    // const user = await new Promise<UserModel>((resolve, reject) => {
-    //   this.http.get<UserModel>(url)
-    //     .subscribe({
-    //       next: (res: UserModel) => {
-    //         resolve(res);
-    //         console.log(res);
-    //       },
-    //       error: (err: HttpErrorResponse) => { console.error(err); reject(err) },
-    //     });
-    // })
-    // return user;
   }
+
 }

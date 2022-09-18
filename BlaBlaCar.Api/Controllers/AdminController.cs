@@ -24,7 +24,7 @@ namespace BlaBlaCar.API.Controllers
         }
 
         [HttpGet("requests/{status}/{take}/{skip}")]
-        public async Task<IActionResult> GetRequests(int take, int skip, UserDTOStatus status)
+        public async Task<IActionResult> GetRequests(int take, int skip, UserStatusDTO status)
         {
             
             var res = await _adminService.GetRequestsAsync(take, skip, status);
@@ -36,12 +36,6 @@ namespace BlaBlaCar.API.Controllers
         [HttpPost("user/status")]
         public async Task<IActionResult> ChangeUserRequest([FromBody]ChangeUserStatusDTO status)
         {
-            
-            if (!ModelState.IsValid)
-                throw new Exception(string.Join("; ", ModelState.Values
-                    .SelectMany(x => x.Errors)
-                    .Select(x => x.ErrorMessage)));
-
             var res = await _adminService.ChangeUserStatusAsync(status, User);
             if (res != null) return Ok("User status changed");
             return Ok(new JsonResult("User status changed!"));
@@ -50,11 +44,6 @@ namespace BlaBlaCar.API.Controllers
         [HttpPost("car/status")]
         public async Task<IActionResult> ChangeCarRequest([FromBody] ChangeCarStatusDTO status)
         {
-            
-            if (!ModelState.IsValid)
-                throw new Exception(string.Join("; ", ModelState.Values
-                    .SelectMany(x => x.Errors)
-                    .Select(x => x.ErrorMessage)));
 
             var res = await _adminService.ChangeCarStatusAsync(status, User);
             if (res != null) return Ok(new{res="User status changed"});

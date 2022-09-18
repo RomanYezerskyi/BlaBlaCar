@@ -1,4 +1,9 @@
+.container {
+    position: relative;
+}
+
 .register-form {
+
     border-radius: 10px;
     display: flex;
     flex-flow: row-reverse;
@@ -7,8 +12,17 @@
     box-shadow: 0 12px 15px 0 rgb(0 0 0 / 30%), 0 17px 50px 0 rgb(0 0 0 / 30%);
     width: 60%;
     padding: 0 0;
-    margin: 120px auto;
+    margin: 140px auto;
     min-width: 680px;
+}
+
+app-alerts {
+    width: 325px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -153px;
+    z-index: 3;
 }
 
 .btn {
@@ -61,7 +75,7 @@
 
 .form {
 
-    padding: 50px 50px;
+    padding: 30px 30px;
     border-radius: 10px;
     box-shadow: 0 12px 15px 0 rgb(0 0 0 / 30%), 0 17px 50px 0 rgb(0 0 0 / 30%);
     background-color: #fff;
@@ -105,10 +119,14 @@
         padding-bottom: 10px;
     }
 
+    app-alerts {
+        top: -70px;
+    }
+
     .register-form {
         flex-flow: column;
-        margin-top: 50px;
-        margin-bottom: 20px;
+        margin-top: 60px;
+        margin-bottom: 10px;
         min-width: 400px;
 
         .login-reference {

@@ -1,0 +1,92 @@
+@import url('https://cdn.jsdelivr.net/npm/lightgallery@2.0.0-beta.4/css/lightgallery.css');
+@import url('https://cdn.jsdelivr.net/npm/lightgallery@2.0.0-beta.4/css/lg-zoom.css');
+
+.documents {
+    margin: 5px 30px;
+    min-width: 220px;
+    max-width: 360px;
+
+    .actions {
+        display: flex;
+
+        mat-form-field {
+            margin: 0 10px;
+        }
+    }
+
+
+    .btn-edit {
+        margin: auto;
+        border-radius: 5px;
+        padding: 5px 10px;
+        box-sizing: border-box;
+        border: none;
+        display: flex;
+        background-color: #3786bd;
+        color: #fff;
+
+
+        .material-icons {}
+
+        p {
+
+            font-weight: 500;
+            font-size: 15px;
+            margin: auto 5px;
+        }
+    }
+
+    .btn-edit:hover {
+        background: #2f73a3;
+    }
+
+
+    .doc-list {
+        box-sizing: border-box;
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: center;
+        margin: auto;
+
+        .doc-item {
+
+            padding: 10px;
+            box-sizing: border-box;
+            width: 110px;
+            height: 110px;
+            overflow: hidden;
+            margin: 5px;
+            position: relative;
+
+
+        }
+
+        img {
+            // filter: brightness(60%);
+            border-radius: 10px;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .btn-remove {
+            z-index: 2;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            box-sizing: border-box;
+            background: none;
+            border: none;
+            color: #fff;
+
+
+            .material-icons {
+                cursor: pointer;
+                font-size: 30px;
+                width: 30px;
+                height: 30px;
+            }
+        }
+    }
+}

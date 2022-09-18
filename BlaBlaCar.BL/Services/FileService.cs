@@ -44,5 +44,13 @@ namespace BlaBlaCar.BL.Services
             var res = await FilesDbPathListAsync(list);
             return res.FirstOrDefault();
         }
+
+        public void DeleteFileFormApi(IEnumerable<string> files)
+        {
+            foreach (var file in files)
+            {
+                File.Delete(file);
+            }
+        }
     }
 }

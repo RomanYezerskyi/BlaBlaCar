@@ -3,7 +3,7 @@ using BlaBlaCar.BL.DTOs.UserDTOs;
 
 namespace BlaBlaCar.BL.DTOs.CarDTOs
 {
-    public class CarDTO:BaseEntity
+    public class CarDTO:BaseDTO
     {
         public string ModelName { get; set; }
         public string RegistNum { get; set; }

@@ -1,8 +1,8 @@
 ﻿namespace BlaBlaCar.BL.DTOs.UserDTOs
 {
-    public enum UserDTOStatus
+    public enum UserStatusDTO
     {
-        WithoutCar = 0,
+        None = 0,
         Pending = 1,
         Confirmed = 2,
         Rejected = 3,

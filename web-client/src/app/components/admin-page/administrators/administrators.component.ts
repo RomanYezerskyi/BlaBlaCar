@@ -28,7 +28,8 @@ export class AdministratorsComponent implements OnInit, OnDestroy {
   searchSubscription!: Subscription;
   chatSubscription!: Subscription;
   isCheckedName = '';
-  constructor(private sanitizeImgService: ImgSanitizerService, private adminService: AdminService, private chatService: ChatService, private router: Router,) { }
+  constructor(private sanitizeImgService: ImgSanitizerService,
+    private adminService: AdminService, private chatService: ChatService, private router: Router,) { }
 
   ngOnInit(): void {
     this.getAdmins();

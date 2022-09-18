@@ -24,5 +24,6 @@ namespace BlaBlaCar.DAL.Entities
         public ICollection<TripUser>? TripUsers { get; set; }
         public ICollection<Notifications>? Notifications { get; set; }
         public ICollection<ReadNotifications>? ReadNotifications { get; set; }
+        public ICollection<FeedBack>? FeedBacks { get; set; }
     }
 }

@@ -17,6 +17,8 @@ namespace BlaBlaCar.BL.DTOs.CarDTOs
         [Required]
         public int CountOfSeats { get; set; }
         [Required]
+        public CarTypeDTO CarType { get; set; }
+        [Required]
         public IEnumerable<IFormFile> TechPassportFile { get; set; }
     }
 }

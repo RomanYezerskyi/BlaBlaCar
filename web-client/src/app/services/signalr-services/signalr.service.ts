@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { BehaviorSubject, filter, Observable, Subject } from 'rxjs';
 import { SignalEvent } from './signal-event';
+import { environment } from '../../../environments/environment';
 
 
 @Injectable({
@@ -16,6 +17,7 @@ export class SignalRService {
   public hubMethod: string = '';
   public hubMethodParams: any;
   public handlerMethod: string = '';
+
   constructor() {
     // super();
     console.log(this.url);

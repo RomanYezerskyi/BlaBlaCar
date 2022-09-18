@@ -139,7 +139,7 @@ namespace BlaBlaCar.BL.Services
             var userEmail = principal.Identity.Name;
             var userModel = _mapper.Map<UserDTO>(await _unitOfWork.Users
                 .GetAsync(null, x => x.Email == userEmail));
-            if (userModel.UserStatus == UserDTOStatus.Rejected) throw new PermissionException("This user cannot add driving license!");
+            if (userModel.UserStatus == UserStatusDTO.Rejected) throw new PermissionException("This user cannot add driving license!");
 
            
             if (drivingLicense.Any())
@@ -148,7 +148,7 @@ namespace BlaBlaCar.BL.Services
 
                userModel.UserDocuments = files.Select(f => new UserDocumentDTO() { User = userModel, DrivingLicense = f }).ToList();
 
-                userModel.UserStatus = UserDTOStatus.Pending;
+                userModel.UserStatus = UserStatusDTO.Pending;
 
 
                 var user = _mapper.Map<ApplicationUser>(userModel);
@@ -172,7 +172,7 @@ namespace BlaBlaCar.BL.Services
                 Email = principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 FirstName = principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.GivenName).Value,
                 PhoneNumber = principal.Claims.FirstOrDefault(x=>x.Type == JwtClaimTypes.PhoneNumber).Value,
-                UserStatus = UserDTOStatus.WithoutCar
+                UserStatus = UserStatusDTO.None
             };
             await _unitOfWork.Users.InsertAsync(_mapper.Map<ApplicationUser>(user));
             return await _unitOfWork.SaveAsync(user.Id);

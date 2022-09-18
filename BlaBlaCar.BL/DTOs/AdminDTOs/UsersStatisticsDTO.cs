@@ -17,7 +17,7 @@ namespace BlaBlaCar.BL.DTOs.AdminDTOs
         public string? PhoneNumber { get; set; }
         public string? FirstName { get; set; }
         public string? UserImg { get; set; }
-        public UserDTOStatus? UserStatus { get; set; }
+        public UserStatusDTO? UserStatus { get; set; }
         public ICollection<UserDocumentDTO>? UserDocuments { get; set; }
         public ICollection<CarDTO>? Cars { get; set; }
         public ICollection<TripDTO>? Trips { get; set; }

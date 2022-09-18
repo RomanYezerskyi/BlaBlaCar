@@ -1,3 +1,16 @@
+.wrapper {
+    position: relative;
+}
+
+app-alerts {
+    width: 325px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -95px;
+    z-index: 3;
+}
+
 .login-form {
     border-radius: 10px;
     display: flex;
@@ -99,10 +112,13 @@
 
 @media all and (max-width:768px) {
 
+    app-alerts {
+        top: -80px;
+    }
 
     .login-form {
         flex-flow: column;
-        margin-top: 50px;
+        margin-top: 70px;
         margin-bottom: 20px;
         min-width: 400px;
 

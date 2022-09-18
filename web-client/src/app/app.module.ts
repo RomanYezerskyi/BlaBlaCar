@@ -60,6 +60,12 @@ import { ChatListComponent } from './components/chat-layout/chat-list/chat-list.
 import { ChatComponent } from './components/chat-layout/chat/chat.component';
 import { AdministratorsComponent } from './components/admin-page/administrators/administrators.component';
 import { UserGuard } from './guards/user-guard/user.guard';
+import { EditModalDialogComponent } from './components/user/user-profile/edit-modal-dialog/edit-modal-dialog.component';
+import { EditCarModalDialogComponent } from './components/user/user-cars/edit-car-modal-dialog/edit-car-modal-dialog.component';
+import { LightgalleryModule } from 'lightgallery/angular';
+import { ImagesGalleryComponent } from './components/images-gallery/images-gallery.component';
+import { AlertsComponent } from './components/alerts/alerts.component';
+import { UserService } from './services/userservice/user.service';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -104,6 +110,10 @@ export function tokenGetter() {
     ChatListComponent,
     ChatComponent,
     AdministratorsComponent,
+    EditModalDialogComponent,
+    EditCarModalDialogComponent,
+    ImagesGalleryComponent,
+    AlertsComponent,
 
   ],
   imports: [
@@ -135,11 +145,12 @@ export function tokenGetter() {
     MatDatepickerModule,
     MatRadioModule,
     MatProgressSpinnerModule,
-
+    LightgalleryModule
   ],
-  providers: [AuthGuard, AdminGuard, PageAccessGuard, UserGuard],
+  providers: [AuthGuard, AdminGuard, PageAccessGuard, UserGuard, UserService],
   bootstrap: [AppComponent],
-  entryComponents: [DialogBookingConfirmationComponent, UserProfileComponent, CreateNotificationDialogComponent],
+  entryComponents: [DialogBookingConfirmationComponent,
+    CreateNotificationDialogComponent, EditModalDialogComponent, EditCarModalDialogComponent],
   exports: [
     MatToolbarModule,
     MatButtonModule,

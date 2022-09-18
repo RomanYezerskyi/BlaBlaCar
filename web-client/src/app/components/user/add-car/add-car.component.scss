@@ -1,3 +1,7 @@
+.container {
+    position: relative;
+}
+
 .car_form {
     border-radius: 10px;
     display: flex;
@@ -6,7 +10,7 @@
     box-shadow: 0 12px 15px 0 rgb(0 0 0 / 30%), 0 17px 50px 0 rgb(0 0 0 / 30%);
     width: 70%;
     padding: 0 0;
-    margin: 50px auto;
+    margin: 100px auto;
 
 
 }

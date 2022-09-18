@@ -4,9 +4,9 @@ using BlaBlaCar.BL.DTOs.UserDTOs;
 
 namespace BlaBlaCar.BL.DTOs.TripDTOs
 {
-    public class TripDTO
+    public class TripDTO:BaseDTO
     {
-        public Guid Id { get; set; }
+       
         public string StartPlace { get; set; }
         public string EndPlace { get; set; }
         public DateTimeOffset StartTime { get; set; }
@@ -17,7 +17,9 @@ namespace BlaBlaCar.BL.DTOs.TripDTOs
         public UserDTO? User { get; set; }
         public Guid CarId { get; set; }
         public CarDTO? Car { get; set; }
+        public UserPermission UserPermission { get; set; }
         public ICollection<TripUserDTO>? TripUsers { get; set; }
         public ICollection<AvailableSeatDTO>? AvailableSeats { get; set; }
+
     }
 }

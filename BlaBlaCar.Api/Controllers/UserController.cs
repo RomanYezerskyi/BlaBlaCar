@@ -71,11 +71,7 @@ namespace BlaBlaCar.API.Controllers
         [HttpPost("update")]
         public async Task<IActionResult> UpdateUser(UpdateUserDTO userModel)
         {
-           
-            if (!ModelState.IsValid)
-                throw new Exception(string.Join("; ", ModelState.Values
-                    .SelectMany(x => x.Errors)
-                    .Select(x => x.ErrorMessage)));
+            
             var res = await _userService.UpdateUserAsync(userModel, User);
             if (res)
                 return Ok();
@@ -92,5 +88,15 @@ namespace BlaBlaCar.API.Controllers
             return BadRequest();
            
         }
+        //[HttpGet("statistics")]
+        //public async Task<IActionResult> GerUserStatistics()
+        //{
+
+        //    var res = await _userService.GetUserStatisticsAsync(User);
+        //    if (res != null) return Ok(res);
+        //    return BadRequest("Fail");
+
+        //}
+
     }
 }

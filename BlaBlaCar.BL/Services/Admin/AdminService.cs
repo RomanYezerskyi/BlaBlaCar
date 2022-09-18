@@ -33,7 +33,7 @@ namespace BlaBlaCar.BL.Services.Admin
             _notificationService = notificationService;
             _hostSettings = hostSettings.Value;
         }
-        public async Task<UserRequestsViewModel> GetRequestsAsync(int take, int skip, UserDTOStatus status)
+        public async Task<UserRequestsViewModel> GetRequestsAsync(int take, int skip, UserStatusDTO status)
         {
             var users = _mapper.Map<IEnumerable<UserDTO>>(
                 await _unitOfWork.Users.GetAsync(
@@ -72,7 +72,7 @@ namespace BlaBlaCar.BL.Services.Admin
             await _notificationService.GenerateNotificationAsync(
                 new CreateNotificationDTO()
                 {
-                    NotificationStatus = NotificationDTOStatus.SpecificUser,
+                    NotificationStatus = NotificationStatusDTO.SpecificUser,
                     Text = $"Your driving license status changed - {user.UserStatus}",
                     UserId = user.Id
                 });
@@ -93,7 +93,7 @@ namespace BlaBlaCar.BL.Services.Admin
             await _notificationService.GenerateNotificationAsync(
                 new CreateNotificationDTO()
                 {
-                    NotificationStatus = NotificationDTOStatus.SpecificUser,
+                    NotificationStatus = NotificationStatusDTO.SpecificUser,
                     Text = $"Your car {car.RegistNum} status changed - {car.CarStatus}",
                     UserId = car.UserId,
                 });
@@ -104,7 +104,7 @@ namespace BlaBlaCar.BL.Services.Admin
         {
             var users = _mapper.Map<IEnumerable<UsersStatisticsDTO>>(
                 await _unitOfWork.Users.GetAsync(null, null, 
-                    x=>x.CreatedAt.Value.Month == searchDate.Month));
+                    x=>x.CreatedAt. Value.Month == searchDate.Month));
             var groupedUsers = users.GroupBy(x => x.CreatedAt.Value.Date);
             var cars = _mapper.Map<IEnumerable<CarStatisticsDTO>>(
                 await _unitOfWork.Cars.GetAsync(null, null, x=> x.CreatedAt.Value.Month == searchDate.Month));

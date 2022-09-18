@@ -4,6 +4,7 @@ using BlaBlaCar.BL.DTOs.BookTripDTOs;
 using BlaBlaCar.BL.DTOs.BookTripModels;
 using BlaBlaCar.BL.DTOs.CarDTOs;
 using BlaBlaCar.BL.DTOs.ChatDTOs;
+using BlaBlaCar.BL.DTOs.FeedbackDTOs;
 using BlaBlaCar.BL.DTOs.NotificationDTOs;
 using BlaBlaCar.BL.DTOs.TripDTOs;
 using BlaBlaCar.BL.DTOs.UserDTOs;
@@ -22,6 +23,9 @@ namespace BlaBlaCar.BL
             CreateMap<ApplicationUser, UserDTO>().ReverseMap();
             CreateMap<UsersStatisticsDTO, ApplicationUser>().ReverseMap();
 
+            CreateMap<FeedBack, FeedBackDTO>().ReverseMap();
+            CreateMap<CreateFeedbackDTO, FeedBackDTO>().ReverseMap();
+
             CreateMap<CreateTripDTO, TripDTO>().ReverseMap();
             CreateMap<Trip, TripDTO>().ReverseMap();
             CreateMap<GetTripWithTripUsersDTO, TripDTO>().ReverseMap();
@@ -31,6 +35,7 @@ namespace BlaBlaCar.BL
             CreateMap<Car, CarDTO>().ReverseMap();
             CreateMap<CreateCarDTO, CarDTO>().ReverseMap();
             CreateMap<CarStatisticsDTO, Car>().ReverseMap();
+            CreateMap<CarDTO, UpdateCarDTO>().ReverseMap();
 
             CreateMap<AvailableSeatDTO, NewAvailableSeatDTO>().ReverseMap();
             CreateMap<SeatDTO, Seat>().ReverseMap();

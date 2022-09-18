@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { CarType } from 'src/app/enums/car-type';
 import { NotificationStatus } from 'src/app/enums/notification-status';
+import { CarDocuments } from 'src/app/interfaces/car-interfaces/car-documents';
 import { CarStatus } from 'src/app/interfaces/car-interfaces/car-status';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
@@ -27,6 +28,7 @@ export enum Menu {
   styleUrls: ['./user-request-info.component.scss']
 })
 export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
+  userDocs: Array<string> = [];
   userStatus = UserStatus;
   carStatus = CarStatus;
   carType = CarType;
@@ -37,8 +39,8 @@ export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
   constructor(private userService: UserService,
     private sanitizeImgService: ImgSanitizerService,
     private route: ActivatedRoute,
-    private http: HttpClient, private adminService: AdminService,
-    private dialog: MatDialog, private notificationsService: NotificationsService,) { }
+    private adminService: AdminService,
+    private dialog: MatDialog) { }
   @Input() userId = '';
   ngOnInit(): void {
     if (this.userId == '') {
@@ -56,8 +58,9 @@ export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
       if (this.userId != '') this.getUser(this.userId)
     }
   }
-  addNotitfication(userId: string) {
-    this.openNotificationDialog(NotificationStatus.Global, userId);
+  addNotitfication() {
+    this.openNotificationDialog(NotificationStatus.SpecificUser, this.selectedUser.id);
+    this.changeUserStatus(this.userStatus.NeedMoreData);
   }
   private openNotificationDialog(notificationStatus: NotificationStatus, userId: string | null) {
     const dialogConfig = new MatDialogConfig();
@@ -71,9 +74,9 @@ export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
     };
     const dRef = this.dialog.open(CreateNotificationDialogComponent, dialogConfig);
 
-    dRef.componentInstance.onSubmitReason.subscribe(() => {
-
-    });
+    // dRef.componentInstance.onSubmitReason.subscribe(() => {
+    //   this.changeUserStatus(this.userStatus.NeedMoreData);
+    // });
 
   }
   sanitizeImg(img: string): SafeUrl {
@@ -84,6 +87,7 @@ export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
       response => {
         console.log(response);
         this.selectedUser = response;
+        this.selectedUser.userDocuments.forEach(x => this.userDocs.push(x.drivingLicense));
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
@@ -115,6 +119,11 @@ export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
 
+  }
+  getCarDoc(carDocuments: CarDocuments[]): Array<string> {
+    let images: Array<string> = [];
+    carDocuments.forEach(x => images.push(x.techPassport));
+    return images;
   }
 
 }

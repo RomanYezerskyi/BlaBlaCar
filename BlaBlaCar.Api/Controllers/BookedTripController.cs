@@ -20,11 +20,6 @@ namespace BlaBlaCar.API.Controllers
         [HttpPost]
         public async Task<IActionResult> BookTrip([FromBody] AddNewBookTripDTO bookedTrip)
         {
-            
-            if (!ModelState.IsValid)
-                throw new Exception(string.Join("; ", ModelState.Values
-                    .SelectMany(x => x.Errors)
-                    .Select(x => x.ErrorMessage)));
 
             var res = await _tripService.AddBookedTripAsync(bookedTrip, User);
             if (res) return Ok(new {Result = "Added Successfully"});
@@ -43,11 +38,6 @@ namespace BlaBlaCar.API.Controllers
         [HttpDelete("trip")]
         public async Task<IActionResult> DeleteBookedTrip(DeleteTripUserDTO trip)
         {
-           
-            if (!ModelState.IsValid)
-                throw new Exception(string.Join("; ", ModelState.Values
-                    .SelectMany(x => x.Errors)
-                    .Select(x => x.ErrorMessage)));
 
             var res = await _tripService.DeleteBookedTripAsync(trip, User);
             if (res) return Ok(new { Result = res });
@@ -57,11 +47,6 @@ namespace BlaBlaCar.API.Controllers
         [HttpDelete("seat")]
         public async Task<IActionResult> DeleteBookedSeat(UpdateTripUserDTO tripUser)
         {
-            
-            if (!ModelState.IsValid)
-                throw new Exception(string.Join("; ", ModelState.Values
-                    .SelectMany(x => x.Errors)
-                    .Select(x => x.ErrorMessage)));
             var res = await _tripService.DeleteBookedSeatAsync(tripUser, User);
             if (res) return Ok(new { Result = res });
             return BadRequest("Fail");
@@ -70,11 +55,6 @@ namespace BlaBlaCar.API.Controllers
         [HttpDelete("user")]
         public async Task<IActionResult> DeleteUserFromTrip(UpdateTripUserDTO tripUser)
         {
-            
-            if (!ModelState.IsValid)
-                throw new Exception(string.Join("; ", ModelState.Values
-                    .SelectMany(x => x.Errors)
-                    .Select(x => x.ErrorMessage)));
             var res = await _tripService.DeleteUserFromTripAsync(tripUser, User);
             if (res) return Ok(new { Result = res });
             return BadRequest("Fail");

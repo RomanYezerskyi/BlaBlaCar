@@ -12,6 +12,7 @@ using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.BL;
 using BlaBlaCar.BL.ExceptionHandler;
 using BlaBlaCar.BL.Hubs;
+using BlaBlaCar.BL.ModelStateValidationAttribute;
 using BlaBlaCar.BL.Services.Admin;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -31,7 +32,11 @@ using Microsoft.AspNetCore.Builder;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers().AddNewtonsoftJson(options =>
+builder.Services.AddControllers(options =>
+    {
+        options.Filters.Add<ModelStateValidationActionFilterAttribute>();
+    })
+    .AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 
@@ -74,6 +79,8 @@ builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IChatHubService, ChatHubService>();
+
+
 
 var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
 builder.Services.AddAuthentication(opt => {
@@ -143,7 +150,7 @@ app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.MapHub<NotificationHub>("/notify");
 app.MapHub<ChatHub>("/chatHub");
 app.UseHangfireDashboard();
-BackgroundJob.Enqueue(() => Console.WriteLine("Hello world from Hangfire!"));
+//BackgroundJob.Enqueue(() => Console.WriteLine("Hello world from Hangfire!"));
 
 app.UseEndpoints(endpoints =>
 {

@@ -12,6 +12,6 @@ namespace BlaBlaCar.DAL.Entities.CarEntities
         public ICollection<CarDocuments> CarDocuments { get; set; }
         public ApplicationUser User { get; set; }
         public ICollection<Seat> Seats { get; set; }
-        public ICollection<Trip> Trips { get; set; }
+        public ICollection<Trip>? Trips { get; set; }
     }
 }

@@ -12,8 +12,8 @@ namespace BlaBlaCar.DAL.Entities.TripEntities
         //public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public ApplicationUser User { get; set; }
-        public Guid SeatId { get; set; }
-        public Seat Seat { get; set; }
+        public Guid? SeatId { get; set; }
+        public Seat? Seat { get; set; }
         public Guid TripId { get; set; }
         public Trip Trip { get; set; }
     }

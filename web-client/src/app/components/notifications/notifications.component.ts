@@ -5,6 +5,9 @@ import { NotificationsService } from 'src/app/services/notificationsservice/noti
 import * as signalR from '@microsoft/signalr';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { SignalRService } from 'src/app/services/signalr-services/signalr.service';
+import { NotificationStatus } from 'src/app/enums/notification-status';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { CreateNotificationDialogComponent } from '../admin-page/create-notification-dialog/create-notification-dialog.component';
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.component.html',
@@ -12,59 +15,40 @@ import { SignalRService } from 'src/app/services/signalr-services/signalr.servic
   providers: [SignalRService]
 })
 export class NotificationsComponent implements OnInit {
-  notifications: NotificationsModel[] = [];
-  token = localStorage.getItem("jwt");
   @Output() notReadedNotifiEvent = new EventEmitter<number>();
+  notifications: NotificationsModel[] = [];
+  notificationStatus = NotificationStatus;
+  private Skip: number = 0;
+  private Take: number = 5;
+  public isFullListDisplayed: boolean = false;
+  private token = localStorage.getItem("jwt");
+  private currentUserId: string = this.jwtHelper.decodeToken(this.token!).id;
   constructor(
-    private http: HttpClient,
+    private dialog: MatDialog,
     private notificationsService: NotificationsService,
     private jwtHelper: JwtHelperService,
     private signal: SignalRService) {
-    const currentUserId = this.jwtHelper.decodeToken(this.token!).id;
     this.signal.url = "https://localhost:6001/notify";
     this.signal.hubMethod = 'JoinToNotificationsHub';
-    this.signal.hubMethodParams = currentUserId;
+    this.signal.hubMethodParams = this.currentUserId;
     this.signal.handlerMethod = "BroadcastNotification";
   }
 
-  async ngOnInit() {
+  ngOnInit(): void {
     this.signal.getDataStream<any>().subscribe(message => {
       console.log(message.data);
       this.getUserNotifications();
     });
-    // const connection = new signalR.HubConnectionBuilder()
-    //   .configureLogging(signalR.LogLevel.Information)
-    //   .withUrl('https://localhost:6001/' + 'notify')
-    //   .build();
-
-    // const userId = this.jwtHelper.decodeToken(this.token!).id
-    // connection.start().then(function () {
-    //   console.log('SignalR Connected!');
-    //   connection.invoke('getConnectionId', userId)
-    //     .then(function (connectionId) {
-    //       console.log("connectionID: " + connectionId);
-    //       // $("#signalRconnectionId").attr("value", connectionId);
-    //     });
-    // }).catch(function (err) {
-    //   return console.error(err.toString());
-    // });
-    // connection.on("BroadcastNotification", () => {
-    //   console.log("Hi man!!!");
-    //   this.getUserNotifications();
-    // });
     this.getUserNotifications();
   }
-  checkIfNotRead() {
-    console.log("c");
+  checkIfNotRead(): void {
     let notifi = this.notifications.filter(x => x.readNotificationStatus == 2).length;
     if (notifi != 0) {
-      console.log(notifi);
       this.notReadedNotifiEvent.emit(notifi);
     }
   }
-  getUserNotifications() {
-
-    this.notificationsService.getUserNotifications().pipe().subscribe(
+  getUserNotifications(): void {
+    this.notificationsService.getUserUnreadNotifications().pipe().subscribe(
       response => {
         this.notifications = response;
         this.checkIfNotRead();
@@ -72,37 +56,47 @@ export class NotificationsComponent implements OnInit {
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
-    // const url = 'https://localhost:6001/api/Notification/'
-    // const notifications = await new Promise<NotificationsModel[]>((resolve, reject) => {
-    //   this.http.get<NotificationsModel[]>(url)
-    //     .subscribe({
-    //       next: (res: NotificationsModel[]) => {
-    //         resolve(res);
-    //       },
-    //       error: (err: HttpErrorResponse) => { reject(err), console.error(err) }
-    //     });
-    // });
-    // return notifications;
   }
 
-  async readNotifications() {
+  loadMore(): void {
+    if (this.Skip <= this.notifications.length) {
+      this.notificationsService.getUserNotifications(this.Take, this.Skip).pipe().subscribe(
+        response => {
+          this.notifications = response;
+          this.checkIfNotRead();
+          console.log(response);
+        },
+        (error: HttpErrorResponse) => { console.error(error.error); }
+      );
+    }
+    // else {
+    //   this.isFullListDisplayed = true;
+    // }
+    this.Skip += this.Take;
+  }
+  readNotifications(): void {
     this.notificationsService.readNotifications(this.notifications).pipe().subscribe(
       response => {
         console.log(response);
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
-    // const url = 'https://localhost:6001/api/Notification/'
-    // const notifications = await new Promise((resolve, reject) => {
-    //   this.http.post(url, this.notifications)
-    //     .subscribe({
-    //       next: (res) => {
-    //         resolve(res);
-    //         console.log(res);
-    //       },
-    //       error: (err: HttpErrorResponse) => { reject(err), console.error(err) }
-    //     });
+  }
+  AddFeedBackDialog(userId: string | null, description: string): void {
+    const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = {
+      notificationStatus: NotificationStatus.FeedBack,
+      userId: userId,
+      title: "Feedback",
+      description: description,
+    };
+    const dRef = this.dialog.open(CreateNotificationDialogComponent, dialogConfig);
+
+    // dRef.componentInstance.onSubmitReason.subscribe(() => {
+    //   this.changeUserStatus(this.userStatus.NeedMoreData);
     // });
-    // return notifications;
+
   }
 }

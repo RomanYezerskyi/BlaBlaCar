@@ -1,26 +1,62 @@
-<!-- <mat-dialog-actions>
-    <div class="actions">
-        <button class="btn_action">Close</button>
-
-    </div>
-</mat-dialog-actions> -->
+<button class="btn-close" mat-button (click)="close()"><i class="material-icons">highlight_remove</i></button>
 <mat-dialog-content>
     <div class="container">
         <h2 class="title">{{title}}</h2>
 
+
+        <div class="rate">
+            <input type="radio" id="star5" name="rate" value="5" />
+            <label for="star5" (click)="rate(5)" title="text">5 stars</label>
+            <input type="radio" id="star4" name="rate" value="4" />
+            <label for="star4" (click)="rate(4)" title="text">4 stars</label>
+            <input type="radio" id="star3" name="rate" value="3" />
+            <label for="star3" (click)="rate(3)" title="text">3 stars</label>
+            <input type="radio" id="star2" name="rate" value="2" />
+            <label for="star2" (click)="rate(2)" title="text">2 stars</label>
+            <input type="radio" id="star1" name="rate" value="1" />
+            <label for="star1" (click)="rate(1)" title="text">1 star</label>
+            <mat-error *ngIf="textFormControl.hasError('rate')">
+                Rate is <strong>required</strong>
+            </mat-error>
+        </div>
+
         <form #notifiForm="ngForm" class="form" (ngSubmit)="createNotification(notifiForm)">
-            <mat-form-field class="example-full-width" appearance="legacy">
+            <mat-form-field class="field" class="example-full-width" appearance="legacy"
+                *ngIf="notification.notificationStatus !=  4">
                 <mat-label>Notification text</mat-label>
-                <!-- <input type="text" matInput required placeholder="Ex. pat@example.com" id="email" name="email"
-            [(ngModel)]="notification.text"> -->
                 <textarea [formControl]="textFormControl" [(ngModel)]="notification.text" matInput required
-                    placeholder="Ex. hi!" id="email" name="email" cols="10" rows="10"></textarea>
+                    [placeholder]="'Ex. hi!'" id="email" name="email" cols="10" rows="10" [disabled]="true"></textarea>
                 <mat-error *ngIf="textFormControl.hasError('required')">
                     Text is <strong>required</strong>
                 </mat-error>
             </mat-form-field>
 
-            <button class="btn" type="submit" [disabled]="!textFormControl.valid">Send</button>
+
+
+            <mat-form-field class="field" class="example-full-width" appearance="legacy"
+                *ngIf="notification.notificationStatus ==  4">
+                <mat-label>Notification text</mat-label>
+                <textarea [formControl]="textFormControl" [(ngModel)]="feedback.text" matInput required
+                    [placeholder]="description == '' ? 'Ex. hi!' : description" id="email" name="email" cols="10"
+                    rows="10" [disabled]="true"></textarea>
+                <mat-error *ngIf="textFormControl.hasError('required')">
+                    Text is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+
+            <button class="btn" type="submit"
+                [ngStyle]="{'display':notificationStatus == true || notificationStatus == false?'none':'inline-block'}"
+                [disabled]="!textFormControl.valid">Send</button>
+            <button class="btn-status btn-success" [ngStyle]="{'display':notificationStatus?'flex':'none'}"
+                [disabled]="true">
+                <i class="material-icons">check</i>
+                <p>Success</p>
+            </button>
+            <button class="btn-status btn-error" [ngStyle]="{'display':notificationStatus == false?'flex':'none'}"
+                [disabled]="true">
+                <i class="material-icons">check</i>
+                <p><strong>Error!</strong> Try again later!</p>
+            </button>
         </form>
     </div>
 </mat-dialog-content>

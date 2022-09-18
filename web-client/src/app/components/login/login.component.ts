@@ -1,22 +1,24 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginModel } from '../../interfaces/login';
 import { AuthenticatedResponse } from '../../interfaces/authenticated-response';
 import { FormControl, NgForm, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/authservice/auth-service.service';
 import { first } from 'rxjs';
+import { AlertsComponent } from '../alerts/alerts.component';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  invalidLogin: boolean | undefined;
   credentials: LoginModel = { email: '', password: '' };
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   passwordFormControl = new FormControl('', [Validators.required]);
   returnUrl: string | undefined;
+  @ViewChild(AlertsComponent)
+  private alertsComponent: AlertsComponent = new AlertsComponent;
   constructor(private router: Router,
     private http: HttpClient,
     private route: ActivatedRoute,
@@ -31,26 +33,11 @@ export class LoginComponent implements OnInit {
       this.authService.login(this.credentials)
         .pipe().subscribe(
           response => {
-            this.invalidLogin = false;
             this.router.navigateByUrl(this.returnUrl!);
 
           },
-          (error: HttpErrorResponse) => { console.log(error.error); this.invalidLogin = true; }
+          (error: HttpErrorResponse) => { this.alertsComponent.showError(error.error) }
         )
-      // this.http.post<AuthenticatedResponse>("https://localhost:5001/api/auth/login", this.credentials, {
-      //   headers: new HttpHeaders({ "Content-Type": "application/json" })
-      // })
-      //   .subscribe({
-      //     next: (response: AuthenticatedResponse) => {
-      //       const token = response.token;
-      //       const refreshToken = response.refreshToken;
-      //       localStorage.setItem("jwt", token);
-      //       localStorage.setItem("refreshToken", refreshToken);
-      //       this.invalidLogin = false;
-      //       this.router.navigateByUrl(this.returnUrl!);
-      //     },
-      //     error: (err: HttpErrorResponse) => this.invalidLogin = true
-      //   })
     }
   }
 

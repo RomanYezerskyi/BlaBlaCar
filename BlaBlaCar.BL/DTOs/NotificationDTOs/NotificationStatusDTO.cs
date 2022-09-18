@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BlaBlaCar.BL.DTOs.NotificationDTOs
+﻿namespace BlaBlaCar.BL.DTOs.NotificationDTOs
 {
     public enum NotificationStatusDTO
     {
-        Read = 1,
-        NotRead = 2,
+        Global = 1,
+        SpecificUser = 2,
+        RequestForFeedBack = 3,
+        FeedBack = 4
     }
 }

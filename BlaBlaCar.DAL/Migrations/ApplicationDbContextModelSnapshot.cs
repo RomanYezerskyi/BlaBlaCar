@@ -319,6 +319,41 @@ namespace BlaBlaCar.DAL.Migrations
                     b.ToTable("UsersInChats");
                 });
 
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.FeedBack", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Rate")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("FeedBacks");
+                });
+
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.NotificationEntities.Notifications", b =>
                 {
                     b.Property<Guid>("Id")
@@ -329,6 +364,9 @@ namespace BlaBlaCar.DAL.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("FeedBackOnUser")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("NotificationStatus")
@@ -426,7 +464,7 @@ namespace BlaBlaCar.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CarId")
+                    b.Property<Guid?>("CarId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset?>("CreatedAt")
@@ -436,7 +474,6 @@ namespace BlaBlaCar.DAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EndPlace")
@@ -486,7 +523,7 @@ namespace BlaBlaCar.DAL.Migrations
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("SeatId")
+                    b.Property<Guid?>("SeatId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("TripId")
@@ -642,11 +679,23 @@ namespace BlaBlaCar.DAL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("BlaBlaCar.DAL.Entities.FeedBack", b =>
+                {
+                    b.HasOne("BlaBlaCar.DAL.Entities.ApplicationUser", "User")
+                        .WithMany("FeedBacks")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.NotificationEntities.Notifications", b =>
                 {
                     b.HasOne("BlaBlaCar.DAL.Entities.ApplicationUser", "User")
                         .WithMany("Notifications")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("User");
                 });
@@ -693,9 +742,7 @@ namespace BlaBlaCar.DAL.Migrations
                 {
                     b.HasOne("BlaBlaCar.DAL.Entities.CarEntities.Car", "Car")
                         .WithMany("Trips")
-                        .HasForeignKey("CarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CarId");
 
                     b.HasOne("BlaBlaCar.DAL.Entities.ApplicationUser", "User")
                         .WithMany("Trips")
@@ -713,8 +760,7 @@ namespace BlaBlaCar.DAL.Migrations
                     b.HasOne("BlaBlaCar.DAL.Entities.CarEntities.Seat", "Seat")
                         .WithMany("TripUsers")
                         .HasForeignKey("SeatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("BlaBlaCar.DAL.Entities.TripEntities.Trip", "Trip")
                         .WithMany("TripUsers")
@@ -749,6 +795,8 @@ namespace BlaBlaCar.DAL.Migrations
             modelBuilder.Entity("BlaBlaCar.DAL.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("Cars");
+
+                    b.Navigation("FeedBacks");
 
                     b.Navigation("Notifications");
 

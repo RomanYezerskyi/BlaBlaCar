@@ -12,6 +12,7 @@ using BlaBlaCar.DAL.Entities.TripEntities;
 using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.BL.Exceptions;
 using BlaBlaCar.BL.ViewModels.AdminViewModels;
+using Hangfire;
 
 namespace BlaBlaCar.BL.Services.TripServices
 {
@@ -22,21 +23,25 @@ namespace BlaBlaCar.BL.Services.TripServices
         private readonly IUserService _userService;
         private readonly HostSettings _hostSettings;
         private readonly INotificationService _notificationService;
+        private readonly IBackgroundJobClient _backgroundJobs;
         public TripService(
             IUnitOfWork unitOfWork,
             IMapper mapper,
             IUserService userService, 
             IOptionsSnapshot<HostSettings> hostSettings, 
-            INotificationService notificationService)
+            INotificationService notificationService, 
+            IBackgroundJobClient backgroundJobs)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _userService = userService;
             _notificationService = notificationService;
+            _backgroundJobs = backgroundJobs;
             _hostSettings = hostSettings.Value;
         }
-        public async Task<TripDTO> GetTripAsync(Guid id)
+        public async Task<TripDTO> GetTripAsync(Guid id, ClaimsPrincipal principal)
         {
+            var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
             var usersBookedTrip = await _unitOfWork.TripUser
                 .GetAsync(null, null, x => x.TripId == id);
             var trip = _mapper.Map<Trip, TripDTO>(await _unitOfWork.Trips.GetAsync(
@@ -44,10 +49,12 @@ namespace BlaBlaCar.BL.Services.TripServices
                                                                         .ThenInclude(x => x.Seat)
                                                                         .Include(x=>x.User)
                                                                         .Include(x=>x.Car)
-                                                                        .ThenInclude(x=>x.Seats),
-                                        x => x.Id == id));
+                                                                        .ThenInclude(x => x.Seats)
+                                                                        .Include(
+                                                                            x=>x.TripUsers.Where(x=>x.UserId == userId)),
+                                                                    x => x.Id == id));
             if (trip is null)
-                throw new NotFoundException(nameof(TripDTO));
+                throw new NotFoundException("Trip");
 
             trip.AvailableSeats.Select(x =>
             {
@@ -57,13 +64,19 @@ namespace BlaBlaCar.BL.Services.TripServices
                 }
                 return x;
             }).ToList();
-            trip.User.UserImg = _hostSettings.CurrentHost + trip.User.UserImg;
-            trip.Car.CarDocuments = trip.Car.CarDocuments.Select(c =>
-            {
-                c.TechPassport = _hostSettings.CurrentHost + c.TechPassport;
-                return c;
-            }).ToList();
-            
+            if (trip.User != null && trip.User.UserImg != null) trip.User.UserImg = _hostSettings.CurrentHost + trip.User.UserImg;
+
+            if (trip.Car != null)
+                trip.Car.CarDocuments = trip.Car.CarDocuments.Select(c =>
+                {
+                    c.TechPassport = _hostSettings.CurrentHost + c.TechPassport;
+                    return c;
+                }).ToList();
+
+            if (trip.UserId == userId) trip.UserPermission = UserPermission.Owner;
+            else if(trip.TripUsers != null 
+                    && trip.TripUsers.Any(u=>u.UserId == userId)) trip.UserPermission = UserPermission.СanSeeTheOwnersData;
+            else trip.UserPermission = UserPermission.OnlyBook;
             return trip;
 
         }
@@ -88,12 +101,15 @@ namespace BlaBlaCar.BL.Services.TripServices
 
             trips = trips.Select(t =>
             {
-                t.Car.CarDocuments = t.Car.CarDocuments.Select(c =>
+                if (t.Car != null)
                 {
-                    if(c.TechPassport != null)
-                        c.TechPassport = _hostSettings.CurrentHost + c.TechPassport;
-                    return c;
-                }).ToList();
+                    t.Car.CarDocuments = t.Car.CarDocuments.Select(c =>
+                    {
+                        if (c.TechPassport != null)
+                            c.TechPassport = _hostSettings.CurrentHost + c.TechPassport;
+                        return c;
+                    }).ToList();
+                }
 
                 t.TripUsers = t.TripUsers.Select(tu =>
                 {
@@ -147,7 +163,7 @@ namespace BlaBlaCar.BL.Services.TripServices
                     orderBy = trip => trip.OrderBy(t => t.StartTime);
                     break;
                 case TripOrderBy.ShortestTrip:
-                    orderBy = trip => trip.OrderBy(t=> new {t.EndTime.Subtract(t.StartTime).Minutes});
+                    orderBy = trip => trip.OrderBy(x => new {res= x.EndTime-x.StartTime });
                     break;
                 case TripOrderBy.LowestPrice:
                     orderBy = trip => trip.OrderBy(t => t.PricePerSeat);
@@ -193,8 +209,12 @@ namespace BlaBlaCar.BL.Services.TripServices
             var trip = _mapper.Map<TripDTO, Trip>(tripModel);
 
             await _unitOfWork.Trips.InsertAsync(trip);
-            return await _unitOfWork.SaveAsync(userId);
-            
+            var res =  await _unitOfWork.SaveAsync(userId);
+            if (res)
+                _backgroundJobs.Schedule((() => _notificationService.GenerateFeedBackNotificationAsync(trip.Id)),
+                    trip.EndTime);
+            return res;
+
         }
 
         public async Task<bool> DeleteTripAsync(Guid id, ClaimsPrincipal principal)
@@ -211,7 +231,7 @@ namespace BlaBlaCar.BL.Services.TripServices
                 _notificationService.GenerateNotificationAsync(new CreateNotificationDTO()
                 {
                     UserId = u.UserId,
-                    NotificationStatus = NotificationDTOStatus.SpecificUser,
+                    NotificationStatus = NotificationStatusDTO.SpecificUser,
                     Text = $"The trip {trip.StartPlace} - {trip.EndPlace} was cancelled!"
                 });
             });

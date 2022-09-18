@@ -1,11 +1,12 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticatedResponse } from 'src/app/interfaces/authenticated-response';
 import { RegisterModel } from 'src/app/interfaces/register';
 import { AuthService } from 'src/app/services/authservice/auth-service.service';
 import { PasswordValidatorService } from 'src/app/services/password-validator/password-validator.service';
+import { AlertsComponent } from '../alerts/alerts.component';
 
 @Component({
   selector: 'app-register',
@@ -13,14 +14,14 @@ import { PasswordValidatorService } from 'src/app/services/password-validator/pa
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  invalidRegister: boolean | undefined;
   credentials: RegisterModel = { firstName: '', email: '', phoneNum: '', password: '' };
   data: any;
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   itemFormControl = new FormControl('', [Validators.required]);
   passwordFormControl = new FormControl('', [Validators.required]);
-
   form: FormGroup = new FormGroup({});
+  @ViewChild(AlertsComponent)
+  private alertsComponent: AlertsComponent = new AlertsComponent;
   constructor(private router: Router, private http: HttpClient, private fb: FormBuilder,
     private validator: PasswordValidatorService, private authService: AuthService) {
     this.form = fb.group({
@@ -35,28 +36,24 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.alertsComponent.showError("aa");
   }
   get f() {
     return this.form.controls;
   }
   register = (form: FormGroupDirective) => {
+
     if (form.valid) {
       this.authService.Register(this.credentials).pipe().subscribe(
         response => {
-          this.invalidRegister = false;
-          console.log(response)
+          console.log(response);
+
         },
-        (error: HttpErrorResponse) => { console.log(error.error); this.invalidRegister = true; }
+        (error: HttpErrorResponse) => {
+          console.log(error.error);
+          this.alertsComponent.showError("Something went wrong! Try again!");
+        }
       )
-      // this.http.post<AuthenticatedResponse>("https://localhost:5001/api/auth/register", this.credentials, {
-      //   headers: new HttpHeaders({ "Content-Type": "application/json" })
-      // })
-      //   .subscribe((res) => {
-      //     this.data = res
-      //     console.log(this.data)
-      //     console.error(res);
-      //   })
     }
   }
 
