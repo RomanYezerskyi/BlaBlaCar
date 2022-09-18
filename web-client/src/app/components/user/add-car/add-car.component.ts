@@ -1,9 +1,10 @@
 import { HttpErrorResponse, } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { CarType } from 'src/app/enums/car-type';
-import { AddNewCarModel } from 'src/app/interfaces/car-interfaces/addnew-car';
+import { AddNewCarModel } from 'src/app/interfaces/car-interfaces/addnew-car-model';
 import { CarService } from 'src/app/services/carservice/car.service';
 
 @Component({
@@ -11,7 +12,8 @@ import { CarService } from 'src/app/services/carservice/car.service';
   templateUrl: './add-car.component.html',
   styleUrls: ['./add-car.component.scss']
 })
-export class AddCarComponent implements OnInit {
+export class AddCarComponent implements OnInit, OnDestroy {
+  private unsubscribe$: Subject<void> = new Subject<void>();
   newCar: AddNewCarModel = {} as AddNewCarModel;
   carType = CarType;
   private formData = new FormData();
@@ -27,12 +29,16 @@ export class AddCarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.fileControl.valueChanges.subscribe((files: any) => {
+    this.fileControl.valueChanges.pipe(takeUntil(this.unsubscribe$)).subscribe((files: any) => {
       this.uploadFile(files);
     })
   }
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 
-  uploadFile = (files: any) => {
+  uploadFile(files: any): void {
     if (files.length === 0) {
       return;
     }
@@ -42,12 +48,12 @@ export class AddCarComponent implements OnInit {
     }
   }
 
-  addCar = (form: NgForm) => {
+  addCar(form: NgForm): void {
     if (form.valid) {
       this.formData.append("ModelName", this.newCar.modelName);
       this.formData.append("RegistNum", this.newCar.registNum);
       this.formData.append("CountOfSeats", this.newCar.countOfSeats.toString());
-      this.carService.addCar(this.formData).pipe().subscribe(
+      this.carService.addCar(this.formData).pipe(takeUntil(this.unsubscribe$)).subscribe(
         response => {
           this.router.navigate(['/profile']);
         },

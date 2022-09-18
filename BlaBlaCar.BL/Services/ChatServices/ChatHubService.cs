@@ -33,7 +33,7 @@ namespace BlaBlaCar.BL.Services.ChatServices
 
         public async Task NotifyAllChatUsers(Guid chatId, Guid currentUserId)
         {
-            var chatUsers = await _unitOfWork.UsersInChats.GetAsync(null, null,
+            var chatUsers = await _unitOfWork.ChatParticipants.GetAsync(null, null,
                 x => x.UserId != currentUserId && x.ChatId == chatId
             );
             foreach (var user in chatUsers)

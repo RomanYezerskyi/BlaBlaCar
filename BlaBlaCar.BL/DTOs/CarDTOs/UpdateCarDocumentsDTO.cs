@@ -12,7 +12,7 @@ namespace BlaBlaCar.BL.DTOs.CarDTOs
     {
         [Required]
         public Guid Id { get; set; }
-        public IEnumerable<IFormFile>? TechPassportFile { get; set; }
+        public IEnumerable<IFormFile>? TechnicalPassportFile { get; set; }
         public IEnumerable<string>? DeletedDocuments { get; set; }
     }
 }

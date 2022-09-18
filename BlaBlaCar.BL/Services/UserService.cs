@@ -27,11 +27,11 @@ namespace BlaBlaCar.BL.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IFileService _fileService;
+        private readonly ISaveFileService _fileService;
         private readonly HostSettings _hostSettings;
         private readonly IHttpContextAccessor _contextAccessor;
         public UserService(IUnitOfWork unitOfWork,
-            IMapper mapper, IFileService fileService, IOptionsSnapshot<HostSettings> hostSettings, IHttpContextAccessor contextAccessor)
+            IMapper mapper, ISaveFileService fileService, IOptionsSnapshot<HostSettings> hostSettings, IHttpContextAccessor contextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -39,17 +39,15 @@ namespace BlaBlaCar.BL.Services
             _contextAccessor = contextAccessor;
             _hostSettings = hostSettings.Value;
         }
-        public async Task<UserDTO> GetUserInformationAsync(ClaimsPrincipal claimsPrincipal)
+        public async Task<UserDTO> GetUserInformationAsync(Guid currentUserId)
         {
-            Guid userId = Guid.Parse(claimsPrincipal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
-
             var user = _mapper.Map<UserDTO>(
                 await _unitOfWork.Users.GetAsync(x => x.Include(i => i.Cars)
                         .ThenInclude(i => i.CarDocuments)
                         .Include(i => i.UserDocuments)
                         .Include(x => x.TripUsers)
                         .Include(x=>x.Trips),
-                    u => u.Id == userId)
+                    u => u.Id == currentUserId)
             );
             if (user is null)
                 throw new NotFoundException(nameof(UserDTO));
@@ -68,7 +66,7 @@ namespace BlaBlaCar.BL.Services
                {
                    x.CarDocuments.Select(c =>
                    {
-                       c.TechPassport = _hostSettings.CurrentHost + c.TechPassport;
+                       c.TechnicalPassport = _hostSettings.CurrentHost + c.TechnicalPassport;
                        return c;
                    }).ToList();
                    return x;
@@ -102,7 +100,7 @@ namespace BlaBlaCar.BL.Services
             {
                 x.CarDocuments.Select(c =>
                 {
-                    c.TechPassport = _hostSettings.CurrentHost + c.TechPassport;
+                    c.TechnicalPassport = _hostSettings.CurrentHost + c.TechnicalPassport;
                     return c;
                 }).ToList();
                 return x;
@@ -111,15 +109,16 @@ namespace BlaBlaCar.BL.Services
             return user;
         }
 
-        public async Task<IEnumerable<UserDTO>> SearchUsersAsync(string userData)
+        public async Task<IEnumerable<UserDTO>> SearchUsersAsync(string userNameOrEmail)
         {
             var users = _mapper.Map<IEnumerable<UserDTO>>(
                 await _unitOfWork.Users.GetAsync(
                     null, 
                     x=>x.Include(x=>x.TripUsers).Include(x=>x.Trips), 
-                    x=>x.FirstName.Contains(userData) || 
-                       x.Email.Contains(userData) || x.PhoneNumber.Contains(userData))
+                    x=>x.FirstName.Contains(userNameOrEmail) || 
+                       x.Email.Contains(userNameOrEmail) || x.PhoneNumber.Contains(userNameOrEmail))
                 );
+            if (!users.Any()) throw new NoContentException();
             users = users.Select(u =>
             {
                 if (u.UserImg != null)
@@ -134,17 +133,16 @@ namespace BlaBlaCar.BL.Services
 
         
 
-        public async Task<bool> RequestForDrivingLicense(ClaimsPrincipal principal, IEnumerable<IFormFile> drivingLicense)
+        public async Task<bool> RequestForDrivingLicense(Guid currentUserId, IEnumerable<IFormFile> drivingLicense)
         {
-            var userEmail = principal.Identity.Name;
             var userModel = _mapper.Map<UserDTO>(await _unitOfWork.Users
-                .GetAsync(null, x => x.Email == userEmail));
+                .GetAsync(null, x => x.Id == currentUserId));
             if (userModel.UserStatus == UserStatusDTO.Rejected) throw new PermissionException("This user cannot add driving license!");
 
            
             if (drivingLicense.Any())
             {
-                var files = await _fileService.FilesDbPathListAsync(drivingLicense);
+                var files = await _fileService.GetFilesDbPathListAsync(drivingLicense);
 
                userModel.UserDocuments = files.Select(f => new UserDocumentDTO() { User = userModel, DrivingLicense = f }).ToList();
 
@@ -159,28 +157,18 @@ namespace BlaBlaCar.BL.Services
             throw new NoFileException($"File is required!");
         }
 
-        public async Task<bool> AddUserAsync(ClaimsPrincipal principal)
+        public async Task<bool> AddUserAsync(UserDTO user)
         {
-            var userEmail = principal.Identity.Name;
-            var user =_mapper.Map<UserDTO>( await _unitOfWork.Users
-                .GetAsync(null, x => x.Email == userEmail));
-            if (user != null) return true;
+            var userDTO =_mapper.Map<UserDTO>( await _unitOfWork.Users
+                .GetAsync(null, x => x.Id == user.Id));
+            if (userDTO != null) return true;
             
-            user = new UserDTO()
-            {
-                Id = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value),
-                Email = principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                FirstName = principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.GivenName).Value,
-                PhoneNumber = principal.Claims.FirstOrDefault(x=>x.Type == JwtClaimTypes.PhoneNumber).Value,
-                UserStatus = UserStatusDTO.None
-            };
             await _unitOfWork.Users.InsertAsync(_mapper.Map<ApplicationUser>(user));
             return await _unitOfWork.SaveAsync(user.Id);
         }
 
-        public async Task<bool> UpdateUserAsync(UpdateUserDTO newUserData, ClaimsPrincipal principal)
+        public async Task<bool> UpdateUserAsync(UpdateUserDTO newUserData, Guid currentUserId)
         {
-            var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
             var accessToken = _contextAccessor.HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
 
             using var httpClient = new HttpClient();
@@ -197,26 +185,24 @@ namespace BlaBlaCar.BL.Services
                 user.PhoneNumber = newUserData.PhoneNumber;
 
                 _unitOfWork.Users.Update(user);
-                return await _unitOfWork.SaveAsync(userId);
+                return await _unitOfWork.SaveAsync(currentUserId);
             }
 
             throw new PermissionException("This user cannot update data");
         }
 
-        public async Task<bool> UpdateUserImgAsync(IFormFile userImg, ClaimsPrincipal principal)
+        public async Task<bool> UpdateUserImgAsync(IFormFile userImg, Guid currentUserId)
         {
             if (userImg is null) throw new NoFileException($"File is required!");
-            var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
-
             var user = _mapper.Map<UserDTO>(
-                await _unitOfWork.Users.GetAsync(null, x => x.Id == userId));
+                await _unitOfWork.Users.GetAsync(null, x => x.Id == currentUserId));
 
-            var img = await _fileService.FilesDbPathListAsync(userImg);
+            var img = await _fileService.GetFilesDbPathListAsync(userImg);
 
             user.UserImg = img;
             
             _unitOfWork.Users.Update(_mapper.Map<ApplicationUser>(user));
-            return await _unitOfWork.SaveAsync(userId);
+            return await _unitOfWork.SaveAsync(currentUserId);
 
         }
 

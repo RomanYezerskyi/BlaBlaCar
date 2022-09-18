@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { AuthenticatedResponse } from '../interfaces/authenticated-response';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../services/authservice/auth-service.service';
 

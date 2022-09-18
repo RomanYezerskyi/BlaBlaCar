@@ -1,16 +1,25 @@
 .col1,
 .col2 {
     // margin: 0 10px;
-    // box-shadow: rgb(0 0 0 / 16%) 0px 1pt 4pt, rgb(0 0 0 / 8%) 0px 2pt 8pt;
+    // box-shadow: rgb(0 0 0 / 2%) 0px 1pt 4pt, rgb(0 0 0 / 8%) 0px 2pt 8pt;
+
 }
 
 .chats__list {
     padding: 30px;
     background-color: #FFFFFF;
     border-radius: 10px;
+    min-width: 250px;
+    background-color: #393939;
+    box-shadow: rgb(0 0 0 / 2%) 0px 1pt 4pt, rgb(0 0 0 / 8%) 0px 2pt 8pt;
+    color: #fff;
+
+    .no-chat-title {
+        text-align: center;
+    }
 
     .title {
-        color: #222222;
+        color: #fff;
         font-weight: 600;
         line-height: 1.2;
         font-size: 16px;
@@ -72,7 +81,7 @@
                     margin: auto 0;
                     font-size: 14px;
                     font-weight: 500;
-                    color: #222222;
+                    color: #fff;
                     margin-bottom: 6px;
                     // width: 50%;
                 }

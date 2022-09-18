@@ -1,4 +1,4 @@
-import { SeatModel } from "../car-interfaces/seat";
+import { SeatModel } from "../car-interfaces/seat-model";
 
 export interface TripUserModel {
     id: string,

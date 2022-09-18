@@ -1,9 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { TripOrderBy } from 'src/app/enums/trip-order-by';
-import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip';
+import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip-model';
 import { TripsResponseModel } from 'src/app/interfaces/trip-interfaces/trips-response-model';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
 import { TripService } from 'src/app/services/tripservice/trip.service';
@@ -13,27 +14,18 @@ import { TripService } from 'src/app/services/tripservice/trip.service';
   templateUrl: './trips.component.html',
   styleUrls: ['./trips.component.scss']
 })
-export class TripsComponent implements OnInit {
-  trips: TripsResponseModel = {
-    trips: [],
-    totalTrips: 0
-  }
-  trip: SearchTripModel = {
-    countOfSeats: 1,
-    endPlace: '',
-    startPlace: '',
-    startTime: new Date(),
-    orderBy: TripOrderBy.EarliestDepartureTime
-  };
-  totalTrips = 0;
+export class TripsComponent implements OnInit, OnDestroy {
+  private unsubscribe$: Subject<void> = new Subject<void>();
+  trips: TripsResponseModel = {} as TripsResponseModel;
+  trip: SearchTripModel = { orderBy: TripOrderBy.EarliestDepartureTime } as SearchTripModel;
+  totalTrips: number = 0;
   private Skip: number = 0;
   private Take: number = 5;
-  isTrips = true;
-  isSpinner = false;
+  isTrips: boolean = true;
+  isSpinner: boolean = false;
   public isFullListDisplayed: boolean = false;
   constructor(
     private router: Router,
-    private sanitizer: DomSanitizer,
     private route: ActivatedRoute,
     private tripService: TripService,
     private imgSanitaze: ImgSanitizerService) {
@@ -41,7 +33,7 @@ export class TripsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.pipe(takeUntil(this.unsubscribe$)).subscribe(params => {
       if (params['startPlace'] && params['endPlace'] && params['startTime'] && params['seats']) {
         this.trip.startPlace = params['startPlace'];
         this.trip.endPlace = params['endPlace'];
@@ -51,20 +43,22 @@ export class TripsComponent implements OnInit {
         this.isSpinner = true;
       };
     });
-
-
+    this.trips.trips = [];
   }
-  navigateToTripPage = (id: number) => {
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+  navigateToTripPage(id: number): void {
     const url = this.router.serializeUrl(
       this.router.createUrlTree(['trip-page-info', id], { queryParams: { requestedSeats: this.trip.countOfSeats } })
     );
-
     window.open(url, '_blank');
   }
   sanitizeUserImg(img: string): SafeUrl {
     return this.imgSanitaze.sanitiizeUserImg(img);
   }
-  onScroll() {
+  onScroll(): void {
     this.Skip += this.Take;
     if (this.Skip <= this.totalTrips) {
       this.searchTrips();
@@ -74,7 +68,7 @@ export class TripsComponent implements OnInit {
     }
   }
 
-  searchTrips(event?: TripOrderBy) {
+  searchTrips(event?: TripOrderBy): void {
     if (event != null) {
       this.Skip = 0;
       this.Take = 5;
@@ -84,9 +78,7 @@ export class TripsComponent implements OnInit {
     this.trip.startTime = new Date(this.trip.startTime).toDateString();
     this.trip.skip = this.Skip;
     this.trip.take = this.Take;
-
-    // setTimeout(() => , 1000);
-    this.tripService.SearchTrip(this.trip).pipe().subscribe(
+    this.tripService.SearchTrip(this.trip).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         this.isSpinner = false;
         if (response != null) {

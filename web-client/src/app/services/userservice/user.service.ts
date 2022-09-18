@@ -12,7 +12,6 @@ export class UserService {
     if (this.userProfile.id == undefined) {
       this.getCurrentUser().subscribe(
         response => {
-          // if (this.userProfile == {} as UserModel)
           console.log("get user");
           this.userProfile = response;
         },
@@ -54,10 +53,10 @@ export class UserService {
     return this.http.post("https://localhost:6001/api/User/update", userModel);
   }
   updateUserPhoto(formData: FormData): Observable<any> {
-    return this.http.post('https://localhost:6001/api/User/updateUserImg', formData);
+    return this.http.put('https://localhost:6001/api/User/user-profile-image', formData);
   }
   addDrivingLicense(formData: FormData): Observable<any> {
-    return this.http.post('https://localhost:6001/api/User/license', formData)
+    return this.http.put('https://localhost:6001/api/User/license', formData)
   }
   getUserStatistics(): Observable<any> {
     return this.http.get<any>('https://localhost:6001/api/User/statistics');

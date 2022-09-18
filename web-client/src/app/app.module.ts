@@ -51,7 +51,7 @@ import { TopUsersListComponent } from './components/admin-page/main/top-users-li
 import { AdminNotificationsComponent } from './components/admin-page/main/admin-notifications/admin-notifications.component';
 import { AdminGuard } from './guards/admin-guard/admin.guard';
 import { PageAccessGuard } from './guards/page-access/page-access.guard';
-import { CreateNotificationDialogComponent } from './components/admin-page/create-notification-dialog/create-notification-dialog.component';
+import { CreateNotificationDialogComponent } from './components/create-notification-dialog/create-notification-dialog.component';
 import { AdminPanelComponent } from './components/admin-page/admin-panel/admin-panel.component';
 import { ChartsComponent } from './components/admin-page/charts/charts.component';
 import { UsersManagementComponent } from './components/admin-page/users-management/users-management.component';

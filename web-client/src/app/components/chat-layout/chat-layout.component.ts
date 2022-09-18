@@ -8,11 +8,11 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   styleUrls: ['./chat-layout.component.scss']
 })
 export class ChatLayoutComponent implements OnInit {
-  token = localStorage.getItem("jwt");
-  currentUserId = '';
-  role = '';
+  private token: string | null = localStorage.getItem("jwt");
+  currentUserId: string = '';
+  role: string = '';
   constructor(private jwtHelper: JwtHelperService, private router: Router) {
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    // this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
   ngOnInit(): void {

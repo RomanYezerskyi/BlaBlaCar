@@ -1,16 +1,15 @@
 ﻿using System.Security.Claims;
 using BlaBlaCar.BL.DTOs.TripDTOs;
-using BlaBlaCar.BL.ViewModels.AdminViewModels;
 
 namespace BlaBlaCar.BL.Interfaces
 {
     public interface ITripService
     {
-        Task<TripDTO> GetTripAsync(Guid id, ClaimsPrincipal principal);
-        Task<UserTripsViewModel> GetUserTripsAsync(int take, int skip, ClaimsPrincipal principal);
+        Task<TripDTO> GetTripAsync(Guid id, Guid currentUserId);
+        Task<UserTripsDTO> GetUserTripsAsync(int take, int skip, Guid currentUserId);
         Task<SearchTripsResponseDTO> SearchTripsAsync(SearchTripDTO model);
-        Task<bool> AddTripAsync(CreateTripDTO tripModel, ClaimsPrincipal principal);
-        Task<bool> DeleteTripAsync(Guid id, ClaimsPrincipal principal);
+        Task<bool> AddTripAsync(CreateTripDTO tripModel, Guid currentUserId);
+        Task<bool> DeleteTripAsync(Guid id, Guid currentUserId);
 
     }
 }

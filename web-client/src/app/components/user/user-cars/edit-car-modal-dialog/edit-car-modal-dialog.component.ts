@@ -1,19 +1,21 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CarType } from 'src/app/enums/car-type';
-import { CarModel } from 'src/app/interfaces/car-interfaces/car';
+import { CarModel } from 'src/app/interfaces/car-interfaces/car-model';
 import { CarService } from 'src/app/services/carservice/car.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CarUpdateModel } from 'src/app/interfaces/car-interfaces/car-update-model';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-edit-car-modal-dialog',
   templateUrl: './edit-car-modal-dialog.component.html',
   styleUrls: ['./edit-car-modal-dialog.component.scss']
 })
-export class EditCarModalDialogComponent implements OnInit {
-  pageIndex = 1;
+export class EditCarModalDialogComponent implements OnInit, OnDestroy {
+  private unsubscribe$: Subject<void> = new Subject<void>();
+  pageIndex: number = 1;
   car: CarModel = {} as CarModel;
   updateCarModel: CarUpdateModel = {} as CarUpdateModel;
   CarFormControl = new FormControl('', [Validators.required]);
@@ -36,22 +38,23 @@ export class EditCarModalDialogComponent implements OnInit {
     this.updateCarModel.carType = this.car.carType;
     this.updateCarModel.seats = this.car.seats;
   }
-  changePage(page: number) {
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+  changePage(page: number): void {
     this.pageIndex = page;
   }
-  getImages(files: File[]) {
+  getImages(files: File[]): void {
     this.fileToUpload = files;
-    console.log(this.fileToUpload);
-
   }
-  deleteImg(img: string) {
+  deleteImg(img: string): void {
     if (this.updateCarModel.deletedDocuments == undefined)
       this.updateCarModel.deletedDocuments = [];
     let doc = this.car.carDocuments.find(x => x.techPassport == img);
-    console.log(doc);
     this.updateCarModel.deletedDocuments.push(doc!);
   }
-  updateCar() {
+  updateCar(): void {
     if (this.car.carDocuments == this.updateCarModel.deletedDocuments && this.fileToUpload == null) {
       alert("No files");
       return;
@@ -59,25 +62,25 @@ export class EditCarModalDialogComponent implements OnInit {
     this.formData.append("Id", this.updateCarModel.id.toString());
     this.formData.append("ModelName", this.updateCarModel.modelName);
     this.formData.append("RegistNum", this.updateCarModel.registNum);
-    this.carService.updateCar(this.formData).pipe().subscribe(
+    this.carService.updateCar(this.formData).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         console.log(response)
       },
       (error: HttpErrorResponse) => { console.log(error); }
     );
   }
-  updateCarDocuments() {
+  updateCarDocuments(): void {
     if (this.fileToUpload.length == 0 && this.updateCarModel.deletedDocuments.length == 0) return;
     this.uploadFile();
     this.formData.append("Id", this.updateCarModel.id.toString());
-    this.carService.updateCarDocuments(this.formData).pipe().subscribe(
+    this.carService.updateCarDocuments(this.formData).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         console.log(response)
       },
       (error: HttpErrorResponse) => { console.log(error); }
     );
   }
-  uploadFile = () => {
+  uploadFile(): void {
     if (this.fileToUpload.length > 0) {
       for (let item of this.fileToUpload) {
         this.formData.append('techPassportFile', item, item.name);
@@ -89,7 +92,7 @@ export class EditCarModalDialogComponent implements OnInit {
       }
     }
   }
-  closeDialog() {
+  closeDialog(): void {
     this.dialogRef.close();
   }
 }

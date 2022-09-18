@@ -1,9 +1,10 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AddTripModel } from 'src/app/interfaces/trip-interfaces/add-trip';
-import { CarModel } from 'src/app/interfaces/car-interfaces/car';
+import { AddTripModel } from 'src/app/interfaces/trip-interfaces/add-trip-model';
+import { CarModel } from 'src/app/interfaces/car-interfaces/car-model';
 import { CarService } from 'src/app/services/carservice/car.service';
+import { Subject, takeUntil } from 'rxjs';
 
 export enum Menu {
   Info = 1,
@@ -14,57 +15,38 @@ export enum Menu {
   templateUrl: './add-trip-layout.component.html',
   styleUrls: ['./add-trip-layout.component.scss']
 })
-export class AddTripLayoutComponent implements OnInit {
-  trip: AddTripModel = {
-    startPlace: '',
-    endPlace: '',
-    startTime: new Date(''),
-    endTime: new Date(''),
-    pricePerSeat: 0,
-    description: '',
-    countOfSeats: 0,
-    carId: 0,
-    availableSeats: []
-  };
+export class AddTripLayoutComponent implements OnInit, OnDestroy {
+  private unsubscribe$: Subject<void> = new Subject<void>();
+  trip: AddTripModel = {} as AddTripModel;
   menu = Menu;
   userCars: CarModel[] = [];
   page = false;
-
-  constructor(private http: HttpClient, private router: Router, private carService: CarService) { }
-
-  async ngOnInit() {
-    this.getUserCars();
-    console.log(this.userCars);
-  }
-
   check = Menu.Info;
-  changePage(item: Menu) {
-    this.check = item as number;
-    console.log(this.check);
+  constructor(private carService: CarService) { }
+
+  ngOnInit(): void {
+    this.getUserCars();
   }
-  getOutPut(event: AddTripModel) {
-    console.log(event);
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+  changePage(item: Menu): void {
+    this.check = item as number;
+  }
+  getOutPut(event: AddTripModel): void {
     this.trip = event;
   }
-  getPagePut(event: number) {
+  getPagePut(event: number): void {
     this.check = Menu.Car;
   }
-  getUserCars() {
-    this.carService.getUserCars().pipe().subscribe(
+  getUserCars(): void {
+    this.carService.getUserCars().pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         this.userCars = response;
         console.log(response);
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
-
-    // const userCar = await new Promise<CarModel[]>((resolve, reject) => {
-    //   this.http.get<CarModel[]>("https://localhost:6001/api/Car/")
-    //     .subscribe({
-    //       next: (res) => resolve(res),
-    //       error: (_) => reject(_)
-    //     })
-    // });
-    // return userCar
   }
 }

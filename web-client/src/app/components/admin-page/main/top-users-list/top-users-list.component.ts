@@ -1,8 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
+import { Subject, takeUntil } from 'rxjs';
 import { UserListOrderby } from 'src/app/enums/user-list-orderby';
-import { UsersListRequest } from 'src/app/interfaces/admin-interfaces/users-list-request';
+import { UsersListRequestModel } from 'src/app/interfaces/admin-interfaces/users-list-request-model';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 import { AdminService } from 'src/app/services/admin/admin.service';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
@@ -12,13 +13,14 @@ import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer
   templateUrl: './top-users-list.component.html',
   styleUrls: ['./top-users-list.component.scss']
 })
-export class TopUsersListComponent implements OnInit {
+export class TopUsersListComponent implements OnInit, OnDestroy {
+  private unsubscribe$: Subject<void> = new Subject<void>();
   private Skip: number = 0;
   private Take: number = 5;
-  public isFullListDisplayed: boolean = false;
+  isFullListDisplayed: boolean = false;
   users: Array<UserModel> = [];
   orderBy = UserListOrderby;
-  usersReuest: UsersListRequest = {
+  usersReuest: UsersListRequestModel = {
     orderBy: UserListOrderby.Trips,
     skip: 0,
     take: 5
@@ -28,19 +30,24 @@ export class TopUsersListComponent implements OnInit {
   ngOnInit(): void {
     this.getUsers();
   }
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   sanitizeImg(img: string): SafeUrl {
     return this.imgSanitizer.sanitiizeUserImg(img);
   }
-  usersOrderBy = (orderBy: UserListOrderby) => {
+  usersOrderBy(orderBy: UserListOrderby): void {
     this.usersReuest.orderBy = orderBy;
     this.usersReuest.skip = this.Skip;
     this.usersReuest.take = this.Take;
     this.users = [];
     this.getUsers();
   }
-  getUsers() {
+  getUsers(): void {
     if (this.usersReuest.skip <= this.users.length) {
-      this.adminService.getTopListUsers(this.usersReuest).subscribe(
+      this.adminService.getTopListUsers(this.usersReuest).pipe(takeUntil(this.unsubscribe$)).subscribe(
         response => {
           this.users = this.users.concat(response);
         },

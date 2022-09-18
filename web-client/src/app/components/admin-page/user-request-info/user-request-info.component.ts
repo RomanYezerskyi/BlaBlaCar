@@ -3,10 +3,10 @@ import { ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, OnInit
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription, takeUntil } from 'rxjs';
 import { CarType } from 'src/app/enums/car-type';
 import { NotificationStatus } from 'src/app/enums/notification-status';
-import { CarDocuments } from 'src/app/interfaces/car-interfaces/car-documents';
+import { CarDocumentsModel } from 'src/app/interfaces/car-interfaces/car-documents-model';
 import { CarStatus } from 'src/app/interfaces/car-interfaces/car-status';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
@@ -14,7 +14,8 @@ import { AdminService } from 'src/app/services/admin/admin.service';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
 import { NotificationsService } from 'src/app/services/notificationsservice/notifications.service';
 import { UserService } from 'src/app/services/userservice/user.service';
-import { CreateNotificationDialogComponent } from '../create-notification-dialog/create-notification-dialog.component';
+import { CreateNotificationDialogComponent } from '../../create-notification-dialog/create-notification-dialog.component';
+
 
 export enum Menu {
   User = 1,
@@ -28,20 +29,19 @@ export enum Menu {
   styleUrls: ['./user-request-info.component.scss']
 })
 export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() userId: string = '';
+  private unsubscribe$: Subject<void> = new Subject<void>();
   userDocs: Array<string> = [];
   userStatus = UserStatus;
   carStatus = CarStatus;
   carType = CarType;
-  selectedUser: UserModel = {
-    id: '', cars: [], email: '', firstName: '', phoneNumber: '', roles: [], userDocuments: [], userStatus: -1,
-  };
-  usersSubscription!: Subscription;
+  selectedUser: UserModel = {} as UserModel;
   constructor(private userService: UserService,
     private sanitizeImgService: ImgSanitizerService,
     private route: ActivatedRoute,
     private adminService: AdminService,
     private dialog: MatDialog) { }
-  @Input() userId = '';
+
   ngOnInit(): void {
     if (this.userId == '') {
       this.route.params.subscribe(params => {
@@ -51,20 +51,21 @@ export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
     this.getUser(this.userId);
   }
   ngOnDestroy(): void {
-    this.usersSubscription.unsubscribe();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['userId'] && changes['userId']?.previousValue != changes['userId']?.currentValue) {
       if (this.userId != '') this.getUser(this.userId)
     }
   }
-  addNotitfication() {
+  addNotitfication(): void {
     this.openNotificationDialog(NotificationStatus.SpecificUser, this.selectedUser.id);
     this.changeUserStatus(this.userStatus.NeedMoreData);
   }
-  private openNotificationDialog(notificationStatus: NotificationStatus, userId: string | null) {
+  private openNotificationDialog(notificationStatus: NotificationStatus, userId: string | null): void {
     const dialogConfig = new MatDialogConfig();
-
     // dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.data = {
@@ -73,17 +74,15 @@ export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
       title: "Notification"
     };
     const dRef = this.dialog.open(CreateNotificationDialogComponent, dialogConfig);
-
     // dRef.componentInstance.onSubmitReason.subscribe(() => {
     //   this.changeUserStatus(this.userStatus.NeedMoreData);
     // });
-
   }
   sanitizeImg(img: string): SafeUrl {
     return this.sanitizeImgService.sanitiizeUserImg(img);
   }
   getUser(userId: string) {
-    this.usersSubscription = this.userService.getUserFromApi(userId).subscribe(
+    this.userService.getUserFromApi(userId).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         console.log(response);
         this.selectedUser = response;
@@ -92,13 +91,13 @@ export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
   }
-  changeUserStatus = (status: UserStatus) => {
+  changeUserStatus(status: UserStatus): void {
     if (this.selectedUser.userStatus == status) return;
     const newStatus = {
       status: status,
       userId: this.selectedUser.id
     };
-    this.adminService.changeUserDrivingLicenseStatus(newStatus).pipe().subscribe(
+    this.adminService.changeUserDrivingLicenseStatus(newStatus).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         window.alert(response);
         console.log(response);
@@ -106,13 +105,13 @@ export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
   }
-  changeCarStatus = (status: CarStatus, carId: number) => {
+  changeCarStatus(status: CarStatus, carId: number): void {
     if (this.selectedUser.cars.find(x => x.id == carId)?.carStatus == status) return;
     const newStatus = {
       status: status,
       carId: carId,
     };
-    this.adminService.changeCarDocumentsStatus(newStatus).pipe().subscribe(
+    this.adminService.changeCarDocumentsStatus(newStatus).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         console.log(response);
       },
@@ -120,7 +119,7 @@ export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
     );
 
   }
-  getCarDoc(carDocuments: CarDocuments[]): Array<string> {
+  getCarDoc(carDocuments: CarDocumentsModel[]): Array<string> {
     let images: Array<string> = [];
     carDocuments.forEach(x => images.push(x.techPassport));
     return images;

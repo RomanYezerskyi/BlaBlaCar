@@ -13,8 +13,9 @@ namespace BlaBlaCar.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
-    public class UserController : ControllerBase
+    [Authorize(Roles = Constants.AdminOrUser)]
+
+    public class UserController : CustomBaseController
     {
         private readonly IUserService _userService;
         public UserController(IUserService userService)
@@ -25,78 +26,53 @@ namespace BlaBlaCar.API.Controllers
         public async Task<IActionResult> AddUserToApi()
         {
 
-            var res = await _userService.AddUserAsync(User);
-            if (res != null) return Ok(new { res });
-            return BadRequest("Fail");
-
+            var res = await _userService.AddUserAsync(GetUserInformation());
+            return Ok();
         }
         [HttpPost("license")]
         public async Task<IActionResult> AddDrivingLicense(IEnumerable<IFormFile> fileToUpload)
         {
             if (fileToUpload is null)
                 return BadRequest();
-            var res = await _userService.RequestForDrivingLicense(User, fileToUpload);
-            if (res != null) return Ok(new {res} );
-            return BadRequest("Fail");
-          
+            var res = await _userService.RequestForDrivingLicense(UserId, fileToUpload);
+           return Ok();
         }
         [HttpGet]
         public async Task<IActionResult> GerUserInformation()
         {
             
-            var res = await _userService.GetUserInformationAsync(User);
-            if (res != null) return Ok(res);
-            return BadRequest("Fail");
-          
+            var res = await _userService.GetUserInformationAsync(UserId);
+            return Ok(res);
         }
-        [HttpGet("users/{userData}")]
-        public async Task<IActionResult> SearchUsersInformation(string userData)
+        [Authorize(Roles = Constants.AdminRole)]
+        [HttpGet("users/{userNameOrEmail}")]
+        public async Task<IActionResult> SearchUsersInformation(string userNameOrEmail)
         {
 
-            var res = await _userService.SearchUsersAsync(userData);
-            if (res != null) return Ok(res);
-            return BadRequest("Fail");
-
+            var res = await _userService.SearchUsersAsync(userNameOrEmail);
+            return Ok(res);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(Guid id)
         {
 
             var res = await _userService.GetUserByIdAsync(id);
-            if (res != null) return Ok(res);
-            return BadRequest(res);
-
+            return Ok(res);
         }
 
-        [HttpPost("update")]
+        [HttpPut("update")]
         public async Task<IActionResult> UpdateUser(UpdateUserDTO userModel)
         {
             
-            var res = await _userService.UpdateUserAsync(userModel, User);
-            if (res)
-                return Ok();
-            return BadRequest();
-            
+            var res = await _userService.UpdateUserAsync(userModel, UserId);
+            return NoContent();
         }
-        [HttpPost("updateUserImg")]
-        public async Task<IActionResult> UpdateUserImg(IFormFile userImg)
+        [HttpPut("user-profile-image")]
+        public async Task<IActionResult> UpdateUserImg(IFormFile userProfileImage)
         {
            
-            var res = await _userService.UpdateUserImgAsync(userImg, User);
-            if (res)
-                return Ok();
-            return BadRequest();
-           
+            var res = await _userService.UpdateUserImgAsync(userProfileImage, UserId);
+            return NoContent();
         }
-        //[HttpGet("statistics")]
-        //public async Task<IActionResult> GerUserStatistics()
-        //{
-
-        //    var res = await _userService.GetUserStatisticsAsync(User);
-        //    if (res != null) return Ok(res);
-        //    return BadRequest("Fail");
-
-        //}
-
     }
 }

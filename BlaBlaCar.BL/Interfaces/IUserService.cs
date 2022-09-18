@@ -13,12 +13,12 @@ namespace BlaBlaCar.BL.Interfaces
 {
     public interface IUserService
     {
-        Task<UserDTO> GetUserInformationAsync(ClaimsPrincipal claimsPrincipal);
+        Task<UserDTO> GetUserInformationAsync(Guid currentUserId);
         Task<UserDTO> GetUserByIdAsync(Guid id);
-        Task<IEnumerable<UserDTO>> SearchUsersAsync(string userData);
-        Task<bool> RequestForDrivingLicense(ClaimsPrincipal principal, IEnumerable<IFormFile> drivingLicense);
-        Task<bool> AddUserAsync(ClaimsPrincipal user);
-        Task<bool> UpdateUserAsync(UpdateUserDTO userModel, ClaimsPrincipal principal);
-        Task<bool> UpdateUserImgAsync(IFormFile userImg, ClaimsPrincipal principal);
+        Task<IEnumerable<UserDTO>> SearchUsersAsync(string userNameOrEmail);
+        Task<bool> RequestForDrivingLicense(Guid currentUserId, IEnumerable<IFormFile> drivingLicense);
+        Task<bool> AddUserAsync(UserDTO user);
+        Task<bool> UpdateUserAsync(UpdateUserDTO userModel, Guid currentUserId);
+        Task<bool> UpdateUserImgAsync(IFormFile userImg, Guid currentUserId);
     }
 }

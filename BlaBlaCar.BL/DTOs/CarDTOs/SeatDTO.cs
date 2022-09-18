@@ -6,7 +6,7 @@ namespace BlaBlaCar.BL.DTOs.CarDTOs
     public class SeatDTO
     {
         public Guid Id { get; set; }
-        public int Num { get; set; }
+        public int SeatNumber { get; set; }
         public Guid CarId { get; set; }
         public CarDTO? Car { get; set; }
         public ICollection<TripUserDTO>? TripUsers { get; set; }

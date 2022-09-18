@@ -24,7 +24,7 @@ namespace BlaBlaCar.DAL
         private BaseRepositoryAsync<ReadNotifications> _readNotifications;
         private BaseRepositoryAsync<Chat> _chats;
         private BaseRepositoryAsync<Message> _messages;
-        private BaseRepositoryAsync<UsersInChats> _usersInChats;
+        private BaseRepositoryAsync<ChatParticipant> _chatParticipants;
         private BaseRepositoryAsync<ReadMessages> _readMessages;
         private BaseRepositoryAsync<FeedBack> _feedBacks;
         public UnitOfWork(ApplicationDbContext context)
@@ -129,11 +129,11 @@ namespace BlaBlaCar.DAL
             }
         }
 
-        public IRepositoryAsync<UsersInChats> UsersInChats
+        public IRepositoryAsync<ChatParticipant> ChatParticipants
         {
             get
             {
-                return _usersInChats ??= new BaseRepositoryAsync<UsersInChats>(_context);
+                return _chatParticipants ??= new BaseRepositoryAsync<ChatParticipant>(_context);
             }
         }
 

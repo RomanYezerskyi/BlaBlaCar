@@ -3,9 +3,9 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Subscription } from 'rxjs';
-import { Chat } from 'src/app/interfaces/chat-interfaces/chat';
-import { UnreadMessagesChats } from 'src/app/interfaces/chat-interfaces/unread-messages-chats';
+import { Subject, Subscription, takeUntil } from 'rxjs';
+import { ChatModel } from 'src/app/interfaces/chat-interfaces/chat-model';
+import { UnreadMessagesInChatsModel } from 'src/app/interfaces/chat-interfaces/unread-messages-in-chats-model';
 import { ChatService } from 'src/app/services/chatservice/chat.service';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
 import { SignalRService } from 'src/app/services/signalr-services/signalr.service';
@@ -16,13 +16,13 @@ import { SignalRService } from 'src/app/services/signalr-services/signalr.servic
   providers: [SignalRService]
 })
 export class ChatListComponent implements OnInit, OnDestroy {
-  token = localStorage.getItem("jwt");
-  chatsSubscription!: Subscription;
-  chats: Array<Chat> = [];
+  @Input() currentUserId: string = '';
+  @Input() role: string = '';
+  private unsubscribe$: Subject<void> = new Subject<void>();
+  private token: string | null = localStorage.getItem("jwt");
+  chats: Array<ChatModel> = [];
   currentChatId: string = '';
-  @Input() currentUserId = '';
-  @Input() role = '';
-  unreadMessagesChats: Array<UnreadMessagesChats> = [];
+  unreadMessagesChats: Array<UnreadMessagesInChatsModel> = [];
   constructor(private chatService: ChatService,
     private router: Router,
     private sanitizeImgService: ImgSanitizerService,
@@ -30,11 +30,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
     private signal: SignalRService,
     private route: ActivatedRoute,) {
 
-    const currentUserId = this.jwtHelper.decodeToken(this.token!).id;
-    this.signal.url = "https://localhost:6001/chatHub";
-    this.signal.hubMethod = "JoinToChatMessagesNotifications";
-    this.signal.hubMethodParams = currentUserId;
-    this.signal.handlerMethod = "BroadcastMessagesFromChats";
+    this.setSignalRUrls();
   }
 
   ngOnInit(): void {
@@ -44,7 +40,22 @@ export class ChatListComponent implements OnInit, OnDestroy {
       }
     });
     this.getUserChats();
-    this.signal.getDataStream<string>().subscribe(message => {
+
+  }
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+  setSignalRUrls(): void {
+    const currentUserId = this.jwtHelper.decodeToken(this.token!).id;
+    this.signal.setConnectionUrl = "https://localhost:6001/chatHub";
+    this.signal.setHubMethod = "JoinToChatMessagesNotifications";
+    this.signal.setHubMethodParams = currentUserId;
+    this.signal.setHandlerMethod = "BroadcastMessagesFromChats";
+  }
+
+  connectToSignalRChatHub(): void {
+    this.signal.getDataStream<string>().pipe(takeUntil(this.unsubscribe$)).subscribe(message => {
       console.log(message.data);
       if (this.currentChatId != message.data) {
         if (this.unreadMessagesChats.some(x => x.chatId == message.data)) {
@@ -55,7 +66,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
           })
         }
         else {
-          const chat: UnreadMessagesChats = {
+          const chat: UnreadMessagesInChatsModel = {
             chatId: message.data,
             count: 1
           };
@@ -63,16 +74,15 @@ export class ChatListComponent implements OnInit, OnDestroy {
         }
       }
     });
+  }
 
-  }
-  ngOnDestroy(): void {
-    this.chatsSubscription.unsubscribe();
-  }
-  getUserChats() {
-    this.chatsSubscription = this.chatService.getUserChats().subscribe(
+  getUserChats(): void {
+    this.chatService.getUserChats().pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         this.chats = response;
         console.log(response);
+        if (response != null)
+          this.connectToSignalRChatHub();
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
@@ -94,7 +104,6 @@ export class ChatListComponent implements OnInit, OnDestroy {
     }
   }
   sanitizeImg(img: string): SafeUrl {
-
     return this.sanitizeImgService.sanitiizeUserImg(img);
   }
   checkIfChatHasUnreadMessages(chatId: string): boolean {

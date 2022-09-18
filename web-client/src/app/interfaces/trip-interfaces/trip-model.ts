@@ -1,6 +1,6 @@
-import { AvailableSeatsModel } from "./available-seats";
-import { BookedTripUsers } from "./booked-trip-users";
-import { CarModel } from "../car-interfaces/car";
+import { AvailableSeatsModel } from "./available-seats-model";
+import { BookedTripUsersModel } from "./booked-trip-users-model";
+import { CarModel } from "../car-interfaces/car-model";
 import { TripUserModel } from "./trip-user-model";
 import { UserModel } from "../user-interfaces/user-model";
 import { UserPermissionsTrip } from "src/app/enums/user-permissions-trip";
@@ -19,7 +19,7 @@ export interface TripModel {
     car: CarModel
     user?: UserModel;
     tripUsers: any[];
-    bookedTripUsers?: BookedTripUsers[];
+    bookedTripUsers?: BookedTripUsersModel[];
     TotalTrips?: number;
     userPermission?: UserPermissionsTrip;
 }

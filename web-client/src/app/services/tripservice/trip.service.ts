@@ -1,13 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { AddTripModel } from 'src/app/interfaces/trip-interfaces/add-trip';
-import { BookedTripModel } from 'src/app/interfaces/trip-interfaces/booked-trip';
-import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip';
+import { AddTripModel } from 'src/app/interfaces/trip-interfaces/add-trip-model';
+import { BookedTripModel } from 'src/app/interfaces/trip-interfaces/booked-trip-model';
+import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip-model';
 import { TripsResponseModel } from 'src/app/interfaces/trip-interfaces/trips-response-model';
 import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
 import { TripUserModel } from 'src/app/interfaces/trip-interfaces/trip-user-model';
-import { UserTrips, UserTripsResponse } from 'src/app/interfaces/user-interfaces/user-trips';
+import { UserTrips, UserTripsResponseModel } from 'src/app/interfaces/user-interfaces/user-trips-response-model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +24,8 @@ export class TripService {
     return this.http.delete(url, { body: trip });
   }
   getUserBookedTrips(take: number, skip: number): Observable<TripsResponseModel> {
-    const url = 'https://localhost:6001/api/BookedTrip/trips/' + take + "/" + skip;
-    return this.http.get<TripsResponseModel>(url);
+    const url = 'https://localhost:6001/api/BookedTrip/trips';
+    return this.http.get<TripsResponseModel>(url, { params: { take: take, skip: skip } });
   }
 
   deleteUserFromTrip(tripUser: { userId: string, tripId: number }): Observable<any> {
@@ -40,9 +40,9 @@ export class TripService {
     });
   }
   //
-  getUserTrips(take: number, skip: number): Observable<UserTripsResponse> {
-    const url = 'https://localhost:6001/api/Trips/user-trips/' + take + "/" + skip;
-    return this.http.get<UserTripsResponse>(url)
+  getUserTrips(take: number, skip: number): Observable<UserTripsResponseModel> {
+    const url = 'https://localhost:6001/api/Trips/user-trips';
+    return this.http.get<UserTripsResponseModel>(url, { params: { take: take, skip: skip } })
   }
   getTripById(tripId: number): Observable<TripModel> {
     const url = 'https://localhost:6001/api/Trips/'
@@ -50,9 +50,7 @@ export class TripService {
   }
   SearchTrip(trip: SearchTripModel): Observable<TripsResponseModel> {
     const url = 'https://localhost:6001/api/Trips/search/'
-    return this.http.post<TripsResponseModel>(url, trip, {
-      headers: new HttpHeaders({ "Content-Type": "application/json" })
-    });
+    return this.http.post<TripsResponseModel>(url, trip);
   }
   addNewtrip(trip: AddTripModel): Observable<any> {
     const url = 'https://localhost:6001/api/Trips/'

@@ -1,6 +1,6 @@
 import { CarType } from "src/app/enums/car-type";
-import { CarDocuments } from "./car-documents";
-import { SeatModel } from "./seat";
+import { CarDocumentsModel } from "./car-documents-model";
+import { SeatModel } from "./seat-model";
 
 export interface CarUpdateModel {
     id: number;
@@ -10,5 +10,5 @@ export interface CarUpdateModel {
     carType: CarType;
     seats: Array<SeatModel>;
     techPassportFile: File[];
-    deletedDocuments: CarDocuments[];
+    deletedDocuments: CarDocumentsModel[];
 }

@@ -1,7 +1,7 @@
-import { CarModel } from "../car-interfaces/car";
-import { RoleModel } from "../role";
+import { CarModel } from "../car-interfaces/car-model";
+import { RoleModel } from "../role-model";
 import { TripModel } from "../trip-interfaces/trip-model";
-import { UserDocuments } from "./user-documents";
+import { UserDocumentsModel } from "./user-documents-model";
 import { UserStatus } from "./user-status";
 
 export interface UserModel {
@@ -11,7 +11,7 @@ export interface UserModel {
     phoneNumber: string;
     userImg?: string
     roles: any[];
-    userDocuments: UserDocuments[];
+    userDocuments: UserDocumentsModel[];
     userStatus: UserStatus;
     cars: CarModel[];
     trips?: TripModel[];

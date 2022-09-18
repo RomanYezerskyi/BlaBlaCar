@@ -1,5 +1,6 @@
 ﻿using BlaBlaCar.BL.DTOs.ChatDTOs;
 using BlaBlaCar.BL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,7 +8,8 @@ namespace BlaBlaCar.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ChatController : ControllerBase
+    [Authorize(Roles = Constants.AdminOrUser)]
+    public class ChatController : CustomBaseController
     {
         private readonly IChatService _chatService;
         public ChatController(IChatService chatService)
@@ -18,39 +20,34 @@ namespace BlaBlaCar.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUserChats()
         {
-            var chats = await _chatService.GetUserChatsAsync(User);
-            if (chats.Any()) return Ok(chats);
-            return BadRequest();
+            var chats = await _chatService.GetUserChatsAsync(UserId);
+            return Ok(chats);
         }
         [HttpGet("chat/{chatId}")]
         public async Task<IActionResult> GetChatById(Guid chatId)
         {
             var chat = await _chatService.GetChatByIdAsync(chatId);
-            if (chat != null) return Ok(chat);
-            return BadRequest();
+            return Ok(chat);
         }
-        [HttpPost("private/{userId}")]
+        [HttpGet("private/{userId}")]
         public async Task<IActionResult> GetPrivateChat(Guid userId)
         {
-            var chat = await _chatService.CreatePrivateChatAsync(userId, User);
-            if (chat != Guid.Empty) return Ok(chat);
-            return BadRequest();
+            var chat = await _chatService.CreatePrivateChatAsync(userId, UserId);
+            return Ok(chat);
         }
 
-        [HttpPost("read-messages")]
+        [HttpPut("read-messages")]
         public async Task<IActionResult> ReadChatMessages(IEnumerable<MessageDTO> messages)
         {
-            var result = await _chatService.ReadMessagesFromChat(messages, User);
-            if (result) return Ok(result);
-            return BadRequest();
+            var result = await _chatService.ReadMessagesFromChat(messages, UserId);
+            return NoContent();
         }
 
         [HttpPost("message")]
         public async Task<IActionResult> CreateMessageChat(CreateMessageDTO message)
         {
-            var res = await _chatService.CreateMessageAsync(message, User);
-            if (res) return Ok(res);
-            return BadRequest();
+            var res = await _chatService.CreateMessageAsync(message, UserId);
+            return NoContent();
         }
     }
 }

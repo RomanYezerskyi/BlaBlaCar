@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 import { ChatService } from 'src/app/services/chatservice/chat.service';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
@@ -15,25 +15,26 @@ import { UsersRequestsComponent } from '../users-requests/users-requests.compone
   styleUrls: ['./users-management.component.scss']
 })
 export class UsersManagementComponent implements OnInit, OnDestroy {
+  private unsubscribe$: Subject<void> = new Subject<void>();
   users: Array<UserModel> = [];
-  userId = '';
-  userData = '';
-  usersSubscription!: Subscription;
-
-  constructor(private userService: UserService, private sanitizeImgService: ImgSanitizerService,) { }
+  userId: string = '';
+  userData: string = '';
+  constructor(private userService: UserService, private sanitizeImgService: ImgSanitizerService) { }
 
   ngOnInit(): void {
   }
   ngOnDestroy(): void {
-    this.usersSubscription.unsubscribe();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
+
   sanitizeImg(img: string): SafeUrl {
     return this.sanitizeImgService.sanitiizeUserImg(img);
   }
 
-  searchUsers() {
+  searchUsers(): void {
     if (this.userData == '') return;
-    this.usersSubscription = this.userService.searchUsers(this.userData).subscribe(
+    this.userService.searchUsers(this.userData).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         console.log(response);
         this.users = response;
@@ -41,9 +42,7 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
   }
-
-
-  getUser(userId: string) {
+  getUser(userId: string): void {
     this.userId = userId;
   }
 }

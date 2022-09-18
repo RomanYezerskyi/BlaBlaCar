@@ -26,11 +26,11 @@
             <div class="seats_list" *ngIf="trip.carId == car.id">
               <div class="seat_item" *ngFor="let seat of car.seats">
                 <div class="btn seat booked" (click)="addSeat(seat.id)" *ngIf="!seat.isSelected; else elseBlock">
-                  <p>{{seat.num}} </p>
+                  <p>{{seat.seatNumber}} </p>
                 </div>
                 <ng-template #elseBlock>
                   <div class="btn seat" (click)="addSeat(seat.id)">
-                    <p>{{seat.num}} </p>
+                    <p>{{seat.seatNumber}} </p>
                   </div>
                 </ng-template>
               </div>

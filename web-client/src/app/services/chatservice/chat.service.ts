@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Chat } from 'src/app/interfaces/chat-interfaces/chat';
-import { RoleModel } from 'src/app/interfaces/role';
+import { ChatModel } from 'src/app/interfaces/chat-interfaces/chat-model';
+import { RoleModel } from 'src/app/interfaces/role-model';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
-import { Message } from 'src/app/interfaces/chat-interfaces/message';
+import { MessageModel } from 'src/app/interfaces/chat-interfaces/message-model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,24 +13,24 @@ export class ChatService {
 
   constructor(private http: HttpClient) { }
 
-  getUserChats(): Observable<Chat[]> {
+  getUserChats(): Observable<ChatModel[]> {
     const url = 'https://localhost:6001/api/Chat/';
-    return this.http.get<Chat[]>(url);
+    return this.http.get<ChatModel[]>(url);
   }
-  createPrivateChat(userId: string): Observable<string> {
+  GetPrivateChat(userId: string): Observable<string> {
     const url = 'https://localhost:6001/api/Chat/private/' + userId;
-    return this.http.post<string>(url, userId);
+    return this.http.get<string>(url);
   }
-  getChatById(chatId: string): Observable<Chat> {
+  getChatById(chatId: string): Observable<ChatModel> {
     const url = 'https://localhost:6001/api/Chat/chat/' + chatId;
-    return this.http.get<Chat>(url);
+    return this.http.get<ChatModel>(url);
   }
   createMessage(message: { text: string, chatId: string, user: UserModel }): Observable<any> {
     const url = 'https://localhost:6001/api/Chat/message';
     return this.http.post<any>(url, message);
   }
-  readMessagesInchat(messages: Message[]): Observable<any> {
+  readMessagesInchat(messages: MessageModel[]): Observable<any> {
     const url = 'https://localhost:6001/api/Chat/read-messages';
-    return this.http.post<any>(url, messages);
+    return this.http.put<any>(url, messages);
   }
 }
