@@ -71,19 +71,20 @@ a {
     }
 
 
-    // position: relative;
+    position: relative;
 
-    // .notifi__count {
-    //     position: absolute;
-    //     color: #fff;
-    //     font-size: 15px;
-    //     padding: 2px;
-    //     border-radius: 7px;
-    //     margin: 0;
-    //     background-color: rgb(197 49 49);
-    //     top: -7px;
-    //     left: -6px;
-    // }
+    .notifi__count {
+        position: absolute;
+        height: 15px;
+        width: 15px;
+        line-height: 15px;
+        text-align: center;
+        background: #ff4b5a;
+        color: #fff;
+
+        border-radius: 100%;
+        font-size: 12px;
+    }
 
 }
 
@@ -97,7 +98,7 @@ a {
     display: block;
     position: absolute;
     right: -1px;
-    bottom: -1px;
+    bottom: -10px;
 
 }
 
@@ -191,7 +192,7 @@ a {
 }
 
 .submenu {
-    display: block;
+    // display: block;
     margin: auto;
     position: absolute;
     width: 150px;
@@ -341,9 +342,6 @@ a {
     .user-profile-submenu::after {
         content: '';
         display: block;
-        // background-color: #000;
-        // width: 19px;
-        // height: 19px;
         border-bottom: 9px solid #fff;
         border-top: 9px solid transparent;
         border-left: 9px solid transparent;

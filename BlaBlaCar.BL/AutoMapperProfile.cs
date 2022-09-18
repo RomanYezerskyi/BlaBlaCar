@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using BlaBlaCar.BL.DTOs;
 using BlaBlaCar.BL.DTOs.AdminDTOs;
 using BlaBlaCar.BL.DTOs.BookTripDTOs;
 using BlaBlaCar.BL.DTOs.BookTripModels;
 using BlaBlaCar.BL.DTOs.CarDTOs;
 using BlaBlaCar.BL.DTOs.ChatDTOs;
+using BlaBlaCar.BL.DTOs.FeedbackDTOs;
 using BlaBlaCar.BL.DTOs.NotificationDTOs;
 using BlaBlaCar.BL.DTOs.TripDTOs;
 using BlaBlaCar.BL.DTOs.UserDTOs;
@@ -22,7 +22,9 @@ namespace BlaBlaCar.BL
         {
             CreateMap<ApplicationUser, UserDTO>().ReverseMap();
             CreateMap<UsersStatisticsDTO, ApplicationUser>().ReverseMap();
+
             CreateMap<FeedBack, FeedBackDTO>().ReverseMap();
+            CreateMap<CreateFeedbackDTO, FeedBackDTO>().ReverseMap();
 
             CreateMap<CreateTripDTO, TripDTO>().ReverseMap();
             CreateMap<Trip, TripDTO>().ReverseMap();

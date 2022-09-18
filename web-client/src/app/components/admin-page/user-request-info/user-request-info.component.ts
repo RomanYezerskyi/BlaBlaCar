@@ -39,8 +39,8 @@ export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
   constructor(private userService: UserService,
     private sanitizeImgService: ImgSanitizerService,
     private route: ActivatedRoute,
-    private http: HttpClient, private adminService: AdminService,
-    private dialog: MatDialog, private notificationsService: NotificationsService,) { }
+    private adminService: AdminService,
+    private dialog: MatDialog) { }
   @Input() userId = '';
   ngOnInit(): void {
     if (this.userId == '') {

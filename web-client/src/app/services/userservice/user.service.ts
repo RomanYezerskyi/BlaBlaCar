@@ -8,12 +8,17 @@ import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 export class UserService {
   public userProfile: UserModel = {} as UserModel;
   constructor(private http: HttpClient) {
-    this.getCurrentUser().subscribe(
-      response => {
-        this.userProfile = response;
-      },
-      (error: HttpErrorResponse) => { console.log(error.error); }
-    );
+
+    if (this.userProfile.id == undefined) {
+      this.getCurrentUser().subscribe(
+        response => {
+          // if (this.userProfile == {} as UserModel)
+          console.log("get user");
+          this.userProfile = response;
+        },
+        (error: HttpErrorResponse) => { console.log(error.error); }
+      );
+    }
   }
   async chekIfUserExist(): Promise<any> {
     const url = 'https://localhost:6001/api/User/user';

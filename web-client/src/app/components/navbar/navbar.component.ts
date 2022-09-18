@@ -25,7 +25,6 @@ export class NavbarComponent implements OnInit {
     public userService: UserService) { }
 
   ngOnInit(): void {
-
   }
   countNotify($event: number) {
     this.notifiNotReadCount = $event;

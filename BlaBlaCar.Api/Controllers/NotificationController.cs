@@ -1,4 +1,5 @@
-﻿using BlaBlaCar.BL.DTOs.NotificationDTOs;
+﻿using BlaBlaCar.BL.DTOs.FeedbackDTOs;
+using BlaBlaCar.BL.DTOs.NotificationDTOs;
 using BlaBlaCar.BL.Hubs;
 using BlaBlaCar.BL.Hubs.Interfaces;
 using BlaBlaCar.BL.Interfaces;
@@ -20,14 +21,23 @@ namespace BlaBlaCar.API.Controllers
             _hubContext = hubContext;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetUserNotifications()
+        [HttpGet("unread")]
+        public async Task<IActionResult> GetUserUnReadNotifications()
         {
             
-            var res = await _notificationService.GetUserNotificationsAsync(User);
+            var res = await _notificationService.GetUserUnreadNotificationsAsync(User);
             if (res.Any()) return Ok(res);
             return NoContent();
            
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetUserNotifications([FromQuery] int take, [FromQuery] int skip)
+        {
+
+            var res = await _notificationService.GetUserNotificationsAsync(User, take, skip);
+            if (res.Any()) return Ok(res);
+            return NoContent();
+
         }
         [HttpPost]
         public async Task<IActionResult> ReadUserNotifications(IEnumerable<NotificationsDTO> notifications)
@@ -62,6 +72,12 @@ namespace BlaBlaCar.API.Controllers
             if (res) return Ok();
             return BadRequest();
 
+        }
+        [HttpPost("feedback")]
+        public async Task<IActionResult> CreateFeedBack(CreateFeedbackDTO feedback)
+        {
+            await _notificationService.AddFeedBack(feedback, User);
+            return NoContent();
         }
     }
 }

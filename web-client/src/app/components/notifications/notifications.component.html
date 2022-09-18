@@ -4,12 +4,32 @@
         <button (click)="readNotifications()">Mark All as Read</button>
     </div>
     <div class="notification__list">
-        <div class="notification_data" *ngFor="let notif of notifications">
-            <div class="date">
-                <p *ngIf="notif.readNotificationStatus == 2" class="mark"></p>
-                <p>{{notif.createdAt | date:'MMM d, y, h:mm a'}}</p>
-            </div>
-            <p class="notif_text">{{notif.text}}</p>
+        <div class="no-nitifications-meesages" *ngIf=" notifications.length == 0">
+            <h4> You have no uread messages</h4>
         </div>
+        <div class="notification_data" *ngFor="let notif of notifications">
+
+            <p *ngIf="notif.readNotificationStatus == 2" class="mark"></p>
+            <div class="icon">
+                <i class="material-icons"
+                    *ngIf="notif.notificationStatus == notificationStatus.SpecificUser">local_post_office</i>
+                <i class="material-icons"
+                    *ngIf="notif.notificationStatus == notificationStatus.RequestForFeedBack">account_box</i>
+                <i class="material-icons" *ngIf="notif.notificationStatus == notificationStatus.Global">sms_failed</i>
+                <i class="material-icons" *ngIf="notif.notificationStatus == notificationStatus.FeedBack">comment</i>
+            </div>
+            <div class="date">
+                <p class="notif_text">{{notif.text}}</p>
+                <p class="time">{{notif.createdAt | date:'MMM d, y, h:mm a'}}</p>
+                <button class="btn-feedback" *ngIf="notif.notificationStatus == notificationStatus.RequestForFeedBack"
+                    (click)="AddFeedBackDialog(notif.feedBackOnUser!, notif.text)">
+                    <i class="material-icons">edit</i>
+                    <p>Add feedback</p>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="notification_dropdown__footer">
+        <button mat-button (click)="loadMore()">Load more</button>
     </div>
 </div>

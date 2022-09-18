@@ -55,16 +55,6 @@ export class UsersRequestsComponent implements OnInit {
       this.isFullListDisplayed = true;
     }
     this.Skip += this.Take;
-    // const url = 'https://localhost:6001/api/Admin/requests/'
-    // const user = await new Promise<UserModel[]>((resolve, reject) => {
-    //   this.http.get<UserModel[]>(url + status)
-    //     .subscribe({
-    //       next: (res: UserModel[]) => {
-    //         resolve(res), console.log(res);
-    //       },
-    //       error: (err: HttpErrorResponse) => { reject(err), console.error(err) }
-    //     });
-    // });
   }
   navigateToRequestInfo = (id: string) => {
     this.router.navigate(['admin/requests-info/', id])

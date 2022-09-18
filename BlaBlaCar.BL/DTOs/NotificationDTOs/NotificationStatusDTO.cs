@@ -4,6 +4,7 @@
     {
         Global = 1,
         SpecificUser = 2,
-        ForFeedBack = 3
+        RequestForFeedBack = 3,
+        FeedBack = 4
     }
 }

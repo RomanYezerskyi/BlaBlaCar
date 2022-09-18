@@ -65,6 +65,7 @@ import { EditCarModalDialogComponent } from './components/user/user-cars/edit-ca
 import { LightgalleryModule } from 'lightgallery/angular';
 import { ImagesGalleryComponent } from './components/images-gallery/images-gallery.component';
 import { AlertsComponent } from './components/alerts/alerts.component';
+import { UserService } from './services/userservice/user.service';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -146,7 +147,7 @@ export function tokenGetter() {
     MatProgressSpinnerModule,
     LightgalleryModule
   ],
-  providers: [AuthGuard, AdminGuard, PageAccessGuard, UserGuard],
+  providers: [AuthGuard, AdminGuard, PageAccessGuard, UserGuard, UserService],
   bootstrap: [AppComponent],
   entryComponents: [DialogBookingConfirmationComponent,
     CreateNotificationDialogComponent, EditModalDialogComponent, EditCarModalDialogComponent],
