@@ -20,12 +20,12 @@ namespace BlaBlaCar.BL.Services.TripServices
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ICarSeatsService _carSeatsService;
-        private readonly ISaveFileService _fileService;
+        private readonly IFileService _fileService;
         private readonly HostSettings _hostSettings;
         public CarService(IUnitOfWork unitOfWork,
             IMapper mapper,
             ICarSeatsService carSeatsService, 
-            ISaveFileService fileService,
+            IFileService fileService,
             IOptionsSnapshot<HostSettings> hostSettings)
         {
             _unitOfWork = unitOfWork;
@@ -42,7 +42,7 @@ namespace BlaBlaCar.BL.Services.TripServices
                         x.Include(s=>s.Seats)
                             .Include(x=>x.CarDocuments), 
                     x => x.UserId == currentUserId));
-            if (!userCars.Any()) throw new NoContentException();
+            if (!userCars.Any()) return null;
             userCars = userCars.Select(c =>
             {
                 c.CarDocuments = c.CarDocuments.Select(d =>
@@ -76,7 +76,7 @@ namespace BlaBlaCar.BL.Services.TripServices
             if (!carModel.TechPassportFile.Any()) throw new Exception("Problems with file");
 
             var newCar = _mapper.Map<CreateCarDTO, CarDTO>(carModel);
-            var files = await _fileService.GetFilesDbPathListAsync(carModel.TechPassportFile);
+            var files = await _fileService.GetFilesDbPathAsync(carModel.TechPassportFile);
 
             newCar.CarDocuments = files.Select(f => new CarDocumentDTO() { Car = newCar, TechnicalPassport = f }).ToList();
             newCar.CarStatus = DTOs.CarDTOs.CarStatus.Pending;
@@ -131,7 +131,7 @@ namespace BlaBlaCar.BL.Services.TripServices
 
             if (carModel.TechnicalPassportFile != null && carModel.TechnicalPassportFile.Any())
             {
-                var files = await _fileService.GetFilesDbPathListAsync(carModel.TechnicalPassportFile);
+                var files = await _fileService.GetFilesDbPathAsync(carModel.TechnicalPassportFile);
                 var doc  = files.Select(f => new CarDocumentDTO() { CarId = car.Id, TechnicalPassport = f }).ToList();
                 await _unitOfWork.CarDocuments.InsertRangeAsync(_mapper.Map<IEnumerable<CarDocuments>>(doc));
             }
@@ -156,7 +156,7 @@ namespace BlaBlaCar.BL.Services.TripServices
 
             var trips = await _unitOfWork.Trips.GetAsync(null,null,x => x.CarId == carId 
                 && x.StartTime > DateTimeOffset.Now || x.EndTime > DateTimeOffset.Now);
-            if (trips.Any()) throw new CarException("You need to complete trips with this car");
+            if (trips.Any()) throw new PermissionException("You need to complete trips with this car");
             
             _unitOfWork.Cars.Delete(car);
             return await _unitOfWork.SaveAsync(userId);

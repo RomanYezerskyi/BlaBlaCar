@@ -23,8 +23,8 @@ namespace BlaBlaCar.API.Controllers
             _adminService = adminService;
         }
 
-        [HttpGet("requests/{status}")]
-        public async Task<IActionResult> GetRequests([FromQuery] int take,[FromQuery] int skip, UserStatusDTO status)
+        [HttpGet("requests")]
+        public async Task<IActionResult> GetRequests([FromQuery] int take,[FromQuery] int skip,[FromQuery] UserStatusDTO status)
         {
             var res = await _adminService.GetRequestsAsync(take, skip, status);
             if (res.Users.Any()) return Ok(res);
@@ -46,10 +46,10 @@ namespace BlaBlaCar.API.Controllers
             return NoContent();
         }
 
-        [HttpGet("statistics/{searchDate}")]
-        public async Task<IActionResult> GetStatic(string searchDate)
+        [HttpGet("statistics")]
+        public async Task<IActionResult> GetStatic([FromQuery]string searchDate)
         {
-            var date = DateTimeOffset.Parse(searchDate);
+            DateTimeOffset.TryParse(searchDate, out var date);
             var res = await _adminService.GetStatisticsDataAsync(date);
             return Ok(res);
         }

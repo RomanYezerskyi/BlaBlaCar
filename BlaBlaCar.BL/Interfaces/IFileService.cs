@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Http;
 
 namespace BlaBlaCar.BL.Interfaces
 {
-    public interface ISaveFileService
+    public interface IFileService
     {
-        Task<List<string>> GetFilesDbPathListAsync(IEnumerable<IFormFile> collection);
-        Task<string> GetFilesDbPathListAsync(IFormFile file);
+        Task<List<string>> GetFilesDbPathAsync(IEnumerable<IFormFile> collection);
+        Task<string> GetFileDbPathAsync(IFormFile file);
         void DeleteFileFormApi(IEnumerable<string> files);
     }
 }

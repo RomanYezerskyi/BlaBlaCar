@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
@@ -11,11 +11,17 @@ export class ChatLayoutComponent implements OnInit {
   private token: string | null = localStorage.getItem("jwt");
   currentUserId: string = '';
   role: string = '';
-  constructor(private jwtHelper: JwtHelperService, private router: Router) {
+  isChatSelected: boolean = false;
+  constructor(private jwtHelper: JwtHelperService, private route: ActivatedRoute) {
     // this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['chatId']) {
+        this.isChatSelected = true;
+      }
+    });
     this.currentUserId = this.jwtHelper.decodeToken(this.token!).id;
     this.role = this.jwtHelper.decodeToken(this.token!).role;
   }

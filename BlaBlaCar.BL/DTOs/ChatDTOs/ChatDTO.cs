@@ -1,7 +1,4 @@
-﻿
-
-using BlaBlaCar.DAL.Entities.ChatEntities;
-namespace BlaBlaCar.BL.DTOs.ChatDTOs
+﻿namespace BlaBlaCar.BL.DTOs.ChatDTOs
 {
     
     public class ChatDTO:BaseDTO
@@ -10,7 +7,7 @@ namespace BlaBlaCar.BL.DTOs.ChatDTOs
         public string ChatImage { get; set; }
         public ICollection<MessageDTO> Messages { get; set; }
         public ICollection<ChatParticipantDTO> Users { get; set; }
-        public ChatDTOType Type { get; set; }
+        public ChatTypeDTO Type { get; set; }
 
     }
 }

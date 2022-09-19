@@ -14,7 +14,7 @@ namespace BlaBlaCar.BL.DTOs.FeedbackDTOs
         [Required]
         public string Text { get; set; }
         [Required]
-        public int Rate { get; set; }
+        public byte Rate { get; set; }
         [Required]
         public Guid UserId { get; set; }
     }

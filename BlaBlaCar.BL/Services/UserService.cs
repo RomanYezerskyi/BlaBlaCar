@@ -27,11 +27,11 @@ namespace BlaBlaCar.BL.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly ISaveFileService _fileService;
+        private readonly IFileService _fileService;
         private readonly HostSettings _hostSettings;
         private readonly IHttpContextAccessor _contextAccessor;
         public UserService(IUnitOfWork unitOfWork,
-            IMapper mapper, ISaveFileService fileService, IOptionsSnapshot<HostSettings> hostSettings, IHttpContextAccessor contextAccessor)
+            IMapper mapper, IFileService fileService, IOptionsSnapshot<HostSettings> hostSettings, IHttpContextAccessor contextAccessor)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -118,7 +118,7 @@ namespace BlaBlaCar.BL.Services
                     x=>x.FirstName.Contains(userNameOrEmail) || 
                        x.Email.Contains(userNameOrEmail) || x.PhoneNumber.Contains(userNameOrEmail))
                 );
-            if (!users.Any()) throw new NoContentException();
+            if (!users.Any()) return null;
             users = users.Select(u =>
             {
                 if (u.UserImg != null)
@@ -142,7 +142,7 @@ namespace BlaBlaCar.BL.Services
            
             if (drivingLicense.Any())
             {
-                var files = await _fileService.GetFilesDbPathListAsync(drivingLicense);
+                var files = await _fileService.GetFilesDbPathAsync(drivingLicense);
 
                userModel.UserDocuments = files.Select(f => new UserDocumentDTO() { User = userModel, DrivingLicense = f }).ToList();
 
@@ -197,7 +197,7 @@ namespace BlaBlaCar.BL.Services
             var user = _mapper.Map<UserDTO>(
                 await _unitOfWork.Users.GetAsync(null, x => x.Id == currentUserId));
 
-            var img = await _fileService.GetFilesDbPathListAsync(userImg);
+            var img = await _fileService.GetFileDbPathAsync(userImg);
 
             user.UserImg = img;
             

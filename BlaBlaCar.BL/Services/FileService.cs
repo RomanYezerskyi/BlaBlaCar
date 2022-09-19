@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Http;
 
 namespace BlaBlaCar.BL.Services
 {
-    public class SaveFileToApiService: ISaveFileService
+    public class FileService: IFileService
     {
-        public async Task<List<string>> GetFilesDbPathListAsync(IEnumerable<IFormFile> collection)
+        public async Task<List<string>> GetFilesDbPathAsync(IEnumerable<IFormFile> collection)
         {
             List<string> files = new List<string>();
             foreach (var file in collection)
@@ -21,7 +21,7 @@ namespace BlaBlaCar.BL.Services
             }
             return files;
         }
-        public async Task<string> GetFilesDbPathListAsync(IFormFile file)
+        public async Task<string> GetFileDbPathAsync(IFormFile file)
         {
             return await SaveFileToApi(file);
         }

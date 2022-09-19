@@ -22,7 +22,14 @@ namespace BlaBlaCar.API.Controllers
         {
             _userService = userService;
         }
-        [HttpGet("user")]
+        [HttpGet]
+        public async Task<IActionResult> GerUserInformation()
+        {
+
+            var res = await _userService.GetUserInformationAsync(UserId);
+            return Ok(res);
+        }
+        [HttpGet("add-user")]
         public async Task<IActionResult> AddUserToApi()
         {
 
@@ -37,13 +44,7 @@ namespace BlaBlaCar.API.Controllers
             var res = await _userService.RequestForDrivingLicense(UserId, fileToUpload);
            return Ok();
         }
-        [HttpGet]
-        public async Task<IActionResult> GerUserInformation()
-        {
-            
-            var res = await _userService.GetUserInformationAsync(UserId);
-            return Ok(res);
-        }
+       
         [Authorize(Roles = Constants.AdminRole)]
         [HttpGet("users/{userNameOrEmail}")]
         public async Task<IActionResult> SearchUsersInformation(string userNameOrEmail)

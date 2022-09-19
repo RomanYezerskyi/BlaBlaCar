@@ -14,6 +14,7 @@ namespace BlaBlaCar.BL.Interfaces
         Task<IEnumerable<ChatDTO>> GetUserChatsAsync(Guid currentUserId);
         Task<bool> CreateMessageAsync(CreateMessageDTO messageModel, Guid currentUserId);
         Task<ChatDTO> GetChatByIdAsync(Guid chatId);
+        Task<IEnumerable<MessageDTO>> GetChatMessages(Guid chatId, int take, int skip);
         Task<bool> ReadMessagesFromChat(IEnumerable<MessageDTO> messages, Guid currentUserId);
     }
 }

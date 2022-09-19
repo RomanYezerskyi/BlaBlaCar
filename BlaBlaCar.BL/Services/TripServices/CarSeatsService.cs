@@ -6,9 +6,6 @@ namespace BlaBlaCar.BL.Services.TripServices
 {
     public class CarSeatsService : ICarSeatsService
     {
-        public CarSeatsService()
-        {
-        }
         public CarDTO AddSeatsToCarAsync(CarDTO carModel, int count)
         {
             carModel.Seats = new List<SeatDTO>();

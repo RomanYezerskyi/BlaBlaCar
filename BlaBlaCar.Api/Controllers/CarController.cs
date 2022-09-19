@@ -42,7 +42,7 @@ namespace BlaBlaCar.Api.Controllers
             await _carService.AddCarAsync(carModel, UserId);
             return NoContent();
         }
-        [HttpPut("update-car")]
+        [HttpPut]
         public async Task<IActionResult> UpdateCar([FromForm] UpdateCarDTO carModel)
         {
             var res = await _carService.UpdateCarAsync(carModel, UserId);

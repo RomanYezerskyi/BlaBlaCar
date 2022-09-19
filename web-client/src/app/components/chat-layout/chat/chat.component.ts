@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, Subscription, takeUntil } from 'rxjs';
@@ -18,9 +18,13 @@ import { SignalRService } from 'src/app/services/signalr-services/signalr.servic
 })
 export class ChatComponent implements OnInit, OnDestroy {
   @Input() currentUserId: string = '';
+  @ViewChild('scrollMe') private myScrollContainer!: ElementRef;
   private unsubscribe$: Subject<void> = new Subject<void>();
-  chat: ChatModel = {} as ChatModel;
+  chat: ChatModel = { messages: [] = [], users: [] = [] };
   text: string = '';
+  private messagesSkip: number = 0;
+  private messagesTake: number = 10;
+  isFullListDisplayed: boolean = false;
   constructor(private route: ActivatedRoute,
     private chatService: ChatService,
     private sanitizeImgService: ImgSanitizerService,
@@ -29,7 +33,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe(params => {
       if (params['chatId']) {
         this.chat.id = params['chatId'];
-
       }
     });
     this.setSignalRUrls();
@@ -43,6 +46,13 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.connectToSignalRChatHub();
     }
   }
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+  scroll(): void {
+    console.log("ccc");
+  }
   connectToSignalRChatHub(): void {
     this.signal.getDataStream<MessageModel>().pipe(takeUntil(this.unsubscribe$)).subscribe(message => {
       this.readMessages(message.data);
@@ -53,14 +63,9 @@ export class ChatComponent implements OnInit, OnDestroy {
   setSignalRUrls(): void {
     this.signal.setConnectionUrl = "https://localhost:6001/chatHub";
     this.signal.setHubMethod = "joinToChat";
-    this.signal.setHubMethodParams = this.chat.id;
+    this.signal.setHubMethodParams = this.chat.id!;
     this.signal.setHandlerMethod = "BroadcastChatMessage";
   }
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
-
   getUnreadMessageIndex(): number {
     return this.chat.messages?.findIndex(x => x.status == MessageStatus.Unread)!;
   }
@@ -81,9 +86,24 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.chatService.getChatById(this.chat.id!).pipe(takeUntil(this.unsubscribe$)).subscribe(response => {
       this.chat = response;
       console.log(response);
-      this.readMessages(null);
+      this.getChatMessages()
     },
       (error: HttpErrorResponse) => { console.error(error.error); });
+  }
+  getChatMessages() {
+    this.chatService.getChatMessages(this.chat.id!, this.messagesTake, this.messagesSkip)
+      .pipe(takeUntil(this.unsubscribe$)).subscribe(response => {
+        if (response != null) {
+          response.forEach(m => {
+            m.user = this.chat.users?.find(x => x.userId == m.userId)?.user!;
+          });
+          console.log(response);
+          this.chat.messages = this.chat.messages!.concat(response);
+          this.readMessages(null);
+
+        }
+      },
+        (error: HttpErrorResponse) => { console.error(error.error); });
   }
   sanitizeImg(img: string): SafeUrl {
     return this.sanitizeImgService.sanitiizeUserImg(img);

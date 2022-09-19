@@ -27,8 +27,8 @@ export class AdminService {
       });
   }
   getStatistics(searchDate: string): Observable<AdminStatisticsModel> {
-    const url = 'https://localhost:6001/api/Admin/statistics/' + searchDate;
-    return this.http.get<AdminStatisticsModel>(url);
+    const url = 'https://localhost:6001/api/Admin/statistics';
+    return this.http.get<AdminStatisticsModel>(url, { params: { searchDate: searchDate } });
   }
   //
   getRoles(): Observable<RoleModel[]> {
@@ -48,8 +48,8 @@ export class AdminService {
     return this.http.get<UserModel>(url + email);
   }
   getUserRequests(status: UserStatus, take: number, skip: number): Observable<UserRequestResponseModel> {
-    const url = 'https://localhost:6001/api/Admin/requests/' + status;
-    return this.http.get<UserRequestResponseModel>(url, { params: { take: take, skip: skip } });
+    const url = 'https://localhost:6001/api/Admin/requests';
+    return this.http.get<UserRequestResponseModel>(url, { params: { take: take, skip: skip, status: status } });
   }
 
   changeUserDrivingLicenseStatus(newStatus: { status: UserStatus, userId: string }): Observable<any> {

@@ -23,7 +23,7 @@ namespace BlaBlaCar.API.Controllers
             var chats = await _chatService.GetUserChatsAsync(UserId);
             return Ok(chats);
         }
-        [HttpGet("chat/{chatId}")]
+        [HttpGet("{chatId}")]
         public async Task<IActionResult> GetChatById(Guid chatId)
         {
             var chat = await _chatService.GetChatByIdAsync(chatId);
@@ -33,6 +33,13 @@ namespace BlaBlaCar.API.Controllers
         public async Task<IActionResult> GetPrivateChat(Guid userId)
         {
             var chat = await _chatService.CreatePrivateChatAsync(userId, UserId);
+            return Ok(chat);
+        }
+
+        [HttpGet("chat-messages/{chatId}")]
+        public async Task<IActionResult> GetChatMessages([FromRoute]Guid chatId,[FromQuery] int take,[FromQuery] int skip)
+        {
+            var chat = await _chatService.GetChatMessages(chatId, take, skip);
             return Ok(chat);
         }
 
