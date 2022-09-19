@@ -19,11 +19,20 @@ export class SignalRService {
   public handlerMethod: string = '';
 
   constructor() {
-    // super();
     console.log(this.url);
     this._signalEvent = new Subject<any>();
-    // this._isInitializing = true;
-    // this._initializeSignalR();
+  }
+  set setConnectionUrl(url: string) {
+    this.url = url;
+  }
+  set setHubMethod(hubMethod: string) {
+    this.hubMethod = hubMethod;
+  }
+  set setHubMethodParams(hubMethodParams: string) {
+    this.hubMethodParams = hubMethodParams;
+  }
+  set setHandlerMethod(handlerMethod: string) {
+    this.handlerMethod = handlerMethod;
   }
   getDataStream<TData>(): Observable<SignalEvent<TData>> {
     console.log(this.hubMethod);
@@ -60,11 +69,9 @@ export class SignalRService {
   }
   private _setupSignalREvents<TData>() {
     this._hubConnection.on(this.handlerMethod, (data) => {
-      // map or transform your data as appropriate here:
       this._onMessage<TData>({ data })
     })
     // this._hubConnection.on('MessageNumberArray', (data) => {
-    //   // map or transform your data as appropriate here:
     //   const { numbers } = data;
     //   this._onMessage({ type: SignalEventType.EVENT_TWO, data: numbers })
     // })

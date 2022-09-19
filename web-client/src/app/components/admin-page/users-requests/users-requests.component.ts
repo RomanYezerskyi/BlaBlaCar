@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { CarStatus } from 'src/app/interfaces/car-interfaces/car-status';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 import { UserRequestResponseModel } from 'src/app/interfaces/user-interfaces/user-request-response-model';
@@ -12,41 +13,44 @@ import { AdminService } from 'src/app/services/admin/admin.service';
   templateUrl: './users-requests.component.html',
   styleUrls: ['./users-requests.component.scss']
 })
-export class UsersRequestsComponent implements OnInit {
-  requestsId = 0;
-  requests: UserRequestResponseModel = {
-    users: [] = [],
-    totalRequests: 0
-  };
+export class UsersRequestsComponent implements OnInit, OnDestroy {
+  private unsubscribe$: Subject<void> = new Subject<void>();
+  requestsId: number = 0;
+  requests: UserRequestResponseModel = { users: [] = [], totalRequests: 0 };
   userStatus = UserStatus;
   carStatus = CarStatus;
-  totalRequests = 0;
+  totalRequests: number = 0;
   private Skip: number = 0;
   private Take: number = 5;
-  public isFullListDisplayed: boolean = false;
-  constructor(private http: HttpClient,
+  isFullListDisplayed: boolean = false;
+  constructor(
     private router: Router,
     private route: ActivatedRoute,
     private adminService: AdminService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
-  async ngOnInit() {
+  ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.requestsId = params['id'];
     });
     this.getRequests();
   }
-  public getRequests() {
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  public getRequests(): void {
     if (this.Skip <= this.totalRequests) {
-      this.adminService.getUserRequests(this.requestsId, this.Take, this.Skip).pipe().subscribe(
+      this.adminService.getUserRequests(this.requestsId, this.Take, this.Skip).subscribe(
         response => {
+          console.log(response);
           if (response != null) {
             this.requests.users = this.requests.users.concat(response.users);
-            console.log(response);
+
             if (this.totalRequests == 0)
               this.totalRequests = response.totalRequests!;
           }
-
         },
         (error: HttpErrorResponse) => { console.error(error.error); }
       );
@@ -56,7 +60,7 @@ export class UsersRequestsComponent implements OnInit {
     }
     this.Skip += this.Take;
   }
-  navigateToRequestInfo = (id: string) => {
+  navigateToRequestInfo(id: string): void {
     this.router.navigate(['admin/requests-info/', id])
   }
 }

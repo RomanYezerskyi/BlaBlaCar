@@ -47,6 +47,9 @@ namespace BlaBlaCar.BL.ExceptionHandler
                 case CarException:
                     code = HttpStatusCode.BadRequest;
                     break;
+                case NoContentException:
+                    code = HttpStatusCode.NoContent;
+                    break;
                 default:
                     code = HttpStatusCode.InternalServerError;
                     break;

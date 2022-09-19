@@ -1,30 +1,25 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { TripsResponseModel } from 'src/app/interfaces/trip-interfaces/trips-response-model';
 import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
 import { TripUserModel } from 'src/app/interfaces/trip-interfaces/trip-user-model';
-import { UserTrips, UserTripsResponse } from 'src/app/interfaces/user-interfaces/user-trips';
+import { UserTrips, UserTripsResponseModel } from 'src/app/interfaces/user-interfaces/user-trips-response-model';
 import { TripService } from 'src/app/services/tripservice/trip.service';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-user-trips',
   templateUrl: './user-trips.component.html',
   styleUrls: ['./user-trips.component.scss']
 })
-export class UserTripsComponent implements OnInit {
-  // trips: UserTrips = {
-  //   trips: [],
-  //   totalTrips: 0
-  // }
-  trips: UserTripsResponse = {
-    trips: [] = [],
-    totalTrips: 0
-  }
+export class UserTripsComponent implements OnInit, OnDestroy {
+  private unsubscribe$: Subject<void> = new Subject<void>();
+  trips: UserTripsResponseModel = {} as UserTripsResponseModel;
   public isFullListDisplayed: boolean = false;
-  totalTrips = 0;
+  totalTrips: number = 0;
   private Skip: number = 0;
   private Take: number = 5;
   constructor(
@@ -34,17 +29,19 @@ export class UserTripsComponent implements OnInit {
   ngOnInit(): void {
     this.getUserTrips();
   }
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   sanitizeUserImg(img: string): SafeUrl {
     return this.imgSanitaze.sanitiizeUserImg(img);
   }
-  onScroll() {
-
-  }
-  getUserTrips = () => {
+  getUserTrips(): void {
 
     console.log(this.Skip);
     if (this.Skip <= this.totalTrips) {
-      this.tripService.getUserTrips(this.Take, this.Skip).pipe().subscribe(
+      this.tripService.getUserTrips(this.Take, this.Skip).pipe(takeUntil(this.unsubscribe$)).subscribe(
         response => {
           if (response != null) {
             this.trips.trips = this.trips.trips.concat(response.trips);
@@ -60,56 +57,26 @@ export class UserTripsComponent implements OnInit {
       this.isFullListDisplayed = true;
     }
     this.Skip += this.Take;
-    // const url = 'https://localhost:6001/api/Trips/user-trips';
-    // this.http.get(url)
-    //   .subscribe({
-    //     next: (res: any) => {
-    //       this.trips = res as TripModel[];
-    //       // console.log(this.trips);
-    //       console.log(res);
-    //     },
-    //     error: (err: HttpErrorResponse) => console.error(err),
-    //   });
   }
-  deleteUserFromTrip = (userId: string, tripId: number) => {
+  deleteUserFromTrip(userId: string, tripId: number): void {
     let tripUser = {
       userId: userId,
       tripId: tripId
     };
-    this.tripService.deleteUserFromTrip(tripUser).pipe().subscribe(
+    this.tripService.deleteUserFromTrip(tripUser).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         this.ngOnInit();
       },
       (error: HttpErrorResponse) => { console.log(error.error); }
     );
-    // this.http.delete(url, { body: tripUser })
-    //   .subscribe({
-    //     next: (res: any) => {
-    //       console.log(res);
-    //       this.getUserTrips();
-    //     },
-    //     error: (err: HttpErrorResponse) => console.error(err),
-    //   });
   }
 
-  deleteTrip = (id: number) => {
+  deleteTrip(id: number): void {
     this.tripService.deleteTrip(id).pipe().subscribe(
       response => {
         this.ngOnInit();
       },
       (error: HttpErrorResponse) => { console.log(error.error); }
     );
-    // const url = 'https://localhost:6001/api/Trips/trip/';
-    // this.http.delete(url + id)
-    //   .subscribe({
-    //     next: (res: any) => {
-    //       console.log(res);
-    //       this.getUserTrips();
-    //     },
-    //     error: (err: HttpErrorResponse) => console.error(err),
-    //   });
   }
-
-
-
 }

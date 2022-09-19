@@ -3,11 +3,11 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, Subscription, takeUntil } from 'rxjs';
-import { Chat } from 'src/app/interfaces/chat-interfaces/chat';
+import { ChatModel } from 'src/app/interfaces/chat-interfaces/chat-model';
 import { ChatService } from 'src/app/services/chatservice/chat.service';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
 import { MessageStatus } from 'src/app/enums/message-status';
-import { Message } from 'src/app/interfaces/chat-interfaces/message';
+import { MessageModel } from 'src/app/interfaces/chat-interfaces/message-model';
 import { SignalRService } from 'src/app/services/signalr-services/signalr.service';
 
 @Component({
@@ -17,15 +17,10 @@ import { SignalRService } from 'src/app/services/signalr-services/signalr.servic
   providers: [SignalRService]
 })
 export class ChatComponent implements OnInit, OnDestroy {
-  @Input() currentUserId = '';
-
-  chatSubscription!: Subscription;
-  messageSubscription!: Subscription;
-  chat: Chat = {} as Chat;
-  text = '';
-
+  @Input() currentUserId: string = '';
   private unsubscribe$: Subject<void> = new Subject<void>();
-
+  chat: ChatModel = {} as ChatModel;
+  text: string = '';
   constructor(private route: ActivatedRoute,
     private chatService: ChatService,
     private sanitizeImgService: ImgSanitizerService,
@@ -37,40 +32,46 @@ export class ChatComponent implements OnInit, OnDestroy {
 
       }
     });
-    this.signal.url = "https://localhost:6001/chatHub";
-    this.signal.hubMethod = "joinToChat";
-    this.signal.hubMethodParams = this.chat.id;
-    this.signal.handlerMethod = "BroadcastChatMessage";
-    // this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.setSignalRUrls();
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
   ngOnInit(): void {
-
-    if (this.chat.id != '') {
+    console.log(this.chat.id)
+    if (this.chat.id != undefined) {
       this.getChat();
-
-      this.signal.getDataStream<Message>().subscribe(message => {
-        // console.log(message.data);
-        this.chat.messages?.push(message.data)
-      });
-
+      this.connectToSignalRChatHub();
     }
   }
-
+  connectToSignalRChatHub(): void {
+    this.signal.getDataStream<MessageModel>().pipe(takeUntil(this.unsubscribe$)).subscribe(message => {
+      this.readMessages(message.data);
+      message.data.status = MessageStatus.Read;
+      this.chat.messages?.push(message.data)
+    });
+  }
+  setSignalRUrls(): void {
+    this.signal.setConnectionUrl = "https://localhost:6001/chatHub";
+    this.signal.setHubMethod = "joinToChat";
+    this.signal.setHubMethodParams = this.chat.id;
+    this.signal.setHandlerMethod = "BroadcastChatMessage";
+  }
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-
-    if (this.chatSubscription != undefined)
-      this.chatSubscription.unsubscribe();
   }
 
   getUnreadMessageIndex(): number {
     return this.chat.messages?.findIndex(x => x.status == MessageStatus.Unread)!;
   }
-  readMessages(): void {
-    let messages = this.chat.messages?.filter(x => x.status == MessageStatus.Unread);
-    console.log(messages);
+  readMessages(unreadMessage: MessageModel | null): void {
+    let messages: MessageModel[] = [];
+    if (unreadMessage == null)
+      messages = this.chat.messages?.filter(x => x.status == MessageStatus.Unread)!;
+    else
+      messages!.push(unreadMessage!);
+    console.log(messages!);
+    if (messages.length == 0) return;
     this.chatService.readMessagesInchat(messages!).pipe(takeUntil(this.unsubscribe$)).subscribe(response => {
       console.log(response);
     },
@@ -80,19 +81,19 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.chatService.getChatById(this.chat.id!).pipe(takeUntil(this.unsubscribe$)).subscribe(response => {
       this.chat = response;
       console.log(response);
-      this.readMessages();
+      this.readMessages(null);
     },
       (error: HttpErrorResponse) => { console.error(error.error); });
   }
   sanitizeImg(img: string): SafeUrl {
     return this.sanitizeImgService.sanitiizeUserImg(img);
   }
-  sendMessage() {
+  sendMessage(): void {
     if (this.text == '') return;
     const user = this.chat.users?.find(x => x.userId == this.currentUserId)?.user;
     const message = { text: this.text, chatId: this.chat.id!, user: user! };
     console.log(message);
-    this.messageSubscription = this.chatService.createMessage(message).subscribe(
+    this.chatService.createMessage(message).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         console.log(response);
       },

@@ -8,13 +8,13 @@
       <div class="seats_list">
         <div *ngFor="let item of  trip.car.seats" class="seat_item">
           <button class="btn seat booked" disabled *ngIf="cheackSeat(item); else elseItem">
-            {{item.num}}
+            {{item.seatNumber}}
           </button>
           <ng-template #elseItem>
             <button class="btn seat" (click)="bookSeat(item.id)"
-              *ngIf="!item.isSelected; else elseSeat">{{item.num}}</button>
+              *ngIf="!item.isSelected; else elseSeat">{{item.seatNumber}}</button>
             <ng-template #elseSeat>
-              <button class="btn seat seat_selected" (click)="bookSeat(item.id)">{{item.num}}</button>
+              <button class="btn seat seat_selected" (click)="bookSeat(item.id)">{{item.seatNumber}}</button>
             </ng-template>
           </ng-template>
         </div>

@@ -13,13 +13,8 @@ export class AlertsComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  showError(message: string) {
+  showError(message: string): void {
     this.errorMessages.push(message);
     let myTimer = setTimeout(() => { this.errorMessages.shift(); }, 2000);
   }
-  // show(message: string) {
-  //   this.errorMessages.push(message);
-  //   let myTimer = setTimeout(() => { this.errorMessages.shift(); }, 2000);
-  // }
-
 }

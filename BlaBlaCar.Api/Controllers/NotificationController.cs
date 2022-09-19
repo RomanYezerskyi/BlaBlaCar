@@ -3,80 +3,69 @@ using BlaBlaCar.BL.DTOs.NotificationDTOs;
 using BlaBlaCar.BL.Hubs;
 using BlaBlaCar.BL.Hubs.Interfaces;
 using BlaBlaCar.BL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using System.Data;
 
 namespace BlaBlaCar.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class NotificationController : ControllerBase
+    [Authorize(Roles = Constants.AdminOrUser)]
+    public class NotificationController : CustomBaseController
     {
         private readonly INotificationService _notificationService;
-        private readonly IHubContext<NotificationHub, INotificationsHubClient> _hubContext;
-        public NotificationController(INotificationService notificationService, IHubContext<NotificationHub, INotificationsHubClient> hubContext)
+        public NotificationController(INotificationService notificationService)
         {
             _notificationService = notificationService;
-            _hubContext = hubContext;
         }
 
         [HttpGet("unread")]
         public async Task<IActionResult> GetUserUnReadNotifications()
         {
             
-            var res = await _notificationService.GetUserUnreadNotificationsAsync(User);
-            if (res.Any()) return Ok(res);
-            return NoContent();
-           
+            var res = await _notificationService.GetUserUnreadNotificationsAsync(UserId);
+            return Ok(res);
         }
         [HttpGet]
         public async Task<IActionResult> GetUserNotifications([FromQuery] int take, [FromQuery] int skip)
         {
 
-            var res = await _notificationService.GetUserNotificationsAsync(User, take, skip);
-            if (res.Any()) return Ok(res);
-            return NoContent();
-
+            var res = await _notificationService.GetUserNotificationsAsync(take, skip, UserId);
+            return Ok(res);
         }
         [HttpPost]
         public async Task<IActionResult> ReadUserNotifications(IEnumerable<NotificationsDTO> notifications)
         {
-            var res = await _notificationService.ReadAllNotificationAsync(notifications, User);
-            if (res) return Ok();
-            return BadRequest();
-            
+            var res = await _notificationService.ReadAllNotificationAsync(notifications, UserId);
+            return NoContent();
         }
-        [HttpGet("global/{take}/{skip}/")]
-        public async Task<IActionResult> GetGlobalNotifications(int take, int skip)
+        [HttpGet("global")]
+        public async Task<IActionResult> GetGlobalNotifications([FromQuery] int take,[FromQuery] int skip)
         {
 
-            var res = await _notificationService.GetGlobalNotificationsAsync(take,skip);
-            if (res.Any()) return Ok(res);
-            return NoContent();
-
+            var res = await _notificationService.GetGlobalNotificationsAsync(take,skip); 
+            return Ok(res);
         }
-        [HttpGet("users/{take}/{skip}/")]
-        public async Task<IActionResult> GetUsersNotifications(int take, int skip)
+        [HttpGet("users")]
+        public async Task<IActionResult> GetUsersNotifications([FromQuery]int take,[FromQuery] int skip)
         {
 
             var res = await _notificationService.GetUsersNotificationsAsync(take, skip);
-            if (res.Any()) return Ok(res);
-            return NoContent();
-
+            return Ok(res);
         }
         [HttpPost("create")]
         public async Task<IActionResult> CreateNotification(CreateNotificationDTO notification)
         {
-            var res = await _notificationService.CreateNotificationAsync(notification, User);
-            if (res) return Ok();
-            return BadRequest();
-
+            var res = await _notificationService.CreateNotificationAsync(notification, UserId);
+            return NoContent();
         }
         [HttpPost("feedback")]
         public async Task<IActionResult> CreateFeedBack(CreateFeedbackDTO feedback)
         {
-            await _notificationService.AddFeedBack(feedback, User);
+            await _notificationService.AddFeedBack(feedback, UserId);
             return NoContent();
         }
     }

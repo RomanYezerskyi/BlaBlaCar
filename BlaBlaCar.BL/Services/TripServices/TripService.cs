@@ -11,7 +11,6 @@ using Microsoft.Extensions.Options;
 using BlaBlaCar.DAL.Entities.TripEntities;
 using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.BL.Exceptions;
-using BlaBlaCar.BL.ViewModels.AdminViewModels;
 using Hangfire;
 
 namespace BlaBlaCar.BL.Services.TripServices
@@ -20,28 +19,24 @@ namespace BlaBlaCar.BL.Services.TripServices
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IUserService _userService;
         private readonly HostSettings _hostSettings;
         private readonly INotificationService _notificationService;
         private readonly IBackgroundJobClient _backgroundJobs;
         public TripService(
             IUnitOfWork unitOfWork,
             IMapper mapper,
-            IUserService userService, 
             IOptionsSnapshot<HostSettings> hostSettings, 
             INotificationService notificationService, 
             IBackgroundJobClient backgroundJobs)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _userService = userService;
             _notificationService = notificationService;
             _backgroundJobs = backgroundJobs;
             _hostSettings = hostSettings.Value;
         }
-        public async Task<TripDTO> GetTripAsync(Guid id, ClaimsPrincipal principal)
+        public async Task<TripDTO> GetTripAsync(Guid id, Guid currentUserId)
         {
-            var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
             var usersBookedTrip = await _unitOfWork.TripUser
                 .GetAsync(null, null, x => x.TripId == id);
             var trip = _mapper.Map<Trip, TripDTO>(await _unitOfWork.Trips.GetAsync(
@@ -51,7 +46,7 @@ namespace BlaBlaCar.BL.Services.TripServices
                                                                         .Include(x=>x.Car)
                                                                         .ThenInclude(x => x.Seats)
                                                                         .Include(
-                                                                            x=>x.TripUsers.Where(x=>x.UserId == userId)),
+                                                                            x=>x.TripUsers.Where(x=>x.UserId == currentUserId)),
                                                                     x => x.Id == id));
             if (trip is null)
                 throw new NotFoundException("Trip");
@@ -69,35 +64,34 @@ namespace BlaBlaCar.BL.Services.TripServices
             if (trip.Car != null)
                 trip.Car.CarDocuments = trip.Car.CarDocuments.Select(c =>
                 {
-                    c.TechPassport = _hostSettings.CurrentHost + c.TechPassport;
+                    c.TechnicalPassport = _hostSettings.CurrentHost + c.TechnicalPassport;
                     return c;
                 }).ToList();
 
-            if (trip.UserId == userId) trip.UserPermission = UserPermission.Owner;
+            if (trip.UserId == currentUserId) trip.UserPermission = UserPermission.Owner;
             else if(trip.TripUsers != null 
-                    && trip.TripUsers.Any(u=>u.UserId == userId)) trip.UserPermission = UserPermission.СanSeeTheOwnersData;
+                    && trip.TripUsers.Any(u=>u.UserId == currentUserId)) trip.UserPermission = UserPermission.СanSeeTheOwnersData;
             else trip.UserPermission = UserPermission.OnlyBook;
             return trip;
 
         }
 
-        public async Task<UserTripsViewModel> GetUserTripsAsync(int take, int skip,
-            ClaimsPrincipal principal)
+        public async Task<UserTripsDTO> GetUserTripsAsync(int take, int skip,
+            Guid currentUserId)
         {
-            var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
             var trips = _mapper.Map<IEnumerable<TripDTO>>
                 (await _unitOfWork.Trips.GetAsync(orderBy:null, 
                     includes:x=>x.Include(i=>i.Car)
                         .Include(x=>x.AvailableSeats)
                         .Include(i=>i.TripUsers).ThenInclude(i=>i.User)
                         .Include(i => i.TripUsers).ThenInclude(x=>x.Seat), 
-                    filter:x=>x.UserId == userId, 
+                    filter:x=>x.UserId == currentUserId, 
                     take: take,
                     skip: skip));
 
-            if (!trips.Any()) throw new NotFoundException(nameof(UserDTO));
+            if (!trips.Any()) throw new NoContentException();
 
-            var tripsCount =await _unitOfWork.Trips.GetCountAsync(x=>x.UserId == userId);
+            var tripsCount =await _unitOfWork.Trips.GetCountAsync(x=>x.UserId == currentUserId);
 
             trips = trips.Select(t =>
             {
@@ -105,8 +99,8 @@ namespace BlaBlaCar.BL.Services.TripServices
                 {
                     t.Car.CarDocuments = t.Car.CarDocuments.Select(c =>
                     {
-                        if (c.TechPassport != null)
-                            c.TechPassport = _hostSettings.CurrentHost + c.TechPassport;
+                        if (c.TechnicalPassport != null)
+                            c.TechnicalPassport = _hostSettings.CurrentHost + c.TechnicalPassport;
                         return c;
                     }).ToList();
                 }
@@ -145,7 +139,7 @@ namespace BlaBlaCar.BL.Services.TripServices
                 return trip;
             });
 
-            var result = new UserTripsViewModel() { Trips = groupedList, TotalTrips = tripsCount };
+            var result = new UserTripsDTO() { Trips = groupedList, TotalTrips = tripsCount };
             return result;
         }
        
@@ -181,6 +175,8 @@ namespace BlaBlaCar.BL.Services.TripServices
                 skip: model.Skip,
                 take: model.Take);
 
+            if (!trips.Any()) throw new NoContentException();
+
             trips = trips.Select(t =>
             {
                 if(t.User.UserImg != null)
@@ -199,17 +195,15 @@ namespace BlaBlaCar.BL.Services.TripServices
             return result;
         }
 
-        public async Task<bool> AddTripAsync(CreateTripDTO newTripModel, ClaimsPrincipal principal)
+        public async Task<bool> AddTripAsync(CreateTripDTO newTripModel, Guid currentUserId)
         {
-            var userId = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
-
             var tripModel = _mapper.Map<CreateTripDTO, TripDTO>(newTripModel);
-            tripModel.UserId = userId;
+            tripModel.UserId = currentUserId;
 
             var trip = _mapper.Map<TripDTO, Trip>(tripModel);
 
             await _unitOfWork.Trips.InsertAsync(trip);
-            var res =  await _unitOfWork.SaveAsync(userId);
+            var res =  await _unitOfWork.SaveAsync(currentUserId);
             if (res)
                 _backgroundJobs.Schedule((() => _notificationService.GenerateFeedBackNotificationAsync(trip.Id)),
                     trip.EndTime);
@@ -217,7 +211,7 @@ namespace BlaBlaCar.BL.Services.TripServices
 
         }
 
-        public async Task<bool> DeleteTripAsync(Guid id, ClaimsPrincipal principal)
+        public async Task<bool> DeleteTripAsync(Guid id, Guid currentUserId)
         {
             var trip = await _unitOfWork.Trips.GetAsync(
                 includes: x=>x.Include(x=>x.TripUsers), 
@@ -239,8 +233,7 @@ namespace BlaBlaCar.BL.Services.TripServices
             //if (tripUsers != null) _unitOfWork.TripUser.Delete(tripUsers);
             _unitOfWork.Trips.Delete(trip);
 
-            var changedBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
-            return await _unitOfWork.SaveAsync(changedBy);
+            return await _unitOfWork.SaveAsync(currentUserId);
         }
     }
 }

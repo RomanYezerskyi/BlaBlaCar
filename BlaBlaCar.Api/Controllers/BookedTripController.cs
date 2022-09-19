@@ -9,8 +9,8 @@ namespace BlaBlaCar.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
-    public class BookedTripController : ControllerBase
+    [Authorize(Roles = Constants.AdminOrUser)]
+    public class BookedTripController : CustomBaseController
     {
         private readonly IBookedTripsService _tripService;
         public BookedTripController(IBookedTripsService tripService)
@@ -18,47 +18,37 @@ namespace BlaBlaCar.API.Controllers
             _tripService = tripService;
         }
         [HttpPost]
-        public async Task<IActionResult> BookTrip([FromBody] AddNewBookTripDTO bookedTrip)
+        public async Task<IActionResult> BookTrip([FromBody] NewBookTripModel bookedTrip)
         {
 
-            var res = await _tripService.AddBookedTripAsync(bookedTrip, User);
-            if (res) return Ok(new {Result = "Added Successfully"});
-            return BadRequest("Fail");
-           
+            var res = await _tripService.AddBookedTripAsync(bookedTrip, UserId, UserName);
+            return NoContent();
         }
-        [HttpGet("trips/{take}/{skip}")]
-        public async Task<IActionResult> GerUserBookedTrips(int take, int skip)
+        [HttpGet("trips")]
+        public async Task<IActionResult> GerUserBookedTrips([FromQuery] int take,[FromQuery] int skip)
         {
             
-            var res = await _tripService.GetUserBookedTripsAsync(take, skip, User);
-            if (res != null) return Ok(res);
-            return BadRequest("Fail");
-            
+            var res = await _tripService.GetUserBookedTripsAsync(take, skip, UserId);
+            return Ok(res);
         }
         [HttpDelete("trip")]
         public async Task<IActionResult> DeleteBookedTrip(DeleteTripUserDTO trip)
         {
 
-            var res = await _tripService.DeleteBookedTripAsync(trip, User);
-            if (res) return Ok(new { Result = res });
-            return BadRequest("Fail");
-          
+            var res = await _tripService.DeleteBookedTripAsync(trip, UserId, UserName);
+            return NoContent();
         }
         [HttpDelete("seat")]
         public async Task<IActionResult> DeleteBookedSeat(UpdateTripUserDTO tripUser)
         {
-            var res = await _tripService.DeleteBookedSeatAsync(tripUser, User);
-            if (res) return Ok(new { Result = res });
-            return BadRequest("Fail");
-          
+            var res = await _tripService.DeleteBookedSeatAsync(tripUser, UserId, UserName);
+            return NoContent();
         }
         [HttpDelete("user")]
         public async Task<IActionResult> DeleteUserFromTrip(UpdateTripUserDTO tripUser)
         {
-            var res = await _tripService.DeleteUserFromTripAsync(tripUser, User);
-            if (res) return Ok(new { Result = res });
-            return BadRequest("Fail");
-           
+            var res = await _tripService.DeleteUserFromTripAsync(tripUser, UserId);
+            return NoContent();
         }
     }
 }

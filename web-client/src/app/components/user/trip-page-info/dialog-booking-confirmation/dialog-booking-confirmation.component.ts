@@ -1,38 +1,28 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Component, EventEmitter, Inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { BookedTripModel } from 'src/app/interfaces/trip-interfaces/booked-trip';
+import { BookedTripModel } from 'src/app/interfaces/trip-interfaces/booked-trip-model';
 import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
-import { CarModel } from "src/app/interfaces/car-interfaces/car";
+import { CarModel } from "src/app/interfaces/car-interfaces/car-model";
 import { AvailableSeatsType } from 'src/app/enums/available-seats-type';
-import { SeatModel } from 'src/app/interfaces/car-interfaces/seat';
+import { SeatModel } from 'src/app/interfaces/car-interfaces/seat-model';
 import { TripService } from 'src/app/services/tripservice/trip.service';
+import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-dialog-booking-confirmation',
   templateUrl: './dialog-booking-confirmation.component.html',
   styleUrls: ['./dialog-booking-confirmation.component.scss']
 })
-export class DialogBookingConfirmationComponent implements OnInit {
+export class DialogBookingConfirmationComponent implements OnInit, OnDestroy {
+  @Output() onSubmitReason = new EventEmitter();
+  private unsubscribe$: Subject<void> = new Subject<void>();
   seatType = AvailableSeatsType;
-  carModel: CarModel = { id: 0, carType: 0, modelName: '', registNum: '', seats: [], carStatus: -1, carDocuments: [] }
-  trip: TripModel = {
-    id: 0,
-    startPlace: '',
-    endPlace: '',
-    startTime: new Date(),
-    endTime: new Date(),
-    countOfSeats: 0,
-    pricePerSeat: 0,
-    description: '',
-    userId: '',
-    availableSeats: [],
-    car: this.carModel,
-    tripUsers: []
-  };
+  carModel: CarModel = {} as CarModel;
+  trip: TripModel = {} as TripModel;
   requestedSeats = 0;
-  bookedtrip: BookedTripModel = { id: 0, bookedSeats: [], requestedSeats: 0, tripId: 0 }
-  onSubmitReason = new EventEmitter();
+  bookedtrip: BookedTripModel = { bookedSeats: [], id: 0, requestedSeats: 1, tripId: 0 };
+
   constructor(
     private dialogRef: MatDialogRef<DialogBookingConfirmationComponent>, private http: HttpClient,
     @Inject(MAT_DIALOG_DATA) data: any, private tripService: TripService) {
@@ -47,7 +37,10 @@ export class DialogBookingConfirmationComponent implements OnInit {
   }
 
   ngOnInit() {
-
+  }
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
   cheackSeat(item: SeatModel): boolean {
     let res = this.trip.availableSeats.some(x => {
@@ -57,58 +50,38 @@ export class DialogBookingConfirmationComponent implements OnInit {
     });
     return res;
   }
-  confirmBook = async () => {
+  confirmBook(): void {
     if (this.requestedSeats != this.bookedtrip.bookedSeats.length) {
-      alert("book" + this.requestedSeats);
       return;
     }
     console.log(this.bookedtrip)
-    this.tripService.bookSeatsInTrip(this.bookedtrip).pipe().subscribe(
+    this.tripService.bookSeatsInTrip(this.bookedtrip).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         this.dialogRef.close();
-        alert(response.result);
+        alert(response);
         console.log(response);
       },
       (error: HttpErrorResponse) => { alert(error.error); console.log(error.error); }
     )
-    // const url = 'https://localhost:6001/api/BookedTrip'
-    // const res = await new Promise<any>((resolve, reject) => {
-    //   this.http.post(url, this.bookedtrip, {
-    //     headers: new HttpHeaders({ "Content-Type": "application/json" })
-    //   })
-    //     .subscribe({
-    //       next: (res: any) => {
-    //         this.dialogRef.close();
-    //         alert(res.result);
-    //         resolve(res);
-    //       },
-    //       error: (err: HttpErrorResponse) => {
-    //         alert(err.error)
-    //         reject(err);
-    //       },
-    //     });
-    // });
     this.onSubmitReason.emit();
   }
-  close() {
+  close(): void {
     this.dialogRef.close();
   }
-  bookSeat(seatId: number) {
-    const seat: SeatModel = { id: seatId, carId: this.trip.car.id, num: 0, tripUsers: [] }
+  bookSeat(seatId: number): void {
+    const seat: SeatModel = { id: seatId, carId: this.trip.car.id, seatNumber: 0, tripUsers: [] }
     if (this.bookedtrip.bookedSeats.find(x => x.id == seat.id)) {
       this.bookedtrip.bookedSeats = this.bookedtrip.bookedSeats.filter(x => x.id != seatId);
       this.changeSeatStatus(seatId);
-      console.log("aaa" + JSON.stringify(this.bookedtrip));
       return;
     }
     if (this.bookedtrip.bookedSeats.length == this.requestedSeats) return;
     else {
       this.bookedtrip.bookedSeats.push(seat);
       this.changeSeatStatus(seatId);
-      console.log("bbb" + JSON.stringify(this.bookedtrip));
     }
   }
-  changeSeatStatus(seatId: number) {
+  changeSeatStatus(seatId: number): void {
     this.trip.car.seats.forEach(seat => {
       if (seat.id == seatId) {
         if (seat.isSelected) { seat.isSelected = false; }

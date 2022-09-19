@@ -29,7 +29,6 @@ namespace BlaBlaCar.BL
             CreateMap<CreateTripDTO, TripDTO>().ReverseMap();
             CreateMap<Trip, TripDTO>().ReverseMap();
             CreateMap<GetTripWithTripUsersDTO, TripDTO>().ReverseMap();
-            CreateMap<TripsStatisticsDTO,Trip>().ReverseMap();
 
             CreateMap<AvailableSeats, AvailableSeatDTO>().ReverseMap();
             CreateMap<Car, CarDTO>().ReverseMap();
@@ -40,7 +39,7 @@ namespace BlaBlaCar.BL
             CreateMap<AvailableSeatDTO, NewAvailableSeatDTO>().ReverseMap();
             CreateMap<SeatDTO, Seat>().ReverseMap();
             CreateMap<TripUser, TripUserDTO>().ReverseMap();
-            CreateMap<AddNewBookTripDTO, TripUserDTO>().ReverseMap();
+            CreateMap<NewBookTripModel, TripUserDTO>().ReverseMap();
             CreateMap<UpdateTripUserDTO, TripUserDTO>().ReverseMap();
 
             CreateMap<CarDocuments, CarDocumentDTO>().ReverseMap();
@@ -54,7 +53,7 @@ namespace BlaBlaCar.BL
 
             CreateMap<Chat, ChatDTO>().ReverseMap();
             CreateMap<Message, MessageDTO>().ReverseMap();
-            CreateMap<UsersInChats, UsersInChatsDTO>().ReverseMap();
+            CreateMap<ChatParticipant, ChatParticipantDTO>().ReverseMap();
             CreateMap<Message, CreateMessageDTO> ().ReverseMap();
             CreateMap<ReadMessages, ReadMessagesDTO>().ReverseMap();
         }

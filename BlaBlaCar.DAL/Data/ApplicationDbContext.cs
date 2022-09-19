@@ -28,7 +28,7 @@ namespace BlaBlaCar.DAL.Data
             
         public DbSet<Chat> Chats { get; set; }
         public DbSet<Message> Messages { get; set; }
-        public DbSet<UsersInChats> UsersInChats { get; set; }
+        public DbSet<ChatParticipant> ChatParticipants { get; set; }
         public DbSet<ReadMessages> ReadMessages { get; set; }
         public DbSet<FeedBack> FeedBacks { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
@@ -39,7 +39,7 @@ namespace BlaBlaCar.DAL.Data
             builder.Entity<ApplicationUser>().HasIndex(x => x.Email).IsUnique();
             builder.Entity<ApplicationUser>().HasIndex(x => x.PhoneNumber).IsUnique();
            // builder.Entity<ApplicationUser>().Property(x=>x.DrivingLicense).IsRequired(false);
-           builder.Entity<Car>().HasIndex(x => x.RegistNum);
+           builder.Entity<Car>().HasIndex(x => x.RegistrationNumber);
 
            builder.Entity<Seat>()
                .HasMany<TripUser>(x=>x.TripUsers)

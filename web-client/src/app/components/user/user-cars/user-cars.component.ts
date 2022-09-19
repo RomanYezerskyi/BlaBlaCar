@@ -1,10 +1,11 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { CarType } from 'src/app/enums/car-type';
-import { CarModel } from 'src/app/interfaces/car-interfaces/car';
+import { CarModel } from 'src/app/interfaces/car-interfaces/car-model';
 import { CarStatus } from 'src/app/interfaces/car-interfaces/car-status';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 import { CarService } from 'src/app/services/carservice/car.service';
@@ -17,7 +18,8 @@ import { EditCarModalDialogComponent } from './edit-car-modal-dialog/edit-car-mo
   templateUrl: './user-cars.component.html',
   styleUrls: ['./user-cars.component.scss']
 })
-export class UserCarsComponent implements OnInit {
+export class UserCarsComponent implements OnInit, OnDestroy {
+  private unsubscribe$: Subject<void> = new Subject<void>();
   cars: CarModel[] = [];
   carStatus = CarStatus;
   carType = CarType;
@@ -27,11 +29,16 @@ export class UserCarsComponent implements OnInit {
   ngOnInit(): void {
     this.getUserCars()
   }
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   sanitaizeImg(img: string): SafeUrl {
     return this.imgSanitize.sanitiizeImg(img);
   }
-  getUserCars() {
-    this.carService.getUserCars().pipe().subscribe(
+  getUserCars(): void {
+    this.carService.getUserCars().pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         this.cars = response;
         console.log(response)
@@ -39,22 +46,19 @@ export class UserCarsComponent implements OnInit {
       (error: HttpErrorResponse) => { console.log(error); }
     );
   }
-  edit(carId: number) {
+  edit(carId: number): void {
     const dialogConfig = new MatDialogConfig();
-
-    // dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.data = {
       car: this.cars.find(x => x.id == carId)
     }
     const dRef = this.dialog.open(EditCarModalDialogComponent, dialogConfig);
-
     // dRef.componentInstance.onSubmitReason.subscribe(() => {
     //   this.searchData();
     // });
   }
-  deleteCar(carId: number) {
-    this.carService.deleteCar(carId).pipe().subscribe(
+  deleteCar(carId: number): void {
+    this.carService.deleteCar(carId).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         console.log(response)
       },

@@ -11,14 +11,14 @@ namespace BlaBlaCar.BL.Interfaces
 {
     public interface INotificationService
     {
-        Task<IEnumerable<GetNotificationsDTO>> GetUserUnreadNotificationsAsync(ClaimsPrincipal principal);
-        Task<IEnumerable<GetNotificationsDTO>> GetUserNotificationsAsync(ClaimsPrincipal principal, int take, int skip);
-        Task<bool> CreateNotificationAsync(CreateNotificationDTO notificationModel, ClaimsPrincipal principal);
+        Task<IEnumerable<GetNotificationsDTO>> GetUserUnreadNotificationsAsync(Guid currentUserId);
+        Task<IEnumerable<GetNotificationsDTO>> GetUserNotificationsAsync(int take, int skip, Guid currentUserId);
+        Task<bool> CreateNotificationAsync(CreateNotificationDTO notificationModel, Guid currentUserId);
         Task GenerateNotificationAsync(CreateNotificationDTO notificationModel);
-        Task<bool> ReadAllNotificationAsync(IEnumerable<NotificationsDTO> notification, ClaimsPrincipal principal);
+        Task<bool> ReadAllNotificationAsync(IEnumerable<NotificationsDTO> notification, Guid currentUserId);
         Task<IEnumerable<GetNotificationsDTO>> GetGlobalNotificationsAsync(int take, int skip);
         Task<IEnumerable<GetNotificationsDTO>> GetUsersNotificationsAsync(int take, int skip);
         Task GenerateFeedBackNotificationAsync(Guid tripId);
-        Task AddFeedBack(CreateFeedbackDTO newFeedback, ClaimsPrincipal principal);
+        Task AddFeedBack(CreateFeedbackDTO newFeedback, Guid currentUserId);
     }
 }

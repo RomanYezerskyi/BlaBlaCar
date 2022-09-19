@@ -5,11 +5,11 @@ using BlaBlaCar.BL.DTOs;
 using BlaBlaCar.BL.DTOs.AdminDTOs;
 using BlaBlaCar.BL.DTOs.CarDTOs;
 using BlaBlaCar.BL.DTOs.NotificationDTOs;
+using BlaBlaCar.BL.DTOs.TripDTOs;
 using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.BL.Exceptions;
 using BlaBlaCar.BL.Interfaces;
 using BlaBlaCar.BL.Services.TripServices;
-using BlaBlaCar.BL.ViewModels.AdminViewModels;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Entities.CarEntities;
 using BlaBlaCar.DAL.Entities.TripEntities;
@@ -26,14 +26,18 @@ namespace BlaBlaCar.BL.Services.Admin
         private readonly IMapper _mapper;
         private readonly HostSettings _hostSettings;
         private readonly INotificationService _notificationService;
-        public AdminService(IUnitOfWork unitOfWork, IMapper mapper, IOptionsSnapshot<HostSettings> hostSettings, INotificationService notificationService)
+        public AdminService(
+            IUnitOfWork unitOfWork, 
+            IMapper mapper, 
+            IOptionsSnapshot<HostSettings> hostSettings, 
+            INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _notificationService = notificationService;
             _hostSettings = hostSettings.Value;
         }
-        public async Task<UserRequestsViewModel> GetRequestsAsync(int take, int skip, UserStatusDTO status)
+        public async Task<UserRequestsDTO> GetRequestsAsync(int take, int skip, UserStatusDTO status)
         {
             var users = _mapper.Map<IEnumerable<UserDTO>>(
                 await _unitOfWork.Users.GetAsync(
@@ -43,11 +47,11 @@ namespace BlaBlaCar.BL.Services.Admin
                             .ThenInclude(x => x.CarDocuments),
                 filter:x=>x.UserStatus == (Status)status || x.Cars.Any(c=>c.CarStatus == (Status)status)));
             if (!users.Any())
-                throw new NotFoundException(nameof(UserDTO));
+                throw new NoContentException();
             var usersCount = await _unitOfWork.Users.GetCountAsync(x=>x.UserStatus == (Status)status 
                                                                 || x.Cars.Any(c => c.CarStatus == (Status)status));
 
-            var result = new UserRequestsViewModel()
+            var result = new UserRequestsDTO()
             {
                 Users = users,
                 TotalRequests = usersCount
@@ -57,7 +61,7 @@ namespace BlaBlaCar.BL.Services.Admin
         }
       
        
-        public async Task<bool> ChangeUserStatusAsync(ChangeUserStatusDTO changeUserStatus, ClaimsPrincipal principal)
+        public async Task<bool> ChangeUserStatusAsync(ChangeUserStatusDTO changeUserStatus, Guid currentUserId)
         {
             var user = _mapper.Map<UserDTO>(
                 await _unitOfWork.Users.GetAsync(null, x => x.Id == changeUserStatus.UserId));
@@ -67,8 +71,6 @@ namespace BlaBlaCar.BL.Services.Admin
 
             _unitOfWork.Users.Update(_mapper.Map<ApplicationUser>(user));
 
-            var changedBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
-
             await _notificationService.GenerateNotificationAsync(
                 new CreateNotificationDTO()
                 {
@@ -76,9 +78,9 @@ namespace BlaBlaCar.BL.Services.Admin
                     Text = $"Your driving license status changed - {user.UserStatus}",
                     UserId = user.Id
                 });
-            return await _unitOfWork.SaveAsync(changedBy);
+            return await _unitOfWork.SaveAsync(currentUserId);
         }
-        public async Task<bool> ChangeCarStatusAsync(ChangeCarStatusDTO changeCarStatus, ClaimsPrincipal principal)
+        public async Task<bool> ChangeCarStatusAsync(ChangeCarStatus changeCarStatus, Guid currentUserId)
         {
             var car = _mapper.Map<CarDTO>
                 (await _unitOfWork.Cars.GetAsync(null, x=>x.Id == changeCarStatus.CarId));
@@ -88,19 +90,17 @@ namespace BlaBlaCar.BL.Services.Admin
 
             _unitOfWork.Cars.Update(_mapper.Map<Car>(car));
 
-            var changedBy = Guid.Parse(principal.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Id).Value);
-
             await _notificationService.GenerateNotificationAsync(
                 new CreateNotificationDTO()
                 {
                     NotificationStatus = NotificationStatusDTO.SpecificUser,
-                    Text = $"Your car {car.RegistNum} status changed - {car.CarStatus}",
+                    Text = $"Your car {car.RegistrationNumber} status changed - {car.CarStatus}",
                     UserId = car.UserId,
                 });
-            return await _unitOfWork.SaveAsync(changedBy);
+            return await _unitOfWork.SaveAsync(currentUserId);
         }
 
-        public async Task<AdminStaticViewModel> GetStatisticsDataAsync(DateTimeOffset searchDate)
+        public async Task<AdminStatisticsDTO> GetStatisticsDataAsync(DateTimeOffset searchDate)
         {
             var users = _mapper.Map<IEnumerable<UsersStatisticsDTO>>(
                 await _unitOfWork.Users.GetAsync(null, null, 
@@ -109,12 +109,12 @@ namespace BlaBlaCar.BL.Services.Admin
             var cars = _mapper.Map<IEnumerable<CarStatisticsDTO>>(
                 await _unitOfWork.Cars.GetAsync(null, null, x=> x.CreatedAt.Value.Month == searchDate.Month));
             var groupedCars = cars.GroupBy(x => x.CreatedAt.Value.Date);
-            var trips = _mapper.Map<IEnumerable<TripsStatisticsDTO>>(
+            var trips = _mapper.Map<IEnumerable<TripDTO>>(
                 await _unitOfWork.Trips.GetAsync(null, null,
                     x=>x.CreatedAt.Value.Month == searchDate.Month));
             var groupedWeekTrips = trips.GroupBy(x => x.CreatedAt.Value.DayOfWeek);
             var groupedTrips = trips.GroupBy(x => x.CreatedAt.Value.Date);
-            var res = new AdminStaticViewModel()
+            var res = new AdminStatisticsDTO()
             {
                 UsersStatisticsCount = groupedUsers.Select(x=>x.ToList().Count()),
                 UsersDateTime = groupedUsers.Select(x=>x.Key),
@@ -157,6 +157,7 @@ namespace BlaBlaCar.BL.Services.Admin
                     null,
                     take:take,
                     skip:skip));
+            if (!users.Any()) throw new NoContentException();
             users = users.Select(u =>
             {
                 if (u.UserImg != null)

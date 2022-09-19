@@ -10,10 +10,10 @@ namespace BlaBlaCar.BL.Interfaces
 {
     public interface IChatService
     {
-        Task<Guid> CreatePrivateChatAsync(Guid userId, ClaimsPrincipal principal);
-        Task<IEnumerable<ChatDTO>> GetUserChatsAsync(ClaimsPrincipal principal);
-        Task<bool> CreateMessageAsync(CreateMessageDTO messageModel, ClaimsPrincipal principal);
+        Task<Guid> CreatePrivateChatAsync(Guid userId, Guid currentUserId);
+        Task<IEnumerable<ChatDTO>> GetUserChatsAsync(Guid currentUserId);
+        Task<bool> CreateMessageAsync(CreateMessageDTO messageModel, Guid currentUserId);
         Task<ChatDTO> GetChatByIdAsync(Guid chatId);
-        Task<bool> ReadMessagesFromChat(IEnumerable<MessageDTO> messages, ClaimsPrincipal principal);
+        Task<bool> ReadMessagesFromChat(IEnumerable<MessageDTO> messages, Guid currentUserId);
     }
 }

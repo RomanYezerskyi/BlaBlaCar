@@ -1,17 +1,18 @@
 ﻿using System.Security.Claims;
+using BlaBlaCar.API;
+using BlaBlaCar.API.Controllers;
 using BlaBlaCar.BL.DTOs.TripDTOs;
 using BlaBlaCar.BL.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlaBlaCar.Api.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
-    public class TripsController : ControllerBase
+    [Authorize(Roles = Constants.AdminOrUser)]
+    public class TripsController : CustomBaseController
     {
         private readonly ITripService _tripService;
         public TripsController(ITripService tripService)
@@ -19,24 +20,19 @@ namespace BlaBlaCar.Api.Controllers
             _tripService = tripService;
         }
 
-        [HttpGet("user-trips/{take}/{skip}")]
-        public async Task<IActionResult> GetUserTrips(int take, int skip)
+        [HttpGet("user-trips")]
+        public async Task<IActionResult> GetUserTrips([FromQuery] int take,[FromQuery] int skip)
         {
            
-            var res = await _tripService.GetUserTripsAsync(take, skip, User);
-            if (res.Trips.Any()) return Ok(res);
-            return NoContent();
-        
+            var res = await _tripService.GetUserTripsAsync(take, skip, UserId);
+            return Ok(res);
         }
-        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTrip(Guid id)
         {
            
-            var res = await _tripService.GetTripAsync(id, User);
-            if (res != null) return Ok(res);
-            return NoContent();
-           
+            var res = await _tripService.GetTripAsync(id, UserId);
+            return Ok(res);
         }
 
         [AllowAnonymous]
@@ -44,27 +40,20 @@ namespace BlaBlaCar.Api.Controllers
         public async Task<IActionResult> SearchTrips([FromBody]SearchTripDTO tripModel)
         {
             var res = await _tripService.SearchTripsAsync(tripModel);
-            if(res.Trips.Any()) return Ok(res);
-            return NoContent();
-          
+            return Ok(res);
         }
         [HttpPost]
         public async Task<IActionResult> CreateTrip([FromBody]CreateTripDTO  tripModel)
         {
-            var res = await _tripService.AddTripAsync(tripModel, User);
-            if (res) return Ok("Added Successfully");
-            return BadRequest("Fail");
-           
+            var res = await _tripService.AddTripAsync(tripModel, UserId);
+            return NoContent();
         }
         
         [HttpDelete("trip/{id}")]
         public async Task<IActionResult> DeleteTrip(Guid id)
         {
-            
-            var res = await _tripService.DeleteTripAsync(id, User);
-            if (res) return Ok(new { result="Deleted Successfully"});
-            return BadRequest("Fail");
-           
+            var res = await _tripService.DeleteTripAsync(id, UserId);
+            return NoContent();
         }
     }
 }

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { TripOrderBy } from 'src/app/enums/trip-order-by';
-import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip';
+import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip-model';
 
 @Component({
   selector: 'app-sorting-panel',
@@ -9,19 +9,12 @@ import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip'
   styleUrls: ['./sorting-panel.component.scss']
 })
 export class SortingPanelComponent implements OnInit {
-
-  constructor(private router: Router,) { }
-  orderBy = TripOrderBy;
-  @Input() trip: SearchTripModel = {
-    countOfSeats: 1,
-    endPlace: '',
-    startPlace: '',
-    startTime: new Date(),
-    orderBy: TripOrderBy.EarliestDepartureTime,
-  };
   @Output() OrderByOutput: EventEmitter<TripOrderBy> = new EventEmitter<TripOrderBy>;
+  @Input() trip: SearchTripModel = { orderBy: TripOrderBy.EarliestDepartureTime } as SearchTripModel;
+  orderBy = TripOrderBy;
+  constructor() { }
+
   ngOnInit(): void {
-    // console.log(this.trip);
   }
   orderByParams() {
     this.OrderByOutput.emit(this.trip.orderBy);

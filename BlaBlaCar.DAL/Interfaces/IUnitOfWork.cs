@@ -20,7 +20,7 @@ namespace BlaBlaCar.DAL.Interfaces
         IRepositoryAsync<ReadNotifications> ReadNotifications { get; }
         IRepositoryAsync<Chat> Chats { get; }
         IRepositoryAsync<Message> Messages { get; }
-        IRepositoryAsync<UsersInChats> UsersInChats { get; }
+        IRepositoryAsync<ChatParticipant> ChatParticipants { get; }
         IRepositoryAsync<ReadMessages> ReadMessages { get; }
         IRepositoryAsync<FeedBack> FeedBacks { get; }
         Task<bool> SaveAsync(Guid userId);

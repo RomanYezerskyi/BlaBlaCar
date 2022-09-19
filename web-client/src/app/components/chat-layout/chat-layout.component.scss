@@ -9,11 +9,16 @@ li {
 }
 
 .container {
+    app-chat-list {
+        margin-right: 15px;
+    }
 
-    padding: 20px;
+    padding: 15px;
+    padding-bottom: 0;
     display: flex;
-    justify-content: space-between;
-    font-family: "Rajdhani", sans-serif;
+    justify-content: center;
+    font-family: "Rajdhani",
+    sans-serif;
 
 
 

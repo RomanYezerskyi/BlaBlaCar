@@ -4,12 +4,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { skip, Subscription } from 'rxjs';
+import { skip, Subject, Subscription, takeUntil } from 'rxjs';
+import { CreateNotificationDialogComponent } from 'src/app/components/create-notification-dialog/create-notification-dialog.component';
 import { NotificationStatus } from 'src/app/enums/notification-status';
-import { NotificationsModel } from 'src/app/interfaces/notifications';
+import { NotificationsModel } from 'src/app/interfaces/notifications-model';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
 import { NotificationsService } from 'src/app/services/notificationsservice/notifications.service';
-import { CreateNotificationDialogComponent } from '../../create-notification-dialog/create-notification-dialog.component';
 
 @Component({
   selector: 'app-admin-notifications',
@@ -17,19 +17,18 @@ import { CreateNotificationDialogComponent } from '../../create-notification-dia
   styleUrls: ['./admin-notifications.component.scss']
 })
 export class AdminNotificationsComponent implements OnInit, OnDestroy {
+  private unsubscribe$: Subject<void> = new Subject<void>();
   globalNotificationsProp = {
     skip: 0,
     take: 5,
     isFullListDisplayed: false
   };
-  globalTripsSubscription!: Subscription;
   globalNotifications: Array<NotificationsModel> = [];
   usersNotificationsProp = {
     skip: 0,
     take: 5,
     isFullListDisplayed: false
   };
-  usersTripsSubscription!: Subscription;
   usersNotifications: Array<NotificationsModel> = [];
   notifiStatus = NotificationStatus;
   constructor(private notificationsService: NotificationsService, private router: Router,
@@ -40,17 +39,16 @@ export class AdminNotificationsComponent implements OnInit, OnDestroy {
     this.getGlobalNotitifications();
     this.getUsersNotitifications();
   }
-  ngOnDestroy() {
-    this.globalTripsSubscription.unsubscribe();
-    this.usersTripsSubscription.unsubscribe();
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
-  addGlobalNotitfication() {
+
+  addGlobalNotitfication(): void {
     this.openNotificationDialog(NotificationStatus.Global, null);
   }
-  private openNotificationDialog(notificationStatus: NotificationStatus, userId: string | null) {
+  private openNotificationDialog(notificationStatus: NotificationStatus, userId: string | null): void {
     const dialogConfig = new MatDialogConfig();
-
-
     // dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     // dialogConfig.autoFocus = true;
@@ -61,9 +59,7 @@ export class AdminNotificationsComponent implements OnInit, OnDestroy {
       title: "Notification"
     };
     const dRef = this.dialog.open(CreateNotificationDialogComponent, dialogConfig);
-
-    dRef.componentInstance.onSubmitReason.subscribe(() => {
-
+    dRef.componentInstance.onSubmitReason.pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
       this.globalNotifications = [];
       this.globalNotificationsProp.skip = 0;
       this.globalNotificationsProp.take = 5;
@@ -79,8 +75,9 @@ export class AdminNotificationsComponent implements OnInit, OnDestroy {
   }
   getGlobalNotitifications() {
     if (this.globalNotificationsProp.skip <= this.globalNotifications.length) {
-      this.globalTripsSubscription =
-        this.notificationsService.getGlobalNotifications(this.globalNotificationsProp.take, this.globalNotificationsProp.skip).subscribe(
+      this.notificationsService.getGlobalNotifications(
+        this.globalNotificationsProp.take,
+        this.globalNotificationsProp.skip).pipe(takeUntil(this.unsubscribe$)).subscribe(
           response => {
             this.globalNotifications = this.globalNotifications.concat(response);
           },
@@ -92,8 +89,9 @@ export class AdminNotificationsComponent implements OnInit, OnDestroy {
   }
   getUsersNotitifications() {
     if (this.usersNotificationsProp.skip <= this.usersNotifications.length) {
-      this.usersTripsSubscription =
-        this.notificationsService.getUsersNotifications(this.usersNotificationsProp.take, this.usersNotificationsProp.skip).subscribe(
+      this.notificationsService.getUsersNotifications(
+        this.usersNotificationsProp.take,
+        this.usersNotificationsProp.skip).pipe(takeUntil(this.unsubscribe$)).subscribe(
           response => {
             this.usersNotifications = this.usersNotifications.concat(response);
           },
@@ -103,5 +101,4 @@ export class AdminNotificationsComponent implements OnInit, OnDestroy {
     }
     else this.usersNotificationsProp.isFullListDisplayed = true;
   }
-
 }

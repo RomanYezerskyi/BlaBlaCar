@@ -1,7 +1,8 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
 import { TripUserModel } from 'src/app/interfaces/trip-interfaces/trip-user-model';
 import { TripsResponseModel } from 'src/app/interfaces/trip-interfaces/trips-response-model';
@@ -14,13 +15,11 @@ import { TripService } from 'src/app/services/tripservice/trip.service';
   templateUrl: './user-booked-trips.component.html',
   styleUrls: ['./user-booked-trips.component.scss']
 })
-export class UserBookedTripsComponent implements OnInit {
-  trips: TripsResponseModel = {
-    trips: [] = [],
-    totalTrips: 0
-  }
+export class UserBookedTripsComponent implements OnInit, OnDestroy {
+  private unsubscribe$: Subject<void> = new Subject<void>();
+  trips: TripsResponseModel = {} as TripsResponseModel;
   public isFullListDisplayed: boolean = false;
-  totalTrips = 0;
+  totalTrips: number = 0;
   private Skip: number = 0;
   private Take: number = 5;
   constructor(
@@ -30,17 +29,21 @@ export class UserBookedTripsComponent implements OnInit {
   ngOnInit(): void {
     this.getUserBookedTrips();
   }
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   sanitizeUserImg(img: string): SafeUrl {
     return this.imgSanitaze.sanitiizeUserImg(img);
   }
 
-  getUserBookedTrips = () => {
+  getUserBookedTrips(): void {
     if (this.Skip <= this.totalTrips) {
-      this.tripService.getUserBookedTrips(this.Take, this.Skip).pipe().subscribe(
+      this.tripService.getUserBookedTrips(this.Take, this.Skip).pipe(takeUntil(this.unsubscribe$)).subscribe(
         response => {
           if (response != null) {
             this.trips.trips = this.trips.trips.concat(response.trips);
-            console.log(response)
             if (this.totalTrips == 0)
               this.totalTrips = response.totalTrips!;
           }
@@ -53,43 +56,21 @@ export class UserBookedTripsComponent implements OnInit {
     }
     this.Skip += this.Take;
   }
-  deleteBookedTrip = (trip: TripModel) => {
-    this.tripService.deleteBookedTrip(trip).pipe().subscribe(
+  deleteBookedTrip(trip: TripModel): void {
+    this.tripService.deleteBookedTrip(trip).pipe(takeUntil(this.unsubscribe$)).subscribe(
+      response => {
+        this.ngOnInit();
+      },
+      (error: HttpErrorResponse) => { console.log(error.error); }
+    );
+  }
+  deleteBookedSeat(tripUser: TripUserModel): void {
+    this.tripService.deleteBookedSeat(tripUser).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         this.ngOnInit();
         console.log(response)
       },
       (error: HttpErrorResponse) => { console.log(error.error); }
     );
-    // const url = 'https://localhost:6001/api/BookedTrip/trip';
-    // this.http.delete(url, { body: trip })
-    //   .subscribe({
-    //     next: (res: any) => {
-    //       console.log(res);
-    //       this.getUserBookedTrips();
-    //     },
-    //     error: (err: HttpErrorResponse) => console.error(err),
-    //   });
-  }
-  deleteBookedSeat = (tripUser: TripUserModel) => {
-    this.tripService.deleteBookedSeat(tripUser).pipe().subscribe(
-      response => {
-        this.ngOnInit();
-        console.log(response)
-      },
-      (error: HttpErrorResponse) => { console.log(error.error); }
-    )
-    // const url = 'https://localhost:6001/api/BookedTrip/seat';
-
-    // this.http.delete(url, { body: tripUser })
-    //   .subscribe({
-    //     next: (res: any) => {
-    //       console.log(res);
-    //       this.getUserBookedTrips();
-    //     },
-    //     error: (err: HttpErrorResponse) => console.error(err),
-    //   });
-
-
   }
 }

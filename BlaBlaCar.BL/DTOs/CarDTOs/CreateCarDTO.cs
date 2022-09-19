@@ -13,7 +13,7 @@ namespace BlaBlaCar.BL.DTOs.CarDTOs
         [Required]
         public string ModelName { get; set; }
         [Required]
-        public string RegistNum { get; set; }
+        public string RegistrationNumber { get; set; }
         [Required]
         public int CountOfSeats { get; set; }
         [Required]

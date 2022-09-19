@@ -8,17 +8,16 @@ using BlaBlaCar.BL.DTOs;
 using BlaBlaCar.BL.DTOs.AdminDTOs;
 using BlaBlaCar.BL.DTOs.CarDTOs;
 using BlaBlaCar.BL.DTOs.UserDTOs;
-using BlaBlaCar.BL.ViewModels.AdminViewModels;
 
 namespace BlaBlaCar.BL.Interfaces
 {
     public interface IAdminService
     {
-        Task<UserRequestsViewModel> GetRequestsAsync(int take, int skip, UserStatusDTO status);
+        Task<UserRequestsDTO> GetRequestsAsync(int take, int skip, UserStatusDTO status);
       
-        Task<bool> ChangeUserStatusAsync(ChangeUserStatusDTO changeUserStatus, ClaimsPrincipal principal);
-        Task<bool> ChangeCarStatusAsync(ChangeCarStatusDTO changeCarStatus, ClaimsPrincipal principal);
-        Task<AdminStaticViewModel> GetStatisticsDataAsync(DateTimeOffset searchDate);
+        Task<bool> ChangeUserStatusAsync(ChangeUserStatusDTO changeUserStatus, Guid currentUserId);
+        Task<bool> ChangeCarStatusAsync(ChangeCarStatus changeCarStatus, Guid currentUserId);
+        Task<AdminStatisticsDTO> GetStatisticsDataAsync(DateTimeOffset searchDate);
         Task<IEnumerable<UsersStatisticsDTO>> GetTopUsersListAsync(int take, int skip, UsersListOrderByType orderBy);
     }
 }

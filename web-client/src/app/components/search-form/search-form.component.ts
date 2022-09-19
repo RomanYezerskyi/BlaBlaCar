@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TripOrderBy } from 'src/app/enums/trip-order-by';
-import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip';
+import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip-model';
 
 @Component({
   selector: 'app-search-form',
@@ -9,31 +9,24 @@ import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip'
   styleUrls: ['./search-form.component.scss']
 })
 export class SearchFormComponent implements OnInit {
-  counter_active = false;
-  @Input() trip: SearchTripModel = {
-    countOfSeats: 1,
-    endPlace: '',
-    startPlace: '',
-    startTime: new Date(),
-  };
-
+  @Input() trip: SearchTripModel = { countOfSeats: 1 } as SearchTripModel;
+  counterActive: boolean = false;
   constructor(private router: Router,) { }
 
   ngOnInit(): void {
   }
-  counterAcive() {
-    this.counter_active = !this.counter_active;
+  counterAcive(): void {
+    this.counterActive = !this.counterActive;
   }
-  counterAdd() {
+  counterAdd(): void {
     if (this.trip.countOfSeats == 8) return;
-    this.trip.countOfSeats += 1;
+    this.trip.countOfSeats = +this.trip.countOfSeats + 1;
   }
-  counterRemove() {
+  counterRemove(): void {
     if (this.trip.countOfSeats == 1) return;
-    this.trip.countOfSeats -= 1;
+    this.trip.countOfSeats = +this.trip.countOfSeats - 1;
   }
-  search() {
-    console.log(this.trip.startTime)
+  search(): void {
     this.router.navigate(['search'], {
       queryParams: {
         startPlace: this.trip.startPlace,

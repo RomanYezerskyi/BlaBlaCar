@@ -28,7 +28,7 @@
             <input type="number" matInput [(ngModel)]="trip.countOfSeats" name="countOfSeats" [disabled]="true"
                 required>
             <mat-icon matSuffix (click)="counterAcive()">person_outline</mat-icon>
-            <div class="input__counter " [ngClass]="{'': !counter_active, 'counter_active': counter_active}">
+            <div class="input__counter " [ngClass]="{'': !counterActive, 'counter_active': counterActive}">
                 <p *ngIf="trip.countOfSeats > 1" class="text">Passengers</p>
                 <p *ngIf="trip.countOfSeats == 1" class="text">Passenger</p>
                 <div class="counter">
