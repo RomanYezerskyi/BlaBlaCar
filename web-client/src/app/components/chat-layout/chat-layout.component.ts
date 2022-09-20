@@ -12,8 +12,8 @@ export class ChatLayoutComponent implements OnInit {
   currentUserId: string = '';
   role: string = '';
   isChatSelected: boolean = false;
-  constructor(private jwtHelper: JwtHelperService, private route: ActivatedRoute) {
-    // this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+  constructor(private jwtHelper: JwtHelperService, private route: ActivatedRoute, private router: Router,) {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
   ngOnInit(): void {

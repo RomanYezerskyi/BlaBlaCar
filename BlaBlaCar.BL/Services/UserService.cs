@@ -191,7 +191,7 @@ namespace BlaBlaCar.BL.Services
             throw new PermissionException("This user cannot update data");
         }
 
-        public async Task<bool> UpdateUserImgAsync(IFormFile userImg, Guid currentUserId)
+        public async Task<string> UpdateUserImgAsync(IFormFile userImg, Guid currentUserId)
         {
             if (userImg is null) throw new NoFileException($"File is required!");
             var user = _mapper.Map<UserDTO>(
@@ -202,7 +202,9 @@ namespace BlaBlaCar.BL.Services
             user.UserImg = img;
             
             _unitOfWork.Users.Update(_mapper.Map<ApplicationUser>(user));
-            return await _unitOfWork.SaveAsync(currentUserId);
+            await _unitOfWork.SaveAsync(currentUserId);
+            var imageLink = _hostSettings.CurrentHost + img;
+            return imageLink;
 
         }
 

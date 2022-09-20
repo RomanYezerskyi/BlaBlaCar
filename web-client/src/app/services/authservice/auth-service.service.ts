@@ -18,7 +18,6 @@ export class AuthService {
   async IsLogged(): Promise<boolean> {
     const token = localStorage.getItem("jwt");
     if (token && !this.jwtHelper.isTokenExpired(token)) {
-      console.log(this.jwtHelper.decodeToken(token))
       return true;
     }
     const isRefreshSuccess = await this.tryRefreshingTokens(token as string);

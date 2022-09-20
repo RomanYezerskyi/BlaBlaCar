@@ -4,14 +4,10 @@
             <input type="search" matInput placeholder="Search users here ..." id="email" name="email"
                 [(ngModel)]="userEmail">
             <i class="material-icons" matSuffix (click)="getUser(searchForm)">search</i>
-            <!-- <mat-error *ngIf="textFormControl.hasError('required')">
-                Text is <strong>required</strong>
-            </mat-error> -->
         </mat-form-field>
-
-        <!-- <button class="btn" type="submit">Send</button> -->
     </form>
-    <div class="users-list admins" *ngIf="searchUser.email != ''">
+
+    <div class="users-list admins" *ngIf="searchUser.email != undefined">
         <div class="head">
             Users
         </div>

@@ -108,7 +108,7 @@ namespace BlaBlaCar.BL.Services.ChatServices
         public async Task<IEnumerable<MessageDTO>> GetChatMessages(Guid chatId, int take, int skip)
         {
             var messages = _mapper.Map<IEnumerable<MessageDTO>>(
-                await _unitOfWork.Messages.GetAsync(null, null, x => x.ChatId == chatId));
+                await _unitOfWork.Messages.GetAsync(x=>x.OrderByDescending(x=>x.CreatedAt), null, x => x.ChatId == chatId, take:take,skip:skip));
             if (!messages.Any()) return messages;
 
             var readMessages =
@@ -122,7 +122,7 @@ namespace BlaBlaCar.BL.Services.ChatServices
 
                 return m;
             });
-            return messages.ToList();
+            return messages.Reverse().ToList();
         }
 
         public async Task<bool> ReadMessagesFromChat(IEnumerable<MessageDTO> messages, Guid currentUserId)
@@ -140,13 +140,14 @@ namespace BlaBlaCar.BL.Services.ChatServices
                 ChatId = messageModel.ChatId,
                 Text = messageModel.Text,
                 UserId = currentUserId,
+                CreatedAt = DateTimeOffset.Now
             };
             var message = _mapper.Map<Message>(newMessage);
             await _unitOfWork.Messages.InsertAsync(message);
             var res =  await _unitOfWork.SaveAsync(currentUserId);
             if (!res) return res;
             newMessage.User = messageModel.User;
-            newMessage.User.UserImg = _hostSettings.CurrentHost + messageModel.User.UserImg;
+            //newMessage.User.UserImg = _hostSettings.CurrentHost + messageModel.User.UserImg;
             newMessage.Id = message.Id;
             await _chatHubService.NotifyChat(newMessage.ChatId, newMessage);
             _backgroundJobs.Enqueue<IChatHubService>(

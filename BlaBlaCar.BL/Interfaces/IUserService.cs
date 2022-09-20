@@ -19,6 +19,6 @@ namespace BlaBlaCar.BL.Interfaces
         Task<bool> RequestForDrivingLicense(Guid currentUserId, IEnumerable<IFormFile> drivingLicense);
         Task<bool> AddUserAsync(UserDTO user);
         Task<bool> UpdateUserAsync(UpdateUserDTO userModel, Guid currentUserId);
-        Task<bool> UpdateUserImgAsync(IFormFile userImg, Guid currentUserId);
+        Task<string> UpdateUserImgAsync(IFormFile userImg, Guid currentUserId);
     }
 }

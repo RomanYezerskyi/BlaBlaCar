@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, Subscription, takeUntil } from 'rxjs';
+import { skip, Subject, Subscription, takeUntil } from 'rxjs';
 import { ChatModel } from 'src/app/interfaces/chat-interfaces/chat-model';
 import { ChatService } from 'src/app/services/chatservice/chat.service';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
@@ -16,11 +16,12 @@ import { SignalRService } from 'src/app/services/signalr-services/signalr.servic
   styleUrls: ['./chat.component.scss'],
   providers: [SignalRService]
 })
-export class ChatComponent implements OnInit, OnDestroy {
+export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   @Input() currentUserId: string = '';
   @ViewChild('scrollMe') private myScrollContainer!: ElementRef;
+  disableScrollDown: boolean = false;
   private unsubscribe$: Subject<void> = new Subject<void>();
-  chat: ChatModel = { messages: [] = [], users: [] = [] };
+  chat: ChatModel = { messages: [], users: [] = [] };
   text: string = '';
   private messagesSkip: number = 0;
   private messagesTake: number = 10;
@@ -40,9 +41,10 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log(this.chat.id)
+
     if (this.chat.id != undefined) {
       this.getChat();
+
       this.connectToSignalRChatHub();
     }
   }
@@ -50,14 +52,40 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
   scroll(): void {
-    console.log("ccc");
+    let element = this.myScrollContainer.nativeElement;
+    let atBottom = (element.scrollTop + 20) >= (element.scrollHeight - element.offsetHeight);
+    // console.log("element Height " + element.scrollHeight);
+    // console.log("element offsetHeight " + element.offsetHeight);
+    // console.log("element scroll " + element.scrollTop)
+    // console.log(atBottom);
+    if (atBottom) {
+      this.disableScrollDown = false
+    } else {
+      this.disableScrollDown = true
+    }
+    if (element.scrollTop < 100 && !this.isFullListDisplayed) {
+      element.scrollTop = 120;
+      this.messagesSkip = this.chat.messages?.length!;
+      this.getChatMessages();
+    }
+  }
+  scrollToBottom() {
+    if (this.disableScrollDown) {
+      return
+    }
+    this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+
   }
   connectToSignalRChatHub(): void {
     this.signal.getDataStream<MessageModel>().pipe(takeUntil(this.unsubscribe$)).subscribe(message => {
       this.readMessages(message.data);
       message.data.status = MessageStatus.Read;
-      this.chat.messages?.push(message.data)
+      this.chat.messages?.push(message.data);
+      console.log(message);
     });
   }
   setSignalRUrls(): void {
@@ -75,8 +103,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       messages = this.chat.messages?.filter(x => x.status == MessageStatus.Unread)!;
     else
       messages!.push(unreadMessage!);
-    console.log(messages!);
-    if (messages.length == 0) return;
+    if (messages == undefined) return;
     this.chatService.readMessagesInchat(messages!).pipe(takeUntil(this.unsubscribe$)).subscribe(response => {
       console.log(response);
     },
@@ -85,25 +112,34 @@ export class ChatComponent implements OnInit, OnDestroy {
   getChat(): void {
     this.chatService.getChatById(this.chat.id!).pipe(takeUntil(this.unsubscribe$)).subscribe(response => {
       this.chat = response;
+      this.chat.messages = [];
       console.log(response);
       this.getChatMessages()
     },
       (error: HttpErrorResponse) => { console.error(error.error); });
   }
   getChatMessages() {
-    this.chatService.getChatMessages(this.chat.id!, this.messagesTake, this.messagesSkip)
-      .pipe(takeUntil(this.unsubscribe$)).subscribe(response => {
-        if (response != null) {
-          response.forEach(m => {
-            m.user = this.chat.users?.find(x => x.userId == m.userId)?.user!;
-          });
-          console.log(response);
-          this.chat.messages = this.chat.messages!.concat(response);
-          this.readMessages(null);
+    console.log(this.messagesSkip);
+    console.log(this.chat.messages?.length);
+    if (this.messagesSkip <= this.chat.messages?.length!) {
+      this.chatService.getChatMessages(this.chat.id!, this.messagesTake, this.messagesSkip)
+        .pipe(takeUntil(this.unsubscribe$)).subscribe(response => {
+          if (response.length > 0) {
+            response.forEach(m => {
+              m.user = this.chat.users?.find(x => x.userId == m.userId)?.user!;
+            });
+            this.chat.messages = response.concat(this.chat.messages!);
+            console.log(this.chat.messages);
+            this.readMessages(null);
+          }
+          else {
+            console.log("aa");
+            this.isFullListDisplayed = true;
+          }
+        },
+          (error: HttpErrorResponse) => { console.error(error.error); });
+    }
 
-        }
-      },
-        (error: HttpErrorResponse) => { console.error(error.error); });
   }
   sanitizeImg(img: string): SafeUrl {
     return this.sanitizeImgService.sanitiizeUserImg(img);

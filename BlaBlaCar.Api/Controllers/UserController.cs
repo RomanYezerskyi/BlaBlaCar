@@ -72,8 +72,8 @@ namespace BlaBlaCar.API.Controllers
         public async Task<IActionResult> UpdateUserImg(IFormFile userProfileImage)
         {
            
-            var res = await _userService.UpdateUserImgAsync(userProfileImage, UserId);
-            return NoContent();
+            var link = await _userService.UpdateUserImgAsync(userProfileImage, UserId);
+            return Ok(link);
         }
     }
 }
