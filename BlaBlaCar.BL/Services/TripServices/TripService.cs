@@ -89,7 +89,7 @@ namespace BlaBlaCar.BL.Services.TripServices
                     take: take,
                     skip: skip));
 
-            if (!trips.Any()) throw new NoContentException();
+            if (!trips.Any()) return null;
 
             var tripsCount =await _unitOfWork.Trips.GetCountAsync(x=>x.UserId == currentUserId);
 
@@ -175,7 +175,7 @@ namespace BlaBlaCar.BL.Services.TripServices
                 skip: model.Skip,
                 take: model.Take);
 
-            if (!trips.Any()) throw new NoContentException();
+            if (!trips.Any()) return null;
 
             trips = trips.Select(t =>
             {

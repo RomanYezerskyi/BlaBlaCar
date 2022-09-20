@@ -36,7 +36,7 @@ namespace BlaBlaCar.API.Controllers
             var res = await _notificationService.GetUserNotificationsAsync(take, skip, UserId);
             return Ok(res);
         }
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> ReadUserNotifications(IEnumerable<NotificationsDTO> notifications)
         {
             var res = await _notificationService.ReadAllNotificationAsync(notifications, UserId);
@@ -49,7 +49,7 @@ namespace BlaBlaCar.API.Controllers
             var res = await _notificationService.GetGlobalNotificationsAsync(take,skip); 
             return Ok(res);
         }
-        [HttpGet("users")]
+        [HttpGet("last-notifications")]
         public async Task<IActionResult> GetUsersNotifications([FromQuery]int take,[FromQuery] int skip)
         {
 

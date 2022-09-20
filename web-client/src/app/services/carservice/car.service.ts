@@ -18,7 +18,7 @@ export class CarService {
     return this.http.post("https://localhost:6001/api/Car", formData)
   }
   updateCar(updateCarModel: FormData): Observable<any> {
-    return this.http.put<any>("https://localhost:6001/api/Car/update-car", updateCarModel);
+    return this.http.put<any>("https://localhost:6001/api/Car", updateCarModel);
   }
   updateCarDocuments(carModel: any): Observable<any> {
     return this.http.put<any>("https://localhost:6001/api/Car/update-doc", carModel);

@@ -22,8 +22,12 @@ export class ChatService {
     return this.http.get<string>(url);
   }
   getChatById(chatId: string): Observable<ChatModel> {
-    const url = 'https://localhost:6001/api/Chat/chat/' + chatId;
+    const url = 'https://localhost:6001/api/Chat/' + chatId;
     return this.http.get<ChatModel>(url);
+  }
+  getChatMessages(chatId: string, take: number, skip: number): Observable<MessageModel[]> {
+    const url = 'https://localhost:6001/api/Chat/chat-messages/' + chatId;
+    return this.http.get<MessageModel[]>(url, { params: { take: take, skip: skip } });
   }
   createMessage(message: { text: string, chatId: string, user: UserModel }): Observable<any> {
     const url = 'https://localhost:6001/api/Chat/message';

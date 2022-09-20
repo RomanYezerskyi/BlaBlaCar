@@ -15,7 +15,7 @@ export class NotificationsService {
     return this.http.get<NotificationsModel[]>(url, { params: { take: take, skip: skip } });
   }
   getUsersNotifications(take: number, skip: number): Observable<NotificationsModel[]> {
-    const url = 'https://localhost:6001/api/Notification/users';
+    const url = 'https://localhost:6001/api/Notification/last-notifications';
     return this.http.get<NotificationsModel[]>(url, { params: { take: take, skip: skip } });
   }
   createNotification(notification: NotificationsModel): Observable<any> {
@@ -36,7 +36,7 @@ export class NotificationsService {
   }
   readNotifications(notifications: NotificationsModel[]): Observable<any> {
     const url = 'https://localhost:6001/api/Notification/'
-    return this.http.post(url, notifications)
+    return this.http.put(url, notifications)
   }
   addFeedBack(feedback: FeedBackModel): Observable<any> {
     const url = 'https://localhost:6001/api/Notification/feedback'

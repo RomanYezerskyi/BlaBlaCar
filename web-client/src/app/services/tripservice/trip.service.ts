@@ -57,7 +57,7 @@ export class TripService {
     return this.http.post(url, trip);
   }
   deleteTrip(id: number): Observable<any> {
-    const url = 'https://localhost:6001/api/Trips/trip/';
+    const url = 'https://localhost:6001/api/Trips/';
     return this.http.delete(url + id);
   }
 }

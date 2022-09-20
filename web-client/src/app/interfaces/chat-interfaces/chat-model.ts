@@ -3,7 +3,7 @@ import { MessageModel } from "./message-model";
 import { ChatParticipantModel } from "./chat-participant-model";
 
 export interface ChatModel {
-    id: string
+    id?: string
     chatName?: string,
     chatImage?: string,
     messages?: Array<MessageModel>,

@@ -19,7 +19,6 @@ export class SignalRService {
   public handlerMethod: string = '';
 
   constructor() {
-    console.log(this.url);
     this._signalEvent = new Subject<any>();
   }
   set setConnectionUrl(url: string) {
@@ -35,7 +34,6 @@ export class SignalRService {
     this.handlerMethod = handlerMethod;
   }
   getDataStream<TData>(): Observable<SignalEvent<TData>> {
-    console.log(this.hubMethod);
     this._ensureConnection<TData>();
     return this._signalEvent.asObservable();
   }
@@ -44,7 +42,6 @@ export class SignalRService {
     this._initializeSignalR<TData>();
   }
   private _initializeSignalR<TData>() {
-    console.log(this.hubMethod);
     this._hubConnection = new HubConnectionBuilder()
       .withUrl(this.url)
       .build();
@@ -58,7 +55,6 @@ export class SignalRService {
       })
       .catch(error => {
         console.warn(error);
-
         this._hubConnection.stop().then(_ => {
           this._openConnection = false;
           this._ensureConnection();

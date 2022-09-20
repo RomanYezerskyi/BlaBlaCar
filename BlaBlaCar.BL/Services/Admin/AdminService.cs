@@ -47,7 +47,7 @@ namespace BlaBlaCar.BL.Services.Admin
                             .ThenInclude(x => x.CarDocuments),
                 filter:x=>x.UserStatus == (Status)status || x.Cars.Any(c=>c.CarStatus == (Status)status)));
             if (!users.Any())
-                throw new NoContentException();
+                return null;
             var usersCount = await _unitOfWork.Users.GetCountAsync(x=>x.UserStatus == (Status)status 
                                                                 || x.Cars.Any(c => c.CarStatus == (Status)status));
 
@@ -112,8 +112,8 @@ namespace BlaBlaCar.BL.Services.Admin
             var trips = _mapper.Map<IEnumerable<TripDTO>>(
                 await _unitOfWork.Trips.GetAsync(null, null,
                     x=>x.CreatedAt.Value.Month == searchDate.Month));
-            var groupedWeekTrips = trips.GroupBy(x => x.CreatedAt.Value.DayOfWeek);
-            var groupedTrips = trips.GroupBy(x => x.CreatedAt.Value.Date);
+            var groupedWeekTrips = trips.GroupBy(x => x.CreatedAt.DayOfWeek);
+            var groupedTrips = trips.GroupBy(x => x.CreatedAt.Date);
             var res = new AdminStatisticsDTO()
             {
                 UsersStatisticsCount = groupedUsers.Select(x=>x.ToList().Count()),
@@ -157,7 +157,7 @@ namespace BlaBlaCar.BL.Services.Admin
                     null,
                     take:take,
                     skip:skip));
-            if (!users.Any()) throw new NoContentException();
+            if (!users.Any()) return null;
             users = users.Select(u =>
             {
                 if (u.UserImg != null)

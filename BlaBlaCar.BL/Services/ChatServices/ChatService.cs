@@ -67,7 +67,7 @@ namespace BlaBlaCar.BL.Services.ChatServices
             if (checkIfChatExist != Guid.Empty) return checkIfChatExist;
             var chatDto = new ChatDTO()
             {
-                Type = ChatDTOType.Private,
+                Type = ChatTypeDTO.Private,
             };
             var chatParticipants = new List<ChatParticipantDTO>()
             {
@@ -91,24 +91,38 @@ namespace BlaBlaCar.BL.Services.ChatServices
         public async Task<ChatDTO> GetChatByIdAsync(Guid chatId)
         {
             var chat = _mapper.Map<ChatDTO>(await _unitOfWork.Chats.GetAsync(
-                x=>x.Include(x=>x.Messages).ThenInclude(x=>x.User)
-                    .Include(x=>x.Users).ThenInclude(x=>x.User),
+                x=>x.Include(x=>x.Users).ThenInclude(x=>x.User),
                 x => x.Id == chatId));
             var readMessages =
               await  _unitOfWork.ReadMessages.GetAsync(null, null, x => x.ChatId == chatId);
-            chat.Messages = chat.Messages.Select(m =>
-            {
-                if (m.User.UserImg != null)
-                    m.User.UserImg = _hostSettings.CurrentHost + m.User.UserImg;
+           chat.Users = chat.Users.Select(u =>
+           {
+               if(u.User.UserImg != null)
+                   u.User.UserImg = _hostSettings.CurrentHost + u.User.UserImg;
+               return u;
+           }).ToList();
 
+            return chat;
+        }
+
+        public async Task<IEnumerable<MessageDTO>> GetChatMessages(Guid chatId, int take, int skip)
+        {
+            var messages = _mapper.Map<IEnumerable<MessageDTO>>(
+                await _unitOfWork.Messages.GetAsync(x=>x.OrderByDescending(x=>x.CreatedAt), null, x => x.ChatId == chatId, take:take,skip:skip));
+            if (!messages.Any()) return messages;
+
+            var readMessages =
+                await _unitOfWork.ReadMessages.GetAsync(null, null, x => x.ChatId == chatId);
+            messages = messages.Select(m =>
+            {
                 if (readMessages.Any(x => x.MessageId == m.Id))
                 {
                     m.Status = MessageStatus.Read;
                 }
-                return m;
-            }).ToList();
 
-            return chat;
+                return m;
+            });
+            return messages.Reverse().ToList();
         }
 
         public async Task<bool> ReadMessagesFromChat(IEnumerable<MessageDTO> messages, Guid currentUserId)
@@ -126,13 +140,14 @@ namespace BlaBlaCar.BL.Services.ChatServices
                 ChatId = messageModel.ChatId,
                 Text = messageModel.Text,
                 UserId = currentUserId,
+                CreatedAt = DateTimeOffset.Now
             };
             var message = _mapper.Map<Message>(newMessage);
             await _unitOfWork.Messages.InsertAsync(message);
             var res =  await _unitOfWork.SaveAsync(currentUserId);
             if (!res) return res;
             newMessage.User = messageModel.User;
-            newMessage.User.UserImg = _hostSettings.CurrentHost + messageModel.User.UserImg;
+            //newMessage.User.UserImg = _hostSettings.CurrentHost + messageModel.User.UserImg;
             newMessage.Id = message.Id;
             await _chatHubService.NotifyChat(newMessage.ChatId, newMessage);
             _backgroundJobs.Enqueue<IChatHubService>(

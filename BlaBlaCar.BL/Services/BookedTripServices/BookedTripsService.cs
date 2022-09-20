@@ -50,9 +50,8 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
                     take:take,
                     skip:skip));
 
-            if (!trips.Any())
-                throw new NoContentException();
-            var tripsCount = await _unitOfWork.Trips.GetCountAsync(x => x.TripUsers
+            if (!trips.Any()) return null;
+                var tripsCount = await _unitOfWork.Trips.GetCountAsync(x => x.TripUsers
                 .Any(user => user.UserId == currentUserId));
 
             trips = trips.Select(t =>

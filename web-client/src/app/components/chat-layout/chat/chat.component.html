@@ -1,9 +1,10 @@
 <div class="col2">
     <div class="chat">
-        <div class="messages__list">
+        <div #scrollMe infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scroll)="scroll()"
+            [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false" class="messages__list">
             <div class="message__item" [ngClass]="{'active': message.userId == currentUserId}"
                 *ngFor="let message of chat.messages;let i = index">
-                <p class="unread-messages-line" *ngIf="i == getUnreadMessageIndex()">New</p>
+                <p #newMessages class="unread-messages-line" *ngIf="i == getUnreadMessageIndex()">New</p>
                 <div class="message-user">
                     <div class="user__img" *ngIf="message.userId != currentUserId">
                         <img [src]="sanitizeImg(message.user!.userImg!)" alt="">

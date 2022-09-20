@@ -20,7 +20,7 @@ export class UserService {
     }
   }
   async chekIfUserExist(): Promise<any> {
-    const url = 'https://localhost:6001/api/User/user';
+    const url = 'https://localhost:6001/api/User/add-user';
     return await new Promise<any>((resolve, reject) => {
       this.http.get<any>(url).subscribe({
         next: (res) => resolve(res),

@@ -1,6 +1,6 @@
 ﻿namespace BlaBlaCar.BL.DTOs.ChatDTOs
 {
-    public enum ChatDTOType
+    public enum ChatTypeDTO
     {
         Private = 1,
         Room = 2

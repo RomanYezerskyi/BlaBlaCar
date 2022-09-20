@@ -59,10 +59,9 @@ namespace BlaBlaCar.BL.Services.NotificationServices
                     x=>x.OrderByDescending(x=>x.CreatedAt),
                     null, notificationFilter));
 
-            if (!notifications.Any())
-                throw new NoContentException();
+            if (!notifications.Any()) return null;
 
-            notifications = notifications.Select(n =>
+                notifications = notifications.Select(n =>
             {
                 if (readNotifications.Any(x => x.NotificationId == n.Id))
                     n.ReadNotificationStatus = ReadNotificationStatusDTO.Read;
@@ -80,10 +79,8 @@ namespace BlaBlaCar.BL.Services.NotificationServices
             var notifications = _mapper.Map<IEnumerable<GetNotificationsDTO>>( 
                 readNotifications.Select(x => x.Notification));
 
-            if (!notifications.Any())
-                throw new NoContentException();
-
-            notifications = notifications.Select(n =>
+            if (!notifications.Any()) return null;
+                notifications = notifications.Select(n =>
             {
                 if (readNotifications.Any(x => x.NotificationId == n.Id))
                     n.ReadNotificationStatus = ReadNotificationStatusDTO.Read;

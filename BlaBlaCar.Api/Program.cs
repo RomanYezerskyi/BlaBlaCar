@@ -71,7 +71,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICarService, CarService>();
 builder.Services.AddScoped<ICarSeatsService, CarSeatsService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
-builder.Services.AddScoped<ISaveFileService, SaveFileToApiService>();
+builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IChatHubService, ChatHubService>();

@@ -12,21 +12,10 @@
                 </div>
                 <div class="data">
                     <h4 class="user-name">{{chat.users![0].user!.firstName}}</h4>
-                    <p class="date" *ngIf="chat.messages![0] != undefined"> {{chat.messages![0].createdAt | date}}</p>
-                    <p class="message" *ngIf="chat.messages![0] != undefined">{{chat.messages![0].text}}</p>
+                    <!-- <p class="date" *ngIf="chat.messages![0] != undefined"> {{chat.messages![0].createdAt | date}}</p> -->
+                    <!-- <p class="message" *ngIf="chat.messages![0] != undefined">{{chat.messages![0].text}}</p> -->
                 </div>
             </li>
-            <!-- <li class="chat__item">
-                <div class="user__img">
-                    <img src="https://demo.dashboard
-                    pack.com/hospital-html/img/messages/1.png" alt="">
-                </div>
-                <div class="data">
-                    <h4 class="user-name">John Doe</h4>
-                    <p class="date"> 28th Nov</p>
-                    <p class="message">Lorem ipsum dolor sit amet consectetur.</p>
-                </div>
-            </li> -->
         </ul>
     </div>
 </div>

@@ -49,7 +49,7 @@ namespace BlaBlaCar.Api.Controllers
             return NoContent();
         }
         
-        [HttpDelete("trip/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTrip(Guid id)
         {
             var res = await _tripService.DeleteTripAsync(id, UserId);

@@ -119,7 +119,7 @@
     }
 
     .messages__list {
-        overflow: auto;
+        overflow-y: auto;
         height: 68vh;
         display: flex;
         flex-flow: column;
