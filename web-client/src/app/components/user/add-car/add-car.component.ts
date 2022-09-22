@@ -51,7 +51,7 @@ export class AddCarComponent implements OnInit, OnDestroy {
   addCar(form: NgForm): void {
     if (form.valid) {
       this.formData.append("ModelName", this.newCar.modelName);
-      this.formData.append("RegistNum", this.newCar.registNum);
+      this.formData.append("RegistrationNumber", this.newCar.registNum);
       this.formData.append("CountOfSeats", this.newCar.countOfSeats.toString());
       this.carService.addCar(this.formData).pipe(takeUntil(this.unsubscribe$)).subscribe(
         response => {

@@ -7,7 +7,7 @@ import { TripModel } from "../trip-interfaces/trip-model";
 export interface CarModel {
     id: number;
     modelName: string;
-    registNum: string;
+    registrationNumber: string;
     carType: CarType;
     seats: SeatModel[];
     carDocuments: CarDocumentsModel[]

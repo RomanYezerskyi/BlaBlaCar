@@ -121,7 +121,7 @@ export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
   }
   getCarDoc(carDocuments: CarDocumentsModel[]): Array<string> {
     let images: Array<string> = [];
-    carDocuments.forEach(x => images.push(x.techPassport));
+    carDocuments.forEach(x => images.push(x.technicalPassport));
     return images;
   }
 

@@ -80,7 +80,7 @@ namespace BlaBlaCar.BL.Services.TripServices
             Guid currentUserId)
         {
             var trips = _mapper.Map<IEnumerable<TripDTO>>
-                (await _unitOfWork.Trips.GetAsync(orderBy:null, 
+                (await _unitOfWork.Trips.GetAsync(orderBy:x=>x.OrderByDescending(x=>x.StartTime), 
                     includes:x=>x.Include(i=>i.Car)
                         .Include(x=>x.AvailableSeats)
                         .Include(i=>i.TripUsers).ThenInclude(i=>i.User)
@@ -93,26 +93,19 @@ namespace BlaBlaCar.BL.Services.TripServices
 
             var tripsCount =await _unitOfWork.Trips.GetCountAsync(x=>x.UserId == currentUserId);
 
-            trips = trips.Select(t =>
+            foreach (var trip in trips)
             {
-                if (t.Car != null)
-                {
-                    t.Car.CarDocuments = t.Car.CarDocuments.Select(c =>
+                if (trip.TripUsers != null)
+                    trip.TripUsers = trip.TripUsers.Select(u =>
                     {
-                        if (c.TechnicalPassport != null)
-                            c.TechnicalPassport = _hostSettings.CurrentHost + c.TechnicalPassport;
-                        return c;
-                    }).ToList();
-                }
+                        if (u.User.UserImg != null)
+                        {
+                            u.User.UserImg = _hostSettings.CurrentHost + u.User.UserImg;
+                        }
 
-                t.TripUsers = t.TripUsers.Select(tu =>
-                {
-                    if(tu.User.UserImg != null)
-                        tu.User.UserImg = _hostSettings.CurrentHost + tu.User.UserImg;
-                    return tu;
-                }).ToList();
-                return t;
-            });
+                        return u;
+                    }).ToList();
+            }
 
             var listGroupByUsers = trips.Select(x => x.TripUsers
                 .GroupBy(x => x.UserId)

@@ -30,11 +30,11 @@ export class EditCarModalDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.car.carDocuments.forEach(x => this.images.push(x.techPassport));
+    this.car.carDocuments.forEach(x => this.images.push(x.technicalPassport));
     this.updateCarModel.id = this.car.id;
-    console.log(this.car.id);
+    console.log(this.car.carDocuments);
     this.updateCarModel.modelName = this.car.modelName;
-    this.updateCarModel.registNum = this.car.registNum;
+    this.updateCarModel.registNum = this.car.registrationNumber;
     this.updateCarModel.carType = this.car.carType;
     this.updateCarModel.seats = this.car.seats;
   }
@@ -51,7 +51,7 @@ export class EditCarModalDialogComponent implements OnInit, OnDestroy {
   deleteImg(img: string): void {
     if (this.updateCarModel.deletedDocuments == undefined)
       this.updateCarModel.deletedDocuments = [];
-    let doc = this.car.carDocuments.find(x => x.techPassport == img);
+    let doc = this.car.carDocuments.find(x => x.technicalPassport == img);
     this.updateCarModel.deletedDocuments.push(doc!);
   }
   updateCar(): void {
@@ -88,7 +88,7 @@ export class EditCarModalDialogComponent implements OnInit, OnDestroy {
     }
     if (this.updateCarModel.deletedDocuments?.length > 0) {
       for (let item of this.updateCarModel.deletedDocuments) {
-        this.formData.append('DeletedDocuments', item.techPassport);
+        this.formData.append('DeletedDocuments', item.technicalPassport);
       }
     }
   }

@@ -8,7 +8,7 @@ import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 export class UserService {
   public userProfile: UserModel = {} as UserModel;
   constructor(private http: HttpClient) {
-
+    console.log(this.userProfile.id);
     if (this.userProfile.id == undefined) {
       this.getCurrentUser().subscribe(
         response => {

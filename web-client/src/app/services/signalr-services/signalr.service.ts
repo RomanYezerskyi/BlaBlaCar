@@ -67,10 +67,6 @@ export class SignalRService {
     this._hubConnection.on(this.handlerMethod, (data) => {
       this._onMessage<TData>({ data })
     })
-    // this._hubConnection.on('MessageNumberArray', (data) => {
-    //   const { numbers } = data;
-    //   this._onMessage({ type: SignalEventType.EVENT_TWO, data: numbers })
-    // })
     this._hubConnection.onclose((e) => this._openConnection = false);
   }
 

@@ -1,5 +1,5 @@
 <div class="container">
-    <form #searchForm="ngForm" class="form">
+    <form #searchForm="ngForm" class="form" (ngSubmit)="search()">
         <mat-form-field class="input__item" appearance="standard">
             <!-- <mat-label>Start place</mat-label> -->
             <input type="text" matInput placeholder="Start place" id="startPlace" name="startPlace"
@@ -39,7 +39,7 @@
             </div>
         </mat-form-field>
 
-        <button href="" class="btn" [disabled]="!searchForm.valid" (click)="search()">
+        <button type="submit" class="btn" [disabled]="!searchForm.valid">
             <!-- <mat-icon>search</mat-icon> -->
             Search
         </button>

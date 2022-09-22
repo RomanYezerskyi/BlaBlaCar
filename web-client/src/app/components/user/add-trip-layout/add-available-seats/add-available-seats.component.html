@@ -1,7 +1,23 @@
 <form #addTripForm="ngForm" (ngSubmit)="addTrip(addTripForm)" class="form">
   <div class="form_items">
     <div class="form_item_inputs">
-      <div class="form_item">
+      <mat-form-field class="form-item" appearance="outline">
+        <mat-label>Car type</mat-label>
+        <mat-select name="carId" id="carId" [(ngModel)]="trip.carId" (ngModelChange)="setSelectedCar($event)" required>
+          <mat-option *ngFor="let car of userCars" [value]="car.id">
+            {{car.modelName}}
+          </mat-option>
+          <!-- <mat-option [value]="carType.Bus">
+            Bus
+          </mat-option> -->
+        </mat-select>
+        <mat-icon matSuffix>drive_eta</mat-icon>
+        <!-- <mat-icon matSuffix *ngIf="newCar.carType == carType.Bus">airport_shuttle</mat-icon> -->
+        <!-- <mat-error *ngIf="CarFormControl.hasError('required')">
+          Car type is <strong>required</strong>
+        </mat-error> -->
+      </mat-form-field>
+      <!-- <div class="form_item">
         <label for="carId" class="sr-only">Car</label>
 
         <select name="carId" id="carId" [(ngModel)]="trip.carId" (ngModelChange)="setSelectedCar($event)" required>
@@ -9,12 +25,22 @@
             <p class="option">{{car.modelName}}</p>
           </option>
         </select>
-      </div>
-      <div class="form_item">
+      </div> -->
+      <mat-form-field class="form-item" appearance="outline">
+        <mat-label>Count of seats</mat-label>
+        <input matInput type="number" id="pricePerSeat" name="pricePerSeat" min="1" [(ngModel)]="trip.pricePerSeat"
+          placeholder="Ex. 4" required>
+        <mat-icon matSuffix>airline_seat_recline_normal</mat-icon>
+        <!-- <mat-error *ngIf="CarFormControl.hasError('required')">
+          Count of seats is <strong>required</strong>
+        </mat-error> -->
+      </mat-form-field>
+      <!-- <div class="form_item">
         <label for="pricePerSeat" class="sr-only">pricePerSeat</label>
         <input type="number" id="pricePerSeat" name="pricePerSeat" [(ngModel)]="trip.pricePerSeat" class="form-control"
           placeholder="pricePerSeat" required>
-      </div>
+      </div> -->
+
     </div>
     <div class="box">
       <div class="seats">

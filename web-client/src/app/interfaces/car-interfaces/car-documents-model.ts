@@ -1,3 +1,3 @@
 export interface CarDocumentsModel {
-    techPassport: string
+    technicalPassport: string
 }

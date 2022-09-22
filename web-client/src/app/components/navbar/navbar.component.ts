@@ -1,26 +1,63 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/userservice/user.service';
 import { AuthService } from 'src/app/services/authservice/auth-service.service';
+import { Subject } from 'rxjs';
+import { SignalRService } from 'src/app/services/signalr-services/signalr.service';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
+  private unsubscribe$: Subject<void> = new Subject<void>();
+  private token: string | null = localStorage.getItem("jwt");
   userStatus = UserStatus;
   toggle: boolean = true;
   notification: boolean = false;
   notifiNotReadCount: number = 0;
+  chatId: string = '';
+  unreadMessages: number = 0;
   constructor(
     private jwtHelper: JwtHelperService,
     private router: Router,
+    private route: ActivatedRoute,
     public userService: UserService,
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private signal: SignalRService) {
+    this.setSignalRUrls();
+  }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['chatId']) {
+        this.chatId = params['chatId'];
+      }
+    });
+    this.connectToChatMessagesSignalRHub()
+  }
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+  setSignalRUrls(): void {
+    if (!this.token) { return }
+    const currentUserId = this.jwtHelper.decodeToken(this.token!).id;
+
+    this.signal.setConnectionUrl = "https://localhost:6001/chatHub";
+    this.signal.setHubMethod = 'JoinToChatMessagesNotifications';
+    this.signal.setHubMethodParams = currentUserId;
+    this.signal.setHandlerMethod = "BroadcastMessagesFromChats";
+  }
+  connectToChatMessagesSignalRHub(): void {
+    this.signal.getDataStream<string>().subscribe(message => {
+      console.log(message.data);
+      if (this.chatId == '' || this.chatId != message.data) {
+        this.unreadMessages += 1;
+      }
+    });
   }
   countNotify($event: number): void {
     this.notifiNotReadCount = $event;

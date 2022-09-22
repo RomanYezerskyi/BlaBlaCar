@@ -157,12 +157,17 @@ namespace BlaBlaCar.DAL
         public async Task<bool> SaveAsync(Guid userId)
         {
             var entities = _context.ChangeTracker.Entries();
-            if (!entities.Any()) 
+            if (!entities.Any())
+            {
                 return Convert.ToBoolean(await _context.SaveChangesAsync());
+            }
 
             foreach (var entity in entities)
             {
-                if (entity.Entity is not BaseEntity baseEntity) continue;
+                if (entity.Entity is not BaseEntity baseEntity)
+                {
+                    continue;
+                }
 
                 if (entity.State == EntityState.Added)
                 {

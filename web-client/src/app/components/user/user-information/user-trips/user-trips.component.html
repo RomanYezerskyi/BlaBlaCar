@@ -3,9 +3,9 @@
     style="height: 88.9vh; overflow: auto;">
     <div class="search_results" *ngIf="trips.trips.length > 0">
         <div class="items">
-            <div class="search_item" *ngFor="let item of trips.trips">
-                <div class="header">
-
+            <div class="search_item" *ngFor="let item of trips.trips"
+                [ngClass]="isTripCompleted(item.endTime) ? 'is-disabled':''">
+                <div class="trip-main-info">
                     <div class="time">
                         <p>{{item.startTime | date:'MMM d, y, h:mm a'}}</p>
                         <p>{{item.endTime | date:'MMM d, y, h:mm a'}}</p>
@@ -14,11 +14,11 @@
                     </div>
                     <div class="price_item">
                         <div class="cities">
-                            <div class="start">
+                            <div class="place">
                                 <mat-icon class="item_icon">gps_fixed</mat-icon>
                                 <p>{{item.startPlace}}</p>
                             </div>
-                            <div class="destination">
+                            <div class="place">
                                 <mat-icon class="item_icon"> place</mat-icon>
                                 <p>{{item.endPlace}}</p>
                             </div>
@@ -27,69 +27,49 @@
                             <p>{{item.pricePerSeat | currency:"UAH":"symbol"}}</p>
                         </div>
                     </div>
-                    <div class="actions ">
-                        <i class="material-icons" (click)="deleteTrip(item.id)">cancel</i>
+                </div>
+                <div class="btn-delete-trip">
+                    <div class="actions" (click)="deleteTrip(item.id)">
+                        <i class="material-icons">delete_outline</i>
+                        <p>Delete</p>
                     </div>
                 </div>
-
                 <div class="booked_info">
                     <div class="info">
-                        <div class="availableSeatsCount">
+                        <div class="seats-count">
                             <i class="material-icons">airline_seat_recline_normal</i>
                             <p>{{item.availableSeats.length}}</p>
                         </div>
-                        <div class="bookedSeatsCount">
-                            <mat-icon class="icons">people</mat-icon>
+                        <div class="seats-count">
+                            <i class="material-icons">people</i>
                             <p>{{item.tripUsers.length}}</p>
                         </div>
                     </div>
-                    <div class="actions">
+                    <div class="btn-users">
                         <i class="material-icons">keyboard_control</i>
                     </div>
                 </div>
-                <div class="list_users">
-                    <hr />
-                    <div class="user" *ngFor="let user of item.bookedTripUsers">
-                        <!-- {{tripUser.user.id}} -->
 
-                        <!-- <div class="user_info" *ngFor="let user of tripUser"> -->
-                        <!-- {{user.user.id}} -->
+                <div class="list_users">
+                    <div class="user" *ngFor="let user of item.bookedTripUsers">
                         <div class="user_info" *ngIf="user != null">
-                            <i class="material-icons cancel"
-                                (click)="deleteUserFromTrip(user.user.id, item.id)">cancel</i>
                             <div class="body">
-                                <i class="material-icons">telegram</i>
+                                <i class="material-icons message" title="Open chat"
+                                    (click)="getChat(user.userId)">chat</i>
                                 <div class="profile_img">
                                     <img [src]="sanitizeUserImg(user.user.userImg!)" class="img" alt="">
                                 </div>
                                 <p class="user_name">{{user.user.firstName}}</p>
                             </div>
-                            <div class="bookedSeats">
-                                <p class="title">Booked seats:</p>
+                            <div class="booked-seats">
+                                <p class="title">Seats:</p>
                                 <div class="booked_seats_num" *ngFor="let seat of user.seats">
                                     <p>{{seat?.seatNumber}}</p>
                                 </div>
                             </div>
                         </div>
-                        <!-- </div> -->
-                        <!-- <div class="user_info" *ngIf="tripUser != null">
-                            <i class="material-icons cancel"
-                                (click)="deleteUserFromTrip(tripUser!.user!.id, item.id)">cancel</i>
-                            <div class="body">
-                                <i class="material-icons">telegram</i>
-                                <div class="profile_img">
-                                    <img [src]="sanitaizeImg(tripUser.user.userImg!)" class="img" alt="">
-                                </div>
-                                <p class="user_name">{{tripUser?.user?.firstName}}</p>
-                            </div>
-                            <div class="bookedSeats">
-                                <p class="title">Booked seats:</p>
-                                <div class="booked_seats_num" *ngFor="let seat of tripUser?.seats">
-                                    <p>{{seat?.num}}</p>
-                                </div>
-                            </div>
-
-                        </div> -->
+                        <i class="material-icons cancel" title="Delete form trip"
+                            (click)="deleteUserFromTrip(user.user.id, item.id)">person_remove</i>
                     </div>
                 </div>
             </div>
