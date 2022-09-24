@@ -80,7 +80,7 @@ namespace BlaBlaCar.BL.Services.TripServices
             Guid currentUserId)
         {
             var trips = _mapper.Map<IEnumerable<TripDTO>>
-                (await _unitOfWork.Trips.GetAsync(orderBy:x=>x.OrderByDescending(x=>x.StartTime), 
+                (await _unitOfWork.Trips.GetAsync(orderBy:x=>x.OrderByDescending(x=>x.EndTime), 
                     includes:x=>x.Include(i=>i.Car)
                         .Include(x=>x.AvailableSeats)
                         .Include(i=>i.TripUsers).ThenInclude(i=>i.User)
@@ -150,7 +150,7 @@ namespace BlaBlaCar.BL.Services.TripServices
                     orderBy = trip => trip.OrderBy(t => t.StartTime);
                     break;
                 case TripOrderBy.ShortestTrip:
-                    orderBy = trip => trip.OrderBy(x => new {res= x.EndTime-x.StartTime });
+                    orderBy = trip => trip.OrderBy(x => x.TripTime);
                     break;
                 case TripOrderBy.LowestPrice:
                     orderBy = trip => trip.OrderBy(t => t.PricePerSeat);

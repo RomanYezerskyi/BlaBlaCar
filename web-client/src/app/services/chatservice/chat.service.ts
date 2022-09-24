@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ChatModel } from 'src/app/interfaces/chat-interfaces/chat-model';
-import { RoleModel } from 'src/app/interfaces/role-model';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 import { MessageModel } from 'src/app/interfaces/chat-interfaces/message-model';
 
@@ -36,5 +35,9 @@ export class ChatService {
   readMessagesInchat(messages: MessageModel[]): Observable<any> {
     const url = 'https://localhost:6001/api/Chat/read-messages';
     return this.http.put<any>(url, messages);
+  }
+  isUreadMessages(): Observable<boolean> {
+    const url = 'https://localhost:6001/api/Chat/unread-messages';
+    return this.http.get<boolean>(url);
   }
 }

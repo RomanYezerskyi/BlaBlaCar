@@ -4,8 +4,9 @@ import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/userservice/user.service';
 import { AuthService } from 'src/app/services/authservice/auth-service.service';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { SignalRService } from 'src/app/services/signalr-services/signalr.service';
+import { ChatService } from 'src/app/services/chatservice/chat.service';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -26,7 +27,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     public userService: UserService,
     private authService: AuthService,
-    private signal: SignalRService) {
+    private signal: SignalRService,
+    private chatService: ChatService) {
     this.setSignalRUrls();
   }
 
@@ -36,11 +38,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.chatId = params['chatId'];
       }
     });
-    this.connectToChatMessagesSignalRHub()
+    this.connectToChatMessagesSignalRHub();
+    this.isUnreadMessages();
   }
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+  isUnreadMessages(): void {
+    this.chatService.isUreadMessages().pipe(takeUntil(this.unsubscribe$)).subscribe(result => {
+      if (result) this.unreadMessages = 1;
+    });
   }
   setSignalRUrls(): void {
     if (!this.token) { return }
@@ -52,7 +60,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.signal.setHandlerMethod = "BroadcastMessagesFromChats";
   }
   connectToChatMessagesSignalRHub(): void {
-    this.signal.getDataStream<string>().subscribe(message => {
+    this.signal.getDataStream<string>().pipe(takeUntil(this.unsubscribe$)).subscribe(message => {
       console.log(message.data);
       if (this.chatId == '' || this.chatId != message.data) {
         this.unreadMessages += 1;

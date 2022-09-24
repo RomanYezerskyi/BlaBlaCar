@@ -1,4 +1,5 @@
-﻿using BlaBlaCar.DAL.Entities.CarEntities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using BlaBlaCar.DAL.Entities.CarEntities;
 
 namespace BlaBlaCar.DAL.Entities.TripEntities
 {
@@ -17,5 +18,8 @@ namespace BlaBlaCar.DAL.Entities.TripEntities
         public Car? Car { get; set; }
         public ICollection<TripUser> TripUsers { get; set; }
         public ICollection<AvailableSeats> AvailableSeats { get; set; }
+
+        [NotMapped]
+        public TimeSpan TripTime => EndTime - StartTime;
     }
 }
