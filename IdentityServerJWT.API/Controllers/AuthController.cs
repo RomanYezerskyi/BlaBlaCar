@@ -12,8 +12,8 @@ using Microsoft.IdentityModel.Tokens;
 namespace IdentityServerJWT.API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    public class AuthController : ControllerBase
+    //[ApiController]
+    public class AuthController : Controller
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly AuthorizationService _authorizationService;
@@ -23,9 +23,15 @@ namespace IdentityServerJWT.API.Controllers
             _signInManager = signInManager;
             _authorizationService = authorizationService;
         }
-        
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+      
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel userModel)
+        public async Task<IActionResult> Login( LoginModel userModel)
         {
             if (userModel is null)
             {
@@ -35,6 +41,7 @@ namespace IdentityServerJWT.API.Controllers
             try
             {
                 var res = await _authorizationService.Login(userModel);
+                return RedirectToRoute("http://localhost:4200/profile", res);
                 return Ok(res);
             }
             catch (Exception e)

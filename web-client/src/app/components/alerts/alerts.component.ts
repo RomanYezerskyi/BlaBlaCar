@@ -15,6 +15,6 @@ export class AlertsComponent implements OnInit {
   }
   showError(message: string): void {
     this.errorMessages.push(message);
-    let myTimer = setTimeout(() => { this.errorMessages.shift(); }, 2000);
+    // let myTimer = setTimeout(() => { this.errorMessages.shift(); }, 2000);
   }
 }
