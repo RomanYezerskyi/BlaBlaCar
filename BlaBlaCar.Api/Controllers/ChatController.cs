@@ -42,6 +42,12 @@ namespace BlaBlaCar.API.Controllers
             var chat = await _chatService.GetChatMessages(chatId, take, skip);
             return Ok(chat);
         }
+        [HttpGet("unread-messages")]
+        public async Task<IActionResult> IsUnreadMessages()
+        {
+            var chat = await _chatService.IsUnreadMessagesAsync(UserId);
+            return Ok(chat);
+        }
 
         [HttpPut("read-messages")]
         public async Task<IActionResult> ReadChatMessages(IEnumerable<MessageDTO> messages)

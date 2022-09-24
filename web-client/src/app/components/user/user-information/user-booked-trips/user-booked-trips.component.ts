@@ -7,6 +7,7 @@ import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
 import { TripUserModel } from 'src/app/interfaces/trip-interfaces/trip-user-model';
 import { TripsResponseModel } from 'src/app/interfaces/trip-interfaces/trips-response-model';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
+import { ChatService } from 'src/app/services/chatservice/chat.service';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
 import { TripService } from 'src/app/services/tripservice/trip.service';
 
@@ -17,14 +18,14 @@ import { TripService } from 'src/app/services/tripservice/trip.service';
 })
 export class UserBookedTripsComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject<void>();
-  trips: TripsResponseModel = {} as TripsResponseModel;
+  trips: TripsResponseModel = { totalTrips: 0, trips: [] = [] };
   public isFullListDisplayed: boolean = false;
   totalTrips: number = 0;
   private Skip: number = 0;
   private Take: number = 5;
   constructor(
-    private tripService: TripService,
-    private imgSanitaze: ImgSanitizerService) { }
+    private tripService: TripService, private router: Router,
+    private imgSanitaze: ImgSanitizerService, private chatService: ChatService) { }
 
   ngOnInit(): void {
     this.getUserBookedTrips();
@@ -42,6 +43,7 @@ export class UserBookedTripsComponent implements OnInit, OnDestroy {
     if (this.Skip <= this.totalTrips) {
       this.tripService.getUserBookedTrips(this.Take, this.Skip).pipe(takeUntil(this.unsubscribe$)).subscribe(
         response => {
+          console.log(response);
           if (response != null) {
             this.trips.trips = this.trips.trips.concat(response.trips);
             if (this.totalTrips == 0)
@@ -71,6 +73,24 @@ export class UserBookedTripsComponent implements OnInit, OnDestroy {
         console.log(response)
       },
       (error: HttpErrorResponse) => { console.log(error.error); }
+    );
+  }
+  isTripCompleted(endDate: Date): boolean {
+
+    if (new Date(endDate) < new Date()) return true;
+    return false
+  }
+  getChat(userId: string) {
+    this.chatService.GetPrivateChat(userId).pipe(takeUntil(this.unsubscribe$)).subscribe(
+      response => {
+        this.router.navigate(['/chat'], {
+          queryParams: {
+            chatId: response
+          }
+        });
+        console.log(response);
+      },
+      (error: HttpErrorResponse) => { console.error(error.error); }
     );
   }
 }

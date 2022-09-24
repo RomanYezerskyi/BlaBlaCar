@@ -1,7 +1,7 @@
 <div class="container" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
   (scrolled)="onScroll();" [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false"
-  style="height: 88.9vh; overflow: scroll;">
-  <div class="" [ngClass]="{'': isParams, 'title': !isParams}">
+  style="height: 88.9vh; overflow-y:auto;">
+  <div class="" [ngClass]="{'hidden': isParams, 'title': !isParams}">
     <h2>
       Where do you want to go?
     </h2>

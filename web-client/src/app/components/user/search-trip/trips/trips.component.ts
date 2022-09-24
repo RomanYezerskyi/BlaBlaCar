@@ -81,6 +81,7 @@ export class TripsComponent implements OnInit, OnDestroy {
     this.tripService.SearchTrip(this.trip).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         this.isSpinner = false;
+        console.log(response);
         if (response != null) {
           console.log(response);
           if (event != undefined) {
@@ -93,7 +94,7 @@ export class TripsComponent implements OnInit, OnDestroy {
           if (response.totalTrips > 0 && this.totalTrips == 0)
             this.totalTrips = response.totalTrips;
         }
-        else this.isTrips = false;
+        else { this.isTrips = false; }
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );

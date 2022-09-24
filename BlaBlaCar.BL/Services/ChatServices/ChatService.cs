@@ -61,6 +61,17 @@ namespace BlaBlaCar.BL.Services.ChatServices
             });
             return chats.ToList();
         }
+
+        public async Task<bool> IsUnreadMessagesAsync(Guid currentUserId)
+        {
+            var messages =_mapper.Map<IEnumerable<MessageDTO>>(await _unitOfWork.Messages.GetAsync(null, null,
+                x => x.Chat.Users.Any(x => x.UserId == currentUserId)));
+            var readMessages = _mapper.Map<IEnumerable<ReadMessagesDTO>>(
+                await _unitOfWork.ReadMessages.GetAsync(null, null, x => x.UserId == currentUserId));
+
+            var result = messages.Any(m => readMessages.Any(rm => rm.MessageId != m.Id));
+            return result;
+        }
         public async Task<Guid> CreatePrivateChatAsync(Guid userId, Guid currentUserId)
         {
             var checkIfChatExist =await GetPrivateChatAsync(userId, currentUserId);
@@ -128,7 +139,7 @@ namespace BlaBlaCar.BL.Services.ChatServices
         public async Task<bool> ReadMessagesFromChat(IEnumerable<MessageDTO> messages, Guid currentUserId)
         {
             var readMessages = messages.Select(m => 
-                new ReadMessagesDTO() { MessageId = m.Id, ChatId = m.ChatId, UserId = m.UserId });
+                new ReadMessagesDTO() { MessageId = m.Id, ChatId = m.ChatId, UserId = currentUserId});
             await _unitOfWork.ReadMessages.InsertRangeAsync(_mapper.Map<IEnumerable<ReadMessages>>(readMessages));
             return await _unitOfWork.SaveAsync(currentUserId);
         }

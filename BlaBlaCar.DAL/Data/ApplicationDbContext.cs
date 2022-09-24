@@ -49,6 +49,8 @@ namespace BlaBlaCar.DAL.Data
                .HasMany<Notifications>(x=>x.Notifications)
                .WithOne(x=>x.User)
                .HasForeignKey(x=>x.UserId).OnDelete(DeleteBehavior.Restrict);
+
+           builder.Entity<ReadMessages>().HasKey(x=>new { x.Id, x.MessageId, x.UserId });
            //builder.Entity<Car>()
            //    .HasMany<Trip>(x=>x.Trips)
            //    .WithOne(x=>x.Car).HasForeignKey(x=>x.CarId).OnDelete(DeleteBehavior.SetNull);

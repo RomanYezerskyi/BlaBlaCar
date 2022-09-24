@@ -88,6 +88,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
     );
   }
   goToChat(chatId: string) {
+    console.log(this.role);
     if (this.role == 'blablacar.user') {
       this.router.navigate(['/chat'], {
         queryParams: {

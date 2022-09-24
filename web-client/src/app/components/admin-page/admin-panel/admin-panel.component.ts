@@ -14,17 +14,13 @@ import { Subject, takeUntil } from 'rxjs';
 export class AdminPanelComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject<void>();
   userStatus = UserStatus;
-  token: string | null = localStorage.getItem("jwt");
+  private token: string | null = localStorage.getItem("jwt");
   chatId: string = '';
   unreadMessages: number = 0;
   constructor(private jwtHelper: JwtHelperService,
     private route: ActivatedRoute,
     private signal: SignalRService) {
-    const currentUserId = this.jwtHelper.decodeToken(this.token!).id;
-    this.signal.setConnectionUrl = "https://localhost:6001/chatHub";
-    this.signal.setHubMethod = 'JoinToChatMessagesNotifications';
-    this.signal.setHubMethodParams = currentUserId;
-    this.signal.setHandlerMethod = "BroadcastMessagesFromChats";
+
     this.setSignalRUrls();
   }
 
@@ -37,7 +33,11 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
     this.connectToChatMessagesSignalRHub()
   }
   setSignalRUrls(): void {
-
+    const currentUserId = this.jwtHelper.decodeToken(this.token!).id;
+    this.signal.setConnectionUrl = "https://localhost:6001/chatHub";
+    this.signal.setHubMethod = 'JoinToChatMessagesNotifications';
+    this.signal.setHubMethodParams = currentUserId;
+    this.signal.setHandlerMethod = "BroadcastMessagesFromChats";
   }
   connectToChatMessagesSignalRHub(): void {
     this.signal.getDataStream<string>().subscribe(message => {

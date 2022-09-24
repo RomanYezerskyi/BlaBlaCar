@@ -72,6 +72,8 @@ export class AddAvailableSeatsComponent implements OnInit, OnDestroy {
         alert("Add cars!");
         return;
       }
+      this.trip.startTime = new Date(this.trip.startTime!).toDateString();
+      this.trip.endTime = new Date(this.trip.endTime!).toDateString();
       this.tripService.addNewtrip(this.trip).pipe(takeUntil(this.unsubscribe$)).subscribe(
         response => {
           console.log(response)

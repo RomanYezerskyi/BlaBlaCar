@@ -23,7 +23,7 @@ export class ChatLayoutComponent implements OnInit {
       }
     });
     this.currentUserId = this.jwtHelper.decodeToken(this.token!).id;
-    this.role = this.jwtHelper.decodeToken(this.token!).role;
+    this.role = this.jwtHelper.decodeToken(this.token!)['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
   }
 
 }

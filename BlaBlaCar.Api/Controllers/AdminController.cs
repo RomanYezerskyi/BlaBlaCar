@@ -47,7 +47,7 @@ namespace BlaBlaCar.API.Controllers
         }
 
         [HttpGet("statistics")]
-        public async Task<IActionResult> GetStatic([FromQuery]string searchDate)
+        public async Task<IActionResult> GetStatistics([FromQuery]string searchDate)
         {
             DateTimeOffset.TryParse(searchDate, out var date);
             var res = await _adminService.GetStatisticsDataAsync(date);

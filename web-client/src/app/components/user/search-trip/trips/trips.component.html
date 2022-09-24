@@ -1,6 +1,6 @@
 <mat-progress-spinner mode="indeterminate" *ngIf="isSpinner"></mat-progress-spinner>
 
-<div class="no-content" *ngIf="!isTrips">
+<div class="no-content" *ngIf="!isTrips && trips.trips.length == 0">
     <img src="../../../../assets/traveler.png" alt="">
     <h3>There are no trips yet :)</h3>
 </div>

@@ -14,7 +14,7 @@ export class SearchTripComponent implements OnInit {
   @ViewChild(TripsComponent)
   tripsComponent!: TripsComponent;
   invalidForm: boolean | undefined;
-  trip: SearchTripModel = {} as SearchTripModel;
+  trip: SearchTripModel = { countOfSeats: 1 } as SearchTripModel;
   isParams = false;
   public isFullListDisplayed: boolean = false;
 
@@ -37,11 +37,11 @@ export class SearchTripComponent implements OnInit {
         this.isParams = true;
       }
     });
+    console.log(this.trip);
   }
 
   onScroll(): void {
     this.tripsComponent.onScroll();
     this.isFullListDisplayed = this.tripsComponent.isFullListDisplayed;
   }
-
 }
