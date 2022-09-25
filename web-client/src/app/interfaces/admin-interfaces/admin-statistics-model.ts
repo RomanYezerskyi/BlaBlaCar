@@ -9,5 +9,5 @@ export interface AdminStatisticsModel {
     tripsDateTime: Array<Date>;
 
     weekStatisticsTripsCount: string[];
-    weekTripsDateTime: Array<Date>;
+    weekTripsDateTime: Array<string>;
 }

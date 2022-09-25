@@ -36,8 +36,8 @@ export class ChatService {
     const url = 'https://localhost:6001/api/Chat/read-messages';
     return this.http.put<any>(url, messages);
   }
-  isUreadMessages(): Observable<boolean> {
+  isUreadMessages(): Observable<number> {
     const url = 'https://localhost:6001/api/Chat/unread-messages';
-    return this.http.get<boolean>(url);
+    return this.http.get<number>(url);
   }
 }

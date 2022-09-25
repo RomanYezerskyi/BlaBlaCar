@@ -72,12 +72,14 @@
             }
 
             .data {
+                width: 70%;
                 padding: 0 10px;
                 display: flex;
                 flex-flow: row wrap;
                 justify-content: space-between;
 
                 .user-name {
+                    width: 50%;
                     margin: auto 0;
                     font-size: 14px;
                     font-weight: 500;

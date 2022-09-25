@@ -104,16 +104,23 @@ namespace BlaBlaCar.BL.Services.Admin
         {
             var users = _mapper.Map<IEnumerable<UsersStatisticsDTO>>(
                 await _unitOfWork.Users.GetAsync(null, null, 
-                    x=>x.CreatedAt. Value.Month == searchDate.Month));
-            var groupedUsers = users.GroupBy(x => x.CreatedAt.Value.Date);
+                    x=>x.CreatedAt.Month == searchDate.Month));
+            var groupedUsers = users.GroupBy(x => x.CreatedAt.Value.Date.ToString("MM-dd"));
             var cars = _mapper.Map<IEnumerable<CarStatisticsDTO>>(
-                await _unitOfWork.Cars.GetAsync(null, null, x=> x.CreatedAt.Value.Month == searchDate.Month));
-            var groupedCars = cars.GroupBy(x => x.CreatedAt.Value.Date);
+                await _unitOfWork.Cars.GetAsync(null, null, x=> x.CreatedAt.Month == searchDate.Month));
+            var groupedCars = cars.GroupBy(x => x.CreatedAt.Value.Date.ToString("MM-dd"));
+
+            var mondayDate = GetDayOfWeek(DateTimeOffset.Now, DayOfWeek.Monday);
+            var sundayDate = GetDayOfWeek(DateTimeOffset.Now, DayOfWeek.Sunday);
             var trips = _mapper.Map<IEnumerable<TripDTO>>(
                 await _unitOfWork.Trips.GetAsync(null, null,
-                    x=>x.CreatedAt.Value.Month == searchDate.Month));
-            var groupedWeekTrips = trips.GroupBy(x => x.CreatedAt.DayOfWeek);
-            var groupedTrips = trips.GroupBy(x => x.CreatedAt.Date);
+                    x=>x.CreatedAt.Month == searchDate.Month));
+            var groupedTrips = trips.GroupBy(x => x.CreatedAt.Date.ToString("MM-dd"));
+
+
+            var groupedWeekTrips = trips.Where(x=> x.CreatedAt >= mondayDate || x.CreatedAt <= sundayDate)
+                .GroupBy(x => x.CreatedAt.DayOfWeek.ToString());
+          
             var res = new AdminStatisticsDTO()
             {
                 UsersStatisticsCount = groupedUsers.Select(x=>x.ToList().Count()),
@@ -125,12 +132,33 @@ namespace BlaBlaCar.BL.Services.Admin
                 TripsStatisticsCount = groupedTrips.Select(x=>x.ToList().Count),
                 TripsDateTime = groupedTrips.Select(x=>x.Key),
 
-                WeekStatisticsTripsCount = groupedWeekTrips.Select(x=>x.ToList().Count),
-                WeekTripsDateTime = groupedWeekTrips.Select(x=>x.Key)
+                WeekStatisticsTripsCount = groupedWeekTrips.Select(x=>x.ToList().Count).ToList(),
+                WeekTripsDateTime = groupedWeekTrips.Select(x=>x.Key).ToList()
             };
             return res;
         }
 
+        public async Task<ShortStatisticsDTO> GetShortStatisticsDataAsync()
+        {
+            var mondayDate = GetDayOfWeek(DateTimeOffset.Now, DayOfWeek.Monday);
+            var sundayDate = GetDayOfWeek(DateTimeOffset.Now, DayOfWeek.Sunday);
+            var statistics = new ShortStatisticsDTO
+            {
+                UsersCount = await _unitOfWork.Users.GetCountAsync(null),
+                CarsCount = await _unitOfWork.Cars.GetCountAsync(null),
+                TripsCount = await _unitOfWork.Trips.GetCountAsync(null),
+                WeekTripsCount = await _unitOfWork.Trips
+                    .GetCountAsync(x=>x.CreatedAt >= mondayDate || x.CreatedAt <= sundayDate )
+            };
+
+            return statistics;
+        }
+
+        public  DateTimeOffset GetDayOfWeek(DateTimeOffset currentDate, DayOfWeek day)
+        {
+            int diff = (7 + (currentDate.DayOfWeek - day)) % 7;
+            return DateTimeOffset.Now.AddDays(-1 * diff).Date;
+        }
         public async Task<IEnumerable<UsersStatisticsDTO>> GetTopUsersListAsync(int take, int skip, UsersListOrderByType orderBy)
         {
             Func<IQueryable<ApplicationUser>, IOrderedQueryable<ApplicationUser>> usersOrderBy = null;

@@ -7,6 +7,8 @@ import { AuthService } from 'src/app/services/authservice/auth-service.service';
 import { Subject, takeUntil } from 'rxjs';
 import { SignalRService } from 'src/app/services/signalr-services/signalr.service';
 import { ChatService } from 'src/app/services/chatservice/chat.service';
+import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
+import { SafeUrl } from '@angular/platform-browser';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -19,7 +21,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   toggle: boolean = true;
   notification: boolean = false;
   notifiNotReadCount: number = 0;
-  chatId: string = '';
   unreadMessages: number = 0;
   constructor(
     private jwtHelper: JwtHelperService,
@@ -28,18 +29,20 @@ export class NavbarComponent implements OnInit, OnDestroy {
     public userService: UserService,
     private authService: AuthService,
     private signal: SignalRService,
-    private chatService: ChatService) {
+    private chatService: ChatService,
+    private imgSanitize: ImgSanitizerService) {
     this.setSignalRUrls();
+
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      if (params['chatId']) {
-        this.chatId = params['chatId'];
+    this.isUnreadMessages();
+    this.connectToChatMessagesSignalRHub();
+    this.router.events.subscribe(val => {
+      if (this.router.url.includes("/chat")) {
+        this.unreadMessages = 0;
       }
     });
-    this.connectToChatMessagesSignalRHub();
-    this.isUnreadMessages();
   }
   ngOnDestroy(): void {
     this.unsubscribe$.next();
@@ -47,7 +50,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
   isUnreadMessages(): void {
     this.chatService.isUreadMessages().pipe(takeUntil(this.unsubscribe$)).subscribe(result => {
-      if (result) this.unreadMessages = 1;
+      if (result && !this.router.url.includes("/chat")) this.unreadMessages += result;
     });
   }
   setSignalRUrls(): void {
@@ -62,7 +65,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   connectToChatMessagesSignalRHub(): void {
     this.signal.getDataStream<string>().pipe(takeUntil(this.unsubscribe$)).subscribe(message => {
       console.log(message.data);
-      if (this.chatId == '' || this.chatId != message.data) {
+      if (!this.router.url.includes("/chat")) {
         this.unreadMessages += 1;
       }
     });
@@ -88,5 +91,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
   isAdmin = (): boolean => {
     return this.authService.isAdmin();
+  }
+  sanitizaImg(img: string): SafeUrl {
+    return this.imgSanitize.sanitiizeUserImg(img);
   }
 }

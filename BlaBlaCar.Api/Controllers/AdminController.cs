@@ -53,6 +53,13 @@ namespace BlaBlaCar.API.Controllers
             var res = await _adminService.GetStatisticsDataAsync(date);
             return Ok(res);
         }
+        [HttpGet("short-statistics")]
+        public async Task<IActionResult> GetShortStatistics()
+        {
+            
+            var res = await _adminService.GetShortStatisticsDataAsync();
+            return Ok(res);
+        }
 
         [HttpGet("top-list")]
         public async Task<IActionResult> GetUsersTopList([FromQuery] int take,[FromQuery] int skip,[FromQuery] UsersListOrderByType orderBy)

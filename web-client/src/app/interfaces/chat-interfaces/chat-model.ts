@@ -10,4 +10,5 @@ export interface ChatModel {
     users?: Array<ChatParticipantModel>,
     chatType?: number,
     createdAt?: Date,
+    lastMessage?: MessageModel;
 }

@@ -40,14 +40,30 @@ namespace BlaBlaCar.BL.Services.ChatServices
         }
         public async Task<IEnumerable<ChatDTO>> GetUserChatsAsync(Guid currentUserId)
         {
-            var chats = _mapper.Map<IEnumerable<ChatDTO>>(
-                await _unitOfWork.Chats.GetAsync(null, 
-                    x=>x.Include(x=>x.Users.Where(x=>x.UserId != currentUserId))
-                        .ThenInclude(x=>x.User)
-                        .Include(x=>x.Messages.OrderByDescending(x=>x.CreatedAt).Take(1)),
-                    x=>x.Users.Any(x=>x.UserId == currentUserId)));
-            if (!chats.Any()) return null;
-            chats = chats.Select(c =>
+            var chats = await _unitOfWork.Chats.GetAsync(null,
+                x => x.Include(x => x.Users.Where(x => x.UserId != currentUserId))
+                    .ThenInclude(x => x.User)
+                    .Include(x => x.Messages.OrderByDescending(x => x.CreatedAt).Take(1)),
+                x => x.Users.Any(x => x.UserId == currentUserId));
+
+            var chatsDTOs = _mapper.Map<IEnumerable<ChatDTO>>(chats);
+            if (!chatsDTOs.Any()) return null;
+
+            foreach (var dto in chatsDTOs)
+            {
+                foreach (var chat in chats)
+                {
+                    if (chat.Messages.FirstOrDefault().ChatId == dto.Id)
+                        dto.LastMessage = _mapper.Map<MessageDTO>(chat.Messages.FirstOrDefault());
+                }
+                if (dto.LastMessage != null)
+                {
+                    var readMessage = await _unitOfWork.ReadMessages.GetAsync(null, x => x.MessageId == dto.LastMessage.Id 
+                        && x.UserId == currentUserId);
+                    if (readMessage != null) dto.LastMessage.Status = MessageStatus.Read;
+                }
+            }
+            chatsDTOs = chatsDTOs.Select(c =>
             {
                 c.Users = c.Users.Select(u =>
                 {
@@ -59,17 +75,17 @@ namespace BlaBlaCar.BL.Services.ChatServices
                 }).ToList();
                 return c;
             });
-            return chats.ToList();
+            return chatsDTOs.OrderByDescending(x=>x.LastMessage.CreatedAt).ThenBy(x=> x.LastMessage.Status == MessageStatus.Read);
         }
 
-        public async Task<bool> IsUnreadMessagesAsync(Guid currentUserId)
+        public async Task<int> IsUnreadMessagesAsync(Guid currentUserId)
         {
             var messages =_mapper.Map<IEnumerable<MessageDTO>>(await _unitOfWork.Messages.GetAsync(null, null,
                 x => x.Chat.Users.Any(x => x.UserId == currentUserId)));
             var readMessages = _mapper.Map<IEnumerable<ReadMessagesDTO>>(
                 await _unitOfWork.ReadMessages.GetAsync(null, null, x => x.UserId == currentUserId));
 
-            var result = messages.Any(m => readMessages.Any(rm => rm.MessageId != m.Id));
+            var result = messages.Count(m => readMessages.All(rm => rm.MessageId != m.Id));
             return result;
         }
         public async Task<Guid> CreatePrivateChatAsync(Guid userId, Guid currentUserId)
@@ -116,14 +132,15 @@ namespace BlaBlaCar.BL.Services.ChatServices
             return chat;
         }
 
-        public async Task<IEnumerable<MessageDTO>> GetChatMessages(Guid chatId, int take, int skip)
+        public async Task<IEnumerable<MessageDTO>> GetChatMessages(Guid chatId, Guid currentUserId, int take, int skip)
         {
             var messages = _mapper.Map<IEnumerable<MessageDTO>>(
-                await _unitOfWork.Messages.GetAsync(x=>x.OrderByDescending(x=>x.CreatedAt), null, x => x.ChatId == chatId, take:take,skip:skip));
+                await _unitOfWork.Messages.GetAsync(x=>x.OrderByDescending(x=>x.CreatedAt), 
+                    null, x => x.ChatId == chatId, take:take,skip:skip));
             if (!messages.Any()) return messages;
 
             var readMessages =
-                await _unitOfWork.ReadMessages.GetAsync(null, null, x => x.ChatId == chatId);
+                await _unitOfWork.ReadMessages.GetAsync(null, null, x => x.ChatId == chatId && x.UserId == currentUserId);
             messages = messages.Select(m =>
             {
                 if (readMessages.Any(x => x.MessageId == m.Id))
@@ -139,7 +156,7 @@ namespace BlaBlaCar.BL.Services.ChatServices
         public async Task<bool> ReadMessagesFromChat(IEnumerable<MessageDTO> messages, Guid currentUserId)
         {
             var readMessages = messages.Select(m => 
-                new ReadMessagesDTO() { MessageId = m.Id, ChatId = m.ChatId, UserId = currentUserId});
+                new ReadMessagesDTO() {Id = Guid.NewGuid(),MessageId = m.Id, ChatId = m.ChatId, UserId = currentUserId});
             await _unitOfWork.ReadMessages.InsertRangeAsync(_mapper.Map<IEnumerable<ReadMessages>>(readMessages));
             return await _unitOfWork.SaveAsync(currentUserId);
         }

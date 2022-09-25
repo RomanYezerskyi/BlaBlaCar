@@ -8,12 +8,13 @@ import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 export class UserService {
   public userProfile: UserModel = {} as UserModel;
   constructor(private http: HttpClient) {
-    console.log(this.userProfile.id);
+    console.log(this.userProfile);
     if (this.userProfile.id == undefined) {
       this.getCurrentUser().subscribe(
         response => {
           console.log("get user");
           this.userProfile = response;
+          console.log(this.userProfile);
         },
         (error: HttpErrorResponse) => { console.log(error.error); }
       );

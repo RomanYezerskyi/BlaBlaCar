@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AdminStatisticsModel } from 'src/app/interfaces/admin-interfaces/admin-statistics-model';
+import { ShortStatisticsModel } from 'src/app/interfaces/admin-interfaces/short-statistics-model';
 import { UsersListRequestModel } from 'src/app/interfaces/admin-interfaces/users-list-request-model';
 import { CarStatus } from 'src/app/interfaces/car-interfaces/car-status';
 import { RoleModel } from 'src/app/interfaces/role-model';
@@ -29,6 +30,10 @@ export class AdminService {
   getStatistics(searchDate: string): Observable<AdminStatisticsModel> {
     const url = 'https://localhost:6001/api/Admin/statistics';
     return this.http.get<AdminStatisticsModel>(url, { params: { searchDate: searchDate } });
+  }
+  getShortStatistics(): Observable<ShortStatisticsModel> {
+    const url = 'https://localhost:6001/api/Admin/short-statistics';
+    return this.http.get<ShortStatisticsModel>(url);
   }
   //
   getRoles(): Observable<RoleModel[]> {

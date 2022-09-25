@@ -48,12 +48,6 @@ namespace BlaBlaCar.BL.Services.NotificationServices
 
             Expression<Func<Notifications, bool>> notificationFilter =
                 x => x.UserId == currentUserId || x.NotificationStatus == NotificationStatus.Global;
-            if (readNotifications.Any())
-            {
-                notificationFilter =
-                    x => x.UserId == currentUserId || x.NotificationStatus == NotificationStatus.Global
-                        && readNotifications.ToList().Any(r => r.NotificationId != x.Id);
-            }
             var notifications = _mapper.Map<IEnumerable<GetNotificationsDTO>>(
                 await _unitOfWork.Notifications.GetAsync(
                     x=>x.OrderByDescending(x=>x.CreatedAt),
@@ -61,7 +55,9 @@ namespace BlaBlaCar.BL.Services.NotificationServices
 
             if (!notifications.Any()) return null;
 
-                notifications = notifications.Select(n =>
+            if (readNotifications.All(x => notifications.Any(n => n.Id == x.NotificationId))) return null;
+
+            notifications = notifications.Select(n =>
             {
                 if (readNotifications.Any(x => x.NotificationId == n.Id))
                     n.ReadNotificationStatus = ReadNotificationStatusDTO.Read;
@@ -159,7 +155,7 @@ namespace BlaBlaCar.BL.Services.NotificationServices
             var readNotifications = new List<ReadNotificationsDTO>();
 
             readNotifications.AddRange(
-                notification.Select(n => new ReadNotificationsDTO() { NotificationId = n.Id, UserId = n.UserId }));
+                notification.Select(n => new ReadNotificationsDTO() { NotificationId = n.Id, UserId = currentUserId }));
 
             await _unitOfWork.ReadNotifications.InsertRangeAsync(_mapper.Map<IEnumerable<ReadNotifications>>(readNotifications));
 
