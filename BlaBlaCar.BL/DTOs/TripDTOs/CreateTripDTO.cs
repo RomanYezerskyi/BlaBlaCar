@@ -5,10 +5,11 @@ namespace BlaBlaCar.BL.DTOs.TripDTOs
 {
     public class CreateTripDTO
     {
-        [Required]
-        public string StartPlace { get; set; }
-        [Required]
-        public string EndPlace { get; set; }
+       
+        public double StartLat { get; set; }
+        public double StartLon { get; set; }
+        public double EndLat { get; set; }
+        public double EndLon { get; set; }
         [Required]
         public DateTimeOffset StartTime { get; set; }
         [Required]

@@ -1,13 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using BlaBlaCar.DAL.Entities.CarEntities;
+using NetTopologySuite.Geometries;
 
 namespace BlaBlaCar.DAL.Entities.TripEntities
 {
     public class Trip : BaseEntity
     {
-        //public Guid Id { get; set; }
         public string StartPlace { get; set; }
         public string EndPlace { get; set; }
+        public Point? StartLocation { get; set; }
+        public Point? EndLocation { get; set; }
         public DateTimeOffset StartTime { get; set; }
         public DateTimeOffset EndTime { get; set; }
         public int PricePerSeat { get; set; }

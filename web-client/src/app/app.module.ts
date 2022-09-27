@@ -66,6 +66,9 @@ import { LightgalleryModule } from 'lightgallery/angular';
 import { ImagesGalleryComponent } from './components/images-gallery/images-gallery.component';
 import { AlertsComponent } from './components/alerts/alerts.component';
 import { UserService } from './services/userservice/user.service';
+import { MapsAutocompleteComponent } from './components/maps-autocomplete/maps-autocomplete.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatTooltipModule } from '@angular/material/tooltip';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -114,6 +117,7 @@ export function tokenGetter() {
     EditCarModalDialogComponent,
     ImagesGalleryComponent,
     AlertsComponent,
+    MapsAutocompleteComponent,
 
   ],
   imports: [
@@ -145,7 +149,9 @@ export function tokenGetter() {
     MatDatepickerModule,
     MatRadioModule,
     MatProgressSpinnerModule,
-    LightgalleryModule
+    LightgalleryModule,
+    MatAutocompleteModule,
+    MatTooltipModule
   ],
   providers: [AuthGuard, AdminGuard, PageAccessGuard, UserGuard, UserService],
   bootstrap: [AppComponent],

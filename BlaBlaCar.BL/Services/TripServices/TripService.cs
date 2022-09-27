@@ -12,6 +12,8 @@ using BlaBlaCar.DAL.Entities.TripEntities;
 using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.BL.Exceptions;
 using Hangfire;
+using NetTopologySuite.Geometries;
+using BlaBlaCar.BL.Extensions;
 
 namespace BlaBlaCar.BL.Services.TripServices
 {
@@ -192,8 +194,15 @@ namespace BlaBlaCar.BL.Services.TripServices
         {
             var tripModel = _mapper.Map<CreateTripDTO, TripDTO>(newTripModel);
             tripModel.UserId = currentUserId;
-
+            
             var trip = _mapper.Map<TripDTO, Trip>(tripModel);
+
+            trip.StartPlace = "-";
+            trip.EndPlace = "-";
+
+            trip.StartLocation = new Point(newTripModel.StartLat, newTripModel.StartLon) { SRID = 4326 };
+            trip.EndLocation = new Point(newTripModel.EndLat, newTripModel.EndLon) { SRID = 4326 };
+            //var distanceInMeters = seattle.ProjectTo(2855).Distance(trip.Location.ProjectTo(2855));
 
             await _unitOfWork.Trips.InsertAsync(trip);
             var res =  await _unitOfWork.SaveAsync(currentUserId);

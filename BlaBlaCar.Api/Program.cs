@@ -36,8 +36,12 @@ builder.Services.AddControllers()
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-               options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<ApplicationDbContext>(
+    options =>
+               options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+                   sqlOption =>
+                       sqlOption.UseNetTopologySuite()));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddHangfire(configuration => configuration
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)

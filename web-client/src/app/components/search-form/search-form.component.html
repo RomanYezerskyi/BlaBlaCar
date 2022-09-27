@@ -1,11 +1,12 @@
 <div class="container">
     <form #searchForm="ngForm" class="form" (ngSubmit)="search()">
-        <mat-form-field class="input__item" appearance="standard">
-            <!-- <mat-label>Start place</mat-label> -->
+        <!-- <mat-form-field class="input__item" appearance="standard">
+           
             <input type="text" matInput placeholder="Start place" id="startPlace" name="startPlace"
                 [(ngModel)]="trip.startPlace">
             <mat-icon matSuffix>my_location</mat-icon>
-        </mat-form-field>
+        </mat-form-field> -->
+        <app-maps-autocomplete (locationChange)="autocompleteChanged($event)"></app-maps-autocomplete>
         <mat-form-field class="input__item" appearance="standard">
             <!-- <mat-label>End place</mat-label> -->
             <input type="text" matInput placeholder="End place" id="endPlace" name="endPlace"

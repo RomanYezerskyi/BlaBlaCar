@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TripOrderBy } from 'src/app/enums/trip-order-by';
 import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip-model';
+import { PlaceSuggestion } from '../maps-autocomplete/maps-autocomplete.component';
 
 @Component({
   selector: 'app-search-form',
@@ -37,7 +38,10 @@ export class SearchFormComponent implements OnInit {
       }
     });
   }
+  autocompleteChanged(value: PlaceSuggestion) {
+    console.log(value);
 
+  }
 }
 
 

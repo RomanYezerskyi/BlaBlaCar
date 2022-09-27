@@ -9,6 +9,10 @@ export interface TripModel {
     id: number;
     startPlace: string;
     endPlace: string;
+    startLat?: number;
+    startLon?: number;
+    endLat?: number;
+    endLon?: number;
     startTime: Date;
     endTime: Date;
     pricePerSeat: number;
