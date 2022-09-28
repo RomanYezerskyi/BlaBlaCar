@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Globalization;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using AutoMapper;
 using BlaBlaCar.BL.DTOs.NotificationDTOs;
@@ -14,6 +15,7 @@ using BlaBlaCar.BL.Exceptions;
 using Hangfire;
 using NetTopologySuite.Geometries;
 using BlaBlaCar.BL.Extensions;
+using System.Security.Cryptography.X509Certificates;
 
 namespace BlaBlaCar.BL.Services.TripServices
 {
@@ -137,14 +139,19 @@ namespace BlaBlaCar.BL.Services.TripServices
             var result = new UserTripsDTO() { Trips = groupedList, TotalTrips = tripsCount };
             return result;
         }
-       
+
+        public double Compare(Point point, Point point1)
+        {
+            return point.ProjectTo(2855).Distance(point1.ProjectTo(2855));
+        }
         public async Task<SearchTripsResponseDTO> SearchTripsAsync(SearchTripDTO model)
         {
-            Expression<Func<Trip, bool>> tripFilter = trip => trip.StartPlace.Contains(model.StartPlace)
-                                                           && trip.EndPlace.Contains(model.EndPlace)
-                                                           && trip.StartTime.Date == model.StartTime.Date
-                                                           && trip.AvailableSeats.Count(s =>
-                                                               trip.TripUsers.All(u => u.SeatId != s.SeatId)) >= model.CountOfSeats;
+            //Expression <Func<Trip, bool>> tripFilter = trip => 
+
+            //                                                trip.StartTime.Date == model.StartTime.Date
+            //                                               && trip.AvailableSeats.Count(s =>
+            //                                                   trip.TripUsers.All(u => u.SeatId != s.SeatId)) >= model.CountOfSeats;
+
             Func<IQueryable<Trip>, IOrderedQueryable<Trip>> orderBy = null;
             switch (model.OrderBy)
             {
@@ -161,14 +168,36 @@ namespace BlaBlaCar.BL.Services.TripServices
                     orderBy = trip => trip.OrderBy(t => t.StartTime);
                     break;
             }
-            var trips = await _unitOfWork.Trips.GetAsync(
-                orderBy: orderBy,
-                includes: x => x.Include(x => x.AvailableSeats)
-                    .Include(x => x.TripUsers)
-                    .Include(x=>x.User),
-                filter: tripFilter,
+
+            var radius = 500000000;
+
+            var startLocationLat = model.StartLat.ToString(CultureInfo.InvariantCulture);
+            var startLocationLon = model.StartLon.ToString(CultureInfo.InvariantCulture);
+            var endLocationLat = model.EndLat.ToString(CultureInfo.InvariantCulture);
+            var endLocationLon = model.EndLon.ToString(CultureInfo.InvariantCulture);
+            var sqlRaw = $"SELECT * FROM [Trips] AS [t]" +
+                         $"WHERE (CONVERT(date, [t].[StartTime]) = '{model.StartTime.Date:yyyy-MM-dd}') AND" +
+                         $"([t].StartLocation.STDistance(geography::STGeomFromText('POINT({startLocationLat} {startLocationLon})', 4326)) < {radius}) " +
+                         $" AND ([t].EndLocation.STDistance(geography::STGeomFromText('POINT({endLocationLat} {endLocationLon})', 4326)) < {radius})  AND" +
+                         $" ((SELECT COUNT(*)FROM [AvailableSeats] AS [a] WHERE ([t].[Id] = [a].[TripId]) AND NOT EXISTS (SELECT 1 FROM [TripUsers] AS [t0]" +
+                         $" WHERE ([t].[Id] = [t0].[TripId]) AND (([t0].[SeatId] = [a].[SeatId]) AND ([t0].[SeatId] IS NOT NULL)))) >= {model.CountOfSeats})";
+                         var trips = await _unitOfWork.Trips.GetFromSqlRowAsync(sqlRaw: sqlRaw,
+                includes: x => x.Include(x => x.User)
+                                                .Include(x=>x.AvailableSeats)
+                                                .Include(x=>x.TripUsers), 
+                orderBy:orderBy,
                 skip: model.Skip,
                 take: model.Take);
+
+
+            //var trips = await _unitOfWork.Trips.GetAsync(
+            //    orderBy: orderBy,
+            //    includes: x => x.Include(x => x.AvailableSeats)
+            //        .Include(x => x.TripUsers)
+            //        .Include(x=>x.User),
+            //    filter: tripFilter,
+            //    skip: model.Skip,
+            //    take: model.Take);
 
             if (!trips.Any()) return null;
 
@@ -185,7 +214,7 @@ namespace BlaBlaCar.BL.Services.TripServices
             };
             if (model.Skip == 0)
             {
-                result.TotalTrips = await _unitOfWork.Trips.GetCountAsync(tripFilter);
+                result.TotalTrips = 10; //await _unitOfWork.Trips.GetCountAsync(tripFilter);
             }
             return result;
         }

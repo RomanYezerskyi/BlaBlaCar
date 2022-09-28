@@ -39,6 +39,10 @@ export class TripsComponent implements OnInit, OnDestroy {
         this.trip.endPlace = params['endPlace'];
         this.trip.startTime = new Date(params['startTime']);
         this.trip.countOfSeats = params['seats'];
+        this.trip.startLat = params['startLat'];
+        this.trip.startLon = params['startLon'];
+        this.trip.endLat = params['endLat'];
+        this.trip.endLon = params['endLon'];
         this.searchTrips();
         this.isSpinner = true;
       };

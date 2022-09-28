@@ -5,6 +5,11 @@ namespace BlaBlaCar.BL.DTOs.TripDTOs
 {
     public class SearchTripDTO
     {
+        public double StartLat { get; set; }
+        public double StartLon { get; set; }
+        public double EndLat { get; set; }
+        public double EndLon { get; set; }
+            
         [Required]
         public string StartPlace { get; set; }
         [Required]

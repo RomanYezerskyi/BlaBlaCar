@@ -30,17 +30,27 @@ export class SearchFormComponent implements OnInit {
   search(): void {
     this.router.navigate(['search'], {
       queryParams: {
-        startPlace: this.trip.startPlace,
-        endPlace: this.trip.endPlace,
+        startPlace: "Lviv", //this.trip.startPlace,
+        endPlace: "Kyiv",//this.trip.endPlace,
         startTime: this.trip.startTime,
         seats: this.trip.countOfSeats,
         orderBy: TripOrderBy.EarliestDepartureTime,
+        startLat: this.trip.startLat,
+        startLon: this.trip.startLon,
+        endLat: this.trip.endLat,
+        endLon: this.trip.endLon
       }
     });
   }
-  autocompleteChanged(value: PlaceSuggestion) {
+  startPlaceChanged(value: PlaceSuggestion) {
+    this.trip.startLat = value.data.lat;
+    this.trip.startLon = value.data.lon;
     console.log(value);
-
+  }
+  endPlaceChanged(value: PlaceSuggestion) {
+    this.trip.endLat = value.data.lat;
+    this.trip.endLon = value.data.lon;
+    console.log(value);
   }
 }
 

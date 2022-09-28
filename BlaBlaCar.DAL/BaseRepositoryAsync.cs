@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Linq;
+using System.Linq.Expressions;
 using BlaBlaCar.DAL.Data;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Interfaces;
@@ -43,7 +44,20 @@ namespace BlaBlaCar.DAL
             return await queryable.AsNoTracking().ToListAsync();
         }
 
-        
+        public async Task<IEnumerable<TEntity>> GetFromSqlRowAsync(
+            string sqlRaw,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> includes = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            int skip = 0,
+            int take = int.MaxValue
+           )
+        {
+            IQueryable<TEntity> queryable = _context.Set<TEntity>().FromSqlRaw(sqlRaw);
+            queryable = orderBy is null ? queryable : orderBy(queryable);
+            queryable = queryable.Skip(skip).Take(take);
+            queryable = includes is null ? queryable : includes(queryable);
+            return await queryable.AsNoTracking().ToListAsync();
+        }
 
         public async Task<TEntity> GetAsync(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> includes = null,
             Expression<Func<TEntity, bool>> filter = null)
