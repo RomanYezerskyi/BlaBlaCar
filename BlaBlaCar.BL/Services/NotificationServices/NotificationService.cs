@@ -14,6 +14,7 @@ using BlaBlaCar.BL.Exceptions;
 using BlaBlaCar.BL.Hubs;
 using BlaBlaCar.BL.Hubs.Interfaces;
 using BlaBlaCar.BL.Interfaces;
+using BlaBlaCar.BL.Services.MapsServices;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Entities.NotificationEntities;
 using BlaBlaCar.DAL.Interfaces;
@@ -30,15 +31,18 @@ namespace BlaBlaCar.BL.Services.NotificationServices
         private readonly IMapper _mapper;
         private readonly HostSettings _hostSettings;
         private readonly IHubContext<NotificationHub, INotificationsHubClient> _hubContext;
+        private readonly IMapService _mapService;
         public NotificationService(
             IUnitOfWork unitOfWork, 
             IMapper mapper, 
             IOptionsSnapshot<HostSettings> hostSettings, 
-            IHubContext<NotificationHub, INotificationsHubClient> hubContext)
+            IHubContext<NotificationHub, INotificationsHubClient> hubContext, 
+            IMapService mapService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _hubContext = hubContext;
+            _mapService = mapService;
             _hostSettings = hostSettings.Value;
         }
         public async Task<IEnumerable<GetNotificationsDTO>> GetUserUnreadNotificationsAsync(Guid currentUserId)
@@ -117,6 +121,8 @@ namespace BlaBlaCar.BL.Services.NotificationServices
             if (trip == null) throw new NotFoundException($"Trips with id {tripId}");
             var users = trip.TripUsers.Distinct();
 
+            var startPlace = await _mapService.GetPlaceInformation(trip.StartLocation.X, trip.StartLocation.Y);
+            var endPlace = await _mapService.GetPlaceInformation(trip.EndLocation.X, trip.EndLocation.Y);
             foreach (var user in users)
             {
                 var notificationDTO = new NotificationsDTO()
@@ -124,7 +130,7 @@ namespace BlaBlaCar.BL.Services.NotificationServices
                     UserId = user.UserId,
                     NotificationStatus = NotificationStatusDTO.FeedBack,
                     Text = $"Please write a feedback about the driver {trip.User.FirstName}." +
-                           $"\nDescribe how your trip {trip.StartPlace} - {trip.EndPlace} went.",
+                           $"\nDescribe how your trip {startPlace?.FeaturesList.First().Properties.Formatted} - {endPlace?.FeaturesList.First().Properties.Formatted} went.",
                     FeedBackOnUser = trip.UserId,
                 };
                 await _unitOfWork.Notifications.InsertAsync(_mapper.Map<Notifications>(notificationDTO));

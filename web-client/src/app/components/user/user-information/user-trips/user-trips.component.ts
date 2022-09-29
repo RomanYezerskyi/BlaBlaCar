@@ -9,6 +9,7 @@ import { ChatService } from 'src/app/services/chatservice/chat.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GeocodingFeatureProperties, PlaceSuggestion } from 'src/app/components/maps-autocomplete/maps-autocomplete.component';
 import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
+import { MapsService } from 'src/app/services/maps-service/maps.service';
 
 @Component({
   selector: 'app-user-trips',
@@ -22,11 +23,9 @@ export class UserTripsComponent implements OnInit, OnDestroy {
   totalTrips: number = 0;
   private Skip: number = 0;
   private Take: number = 5;
-  private requestSub!: Subscription;
-  searchOptions: Subject<PlaceSuggestion[]> = new Subject<PlaceSuggestion[]>();
   constructor(private http: HttpClient,
     private imgSanitaze: ImgSanitizerService, private router: Router,
-    private tripService: TripService, private chatService: ChatService) { }
+    private tripService: TripService, private chatService: ChatService, private mapsService: MapsService) { }
 
   ngOnInit(): void {
     this.getUserTrips();
@@ -48,7 +47,7 @@ export class UserTripsComponent implements OnInit, OnDestroy {
             response.trips.forEach(
               x => {
                 if (x.startLat! > 0) {
-                  this.generateSuggestions(x);
+                  this.getPlaces(x);
                 }
               }
             )
@@ -108,54 +107,36 @@ export class UserTripsComponent implements OnInit, OnDestroy {
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
   }
-  private generateSuggestions(trip: TripModel) {
-    const text = `${trip.startLat}%20${trip.startLon}`;
-    console.log(text)
-    const url = `https://api.geoapify.com/v1/geocode/search?text=${text}&apiKey=32849d6b3d3b480c9a60be1ce5891252`;
-
-    if (this.requestSub) {
-      this.requestSub.unsubscribe();
-    }
-
-    this.requestSub = this.http.get(url).subscribe((data: any /*GeoJSON.FeatureCollection*/) => {
+  private getPlaces(trip: TripModel) {
+    let text = `${trip.startLat}%20${trip.startLon}`;
+    this.mapsService.getPlaceName(text).pipe(takeUntil(this.unsubscribe$)).subscribe((data: any) => {
       const placeSuggestions = data.features.map((feature: { properties: GeocodingFeatureProperties; }) => {
         const properties: GeocodingFeatureProperties = (feature.properties as GeocodingFeatureProperties);
-
         return {
-          shortAddress: this.generateShortAddress(properties),
-          fullAddress: this.generateFullAddress(properties),
+          shortAddress: this.mapsService.generateShortAddress(properties),
+          fullAddress: this.mapsService.generateFullAddress(properties),
           data: properties
         }
       });
+      trip.startPlace = placeSuggestions[0].data.city;
       console.log(placeSuggestions);
-      trip.startPlace = placeSuggestions[0].data.formatted;
-      this.searchOptions.next(placeSuggestions.length ? placeSuggestions : null);
     }, err => {
       console.log(err);
     });
-  }
-  private generateShortAddress(properties: GeocodingFeatureProperties): string {
-    let shortAddress = properties.name;
-
-    if (!shortAddress && properties.street && properties.housenumber) {
-      // name is not set for buildings
-      shortAddress = `${properties.street} ${properties.housenumber}`;
-    }
-
-    shortAddress += (properties.postcode && properties.city) ? `, ${properties.postcode}-${properties.city}` : '';
-    shortAddress += (!properties.postcode && properties.city && properties.city !== properties.name) ? `, ${properties.city}` : '';
-    shortAddress += (properties.country && properties.country !== properties.name) ? `, ${properties.country}` : '';
-
-    return shortAddress;
-  }
-  private generateFullAddress(properties: GeocodingFeatureProperties): string {
-    let fullAddress = properties.name;
-    fullAddress += properties.street ? `, ${properties.street}` : '';
-    fullAddress += properties.housenumber ? ` ${properties.housenumber}` : '';
-    fullAddress += (properties.postcode && properties.city) ? `, ${properties.postcode}-${properties.city}` : '';
-    fullAddress += (!properties.postcode && properties.city && properties.city !== properties.name) ? `, ${properties.city}` : '';
-    fullAddress += properties.state ? `, ${properties.state}` : '';
-    fullAddress += (properties.country && properties.country !== properties.name) ? `, ${properties.country}` : '';
-    return fullAddress;
+    text = `${trip.endLat}%20${trip.endLon}`;
+    this.mapsService.getPlaceName(text).pipe(takeUntil(this.unsubscribe$)).subscribe((data: any) => {
+      const placeSuggestions = data.features.map((feature: { properties: GeocodingFeatureProperties; }) => {
+        const properties: GeocodingFeatureProperties = (feature.properties as GeocodingFeatureProperties);
+        return {
+          shortAddress: this.mapsService.generateShortAddress(properties),
+          fullAddress: this.mapsService.generateFullAddress(properties),
+          data: properties
+        }
+      });
+      trip.endPlace = placeSuggestions[0].data.city;
+      console.log(placeSuggestions);
+    }, err => {
+      console.log(err);
+    });
   }
 }

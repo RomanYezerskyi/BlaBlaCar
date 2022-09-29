@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { GeocodingFeatureProperties } from 'src/app/components/maps-autocomplete/maps-autocomplete.component';
+import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,24 +11,13 @@ export class MapsService {
 
   constructor(private http: HttpClient) { }
 
+  getPlaceName(text: string): Observable<any> {
+    const url = `https://api.geoapify.com/v1/geocode/search?text=${text}&apiKey=32849d6b3d3b480c9a60be1ce5891252`;
+    return this.http.get<any>(url);
+  }
   getPlace(text: string): Observable<any> {
     const url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${text}&limit=5&apiKey=d06cb6573e1e488d92494d5296611f0c`;
     return this.http.get<any>(url);
-
-    // .subscribe((data: any /*GeoJSON.FeatureCollection*/) => {
-    //   const placeSuggestions = data.features.map((feature: { properties: GeocodingFeatureProperties; }) => {
-    //     const properties: GeocodingFeatureProperties = (feature.properties as GeocodingFeatureProperties);
-
-    //     return {
-    //       shortAddress: this.generateShortAddress(properties),
-    //       fullAddress: this.generateFullAddress(properties),
-    //       data: properties
-    //     }
-    //   });
-
-    // }, err => {
-    //   console.log(err);
-    // });
   }
   generateShortAddress(properties: GeocodingFeatureProperties): string {
     let shortAddress = properties.name;

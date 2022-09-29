@@ -3,12 +3,14 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { GeocodingFeatureProperties } from 'src/app/components/maps-autocomplete/maps-autocomplete.component';
 import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
 import { TripUserModel } from 'src/app/interfaces/trip-interfaces/trip-user-model';
 import { TripsResponseModel } from 'src/app/interfaces/trip-interfaces/trips-response-model';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 import { ChatService } from 'src/app/services/chatservice/chat.service';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
+import { MapsService } from 'src/app/services/maps-service/maps.service';
 import { TripService } from 'src/app/services/tripservice/trip.service';
 
 @Component({
@@ -25,7 +27,7 @@ export class UserBookedTripsComponent implements OnInit, OnDestroy {
   private Take: number = 5;
   constructor(
     private tripService: TripService, private router: Router,
-    private imgSanitaze: ImgSanitizerService, private chatService: ChatService) { }
+    private imgSanitaze: ImgSanitizerService, private chatService: ChatService, private mapsService: MapsService) { }
 
   ngOnInit(): void {
     this.getUserBookedTrips();
@@ -45,6 +47,12 @@ export class UserBookedTripsComponent implements OnInit, OnDestroy {
         response => {
           console.log(response);
           if (response != null) {
+            response.trips.forEach(
+              x => {
+                if (x.startLat! > 0) {
+                  this.getPlaces(x);
+                }
+              });
             this.trips.trips = this.trips.trips.concat(response.trips);
             if (this.totalTrips == 0)
               this.totalTrips = response.totalTrips!;
@@ -92,5 +100,37 @@ export class UserBookedTripsComponent implements OnInit, OnDestroy {
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
+  }
+  private getPlaces(trip: TripModel) {
+    let text = `${trip.startLat}%20${trip.startLon}`;
+    this.mapsService.getPlaceName(text).pipe(takeUntil(this.unsubscribe$)).subscribe((data: any) => {
+      const placeSuggestions = data.features.map((feature: { properties: GeocodingFeatureProperties; }) => {
+        const properties: GeocodingFeatureProperties = (feature.properties as GeocodingFeatureProperties);
+        return {
+          shortAddress: this.mapsService.generateShortAddress(properties),
+          fullAddress: this.mapsService.generateFullAddress(properties),
+          data: properties
+        }
+      });
+      trip.startPlace = placeSuggestions[0].data.city;
+      console.log(placeSuggestions);
+    }, err => {
+      console.log(err);
+    });
+    text = `${trip.endLat}%20${trip.endLon}`;
+    this.mapsService.getPlaceName(text).pipe(takeUntil(this.unsubscribe$)).subscribe((data: any) => {
+      const placeSuggestions = data.features.map((feature: { properties: GeocodingFeatureProperties; }) => {
+        const properties: GeocodingFeatureProperties = (feature.properties as GeocodingFeatureProperties);
+        return {
+          shortAddress: this.mapsService.generateShortAddress(properties),
+          fullAddress: this.mapsService.generateFullAddress(properties),
+          data: properties
+        }
+      });
+      trip.endPlace = placeSuggestions[0].data.city;
+      console.log(placeSuggestions);
+    }, err => {
+      console.log(err);
+    });
   }
 }

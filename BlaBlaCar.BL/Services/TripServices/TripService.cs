@@ -16,6 +16,10 @@ using Hangfire;
 using NetTopologySuite.Geometries;
 using BlaBlaCar.BL.Extensions;
 using System.Security.Cryptography.X509Certificates;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
+using System.Text;
+using BlaBlaCar.BL.Services.MapsServices;
 
 namespace BlaBlaCar.BL.Services.TripServices
 {
@@ -26,17 +30,20 @@ namespace BlaBlaCar.BL.Services.TripServices
         private readonly HostSettings _hostSettings;
         private readonly INotificationService _notificationService;
         private readonly IBackgroundJobClient _backgroundJobs;
+        private readonly IMapService _mapService;
         public TripService(
             IUnitOfWork unitOfWork,
             IMapper mapper,
             IOptionsSnapshot<HostSettings> hostSettings, 
             INotificationService notificationService, 
-            IBackgroundJobClient backgroundJobs)
+            IBackgroundJobClient backgroundJobs, 
+            IMapService mapService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _notificationService = notificationService;
             _backgroundJobs = backgroundJobs;
+            _mapService = mapService;
             _hostSettings = hostSettings.Value;
         }
         public async Task<TripDTO> GetTripAsync(Guid id, Guid currentUserId)
@@ -140,41 +147,25 @@ namespace BlaBlaCar.BL.Services.TripServices
             return result;
         }
 
-        public double Compare(Point point, Point point1)
-        {
-            return point.ProjectTo(2855).Distance(point1.ProjectTo(2855));
-        }
+       
         public async Task<SearchTripsResponseDTO> SearchTripsAsync(SearchTripDTO model)
         {
-            //Expression <Func<Trip, bool>> tripFilter = trip => 
 
-            //                                                trip.StartTime.Date == model.StartTime.Date
-            //                                               && trip.AvailableSeats.Count(s =>
-            //                                                   trip.TripUsers.All(u => u.SeatId != s.SeatId)) >= model.CountOfSeats;
-
-            Func<IQueryable<Trip>, IOrderedQueryable<Trip>> orderBy = null;
-            switch (model.OrderBy)
+            Func<IQueryable<Trip>, IOrderedQueryable<Trip>> orderBy = model.OrderBy switch
             {
-                case TripOrderBy.EarliestDepartureTime:
-                    orderBy = trip => trip.OrderBy(t => t.StartTime);
-                    break;
-                case TripOrderBy.ShortestTrip:
-                    orderBy = trip => trip.OrderBy(x => x.TripTime);
-                    break;
-                case TripOrderBy.LowestPrice:
-                    orderBy = trip => trip.OrderBy(t => t.PricePerSeat);
-                    break;
-                default:
-                    orderBy = trip => trip.OrderBy(t => t.StartTime);
-                    break;
-            }
+                TripOrderBy.EarliestDepartureTime => trip => trip.OrderBy(t => t.StartTime),
+                TripOrderBy.ShortestTrip => trip => trip.OrderBy(x => x.TripTime),
+                TripOrderBy.LowestPrice => trip => trip.OrderBy(t => t.PricePerSeat),
+                _ => trip => trip.OrderBy(t => t.StartTime)
+            };
 
-            var radius = 500000000;
+            var radius = 50000;
 
             var startLocationLat = model.StartLat.ToString(CultureInfo.InvariantCulture);
             var startLocationLon = model.StartLon.ToString(CultureInfo.InvariantCulture);
             var endLocationLat = model.EndLat.ToString(CultureInfo.InvariantCulture);
             var endLocationLon = model.EndLon.ToString(CultureInfo.InvariantCulture);
+
             var sqlRaw = $"SELECT * FROM [Trips] AS [t]" +
                          $"WHERE (CONVERT(date, [t].[StartTime]) = '{model.StartTime.Date:yyyy-MM-dd}') AND" +
                          $"([t].StartLocation.STDistance(geography::STGeomFromText('POINT({startLocationLat} {startLocationLon})', 4326)) < {radius}) " +
@@ -188,16 +179,6 @@ namespace BlaBlaCar.BL.Services.TripServices
                 orderBy:orderBy,
                 skip: model.Skip,
                 take: model.Take);
-
-
-            //var trips = await _unitOfWork.Trips.GetAsync(
-            //    orderBy: orderBy,
-            //    includes: x => x.Include(x => x.AvailableSeats)
-            //        .Include(x => x.TripUsers)
-            //        .Include(x=>x.User),
-            //    filter: tripFilter,
-            //    skip: model.Skip,
-            //    take: model.Take);
 
             if (!trips.Any()) return null;
 
@@ -225,10 +206,6 @@ namespace BlaBlaCar.BL.Services.TripServices
             tripModel.UserId = currentUserId;
             
             var trip = _mapper.Map<TripDTO, Trip>(tripModel);
-
-            trip.StartPlace = "-";
-            trip.EndPlace = "-";
-
             trip.StartLocation = new Point(newTripModel.StartLat, newTripModel.StartLon) { SRID = 4326 };
             trip.EndLocation = new Point(newTripModel.EndLat, newTripModel.EndLon) { SRID = 4326 };
             //var distanceInMeters = seattle.ProjectTo(2855).Distance(trip.Location.ProjectTo(2855));
@@ -249,15 +226,16 @@ namespace BlaBlaCar.BL.Services.TripServices
                 filter: x => x.Id == id);
             if (trip is null)
                 throw new NotFoundException(nameof(TripDTO));
-            //var tripUsers = await _unitOfWork.TripUser.GetAsync(null, null, x => x.TripId == id);
-            //trip.tripUsers.ToList()
+
+            var startPlace = await _mapService.GetPlaceInformation(trip.StartLocation.X, trip.StartLocation.Y);
+            var endPlace = await _mapService.GetPlaceInformation(trip.EndLocation.X, trip.EndLocation.Y);
             trip.TripUsers.ToList().ForEach(u =>
             {
                 _notificationService.GenerateNotificationAsync(new CreateNotificationDTO()
                 {
                     UserId = u.UserId,
                     NotificationStatus = NotificationStatusDTO.SpecificUser,
-                    Text = $"The trip {trip.StartPlace} - {trip.EndPlace} was cancelled!"
+                    Text = $"The trip {startPlace?.FeaturesList.First().Properties.Formatted} - {endPlace?.FeaturesList.First().Properties.Formatted} was cancelled!"
                 });
             });
 

@@ -1,10 +1,11 @@
-import { Component, Output, EventEmitter, OnDestroy, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, OnDestroy, OnInit, Input } from '@angular/core';
 // import { MatOptionSelectionChange } from '@angular/material/se';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { MapsService } from 'src/app/services/maps-service/maps.service';
+import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip-model';
 
 
 export interface PlaceSuggestion {
@@ -33,9 +34,9 @@ export interface GeocodingFeatureProperties {
   styleUrls: ['./maps-autocomplete.component.scss']
 })
 export class MapsAutocompleteComponent implements OnInit, OnDestroy {
+  @Input() place: string = '';
   private unsubscribe$: Subject<void> = new Subject<void>();
-  @Output()
-  locationChange: EventEmitter<PlaceSuggestion> = new EventEmitter<PlaceSuggestion>();
+  @Output() locationChange: EventEmitter<PlaceSuggestion> = new EventEmitter<PlaceSuggestion>();
   searchOptions: Subject<PlaceSuggestion[]> = new Subject<PlaceSuggestion[]>();
   inputFieldFormControl: FormControl = new FormControl();
 
@@ -73,6 +74,7 @@ export class MapsAutocompleteComponent implements OnInit, OnDestroy {
   }
   private generateSuggestions(text: string) {
     this.mapsService.getPlace(text).pipe(takeUntil(this.unsubscribe$)).subscribe((data: any /*GeoJSON.FeatureCollection*/) => {
+      console.log(data);
       const placeSuggestions = data.features.map((feature: { properties: GeocodingFeatureProperties; }) => {
         const properties: GeocodingFeatureProperties = (feature.properties as GeocodingFeatureProperties);
 

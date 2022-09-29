@@ -6,13 +6,15 @@
                 [(ngModel)]="trip.startPlace">
             <mat-icon matSuffix>my_location</mat-icon>
         </mat-form-field> -->
-        <app-maps-autocomplete (locationChange)="startPlaceChanged($event)"></app-maps-autocomplete>
+        <app-maps-autocomplete [place]="trip.startPlace" (locationChange)="startPlaceChanged($event)">
+        </app-maps-autocomplete>
         <!-- <mat-form-field class="input__item" appearance="standard">
             <input type="text" matInput placeholder="End place" id="endPlace" name="endPlace"
                 [(ngModel)]="trip.endPlace">
             <mat-icon matSuffix> place</mat-icon>
         </mat-form-field> -->
-        <app-maps-autocomplete (locationChange)="endPlaceChanged($event)"></app-maps-autocomplete>
+        <app-maps-autocomplete [place]="trip.endPlace" (locationChange)="endPlaceChanged($event)">
+        </app-maps-autocomplete>
 
 
         <mat-form-field class="input__item date" appearance="standard">

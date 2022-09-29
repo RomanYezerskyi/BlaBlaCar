@@ -30,8 +30,8 @@ export class SearchFormComponent implements OnInit {
   search(): void {
     this.router.navigate(['search'], {
       queryParams: {
-        startPlace: "Lviv", //this.trip.startPlace,
-        endPlace: "Kyiv",//this.trip.endPlace,
+        startPlace: this.trip.startPlace,
+        endPlace: this.trip.endPlace,
         startTime: this.trip.startTime,
         seats: this.trip.countOfSeats,
         orderBy: TripOrderBy.EarliestDepartureTime,
@@ -45,11 +45,13 @@ export class SearchFormComponent implements OnInit {
   startPlaceChanged(value: PlaceSuggestion) {
     this.trip.startLat = value.data.lat;
     this.trip.startLon = value.data.lon;
+    this.trip.startPlace = value.data.formatted
     console.log(value);
   }
   endPlaceChanged(value: PlaceSuggestion) {
     this.trip.endLat = value.data.lat;
     this.trip.endLon = value.data.lon;
+    this.trip.endPlace = value.data.formatted
     console.log(value);
   }
 }

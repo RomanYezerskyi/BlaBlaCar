@@ -6,8 +6,6 @@ namespace BlaBlaCar.DAL.Entities.TripEntities
 {
     public class Trip : BaseEntity
     {
-        public string StartPlace { get; set; }
-        public string EndPlace { get; set; }
         public Point? StartLocation { get; set; }
         public Point? EndLocation { get; set; }
         public DateTimeOffset StartTime { get; set; }

@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication;
 using BlaBlaCar.BL.Services.BookedTripServices;
 using BlaBlaCar.BL.Services.ChatServices;
+using BlaBlaCar.BL.Services.MapsServices;
 using BlaBlaCar.BL.Services.NotificationServices;
 using BlaBlaCar.BL.Services.TripServices;
 using Hangfire;
@@ -68,6 +69,7 @@ builder.Services.Configure<FormOptions>(o =>
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ITripService, TripService>();
 builder.Services.AddScoped<IBookedTripsService, BookedTripsService>();
@@ -79,7 +81,7 @@ builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IChatHubService, ChatHubService>();
-
+builder.Services.AddScoped<IMapService, MapsService>();
 
 
 var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
