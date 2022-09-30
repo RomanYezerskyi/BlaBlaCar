@@ -20,7 +20,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { AddTripLayoutComponent } from './components/user/add-trip-layout/add-trip-layout.component';
 import { AddCarComponent } from './components/user/add-car/add-car.component';
 import { AddAvailableSeatsComponent } from './components/user/add-trip-layout/add-available-seats/add-available-seats.component';
-import { RequestDrivingLicenseComponent } from './components/user/request-driving-license/request-driving-license.component';
+import { RequestDrivingLicenseComponent } from './components/user/user-profile/request-driving-license/request-driving-license.component';
 import { AdminPageComponent } from './components/admin-page/admin-page.component';
 import { RolesComponent } from './components/admin-page/roles/roles.component';
 import { UsersRequestsComponent } from './components/admin-page/users-requests/users-requests.component';
@@ -156,7 +156,7 @@ export function tokenGetter() {
   providers: [AuthGuard, AdminGuard, PageAccessGuard, UserGuard, UserService],
   bootstrap: [AppComponent],
   entryComponents: [DialogBookingConfirmationComponent,
-    CreateNotificationDialogComponent, EditModalDialogComponent, EditCarModalDialogComponent],
+    CreateNotificationDialogComponent, EditModalDialogComponent, EditCarModalDialogComponent, RequestDrivingLicenseComponent],
   exports: [
     MatToolbarModule,
     MatButtonModule,

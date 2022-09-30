@@ -172,7 +172,7 @@ namespace BlaBlaCar.BL.Services.TripServices
                          $" AND ([t].EndLocation.STDistance(geography::STGeomFromText('POINT({endLocationLat} {endLocationLon})', 4326)) < {radius})  AND" +
                          $" ((SELECT COUNT(*)FROM [AvailableSeats] AS [a] WHERE ([t].[Id] = [a].[TripId]) AND NOT EXISTS (SELECT 1 FROM [TripUsers] AS [t0]" +
                          $" WHERE ([t].[Id] = [t0].[TripId]) AND (([t0].[SeatId] = [a].[SeatId]) AND ([t0].[SeatId] IS NOT NULL)))) >= {model.CountOfSeats})";
-                         var trips = await _unitOfWork.Trips.GetFromSqlRowAsync(sqlRaw: sqlRaw,
+            var trips = await _unitOfWork.Trips.GetFromSqlRowAsync(sqlRaw: sqlRaw,
                 includes: x => x.Include(x => x.User)
                                                 .Include(x=>x.AvailableSeats)
                                                 .Include(x=>x.TripUsers), 
@@ -193,10 +193,10 @@ namespace BlaBlaCar.BL.Services.TripServices
             {
                 Trips = _mapper.Map<IEnumerable<Trip>, IEnumerable<TripDTO>>(trips),
             };
-            if (model.Skip == 0)
-            {
-                result.TotalTrips = 10; //await _unitOfWork.Trips.GetCountAsync(tripFilter);
-            }
+            //if (model.Skip == 0)
+            //{
+            //    result.TotalTrips = 10; //await _unitOfWork.Trips.GetCountAsync(tripFilter);
+            //}
             return result;
         }
 

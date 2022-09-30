@@ -1,6 +1,8 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
+import { UpdateUserDocuments } from 'src/app/interfaces/user-interfaces/update-user-documents';
+import { UserDocumentsModel } from 'src/app/interfaces/user-interfaces/user-documents-model';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 @Injectable({
   providedIn: 'root'
@@ -56,10 +58,13 @@ export class UserService {
   updateUserPhoto(formData: FormData): Observable<any> {
     return this.http.put('https://localhost:6001/api/User/user-profile-image', formData);
   }
-  addDrivingLicense(formData: FormData): Observable<any> {
-    return this.http.put('https://localhost:6001/api/User/license', formData)
+  addDrivingLicense(documents: FormData): Observable<any> {
+    return this.http.post('https://localhost:6001/api/User/license', documents)
   }
   getUserStatistics(): Observable<any> {
     return this.http.get<any>('https://localhost:6001/api/User/statistics');
+  }
+  getUserDrivingDocuments(): Observable<UserDocumentsModel[]> {
+    return this.http.get<UserDocumentsModel[]>('https://localhost:6001/api/User/documents');
   }
 }

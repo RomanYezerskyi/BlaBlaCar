@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.BL.Interfaces;
+using BlaBlaCar.BL.Services;
 using BlaBlaCar.BL.Services.Admin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -36,12 +37,17 @@ namespace BlaBlaCar.API.Controllers
             var res = await _userService.AddUserAsync(GetUserInformation());
             return Ok();
         }
-        [HttpPost("license")]
-        public async Task<IActionResult> AddDrivingLicense(IEnumerable<IFormFile> fileToUpload)
+        [HttpGet("documents")]
+        public async Task<IActionResult> GetUserDocuments()
         {
-            if (fileToUpload is null)
-                return BadRequest();
-            var res = await _userService.RequestForDrivingLicense(UserId, fileToUpload);
+
+            var res = await _userService.GetUserDocumentsAsync(UserId);
+            return Ok(res);
+        }
+        [HttpPost("license")]
+        public async Task<IActionResult> AddDrivingLicense([FromForm] UpdateUserDocuments documents)
+        {
+            var res = await _userService.RequestForDrivingLicense(documents, UserId);
            return Ok();
         }
        

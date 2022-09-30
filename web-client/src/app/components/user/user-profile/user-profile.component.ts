@@ -10,6 +10,7 @@ import { CarService } from 'src/app/services/carservice/car.service';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
 import { PasswordValidatorService } from 'src/app/services/password-validator/password-validator.service';
 import { UserService } from 'src/app/services/userservice/user.service';
+import { RequestDrivingLicenseComponent } from './request-driving-license/request-driving-license.component';
 import { EditModalDialogComponent } from './edit-modal-dialog/edit-modal-dialog.component';
 Chart.register(...registerables);
 @Component({
@@ -48,7 +49,17 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     //   this.searchData();
     // });
   }
-
+  editDocuments(): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = {
+      user: this.user
+    }
+    const dRef = this.dialog.open(RequestDrivingLicenseComponent, dialogConfig);
+    // dRef.componentInstance.onSubmitReason.subscribe(() => {
+    //   this.searchData();
+    // });
+  }
   changePhoto(): void {
     this.changeUserPhoto = !this.changeUserPhoto;
     if (this.imagePath != null) this.imagePath = null;
