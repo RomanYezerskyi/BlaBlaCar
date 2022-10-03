@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormControl, NgForm } from '@angular/forms';
 import { SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Subject, Subscription, takeUntil } from 'rxjs';
@@ -22,7 +22,7 @@ export class AdministratorsComponent implements OnInit, OnDestroy {
   rolesList: Array<RoleModel> = [];
   userEmail: string = '';
   searchUser: UserModel = {} as UserModel;
-  isCheckedName: string = '';
+  filter = new FormControl();
   constructor(private sanitizeImgService: ImgSanitizerService,
     private adminService: AdminService, private chatService: ChatService, private router: Router,) { }
 
@@ -41,8 +41,12 @@ export class AdministratorsComponent implements OnInit, OnDestroy {
   getAdmins() {
     this.adminService.getAdmins().pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        console.log(response);
-        this.admins = response;
+        if (response != null) {
+          console.log(response);
+          this.admins = response;
+          this.admins.forEach(x => x.newRole = x.roles[0].name);
+          this.getAllRoles();
+        }
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
@@ -52,7 +56,7 @@ export class AdministratorsComponent implements OnInit, OnDestroy {
     this.adminService.getUserByEmail(this.userEmail).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         this.searchUser = response;
-        this.isCheckedName = this.searchUser.roles[0].name;
+        this.searchUser.newRole = response.roles[0].name;
         console.log(response);
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
@@ -66,6 +70,24 @@ export class AdministratorsComponent implements OnInit, OnDestroy {
             chatId: response
           }
         });
+        console.log(response);
+      },
+      (error: HttpErrorResponse) => { console.error(error.error); }
+    );
+  }
+  getAllRoles(): void {
+    this.adminService.getRoles().pipe(takeUntil(this.unsubscribe$)).subscribe(
+      response => {
+        this.rolesList = response;
+        console.log(response);
+      },
+      (error: HttpErrorResponse) => { console.error(error.error); }
+    );
+  }
+  changeRole(role: string, userId: string): void {
+    const data = { roleName: role, userId: userId };
+    this.adminService.changeUserRole(data).pipe(takeUntil(this.unsubscribe$)).subscribe(
+      response => {
         console.log(response);
       },
       (error: HttpErrorResponse) => { console.error(error.error); }

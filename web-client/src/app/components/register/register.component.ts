@@ -18,9 +18,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private alertsComponent: AlertsComponent = new AlertsComponent;
   private unsubscribe$: Subject<void> = new Subject<void>();
   credentials: RegisterModel = {} as RegisterModel;
-  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
-  itemFormControl = new FormControl('', [Validators.required]);
-  passwordFormControl = new FormControl('', [Validators.required]);
   form: FormGroup = new FormGroup({});
   constructor(private router: Router, private http: HttpClient, private fb: FormBuilder,
     private validator: PasswordValidatorService, private authService: AuthService) {
@@ -36,7 +33,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.alertsComponent.showError("aa");
+    // this.alertsComponent.showError("aa");
   }
   ngOnDestroy(): void {
     this.unsubscribe$.next();

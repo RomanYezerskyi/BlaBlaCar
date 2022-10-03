@@ -50,7 +50,6 @@ export class RolesComponent implements OnInit, OnDestroy {
   }
 
   changeRole(event: any, role: string, userId: string): void {
-    this.isCheckedName = role;
     const data = { roleName: role, userId: userId };
     this.adminService.changeUserRole(data).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {

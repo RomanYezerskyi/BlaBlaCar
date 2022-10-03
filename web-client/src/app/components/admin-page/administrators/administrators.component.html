@@ -32,8 +32,19 @@
             <p>{{searchUser.firstName}}</p>
             <p>{{searchUser.email}}</p>
             <p>{{searchUser.phoneNumber}}</p>
-            <p>{{searchUser.roles[0].name}}</p>
-            <p></p>
+            <!-- <p>{{searchUser.roles[0].name}}</p> -->
+            <mat-form-field class="form-item" appearance="standard">
+                <mat-label>{{searchUser.roles[0].name}}</mat-label>
+                <mat-select name="role" id="role" [(ngModel)]="searchUser.newRole">
+                    <mat-option [value]="role.name" *ngFor="let role of rolesList">
+                        {{role.name}}
+                    </mat-option>
+                </mat-select>
+                <!-- <mat-icon matSuffix *ngIf="newCar.carType == carType.Sedan">drive_eta</mat-icon>
+                <mat-icon matSuffix *ngIf="newCar.carType == carType.Bus">airport_shuttle</mat-icon> -->
+            </mat-form-field>
+            <p><button [disabled]="searchUser.roles[0].name === searchUser.newRole"
+                    (click)="changeRole(searchUser.newRole!, searchUser.id)">save</button></p>
         </div>
     </div>
     <div class="users-list admins">
@@ -61,8 +72,19 @@
             <p>{{user.firstName}}</p>
             <p>{{user.email}}</p>
             <p>{{user.phoneNumber}}</p>
-            <p>{{user.roles[0].name}}</p>
-            <p></p>
+            <!-- <p>{{user.roles[0].name}}</p> -->
+            <mat-form-field class="form-item" appearance="standard">
+                <mat-label>{{user.roles[0].name}}</mat-label>
+                <mat-select name="role" id="role" [(ngModel)]="user.newRole">
+                    <mat-option [value]="role.name" *ngFor=" let role of rolesList">
+                        {{role.name}}
+                    </mat-option>
+                </mat-select>
+                <!-- <mat-icon matSuffix *ngIf="newCar.carType == carType.Sedan">drive_eta</mat-icon>
+                <mat-icon matSuffix *ngIf="newCar.carType == carType.Bus">airport_shuttle</mat-icon> -->
+            </mat-form-field>
+            <p><button [disabled]="user.roles[0].name === user.newRole"
+                    (click)="changeRole(user.newRole!, user.id)">save</button></p>
         </div>
     </div>
 </div>

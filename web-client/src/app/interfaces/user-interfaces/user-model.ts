@@ -17,5 +17,5 @@ export interface UserModel {
     trips?: TripModel[];
     tripUsers?: TripModel[];
     createdAt?: Date;
-
+    newRole?: string;
 }
