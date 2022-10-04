@@ -14,6 +14,7 @@ using BlaBlaCar.BL.Exceptions;
 using BlaBlaCar.BL.Hubs;
 using BlaBlaCar.BL.Hubs.Interfaces;
 using BlaBlaCar.BL.Interfaces;
+using BlaBlaCar.BL.Services.MapsServices;
 using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.DAL.Entities.NotificationEntities;
 using BlaBlaCar.DAL.Interfaces;
@@ -30,15 +31,18 @@ namespace BlaBlaCar.BL.Services.NotificationServices
         private readonly IMapper _mapper;
         private readonly HostSettings _hostSettings;
         private readonly IHubContext<NotificationHub, INotificationsHubClient> _hubContext;
+        private readonly IMapService _mapService;
         public NotificationService(
             IUnitOfWork unitOfWork, 
             IMapper mapper, 
             IOptionsSnapshot<HostSettings> hostSettings, 
-            IHubContext<NotificationHub, INotificationsHubClient> hubContext)
+            IHubContext<NotificationHub, INotificationsHubClient> hubContext, 
+            IMapService mapService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _hubContext = hubContext;
+            _mapService = mapService;
             _hostSettings = hostSettings.Value;
         }
         public async Task<IEnumerable<GetNotificationsDTO>> GetUserUnreadNotificationsAsync(Guid currentUserId)
@@ -48,12 +52,6 @@ namespace BlaBlaCar.BL.Services.NotificationServices
 
             Expression<Func<Notifications, bool>> notificationFilter =
                 x => x.UserId == currentUserId || x.NotificationStatus == NotificationStatus.Global;
-            if (readNotifications.Any())
-            {
-                notificationFilter =
-                    x => x.UserId == currentUserId || x.NotificationStatus == NotificationStatus.Global
-                        && readNotifications.ToList().Any(r => r.NotificationId != x.Id);
-            }
             var notifications = _mapper.Map<IEnumerable<GetNotificationsDTO>>(
                 await _unitOfWork.Notifications.GetAsync(
                     x=>x.OrderByDescending(x=>x.CreatedAt),
@@ -61,7 +59,9 @@ namespace BlaBlaCar.BL.Services.NotificationServices
 
             if (!notifications.Any()) return null;
 
-                notifications = notifications.Select(n =>
+            if (readNotifications.All(x => notifications.Any(n => n.Id == x.NotificationId))) return null;
+
+            notifications = notifications.Select(n =>
             {
                 if (readNotifications.Any(x => x.NotificationId == n.Id))
                     n.ReadNotificationStatus = ReadNotificationStatusDTO.Read;
@@ -121,6 +121,8 @@ namespace BlaBlaCar.BL.Services.NotificationServices
             if (trip == null) throw new NotFoundException($"Trips with id {tripId}");
             var users = trip.TripUsers.Distinct();
 
+            var startPlace = await _mapService.GetPlaceInformation(trip.StartLocation.X, trip.StartLocation.Y);
+            var endPlace = await _mapService.GetPlaceInformation(trip.EndLocation.X, trip.EndLocation.Y);
             foreach (var user in users)
             {
                 var notificationDTO = new NotificationsDTO()
@@ -128,7 +130,7 @@ namespace BlaBlaCar.BL.Services.NotificationServices
                     UserId = user.UserId,
                     NotificationStatus = NotificationStatusDTO.FeedBack,
                     Text = $"Please write a feedback about the driver {trip.User.FirstName}." +
-                           $"\nDescribe how your trip {trip.StartPlace} - {trip.EndPlace} went.",
+                           $"\nDescribe how your trip {startPlace?.FeaturesList.First().Properties.Formatted} - {endPlace?.FeaturesList.First().Properties.Formatted} went.",
                     FeedBackOnUser = trip.UserId,
                 };
                 await _unitOfWork.Notifications.InsertAsync(_mapper.Map<Notifications>(notificationDTO));
@@ -159,7 +161,7 @@ namespace BlaBlaCar.BL.Services.NotificationServices
             var readNotifications = new List<ReadNotificationsDTO>();
 
             readNotifications.AddRange(
-                notification.Select(n => new ReadNotificationsDTO() { NotificationId = n.Id, UserId = n.UserId }));
+                notification.Select(n => new ReadNotificationsDTO() { NotificationId = n.Id, UserId = currentUserId }));
 
             await _unitOfWork.ReadNotifications.InsertRangeAsync(_mapper.Map<IEnumerable<ReadNotifications>>(readNotifications));
 

@@ -39,7 +39,7 @@ namespace BlaBlaCar.API.Controllers
         [HttpGet("chat-messages/{chatId}")]
         public async Task<IActionResult> GetChatMessages([FromRoute]Guid chatId,[FromQuery] int take,[FromQuery] int skip)
         {
-            var chat = await _chatService.GetChatMessages(chatId, take, skip);
+            var chat = await _chatService.GetChatMessages(chatId, UserId,take, skip);
             return Ok(chat);
         }
         [HttpGet("unread-messages")]

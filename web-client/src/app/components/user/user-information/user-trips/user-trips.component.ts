@@ -4,9 +4,12 @@ import { SafeUrl } from '@angular/platform-browser';
 import { UserTrips, UserTripsResponseModel } from 'src/app/interfaces/user-interfaces/user-trips-response-model';
 import { TripService } from 'src/app/services/tripservice/trip.service';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
-import { skip, Subject, takeUntil } from 'rxjs';
+import { skip, Subject, Subscription, takeUntil } from 'rxjs';
 import { ChatService } from 'src/app/services/chatservice/chat.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { GeocodingFeatureProperties, PlaceSuggestion } from 'src/app/components/maps-autocomplete/maps-autocomplete.component';
+import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
+import { MapsService } from 'src/app/services/maps-service/maps.service';
 
 @Component({
   selector: 'app-user-trips',
@@ -20,9 +23,9 @@ export class UserTripsComponent implements OnInit, OnDestroy {
   totalTrips: number = 0;
   private Skip: number = 0;
   private Take: number = 5;
-  constructor(
+  constructor(private http: HttpClient,
     private imgSanitaze: ImgSanitizerService, private router: Router,
-    private tripService: TripService, private chatService: ChatService) { }
+    private tripService: TripService, private chatService: ChatService, private mapsService: MapsService) { }
 
   ngOnInit(): void {
     this.getUserTrips();
@@ -41,6 +44,13 @@ export class UserTripsComponent implements OnInit, OnDestroy {
       this.tripService.getUserTrips(this.Take, this.Skip).pipe(takeUntil(this.unsubscribe$)).subscribe(
         response => {
           if (response != null) {
+            response.trips.forEach(
+              x => {
+                if (x.startLat! > 0) {
+                  this.getPlaces(x);
+                }
+              }
+            )
             this.trips.trips = this.trips.trips.concat(response.trips);
             console.log(this.trips);
             if (this.totalTrips == 0)
@@ -96,5 +106,37 @@ export class UserTripsComponent implements OnInit, OnDestroy {
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
+  }
+  private getPlaces(trip: TripModel) {
+    let text = `${trip.startLat}%20${trip.startLon}`;
+    this.mapsService.getPlaceName(text).pipe(takeUntil(this.unsubscribe$)).subscribe((data: any) => {
+      const placeSuggestions = data.features.map((feature: { properties: GeocodingFeatureProperties; }) => {
+        const properties: GeocodingFeatureProperties = (feature.properties as GeocodingFeatureProperties);
+        return {
+          shortAddress: this.mapsService.generateShortAddress(properties),
+          fullAddress: this.mapsService.generateFullAddress(properties),
+          data: properties
+        }
+      });
+      trip.startPlace = placeSuggestions[0].data.city;
+      console.log(placeSuggestions);
+    }, err => {
+      console.log(err);
+    });
+    text = `${trip.endLat}%20${trip.endLon}`;
+    this.mapsService.getPlaceName(text).pipe(takeUntil(this.unsubscribe$)).subscribe((data: any) => {
+      const placeSuggestions = data.features.map((feature: { properties: GeocodingFeatureProperties; }) => {
+        const properties: GeocodingFeatureProperties = (feature.properties as GeocodingFeatureProperties);
+        return {
+          shortAddress: this.mapsService.generateShortAddress(properties),
+          fullAddress: this.mapsService.generateFullAddress(properties),
+          data: properties
+        }
+      });
+      trip.endPlace = placeSuggestions[0].data.city;
+      console.log(placeSuggestions);
+    }, err => {
+      console.log(err);
+    });
   }
 }

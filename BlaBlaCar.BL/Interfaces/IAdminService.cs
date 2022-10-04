@@ -19,5 +19,6 @@ namespace BlaBlaCar.BL.Interfaces
         Task<bool> ChangeCarStatusAsync(ChangeCarStatus changeCarStatus, Guid currentUserId);
         Task<AdminStatisticsDTO> GetStatisticsDataAsync(DateTimeOffset searchDate);
         Task<IEnumerable<UsersStatisticsDTO>> GetTopUsersListAsync(int take, int skip, UsersListOrderByType orderBy);
+        Task<ShortStatisticsDTO> GetShortStatisticsDataAsync();
     }
 }

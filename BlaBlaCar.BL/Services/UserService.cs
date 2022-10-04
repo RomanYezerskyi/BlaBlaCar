@@ -16,7 +16,6 @@ using IdentityModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders.Physical;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
@@ -131,30 +130,49 @@ namespace BlaBlaCar.BL.Services
             return users;
         }
 
-        
 
-        public async Task<bool> RequestForDrivingLicense(Guid currentUserId, IEnumerable<IFormFile> drivingLicense)
+        public async Task<IEnumerable<UserDocumentDTO>> GetUserDocumentsAsync(Guid userId)
+        {
+            var documents = _mapper.Map<IEnumerable<UserDocumentDTO>>(
+                await _unitOfWork.UserDocuments.
+                    GetAsync(null, null, x=>x.UserId == userId)
+                );
+            foreach (var document in documents)
+            {
+                document.DrivingLicense = _hostSettings.CurrentHost + document.DrivingLicense;
+            }
+            return documents;
+        }
+        public async Task<bool> RequestForDrivingLicense(UpdateUserDocuments model, Guid currentUserId)
         {
             var userModel = _mapper.Map<UserDTO>(await _unitOfWork.Users
-                .GetAsync(null, x => x.Id == currentUserId));
+                .GetAsync(x=>x.Include(x=>x.UserDocuments), x => x.Id == currentUserId));
             if (userModel.UserStatus == UserStatusDTO.Rejected) throw new PermissionException("This user cannot add driving license!");
 
            
-            if (drivingLicense.Any())
+            if (model.DocumentsFile != null)
             {
-                var files = await _fileService.GetFilesDbPathAsync(drivingLicense);
+                var files = await _fileService.GetFilesDbPathAsync(model.DocumentsFile);
 
-               userModel.UserDocuments = files.Select(f => new UserDocumentDTO() { User = userModel, DrivingLicense = f }).ToList();
+                userModel.UserDocuments = files.Select(f => new UserDocumentDTO() { User = userModel, DrivingLicense = f }).ToList();
 
                 userModel.UserStatus = UserStatusDTO.Pending;
-
-
                 var user = _mapper.Map<ApplicationUser>(userModel);
                 _unitOfWork.Users.Update(user);
-                return await _unitOfWork.SaveAsync(user.Id);
+                
             }
 
-            throw new NoFileException($"File is required!");
+            if (model.DeletedDocuments != null)
+            {
+                var documents = userModel.UserDocuments.Select(x =>
+                {
+                    return model.DeletedDocuments.All(d => d == x.Id.ToString()) ? x : null;
+                }).Where(x=>x != null).ToList();
+                _unitOfWork.UserDocuments.Delete(_mapper.Map<IEnumerable<UserDocuments>>(documents));
+                _fileService.DeleteFileFormApi(documents.Where(x => x != null).Select(x => x.DrivingLicense));
+            }
+
+            return await _unitOfWork.SaveAsync(currentUserId);
         }
 
         public async Task<bool> AddUserAsync(UserDTO user)

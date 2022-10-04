@@ -1,0 +1,8 @@
+<button class="btn-close" mat-button (click)="close()"><i class="material-icons">highlight_remove</i></button>
+<mat-dialog-content>
+
+    <app-images-gallery (removeImg)="deleteImg($event)" (addedFile)="getImages($event)" [images]="images"
+        [editMode]="true">
+    </app-images-gallery>
+    <button (click)="addLicense()">Save</button>
+</mat-dialog-content>

@@ -22,15 +22,18 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
         private readonly IMapper _mapper;
         private readonly HostSettings _hostSettings;
         private readonly INotificationService _notificationService;
+        private readonly IMapService _mapService;
         public BookedTripsService(
             IUnitOfWork unitOfWork, 
             IMapper mapper,
             IOptionsSnapshot<HostSettings> hostSettings, 
-            INotificationService notificationService)
+            INotificationService notificationService, 
+            IMapService mapService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _notificationService = notificationService;
+            _mapService = mapService;
             _hostSettings = hostSettings.Value;
         }
 
@@ -88,12 +91,16 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
 
             var trip = await _unitOfWork.Trips.GetAsync(null, x => x.Id == tripModel.TripId);
 
+            var startPlace = await _mapService.GetPlaceInformation(trip.StartLocation.X, trip.StartLocation.Y);
+            var endPlace = await _mapService.GetPlaceInformation(trip.EndLocation.X, trip.EndLocation.Y);
+            if (startPlace == null || endPlace == null) throw new Exception("Places not found!");
+
             await _notificationService.GenerateNotificationAsync(
                 new CreateNotificationDTO()
                 {
                     NotificationStatus = NotificationStatusDTO.SpecificUser,
-                    Text = $"{trip.StartPlace} - {trip.EndPlace}" +
-                           $"\nUser {userName} joined your trip",
+                    Text = $"{startPlace?.FeaturesList.First().Properties.Formatted} - {endPlace?.FeaturesList.First().Properties.Formatted}" +
+                           $"\n{userName} joined your trip",
                     UserId = trip.UserId,
                 });
 
@@ -134,12 +141,14 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
                     x => x.Id == tripUserModel.TripId));
             var seat = _mapper.Map<SeatDTO>(
                 await _unitOfWork.CarSeats.GetAsync(null, x => x.Id == tripUserModel.SeatId));
-           
+
+            var startPlace = await _mapService.GetPlaceInformation(trip.StartLocation.X, trip.StartLocation.Y);
+            var endPlace = await _mapService.GetPlaceInformation(trip.EndLocation.X, trip.EndLocation.Y);
             await _notificationService.GenerateNotificationAsync(
                 new CreateNotificationDTO()
                 {
                     NotificationStatus = NotificationStatusDTO.SpecificUser,
-                    Text = $"{trip.StartPlace} - {trip.EndPlace} " +
+                    Text = $"{startPlace?.FeaturesList.First().Properties.Formatted} - {endPlace?.FeaturesList.First().Properties.Formatted} " +
                            $"The {userName} canceled the reservation seat {seat.SeatNumber} ",
                     UserId = trip.UserId,
                 });

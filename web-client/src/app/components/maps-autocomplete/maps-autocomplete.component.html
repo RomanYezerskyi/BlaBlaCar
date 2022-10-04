@@ -1,0 +1,16 @@
+<mat-form-field floatLabel="never" class="input__item" appearance="standard">
+    <!-- <input matInput type="text" [matAutocomplete]="auto" [formControl]="inputFieldFormControl"
+        placeholder="Enter location here" /> -->
+
+    <input matInput type="text" [(ngModel)]="place" id="place" name="place" [matAutocomplete]="auto"
+        [formControl]="inputFieldFormControl" placeholder="Enter location here" />
+    <mat-icon matSuffix>my_location</mat-icon>
+
+    <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption>
+        <mat-option *ngFor="let option of searchOptions | async" [value]="option.fullAddress"
+            (onSelectionChange)="optionSelectionChange(option, $event)" [matTooltip]="option.fullAddress"
+            matTooltipShowDelay="1000">
+            <span class="mat-body">{{ option.fullAddress }}</span>
+        </mat-option>
+    </mat-autocomplete>
+</mat-form-field>

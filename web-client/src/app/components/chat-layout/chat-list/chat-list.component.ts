@@ -4,6 +4,7 @@ import { SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Subject, Subscription, takeUntil } from 'rxjs';
+import { MessageStatus } from 'src/app/enums/message-status';
 import { ChatModel } from 'src/app/interfaces/chat-interfaces/chat-model';
 import { UnreadMessagesInChatsModel } from 'src/app/interfaces/chat-interfaces/unread-messages-in-chats-model';
 import { ChatService } from 'src/app/services/chatservice/chat.service';
@@ -37,6 +38,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe(params => {
       if (params['chatId']) {
         this.currentChatId = params['chatId'];
+        this.markChatAsRead(this.currentChatId);
       }
     });
     this.getUserChats();
@@ -45,6 +47,10 @@ export class ChatListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+  markChatAsRead(chatId: string): void {
+    console.log(chatId);
+    this.unreadMessagesChats = this.unreadMessagesChats.filter(x => x.chatId != chatId);
   }
   setSignalRUrls(): void {
     const currentUserId = this.jwtHelper.decodeToken(this.token!).id;
@@ -80,6 +86,16 @@ export class ChatListComponent implements OnInit, OnDestroy {
     this.chatService.getUserChats().pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         this.chats = response;
+        this.chats.forEach(chat => {
+          if (chat.lastMessage?.status == MessageStatus.Unread) {
+            const chatMess: UnreadMessagesInChatsModel = {
+              chatId: chat.id!,
+              count: 1
+            };
+            this.unreadMessagesChats.push(chatMess);
+          }
+
+        });
         console.log(response);
         if (response != null)
           this.connectToSignalRChatHub();

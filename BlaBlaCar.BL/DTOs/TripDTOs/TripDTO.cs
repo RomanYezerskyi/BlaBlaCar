@@ -1,14 +1,18 @@
 ﻿using BlaBlaCar.BL.DTOs.BookTripDTOs;
 using BlaBlaCar.BL.DTOs.CarDTOs;
 using BlaBlaCar.BL.DTOs.UserDTOs;
+using NetTopologySuite.Geometries;
 
 namespace BlaBlaCar.BL.DTOs.TripDTOs
 {
     public class TripDTO:BaseDTO
     {
-       
-        public string StartPlace { get; set; }
-        public string EndPlace { get; set; }
+        public Point? StartLocation { get; set; }
+        public Point? EndLocation { get; set; }
+        public double StartLat => StartLocation != null ? StartLocation.X : default;
+        public double StartLon => StartLocation != null ? StartLocation.Y : default;
+        public double EndLat => EndLocation != null ? EndLocation.X : default;
+        public double EndLon => EndLocation != null ? EndLocation.Y : default;
         public DateTimeOffset StartTime { get; set; }
         public DateTimeOffset EndTime { get; set; }
         public int PricePerSeat { get; set; }

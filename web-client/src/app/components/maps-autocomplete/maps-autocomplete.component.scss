@@ -1,0 +1,71 @@
+.input__item {
+    // display: block;
+    min-width: 150px;
+    margin: 0 10px;
+    border-radius: 10px;
+    color: #000;
+
+    mat-icon {
+        font-size: 24px;
+        margin: auto;
+        color: #000;
+    }
+}
+
+::ng-deep .mat-form-field-appearance-standard .mat-form-field-underline {
+    background-color: white;
+    background-image: none;
+}
+
+::ng-deep .mat-form-field-appearance-standard:hover .mat-form-field-underline {
+    background-color: #000;
+    height: 2.5% !important;
+    background-image: none;
+    transition: .1s;
+}
+
+// ::ng-deep .mat-form-field-appearance-standard.mat-form-field-ripple {
+//     background-color: yellow;
+// }
+
+// ::ng-deep .mat-form-field-appearance-legacy.mat-disabled .mat-form-field-underline,
+::ng-deep .mat-form-field-appearance-standard.mat-focused .mat-form-field-ripple {
+    background-color: transparent;
+    background-image: none;
+}
+
+
+// ::ng-deep .mat-form-field-appearance-standard.mat-form-field-disabled .mat-form-field-underline {}
+
+
+// ::ng-deep.mat-form-field-disabled .mat-form-field-underline {
+//     background-color: white;
+
+// }
+
+// ::ng-deep.mat-form-field.mat-focused .mat-form-field-ripple {
+//     background-color: #69f0ae !important;
+// }
+
+// /* Font color */
+.mat-input-element:disabled,
+.mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after {
+    color: #000;
+}
+
+input.mat-input-element {
+    // color: white;
+    font-size: 18px;
+}
+
+
+::ng-deep .cdk-overlay-container {
+
+    /* Do you changes here */
+    ::ng-deep .cdk-overlay-connected-position-bounding-box {
+
+        ::ng-deep.cdk-overlay-pane {
+            width: auto !important;
+        }
+    }
+}

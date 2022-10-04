@@ -5,7 +5,7 @@
     <h3>There are no trips yet :)</h3>
 </div>
 <div class="main-line"></div>
-<div class="container" *ngIf="totalTrips > 0">
+<div class="container" *ngIf="trips.trips.length !== 0">
     <div class="filters">
         <div class="sortingPanel">
             <app-sorting-panel [trip]="trip" (OrderByOutput)=searchTrips($event)></app-sorting-panel>

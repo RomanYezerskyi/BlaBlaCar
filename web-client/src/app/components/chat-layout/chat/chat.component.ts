@@ -37,11 +37,16 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       }
     });
     this.setSignalRUrls();
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    // this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
   ngOnInit(): void {
-
+    this.route.queryParams.subscribe(params => {
+      if (params['chatId']) {
+        this.chat.id = params['chatId'];
+        this.getChat();
+      }
+    });
     if (this.chat.id != undefined) {
       this.getChat();
 

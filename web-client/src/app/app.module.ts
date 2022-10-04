@@ -20,7 +20,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { AddTripLayoutComponent } from './components/user/add-trip-layout/add-trip-layout.component';
 import { AddCarComponent } from './components/user/add-car/add-car.component';
 import { AddAvailableSeatsComponent } from './components/user/add-trip-layout/add-available-seats/add-available-seats.component';
-import { RequestDrivingLicenseComponent } from './components/user/request-driving-license/request-driving-license.component';
+import { RequestDrivingLicenseComponent } from './components/user/user-profile/request-driving-license/request-driving-license.component';
 import { AdminPageComponent } from './components/admin-page/admin-page.component';
 import { RolesComponent } from './components/admin-page/roles/roles.component';
 import { UsersRequestsComponent } from './components/admin-page/users-requests/users-requests.component';
@@ -66,6 +66,9 @@ import { LightgalleryModule } from 'lightgallery/angular';
 import { ImagesGalleryComponent } from './components/images-gallery/images-gallery.component';
 import { AlertsComponent } from './components/alerts/alerts.component';
 import { UserService } from './services/userservice/user.service';
+import { MapsAutocompleteComponent } from './components/maps-autocomplete/maps-autocomplete.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatTooltipModule } from '@angular/material/tooltip';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -114,6 +117,7 @@ export function tokenGetter() {
     EditCarModalDialogComponent,
     ImagesGalleryComponent,
     AlertsComponent,
+    MapsAutocompleteComponent,
 
   ],
   imports: [
@@ -145,12 +149,14 @@ export function tokenGetter() {
     MatDatepickerModule,
     MatRadioModule,
     MatProgressSpinnerModule,
-    LightgalleryModule
+    LightgalleryModule,
+    MatAutocompleteModule,
+    MatTooltipModule
   ],
   providers: [AuthGuard, AdminGuard, PageAccessGuard, UserGuard, UserService],
   bootstrap: [AppComponent],
   entryComponents: [DialogBookingConfirmationComponent,
-    CreateNotificationDialogComponent, EditModalDialogComponent, EditCarModalDialogComponent],
+    CreateNotificationDialogComponent, EditModalDialogComponent, EditCarModalDialogComponent, RequestDrivingLicenseComponent],
   exports: [
     MatToolbarModule,
     MatButtonModule,

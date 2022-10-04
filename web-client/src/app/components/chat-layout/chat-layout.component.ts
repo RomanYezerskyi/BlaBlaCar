@@ -13,7 +13,7 @@ export class ChatLayoutComponent implements OnInit {
   role: string = '';
   isChatSelected: boolean = false;
   constructor(private jwtHelper: JwtHelperService, private route: ActivatedRoute, private router: Router,) {
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    // this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
   ngOnInit(): void {

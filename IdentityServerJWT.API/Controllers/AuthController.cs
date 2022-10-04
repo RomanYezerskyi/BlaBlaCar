@@ -27,11 +27,6 @@ namespace IdentityServerJWT.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel userModel)
         {
-            if (userModel is null)
-            {
-                return BadRequest("Invalid client request");
-            }
-
             try
             {
                 var res = await _authorizationService.Login(userModel);

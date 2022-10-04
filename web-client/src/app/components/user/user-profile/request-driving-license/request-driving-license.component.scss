@@ -1,0 +1,17 @@
+::ng-deep.mat-dialog-container {
+    position: relative !important;
+}
+
+.btn-close {
+    position: absolute;
+    right: 0;
+    top: 18px;
+
+}
+
+.upload {
+    font-weight: bold;
+    color: #28a745;
+    margin-left: 15px;
+    line-height: 36px;
+}

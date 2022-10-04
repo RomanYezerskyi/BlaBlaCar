@@ -9,15 +9,15 @@ namespace BlaBlaCar.BL.DTOs.AdminDTOs
     public class AdminStatisticsDTO
     {
         public IEnumerable<int> UsersStatisticsCount { get; set; }
-        public IEnumerable<DateTime> UsersDateTime { get; set; }
+        public IEnumerable<string> UsersDateTime { get; set; }
 
         public IEnumerable<int> CarsStatisticsCount { get; set; }
-        public IEnumerable<DateTime> CarsDateTime { get; set; }
+        public IEnumerable<string> CarsDateTime { get; set; }
 
         public IEnumerable<int> TripsStatisticsCount { get; set; }
-        public IEnumerable<DateTime> TripsDateTime { get; set; }
+        public IEnumerable<string> TripsDateTime { get; set; }
 
         public IEnumerable<int> WeekStatisticsTripsCount { get; set; }
-        public IEnumerable<DayOfWeek> WeekTripsDateTime { get; set; }
+        public IEnumerable<string> WeekTripsDateTime { get; set; }
     }
 }

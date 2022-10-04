@@ -1,3 +1,4 @@
 export interface UserDocumentsModel {
-    drivingLicense: string
+    id?: string;
+    drivingLicense: string;
 }

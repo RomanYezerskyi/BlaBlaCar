@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Router, RouterModule, Routes } from '@angular/router';
-import { AddTripComponent } from './components/user/add-trip-layout/add-trip/add-trip.component';
-import { DialogBookingConfirmationComponent } from './components/user/trip-page-info/dialog-booking-confirmation/dialog-booking-confirmation.component';
 import { HomeComponent } from './components/user/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -13,7 +11,7 @@ import { RolesComponent } from './components/admin-page/roles/roles.component';
 import { AddTripLayoutComponent } from './components/user/add-trip-layout/add-trip-layout.component';
 import { AddAvailableSeatsComponent } from './components/user/add-trip-layout/add-available-seats/add-available-seats.component';
 import { AddCarComponent } from './components/user/add-car/add-car.component';
-import { RequestDrivingLicenseComponent } from './components/user/request-driving-license/request-driving-license.component';
+import { RequestDrivingLicenseComponent } from './components/user/user-profile/request-driving-license/request-driving-license.component';
 import { UsersRequestsComponent } from './components/admin-page/users-requests/users-requests.component';
 import { UserRequestInfoComponent } from './components/admin-page/user-request-info/user-request-info.component';
 import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
@@ -42,7 +40,6 @@ const routes: Routes = [
 
   { path: 'add-trip', component: AddTripLayoutComponent, canActivate: [PageAccessGuard] },
   { path: 'add-car', component: AddCarComponent, canActivate: [AuthGuard] },
-  { path: 'driving-license', component: RequestDrivingLicenseComponent, canActivate: [AuthGuard] },
   { path: 'cars', component: UserCarsComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] },
   {

@@ -8,18 +8,18 @@ export class ChartService {
 
   constructor() { }
 
-  generateChart(chartId: string, label: string, yArray: Array<Date>, xArray: Array<any>): Chart {
+  generateChart(chartId: string, label: string, xArray: Array<Date | string>, yArray: Array<any>): Chart {
     return new Chart(chartId, {
       type: 'line', //this denotes tha type of chart
 
       data: {// values on X-Axis
         // labels: ['2022-05-10', '2022-05-11', '2022-05-12', '2022-05-13',
         //   '2022-05-14', '2022-05-15', '2022-05-16', '2022-05-17',],
-        labels: yArray,
+        labels: xArray,
         datasets: [
           {
             label: label,
-            data: xArray,
+            data: yArray,
             backgroundColor: 'blue'
           },
           // {

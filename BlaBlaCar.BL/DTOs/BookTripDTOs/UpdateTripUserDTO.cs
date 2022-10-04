@@ -15,5 +15,6 @@ namespace BlaBlaCar.BL.DTOs.BookTripDTOs
         public Guid TripId { get; set; }
         [Required]
         public Guid UserId { get; set; }
+      
     }
 }

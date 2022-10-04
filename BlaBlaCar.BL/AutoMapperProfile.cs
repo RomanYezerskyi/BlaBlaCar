@@ -50,6 +50,7 @@ namespace BlaBlaCar.BL
             CreateMap<Notifications, CreateNotificationDTO>().ReverseMap();
             CreateMap<ReadNotifications, CreateNotificationDTO>();
             CreateMap<Notifications, GetNotificationsDTO>().ReverseMap();
+            CreateMap<NotificationsDTO, GetNotificationsDTO>().ReverseMap();
 
             CreateMap<Chat, ChatDTO>().ReverseMap();
             CreateMap<Message, MessageDTO>().ReverseMap();

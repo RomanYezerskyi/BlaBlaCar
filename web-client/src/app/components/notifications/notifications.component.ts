@@ -61,8 +61,10 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   getUserNotifications(): void {
     this.notificationsService.getUserUnreadNotifications().pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        this.notifications = response;
-        this.checkIfNotRead();
+        if (response != null) {
+          this.notifications = response;
+          this.checkIfNotRead();
+        }
         console.log(response);
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
@@ -73,7 +75,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     if (this.Skip <= this.notifications.length) {
       this.notificationsService.getUserNotifications(this.Take, this.Skip).pipe(takeUntil(this.unsubscribe$)).subscribe(
         response => {
-          this.notifications = response;
+          this.notifications = this.notifications.concat(response);
           this.checkIfNotRead();
           console.log(response);
         },

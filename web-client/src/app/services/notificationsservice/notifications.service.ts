@@ -9,7 +9,10 @@ import { NotificationsModel } from 'src/app/interfaces/notifications-model';
 })
 export class NotificationsService {
 
-  constructor(private http: HttpClient) { }
+  userNotifications: NotificationsModel[] = [];
+  constructor(private http: HttpClient) {
+
+  }
   getGlobalNotifications(take: number, skip: number): Observable<NotificationsModel[]> {
     const url = 'https://localhost:6001/api/Notification/global';
     return this.http.get<NotificationsModel[]>(url, { params: { take: take, skip: skip } });

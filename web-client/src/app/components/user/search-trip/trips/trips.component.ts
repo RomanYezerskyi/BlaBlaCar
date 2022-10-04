@@ -3,10 +3,13 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/cor
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { GeocodingFeatureProperties } from 'src/app/components/maps-autocomplete/maps-autocomplete.component';
 import { TripOrderBy } from 'src/app/enums/trip-order-by';
 import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip-model';
+import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
 import { TripsResponseModel } from 'src/app/interfaces/trip-interfaces/trips-response-model';
 import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
+import { MapsService } from 'src/app/services/maps-service/maps.service';
 import { TripService } from 'src/app/services/tripservice/trip.service';
 
 @Component({
@@ -28,7 +31,8 @@ export class TripsComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private tripService: TripService,
-    private imgSanitaze: ImgSanitizerService) {
+    private imgSanitaze: ImgSanitizerService,
+    private mapsService: MapsService) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
@@ -39,16 +43,22 @@ export class TripsComponent implements OnInit, OnDestroy {
         this.trip.endPlace = params['endPlace'];
         this.trip.startTime = new Date(params['startTime']);
         this.trip.countOfSeats = params['seats'];
+        this.trip.startLat = params['startLat'];
+        this.trip.startLon = params['startLon'];
+        this.trip.endLat = params['endLat'];
+        this.trip.endLon = params['endLon'];
         this.searchTrips();
         this.isSpinner = true;
       };
     });
     this.trips.trips = [];
   }
+
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
+
   navigateToTripPage(id: number): void {
     const url = this.router.serializeUrl(
       this.router.createUrlTree(['trip-page-info', id], { queryParams: { requestedSeats: this.trip.countOfSeats } })
@@ -60,7 +70,7 @@ export class TripsComponent implements OnInit, OnDestroy {
   }
   onScroll(): void {
     this.Skip += this.Take;
-    if (this.Skip <= this.totalTrips) {
+    if (this.Skip <= this.trips.trips.length) {
       this.searchTrips();
     }
     else {
@@ -83,7 +93,7 @@ export class TripsComponent implements OnInit, OnDestroy {
         this.isSpinner = false;
         console.log(response);
         if (response != null) {
-          console.log(response);
+          response.trips.forEach(x => { x.startLat! > 0 ? this.getPlaces(x) : x; })
           if (event != undefined) {
             this.trips.trips = response.trips;
             this.totalTrips = response.totalTrips;
@@ -99,5 +109,37 @@ export class TripsComponent implements OnInit, OnDestroy {
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
 
+  }
+  private getPlaces(trip: TripModel | SearchTripModel) {
+    let text = `${trip.startLat}%20${trip.startLon}`;
+    this.mapsService.getPlaceName(text).pipe(takeUntil(this.unsubscribe$)).subscribe((data: any) => {
+      const placeSuggestions = data.features.map((feature: { properties: GeocodingFeatureProperties; }) => {
+        const properties: GeocodingFeatureProperties = (feature.properties as GeocodingFeatureProperties);
+        return {
+          shortAddress: this.mapsService.generateShortAddress(properties),
+          fullAddress: this.mapsService.generateFullAddress(properties),
+          data: properties
+        }
+      });
+      trip.startPlace = placeSuggestions[0].data.city;
+      console.log(placeSuggestions);
+    }, err => {
+      console.log(err);
+    });
+    text = `${trip.endLat}%20${trip.endLon}`;
+    this.mapsService.getPlaceName(text).pipe(takeUntil(this.unsubscribe$)).subscribe((data: any) => {
+      const placeSuggestions = data.features.map((feature: { properties: GeocodingFeatureProperties; }) => {
+        const properties: GeocodingFeatureProperties = (feature.properties as GeocodingFeatureProperties);
+        return {
+          shortAddress: this.mapsService.generateShortAddress(properties),
+          fullAddress: this.mapsService.generateFullAddress(properties),
+          data: properties
+        }
+      });
+      trip.endPlace = placeSuggestions[0].data.city;
+      console.log(placeSuggestions);
+    }, err => {
+      console.log(err);
+    });
   }
 }
