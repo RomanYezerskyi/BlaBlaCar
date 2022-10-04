@@ -4,30 +4,30 @@ import { HomeComponent } from './components/user/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { SearchTripComponent } from './components/user/search-trip/search-trip.component';
-import { TripPageInfoComponent } from './components/user/trip-page-info/trip-page-info.component';
-import { AuthGuard } from './guards/auth.guard';
+// import { TripPageInfoComponent } from './components/user/trip-page-info/trip-page-info.component';
+import { AuthGuard } from './core/guards/auth-guard/auth.guard';
 import { AdminPageComponent } from './components/admin-page/admin-page.component';
 import { RolesComponent } from './components/admin-page/roles/roles.component';
 import { AddTripLayoutComponent } from './components/user/add-trip-layout/add-trip-layout.component';
 import { AddAvailableSeatsComponent } from './components/user/add-trip-layout/add-available-seats/add-available-seats.component';
-import { AddCarComponent } from './components/user/add-car/add-car.component';
-import { RequestDrivingLicenseComponent } from './components/user/user-profile/request-driving-license/request-driving-license.component';
+// import { AddCarComponent } from './components/user/add-car/add-car.component';
+import { RequestDrivingLicenseComponent } from './modules/user/user-profile/request-driving-license/request-driving-license.component';
 import { UsersRequestsComponent } from './components/admin-page/users-requests/users-requests.component';
 import { UserRequestInfoComponent } from './components/admin-page/user-request-info/user-request-info.component';
-import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
-import { UserBookedTripsComponent } from './components/user/user-information/user-booked-trips/user-booked-trips.component';
-import { UserInformationComponent } from './components/user/user-information/user-information.component';
-import { UserCarsComponent } from './components/user/user-cars/user-cars.component';
-import { UserTripsComponent } from './components/user/user-information/user-trips/user-trips.component';
+import { UserProfileComponent } from './modules/user/user-profile/user-profile.component';
+// import { UserBookedTripsComponent } from './components/user/user-information/user-booked-trips/user-booked-trips.component';
+// import { UserInformationComponent } from './components/user/user-information/user-information.component';
+// import { UserCarsComponent } from './components/user/user-cars/user-cars.component';
+// import { UserTripsComponent } from './components/user/user-information/user-trips/user-trips.component';
 import { PageAccessGuard } from './guards/page-access/page-access.guard';
-import { InfoPageComponent } from './guards/info-page/info-page.component';
-import { AdminGuard } from './guards/admin-guard/admin.guard';
+import { InfoPageComponent } from './components/info-page/info-page.component';
+import { AdminGuard } from './core/guards/admin-guard/admin.guard';
 import { MainComponent } from './components/admin-page/main/main.component';
 import { ChartsComponent } from './components/admin-page/charts/charts.component';
 import { UsersManagementComponent } from './components/admin-page/users-management/users-management.component';
 import { ChatLayoutComponent } from './components/chat-layout/chat-layout.component';
 import { AdministratorsComponent } from './components/admin-page/administrators/administrators.component';
-import { UserGuard } from './guards/user-guard/user.guard';
+import { UserGuard } from './core/guards/user-guard/user.guard';
 
 const routes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
@@ -35,21 +35,13 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'search', component: SearchTripComponent, canActivate: [AuthGuard, UserGuard] },
 
-  { path: 'trip-page-info/:id', component: TripPageInfoComponent, canActivate: [AuthGuard] },
+  // { path: 'trip-page-info/:id', component: TripPageInfoComponent, canActivate: [AuthGuard] },
   { path: 'home', component: HomeComponent  /*, canActivate: [AuthGuard]*/ },
 
   { path: 'add-trip', component: AddTripLayoutComponent, canActivate: [PageAccessGuard] },
-  { path: 'add-car', component: AddCarComponent, canActivate: [AuthGuard] },
-  { path: 'cars', component: UserCarsComponent, canActivate: [AuthGuard] },
-  { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] },
-  {
-    path: 'user-information', component: UserInformationComponent, canActivate: [AuthGuard],
-    children: [
-      { path: '', pathMatch: 'full', redirectTo: '/user-information/user-trips' },
-      { path: 'booked-trips', component: UserBookedTripsComponent, canActivate: [AuthGuard], },
-      { path: 'user-trips', component: UserTripsComponent, canActivate: [AuthGuard], },
-    ]
-  },
+
+  // { path: 'cars', component: UserCarsComponent, canActivate: [AuthGuard] },
+
   { path: 'chat', component: ChatLayoutComponent, canActivate: [AuthGuard] },
   { path: 'info', component: InfoPageComponent, canActivate: [AuthGuard] },
   {
@@ -65,6 +57,7 @@ const routes: Routes = [
       { path: 'admins', component: AdministratorsComponent, canActivate: [AuthGuard] },
     ]
   },
+  { path: 'user', loadChildren: () => import('./modules/user/user.module').then(m => m.UserModule) },
 ];
 
 

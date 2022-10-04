@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AdminStatisticsModel } from 'src/app/interfaces/admin-interfaces/admin-statistics-model';
 import { Chart, registerables } from 'chart.js';
-import { ChartService } from 'src/app/services/chart/chart.service';
-import { AdminService } from 'src/app/services/admin/admin.service';
+import { ChartService } from 'src/app/core/services/chart-service/chart.service';
+import { AdminService } from 'src/app/core/services/admin/admin.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subject, takeUntil } from 'rxjs';
 Chart.register(...registerables);

@@ -6,7 +6,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { RoleModel } from 'src/app/interfaces/role-model';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
-import { AdminService } from 'src/app/services/admin/admin.service';
+import { AdminService } from 'src/app/core/services/admin/admin.service';
 
 @Component({
   selector: 'app-roles',

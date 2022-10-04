@@ -8,8 +8,8 @@ import { skip, Subject, Subscription, takeUntil } from 'rxjs';
 import { CreateNotificationDialogComponent } from 'src/app/components/create-notification-dialog/create-notification-dialog.component';
 import { NotificationStatus } from 'src/app/enums/notification-status';
 import { NotificationsModel } from 'src/app/interfaces/notifications-model';
-import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
-import { NotificationsService } from 'src/app/services/notificationsservice/notifications.service';
+import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
+import { NotificationsService } from 'src/app/core/services/notifications-service/notifications.service';
 
 @Component({
   selector: 'app-admin-notifications',

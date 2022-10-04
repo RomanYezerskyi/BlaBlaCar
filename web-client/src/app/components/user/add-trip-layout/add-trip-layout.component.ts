@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AddTripModel } from 'src/app/interfaces/trip-interfaces/add-trip-model';
 import { CarModel } from 'src/app/interfaces/car-interfaces/car-model';
-import { CarService } from 'src/app/services/carservice/car.service';
+import { CarService } from 'src/app/core/services/car-service/car.service';
 import { Subject, takeUntil } from 'rxjs';
 
 export enum Menu {

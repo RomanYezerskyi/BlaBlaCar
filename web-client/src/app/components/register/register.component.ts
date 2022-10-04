@@ -4,8 +4,8 @@ import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Valida
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { RegisterModel } from 'src/app/interfaces/register-model';
-import { AuthService } from 'src/app/services/authservice/auth-service.service';
-import { PasswordValidatorService } from 'src/app/services/password-validator/password-validator.service';
+import { AuthService } from 'src/app/core/services/auth-service/auth-service.service';
+import { PasswordValidatorService } from 'src/app/core/services/password-validator/password-validator.service';
 import { AlertsComponent } from '../alerts/alerts.component';
 
 @Component({

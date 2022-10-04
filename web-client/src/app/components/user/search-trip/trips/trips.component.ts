@@ -8,9 +8,9 @@ import { TripOrderBy } from 'src/app/enums/trip-order-by';
 import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip-model';
 import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
 import { TripsResponseModel } from 'src/app/interfaces/trip-interfaces/trips-response-model';
-import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
-import { MapsService } from 'src/app/services/maps-service/maps.service';
-import { TripService } from 'src/app/services/tripservice/trip.service';
+import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
+import { MapsService } from 'src/app/core/services/maps-service/maps.service';
+import { TripService } from 'src/app/core/services/trip-service/trip.service';
 
 @Component({
   selector: 'app-trips',

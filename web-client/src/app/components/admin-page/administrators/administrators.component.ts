@@ -7,9 +7,9 @@ import { Subject, Subscription, takeUntil } from 'rxjs';
 import { RoleModel } from 'src/app/interfaces/role-model';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
-import { AdminService } from 'src/app/services/admin/admin.service';
-import { ChatService } from 'src/app/services/chatservice/chat.service';
-import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
+import { AdminService } from 'src/app/core/services/admin/admin.service';
+import { ChatService } from 'src/app/core/services/chat-service/chat.service';
+import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
 
 @Component({
   selector: 'app-administrators',

@@ -2,12 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from 'src/app/services/userservice/user.service';
-import { AuthService } from 'src/app/services/authservice/auth-service.service';
+import { UserService } from 'src/app/core/services/user-service/user.service';
+import { AuthService } from 'src/app/core/services/auth-service/auth-service.service';
 import { Subject, takeUntil } from 'rxjs';
-import { SignalRService } from 'src/app/services/signalr-services/signalr.service';
-import { ChatService } from 'src/app/services/chatservice/chat.service';
-import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
+import { SignalRService } from 'src/app/core/services/signalr-services/signalr.service';
+import { ChatService } from 'src/app/core/services/chat-service/chat.service';
+import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
 import { SafeUrl } from '@angular/platform-browser';
 @Component({
   selector: 'app-navbar',

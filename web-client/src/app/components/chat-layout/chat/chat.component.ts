@@ -4,11 +4,11 @@ import { SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { skip, Subject, Subscription, takeUntil } from 'rxjs';
 import { ChatModel } from 'src/app/interfaces/chat-interfaces/chat-model';
-import { ChatService } from 'src/app/services/chatservice/chat.service';
-import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
+import { ChatService } from 'src/app/core/services/chat-service/chat.service';
+import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
 import { MessageStatus } from 'src/app/enums/message-status';
 import { MessageModel } from 'src/app/interfaces/chat-interfaces/message-model';
-import { SignalRService } from 'src/app/services/signalr-services/signalr.service';
+import { SignalRService } from 'src/app/core/services/signalr-services/signalr.service';
 
 @Component({
   selector: 'app-chat',

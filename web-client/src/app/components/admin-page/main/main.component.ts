@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ShortStatisticsModel } from 'src/app/interfaces/admin-interfaces/short-statistics-model';
-import { AdminService } from 'src/app/services/admin/admin.service';
+import { AdminService } from 'src/app/core/services/admin/admin.service';
 
 @Component({
   selector: 'app-main',

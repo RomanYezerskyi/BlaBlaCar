@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginModel } from '../../interfaces/login-model';
 import { FormControl, NgForm, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/services/authservice/auth-service.service';
+import { AuthService } from 'src/app/core/services/auth-service/auth-service.service';
 import { first, Subject, takeUntil } from 'rxjs';
 import { AlertsComponent } from '../alerts/alerts.component';
 @Component({

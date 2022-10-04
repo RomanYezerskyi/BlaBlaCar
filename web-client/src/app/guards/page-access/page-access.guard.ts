@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { CarStatus } from '../../interfaces/car-interfaces/car-status';
 import { UserModel } from '../../interfaces/user-interfaces/user-model';
 import { UserStatus } from '../../interfaces/user-interfaces/user-status';
-import { AuthGuard } from '../auth.guard';
+import { AuthGuard } from '../../core/guards/auth-guard/auth.guard';
 
 @Injectable({
   providedIn: 'root'

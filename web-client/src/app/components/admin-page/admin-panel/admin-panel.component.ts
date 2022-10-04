@@ -3,7 +3,7 @@ import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
 import * as signalR from '@microsoft/signalr';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SignalRService } from 'src/app/services/signalr-services/signalr.service';
+import { SignalRService } from 'src/app/core/services/signalr-services/signalr.service';
 import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-admin-panel',

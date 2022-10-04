@@ -6,7 +6,7 @@ import { CarStatus } from 'src/app/interfaces/car-interfaces/car-status';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 import { UserRequestResponseModel } from 'src/app/interfaces/user-interfaces/user-request-response-model';
 import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
-import { AdminService } from 'src/app/services/admin/admin.service';
+import { AdminService } from 'src/app/core/services/admin/admin.service';
 
 @Component({
   selector: 'app-user-requests',

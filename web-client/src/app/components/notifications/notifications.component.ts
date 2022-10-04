@@ -1,10 +1,10 @@
 import { HttpClient, HttpErrorResponse, HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { NotificationsModel } from 'src/app/interfaces/notifications-model';
-import { NotificationsService } from 'src/app/services/notificationsservice/notifications.service';
+import { NotificationsService } from 'src/app/core/services/notifications-service/notifications.service';
 import * as signalR from '@microsoft/signalr';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { SignalRService } from 'src/app/services/signalr-services/signalr.service';
+import { SignalRService } from 'src/app/core/services/signalr-services/signalr.service';
 import { NotificationStatus } from 'src/app/enums/notification-status';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CreateNotificationDialogComponent } from '../create-notification-dialog/create-notification-dialog.component';

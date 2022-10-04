@@ -5,8 +5,8 @@ import { Subject, takeUntil } from 'rxjs';
 import { UserListOrderby } from 'src/app/enums/user-list-orderby';
 import { UsersListRequestModel } from 'src/app/interfaces/admin-interfaces/users-list-request-model';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
-import { AdminService } from 'src/app/services/admin/admin.service';
-import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
+import { AdminService } from 'src/app/core/services/admin/admin.service';
+import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
 
 @Component({
   selector: 'app-top-users-list',

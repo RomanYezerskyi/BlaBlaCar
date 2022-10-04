@@ -6,7 +6,7 @@ import { Subject, Subscription, takeUntil, timeout } from 'rxjs';
 import { NotificationStatus } from 'src/app/enums/notification-status';
 import { FeedBackModel } from 'src/app/interfaces/feed-back-model';
 import { NotificationsModel } from 'src/app/interfaces/notifications-model';
-import { NotificationsService } from 'src/app/services/notificationsservice/notifications.service';
+import { NotificationsService } from 'src/app/core/services/notifications-service/notifications.service';
 
 @Component({
   selector: 'app-create-notification-dialog',

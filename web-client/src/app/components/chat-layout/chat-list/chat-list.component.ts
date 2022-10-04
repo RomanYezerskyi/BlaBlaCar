@@ -7,9 +7,9 @@ import { Subject, Subscription, takeUntil } from 'rxjs';
 import { MessageStatus } from 'src/app/enums/message-status';
 import { ChatModel } from 'src/app/interfaces/chat-interfaces/chat-model';
 import { UnreadMessagesInChatsModel } from 'src/app/interfaces/chat-interfaces/unread-messages-in-chats-model';
-import { ChatService } from 'src/app/services/chatservice/chat.service';
-import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
-import { SignalRService } from 'src/app/services/signalr-services/signalr.service';
+import { ChatService } from 'src/app/core/services/chat-service/chat.service';
+import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
+import { SignalRService } from 'src/app/core/services/signalr-services/signalr.service';
 @Component({
   selector: 'app-chat-list',
   templateUrl: './chat-list.component.html',

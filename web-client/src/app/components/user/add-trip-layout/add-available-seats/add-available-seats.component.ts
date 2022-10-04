@@ -6,7 +6,7 @@ import { CarType } from 'src/app/enums/car-type';
 import { AddAvailableSeatsModel } from 'src/app/interfaces/trip-interfaces/add-available-seats-model';
 import { AddTripModel } from 'src/app/interfaces/trip-interfaces/add-trip-model';
 import { CarModel } from 'src/app/interfaces/car-interfaces/car-model';
-import { TripService } from 'src/app/services/tripservice/trip.service';
+import { TripService } from 'src/app/core/services/trip-service/trip.service';
 import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-add-available-seats',

@@ -3,9 +3,9 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
-import { ChatService } from 'src/app/services/chatservice/chat.service';
-import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
-import { UserService } from 'src/app/services/userservice/user.service';
+import { ChatService } from 'src/app/core/services/chat-service/chat.service';
+import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
+import { UserService } from 'src/app/core/services/user-service/user.service';
 import { UserRequestInfoComponent } from '../user-request-info/user-request-info.component';
 import { UsersRequestsComponent } from '../users-requests/users-requests.component';
 

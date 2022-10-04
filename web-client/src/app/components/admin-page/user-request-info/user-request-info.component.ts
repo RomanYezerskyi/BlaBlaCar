@@ -10,10 +10,10 @@ import { CarDocumentsModel } from 'src/app/interfaces/car-interfaces/car-documen
 import { CarStatus } from 'src/app/interfaces/car-interfaces/car-status';
 import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
 import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
-import { AdminService } from 'src/app/services/admin/admin.service';
-import { ImgSanitizerService } from 'src/app/services/imgsanitizer/img-sanitizer.service';
-import { NotificationsService } from 'src/app/services/notificationsservice/notifications.service';
-import { UserService } from 'src/app/services/userservice/user.service';
+import { AdminService } from 'src/app/core/services/admin/admin.service';
+import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
+import { NotificationsService } from 'src/app/core/services/notifications-service/notifications.service';
+import { UserService } from 'src/app/core/services/user-service/user.service';
 import { CreateNotificationDialogComponent } from '../../create-notification-dialog/create-notification-dialog.component';
 
 

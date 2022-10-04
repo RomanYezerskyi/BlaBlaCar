@@ -4,7 +4,7 @@ import { Subject, Subscription, takeUntil } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { MatOptionSelectionChange } from '@angular/material/core';
-import { MapsService } from 'src/app/services/maps-service/maps.service';
+import { MapsService } from 'src/app/core/services/maps-service/maps.service';
 import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip-model';
 
 
