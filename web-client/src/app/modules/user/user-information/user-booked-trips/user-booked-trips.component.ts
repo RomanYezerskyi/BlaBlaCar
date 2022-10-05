@@ -3,7 +3,6 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { GeocodingFeatureProperties } from 'src/app/components/maps-autocomplete/maps-autocomplete.component';
 import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
 import { TripUserModel } from 'src/app/interfaces/trip-interfaces/trip-user-model';
 import { TripsResponseModel } from 'src/app/interfaces/trip-interfaces/trips-response-model';
@@ -12,6 +11,7 @@ import { ChatService } from 'src/app/core/services/chat-service/chat.service';
 import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
 import { MapsService } from 'src/app/core/services/maps-service/maps.service';
 import { TripService } from 'src/app/core/services/trip-service/trip.service';
+import { GeocodingFeatureProperties } from 'src/app/interfaces/autocomplete-interfaces/place-suggestion-model';
 
 @Component({
   selector: 'app-user-booked-trips',

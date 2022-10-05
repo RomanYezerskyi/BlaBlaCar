@@ -3,7 +3,6 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/cor
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { GeocodingFeatureProperties } from 'src/app/components/maps-autocomplete/maps-autocomplete.component';
 import { TripOrderBy } from 'src/app/enums/trip-order-by';
 import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip-model';
 import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
@@ -11,6 +10,7 @@ import { TripsResponseModel } from 'src/app/interfaces/trip-interfaces/trips-res
 import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
 import { MapsService } from 'src/app/core/services/maps-service/maps.service';
 import { TripService } from 'src/app/core/services/trip-service/trip.service';
+import { GeocodingFeatureProperties } from 'src/app/interfaces/autocomplete-interfaces/place-suggestion-model';
 
 @Component({
   selector: 'app-trips',

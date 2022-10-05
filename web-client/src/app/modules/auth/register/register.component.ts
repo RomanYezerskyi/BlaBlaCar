@@ -6,7 +6,8 @@ import { Subject, takeUntil } from 'rxjs';
 import { RegisterModel } from 'src/app/interfaces/register-model';
 import { AuthService } from 'src/app/core/services/auth-service/auth-service.service';
 import { PasswordValidatorService } from 'src/app/core/services/password-validator/password-validator.service';
-import { AlertsComponent } from '../alerts/alerts.component';
+import { AlertsComponent } from '../../shared/components/alerts/alerts.component';
+
 
 @Component({
   selector: 'app-register',

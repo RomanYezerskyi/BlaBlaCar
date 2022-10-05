@@ -217,7 +217,7 @@ namespace BlaBlaCar.BL.Services.TripServices
                     trip.EndTime);
             return res;
 
-        }
+         }
 
         public async Task<bool> DeleteTripAsync(Guid id, Guid currentUserId)
         {

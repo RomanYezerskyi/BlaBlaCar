@@ -1,11 +1,11 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoginModel } from '../../interfaces/login-model';
 import { FormControl, NgForm, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/core/services/auth-service/auth-service.service';
 import { first, Subject, takeUntil } from 'rxjs';
-import { AlertsComponent } from '../alerts/alerts.component';
+import { AlertsComponent } from '../../shared/components/alerts/alerts.component';
+import { LoginModel } from 'src/app/interfaces/login-model';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',

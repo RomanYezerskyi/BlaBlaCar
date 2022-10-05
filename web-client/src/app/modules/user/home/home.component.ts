@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PlaceSuggestion } from '../../maps-autocomplete/maps-autocomplete.component';
-// // import 'ol/ol.css';
-// import Map from 'ol/Map';
-// import View from 'ol/View';
-// import OSM from 'ol/source/OSM'
-// import TileLayer from 'ol/layer/Tile';
+import { PlaceSuggestionModel } from 'src/app/interfaces/autocomplete-interfaces/place-suggestion-model';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -29,7 +25,7 @@ export class HomeComponent implements OnInit {
     // });
 
   }
-  autocompleteChanged(value: PlaceSuggestion) {
+  autocompleteChanged(value: PlaceSuggestionModel) {
     console.log(value);
 
   }

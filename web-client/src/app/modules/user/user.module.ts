@@ -14,6 +14,36 @@ import { UserBookedTripsComponent } from './user-information/user-booked-trips/u
 import { UserInformationComponent } from './user-information/user-information.component';
 import { TripPageInfoComponent } from './trip-page-info/trip-page-info.component';
 import { DialogBookingConfirmationComponent } from './trip-page-info/dialog-booking-confirmation/dialog-booking-confirmation.component';
+import { SortingPanelComponent } from './search-trip/sorting-panel/sorting-panel.component';
+import { TripsComponent } from './search-trip/trips/trips.component';
+import { SearchTripComponent } from './search-trip/search-trip.component';
+import { SearchFormComponent } from './search-form/search-form.component';
+import { HomeComponent } from './home/home.component';
+import { MapsAutocompleteComponent } from './maps-autocomplete/maps-autocomplete.component';
+import { AddTripComponent } from './add-trip-layout/add-trip/add-trip.component';
+import { AddTripLayoutComponent } from './add-trip-layout/add-trip-layout.component';
+import { AddAvailableSeatsComponent } from './add-trip-layout/add-available-seats/add-available-seats.component';
+import { PageAccessGuard } from 'src/app/guards/page-access/page-access.guard';
+import { UserGuard } from 'src/app/core/guards/user-guard/user.guard';
+import { RequestDrivingLicenseComponent } from './user-profile/request-driving-license/request-driving-license.component';
+import { EditModalDialogComponent } from './user-profile/edit-modal-dialog/edit-modal-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
+import { NgxMatFileInputModule } from '@angular-material-components/file-input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { LightgalleryModule } from 'lightgallery/angular';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -24,18 +54,54 @@ import { DialogBookingConfirmationComponent } from './trip-page-info/dialog-book
     UserBookedTripsComponent,
     UserInformationComponent,
     UserProfileComponent,
+    RequestDrivingLicenseComponent,
     UserCarsComponent,
     EditCarModalDialogComponent,
     AddCarComponent,
     TripPageInfoComponent,
-    DialogBookingConfirmationComponent
+    DialogBookingConfirmationComponent,
+    SortingPanelComponent,
+    TripsComponent,
+    SearchTripComponent,
+    SearchFormComponent,
+    HomeComponent,
+    MapsAutocompleteComponent,
+    AddTripComponent,
+    AddTripLayoutComponent,
+    AddAvailableSeatsComponent,
+    EditModalDialogComponent,
   ],
-  providers: [AuthGuard],
-  entryComponents: [DialogBookingConfirmationComponent, EditCarModalDialogComponent],
+  providers: [AuthGuard, PageAccessGuard, UserGuard],
+  entryComponents: [
+    DialogBookingConfirmationComponent,
+    EditCarModalDialogComponent,
+    RequestDrivingLicenseComponent,
+    EditModalDialogComponent,
+  ],
   imports: [
     CommonModule,
     UserRoutingModule,
     SharedModule,
+
+    FormsModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    InfiniteScrollModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatRippleModule,
+    NgxMatFileInputModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
+    MatRadioModule,
+    MatProgressSpinnerModule,
+    LightgalleryModule,
+    MatAutocompleteModule,
+    MatTooltipModule
 
   ]
 })

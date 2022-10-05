@@ -6,28 +6,16 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { MapsService } from 'src/app/core/services/maps-service/maps.service';
 import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip-model';
+import { GeocodingFeatureProperties, PlaceSuggestionModel } from 'src/app/interfaces/autocomplete-interfaces/place-suggestion-model';
 
 
-export interface PlaceSuggestion {
-  shortAddress: string;
-  fullAddress: string;
-  data: GeocodingFeatureProperties;
-}
+// export interface PlaceSuggestion {
+//   shortAddress: string;
+//   fullAddress: string;
+//   data: GeocodingFeatureProperties;
+// }
 
-export interface GeocodingFeatureProperties {
-  name: string;
-  address_line2: string
-  address_line1: string
-  country: string;
-  state: string;
-  postcode: string;
-  city: string;
-  street: string;
-  housenumber: string;
-  lat: number;
-  lon: number;
-  formatted: string;
-}
+
 @Component({
   selector: 'app-maps-autocomplete',
   templateUrl: './maps-autocomplete.component.html',
@@ -36,11 +24,11 @@ export interface GeocodingFeatureProperties {
 export class MapsAutocompleteComponent implements OnInit, OnDestroy {
   @Input() place: string = '';
   private unsubscribe$: Subject<void> = new Subject<void>();
-  @Output() locationChange: EventEmitter<PlaceSuggestion> = new EventEmitter<PlaceSuggestion>();
-  searchOptions: Subject<PlaceSuggestion[]> = new Subject<PlaceSuggestion[]>();
+  @Output() locationChange: EventEmitter<PlaceSuggestionModel> = new EventEmitter<PlaceSuggestionModel>();
+  searchOptions: Subject<PlaceSuggestionModel[]> = new Subject<PlaceSuggestionModel[]>();
   inputFieldFormControl: FormControl = new FormControl();
 
-  private choosenOption!: PlaceSuggestion;
+  private choosenOption!: PlaceSuggestionModel;
 
   private userInputTimeout!: number;
   constructor(private mapsService: MapsService) {
@@ -92,7 +80,7 @@ export class MapsAutocompleteComponent implements OnInit, OnDestroy {
 
   }
 
-  public optionSelectionChange(option: PlaceSuggestion, event: MatOptionSelectionChange) {
+  public optionSelectionChange(option: PlaceSuggestionModel, event: MatOptionSelectionChange) {
     if (event.isUserInput) {
       this.choosenOption = option;
       this.locationChange.emit(option);

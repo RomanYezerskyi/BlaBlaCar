@@ -19,40 +19,42 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ImagesGalleryComponent } from './components/images-gallery/images-gallery.component';
+import { CreateNotificationDialogComponent } from './components/create-notification-dialog/create-notification-dialog.component';
+import { NotificationsComponent } from './components/notifications/notifications.component';
+import { AlertsComponent } from './components/alerts/alerts.component';
+import { InfoPageComponent } from './components/info-page/info-page.component';
+import { HttpClientModule } from '@angular/common/http';
+import { ChatLayoutComponent } from './components/chat-layout/chat-layout.component';
+import { ChatListComponent } from './components/chat-layout/chat-list/chat-list.component';
+import { ChatComponent } from './components/chat-layout/chat/chat.component';
+import { RouterModule } from '@angular/router';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 
 
 
 @NgModule({
   declarations: [
-    ImagesGalleryComponent
+    ImagesGalleryComponent,
+    CreateNotificationDialogComponent,
+    NotificationsComponent,
+    NavbarComponent,
+    AlertsComponent,
+    InfoPageComponent,
+    ChatLayoutComponent,
+    ChatListComponent,
+    ChatComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule,
-    MatDialogModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatRippleModule,
-    NgxMatFileInputModule,
-    MatNativeDateModule,
-    MatDatepickerModule,
-    MatRadioModule,
-    MatProgressSpinnerModule,
-    LightgalleryModule,
-    MatAutocompleteModule,
-    MatTooltipModule
-  ],
-  exports: [
-    FormsModule,
-    ReactiveFormsModule,
+    // HttpClientModule,
+    // FormsModule,
+    // ReactiveFormsModule,
+    // FormsModule,
+    // BrowserAnimationsModule,
+    RouterModule,
     MatDialogModule,
     MatToolbarModule,
     MatButtonModule,
@@ -69,10 +71,44 @@ import { ImagesGalleryComponent } from './components/images-gallery/images-galle
     MatProgressSpinnerModule,
     LightgalleryModule,
     MatAutocompleteModule,
-    MatTooltipModule,
+    MatTooltipModule
 
 
-    ImagesGalleryComponent
+
+    // InfiniteScrollModule,
+
+  ],
+  entryComponents: [/*DialogBookingConfirmationComponent*/
+    CreateNotificationDialogComponent, /*EditModalDialogComponent,*/ /*EditCarModalDialogComponent,*/ /*RequestDrivingLicenseComponent*/],
+  exports: [
+    // MatDialogModule,
+    // MatToolbarModule,
+    // MatButtonModule,
+    // MatIconModule,
+    // InfiniteScrollModule,
+    // MatFormFieldModule,
+    // MatInputModule,
+    // MatSelectModule,
+    // MatRippleModule,
+    // NgxMatFileInputModule,
+    // MatNativeDateModule,
+    // MatDatepickerModule,
+    // MatRadioModule,
+    // MatProgressSpinnerModule,
+    // LightgalleryModule,
+    // MatAutocompleteModule,
+    // MatTooltipModule,
+
+
+    ImagesGalleryComponent,
+    CreateNotificationDialogComponent,
+    NotificationsComponent,
+    NavbarComponent,
+    AlertsComponent,
+    InfoPageComponent,
+    ChatLayoutComponent,
+    ChatListComponent,
+    ChatComponent,
   ]
 })
 export class SharedModule { }

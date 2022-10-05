@@ -14,8 +14,7 @@ import { AdminService } from 'src/app/core/services/admin/admin.service';
 import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
 import { NotificationsService } from 'src/app/core/services/notifications-service/notifications.service';
 import { UserService } from 'src/app/core/services/user-service/user.service';
-import { CreateNotificationDialogComponent } from '../../create-notification-dialog/create-notification-dialog.component';
-
+import { CreateNotificationDialogComponent } from '../../shared/components/create-notification-dialog/create-notification-dialog.component';
 
 export enum Menu {
   User = 1,

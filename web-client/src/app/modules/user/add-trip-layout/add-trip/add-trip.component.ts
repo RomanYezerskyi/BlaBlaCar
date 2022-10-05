@@ -7,7 +7,7 @@ import { AddTripModel } from 'src/app/interfaces/trip-interfaces/add-trip-model'
 import { AvailableSeatsModel } from 'src/app/interfaces/trip-interfaces/available-seats-model';
 import { CarModel } from 'src/app/interfaces/car-interfaces/car-model';
 import { SeatModel } from 'src/app/interfaces/car-interfaces/seat-model';
-import { PlaceSuggestion } from 'src/app/components/maps-autocomplete/maps-autocomplete.component';
+import { PlaceSuggestionModel } from 'src/app/interfaces/autocomplete-interfaces/place-suggestion-model';
 @Component({
   selector: 'app-add-trip',
   templateUrl: './add-trip.component.html',
@@ -27,11 +27,11 @@ export class AddTripComponent implements OnInit {
     this.tripOutput.emit(this.trip);
     this.pageOutput.emit(2);
   }
-  startPlaceChanged(value: PlaceSuggestion) {
+  startPlaceChanged(value: PlaceSuggestionModel) {
     this.trip.startLat = value.data.lat;
     this.trip.startLon = value.data.lon;
   }
-  startEndChanged(value: PlaceSuggestion) {
+  startEndChanged(value: PlaceSuggestionModel) {
     this.trip.endLat = value.data.lat;
     this.trip.endLon = value.data.lon;
   }

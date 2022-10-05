@@ -12,11 +12,12 @@ import { UserPermissionsTrip } from 'src/app/enums/user-permissions-trip';
 import { ChatService } from 'src/app/core/services/chat-service/chat.service';
 import { Subject, takeUntil } from 'rxjs';
 import { MapsService } from 'src/app/core/services/maps-service/maps.service';
-import { GeocodingFeatureProperties } from '../../maps-autocomplete/maps-autocomplete.component';
+import { GeocodingFeatureProperties } from 'src/app/interfaces/autocomplete-interfaces/place-suggestion-model';
+
 @Component({
 	selector: 'app-trip-page-info',
 	templateUrl: './trip-page-info.component.html',
-	styleUrls: ['./trip-page-info.component.scss', '../search-trip/search-trip.component.scss']
+	styleUrls: ['./trip-page-info.component.scss']
 })
 export class TripPageInfoComponent implements OnInit, OnDestroy {
 	private unsubscribe$: Subject<void> = new Subject<void>();

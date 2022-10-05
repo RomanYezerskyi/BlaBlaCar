@@ -7,9 +7,9 @@ import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-servi
 import { skip, Subject, Subscription, takeUntil } from 'rxjs';
 import { ChatService } from 'src/app/core/services/chat-service/chat.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GeocodingFeatureProperties, PlaceSuggestion } from 'src/app/components/maps-autocomplete/maps-autocomplete.component';
 import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
 import { MapsService } from 'src/app/core/services/maps-service/maps.service';
+import { GeocodingFeatureProperties } from 'src/app/interfaces/autocomplete-interfaces/place-suggestion-model';
 
 @Component({
   selector: 'app-user-trips',

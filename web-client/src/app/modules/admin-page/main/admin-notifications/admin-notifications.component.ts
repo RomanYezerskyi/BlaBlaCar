@@ -5,11 +5,11 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { skip, Subject, Subscription, takeUntil } from 'rxjs';
-import { CreateNotificationDialogComponent } from 'src/app/components/create-notification-dialog/create-notification-dialog.component';
 import { NotificationStatus } from 'src/app/enums/notification-status';
 import { NotificationsModel } from 'src/app/interfaces/notifications-model';
 import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
 import { NotificationsService } from 'src/app/core/services/notifications-service/notifications.service';
+import { CreateNotificationDialogComponent } from 'src/app/modules/shared/components/create-notification-dialog/create-notification-dialog.component';
 
 @Component({
   selector: 'app-admin-notifications',

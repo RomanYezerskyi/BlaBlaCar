@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TripOrderBy } from 'src/app/enums/trip-order-by';
+import { PlaceSuggestionModel } from 'src/app/interfaces/autocomplete-interfaces/place-suggestion-model';
 import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip-model';
-import { PlaceSuggestion } from '../maps-autocomplete/maps-autocomplete.component';
+
 
 @Component({
   selector: 'app-search-form',
@@ -42,13 +43,13 @@ export class SearchFormComponent implements OnInit {
       }
     });
   }
-  startPlaceChanged(value: PlaceSuggestion) {
+  startPlaceChanged(value: PlaceSuggestionModel) {
     this.trip.startLat = value.data.lat;
     this.trip.startLon = value.data.lon;
     this.trip.startPlace = value.data.formatted
     console.log(value);
   }
-  endPlaceChanged(value: PlaceSuggestion) {
+  endPlaceChanged(value: PlaceSuggestionModel) {
     this.trip.endLat = value.data.lat;
     this.trip.endLon = value.data.lon;
     this.trip.endPlace = value.data.formatted
