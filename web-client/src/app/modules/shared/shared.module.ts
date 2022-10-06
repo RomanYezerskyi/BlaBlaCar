@@ -29,6 +29,8 @@ import { ChatListComponent } from './components/chat-layout/chat-list/chat-list.
 import { ChatComponent } from './components/chat-layout/chat/chat.component';
 import { RouterModule } from '@angular/router';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { SearchFormComponent } from './components/search-form/search-form.component';
+import { MapsAutocompleteComponent } from './components/maps-autocomplete/maps-autocomplete.component';
 
 
 
@@ -44,6 +46,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     ChatLayoutComponent,
     ChatListComponent,
     ChatComponent,
+    SearchFormComponent,
+    MapsAutocompleteComponent,
   ],
   imports: [
     CommonModule,
@@ -109,6 +113,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     ChatLayoutComponent,
     ChatListComponent,
     ChatComponent,
+    SearchFormComponent,
+    MapsAutocompleteComponent,
   ]
 })
 export class SharedModule { }

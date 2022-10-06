@@ -17,9 +17,6 @@ import { DialogBookingConfirmationComponent } from './trip-page-info/dialog-book
 import { SortingPanelComponent } from './search-trip/sorting-panel/sorting-panel.component';
 import { TripsComponent } from './search-trip/trips/trips.component';
 import { SearchTripComponent } from './search-trip/search-trip.component';
-import { SearchFormComponent } from './search-form/search-form.component';
-import { HomeComponent } from './home/home.component';
-import { MapsAutocompleteComponent } from './maps-autocomplete/maps-autocomplete.component';
 import { AddTripComponent } from './add-trip-layout/add-trip/add-trip.component';
 import { AddTripLayoutComponent } from './add-trip-layout/add-trip-layout.component';
 import { AddAvailableSeatsComponent } from './add-trip-layout/add-available-seats/add-available-seats.component';
@@ -44,6 +41,7 @@ import { LightgalleryModule } from 'lightgallery/angular';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UserNavbarComponent } from './user-navbar/user-navbar.component';
 
 
 
@@ -63,13 +61,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     SortingPanelComponent,
     TripsComponent,
     SearchTripComponent,
-    SearchFormComponent,
-    HomeComponent,
-    MapsAutocompleteComponent,
     AddTripComponent,
     AddTripLayoutComponent,
     AddAvailableSeatsComponent,
     EditModalDialogComponent,
+    UserNavbarComponent,
   ],
   providers: [AuthGuard, PageAccessGuard, UserGuard],
   entryComponents: [

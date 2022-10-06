@@ -31,6 +31,7 @@ import { LightgalleryModule } from 'lightgallery/angular';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AdminNavbarComponent } from './admin-navbar/admin-navbar.component';
 // import { CreateNotificationDialogComponent } from 'src/app/components/create-notification-dialog/create-notification-dialog.component';
 
 
@@ -47,6 +48,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ChartsComponent,
     UsersManagementComponent,
     AdministratorsComponent,
+    AdminNavbarComponent,
   ],
 
   imports: [

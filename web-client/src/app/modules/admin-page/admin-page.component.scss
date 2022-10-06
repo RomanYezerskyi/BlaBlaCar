@@ -1,3 +1,13 @@
+.nav {
+    padding-bottom: 60px;
+}
+
+app-admin-navbar {
+    width: 100%;
+    position: fixed;
+    z-index: 10;
+}
+
 .wrapper {
     display: flex;
     // background-color: #eff1f7;

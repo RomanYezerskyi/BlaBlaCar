@@ -29,7 +29,7 @@ export class SearchFormComponent implements OnInit {
     this.trip.countOfSeats = +this.trip.countOfSeats - 1;
   }
   search(): void {
-    this.router.navigate(['search'], {
+    this.router.navigate(['user/search'], {
       queryParams: {
         startPlace: this.trip.startPlace,
         endPlace: this.trip.endPlace,
@@ -47,7 +47,7 @@ export class SearchFormComponent implements OnInit {
     this.trip.startLat = value.data.lat;
     this.trip.startLon = value.data.lon;
     this.trip.startPlace = value.data.formatted
-    console.log(value);
+    console.log(value.data.lat);
   }
   endPlaceChanged(value: PlaceSuggestionModel) {
     this.trip.endLat = value.data.lat;

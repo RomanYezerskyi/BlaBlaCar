@@ -3,7 +3,7 @@
   <div class="register-form">
     <div class="login-reference">
       <h5>Have an account?</h5>
-      <button class="btn" routerLink="/login">Log in</button>
+      <button class="btn" routerLink="/auth/login">Log in</button>
     </div>
     <form #registerForm="ngForm" class="form" [formGroup]="form" (ngSubmit)="register(registerForm)">
       <mat-form-field class="example-full-width" appearance="outline">

@@ -23,6 +23,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LightgalleryModule } from 'lightgallery/angular';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { HomeComponent } from './home/home.component';
+import { AuthNavbarComponent } from './auth-navbar/auth-navbar.component';
 
 
 @NgModule({
@@ -30,6 +32,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     AuthComponent,
     LoginComponent,
     RegisterComponent,
+    HomeComponent,
+    AuthNavbarComponent,
   ],
   imports: [
     CommonModule,

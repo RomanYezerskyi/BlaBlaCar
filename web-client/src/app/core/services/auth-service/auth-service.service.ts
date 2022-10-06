@@ -24,7 +24,7 @@ export class AuthService {
     console.log("try refresh " + isRefreshSuccess);
     if (!isRefreshSuccess) {
       this.logOut();
-      this.router.navigate(["login"], { queryParams: { returnUrl: this.redirectUrl } });
+      this.router.navigate(["auth/login"], { queryParams: { returnUrl: this.redirectUrl } });
     }
     return isRefreshSuccess;
   }
@@ -54,6 +54,7 @@ export class AuthService {
   logOut(): void {
     localStorage.removeItem("jwt");
     localStorage.removeItem("refreshToken");
+    this.router.navigate(["auth/login"]);
   }
   login(credentials: LoginModel): Observable<AuthenticatedResponseModel> {
     return this.http.post<AuthenticatedResponseModel>("https://localhost:5001/api/auth/login", credentials, {

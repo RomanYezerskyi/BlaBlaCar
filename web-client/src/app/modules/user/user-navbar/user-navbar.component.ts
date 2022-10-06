@@ -1,20 +1,21 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { JwtHelperService } from '@auth0/angular-jwt';
-import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
+import { SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from 'src/app/core/services/user-service/user.service';
-import { AuthService } from 'src/app/core/services/auth-service/auth-service.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { Subject, takeUntil } from 'rxjs';
-import { SignalRService } from 'src/app/core/services/signalr-services/signalr.service';
+import { AuthService } from 'src/app/core/services/auth-service/auth-service.service';
 import { ChatService } from 'src/app/core/services/chat-service/chat.service';
 import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
-import { SafeUrl } from '@angular/platform-browser';
+import { SignalRService } from 'src/app/core/services/signalr-services/signalr.service';
+import { UserService } from 'src/app/core/services/user-service/user.service';
+import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
+
 @Component({
-  selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+  selector: 'app-user-navbar',
+  templateUrl: './user-navbar.component.html',
+  styleUrls: ['./user-navbar.component.scss']
 })
-export class NavbarComponent implements OnInit, OnDestroy {
+export class UserNavbarComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject<void>();
   private token: string | null = localStorage.getItem("jwt");
   userStatus = UserStatus;
@@ -76,6 +77,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
   change(): void {
     this.toggle = !this.toggle;
   }
+  navigateToUserRequests = (id: number) => {
+    this.router.navigate(['/admin/requests/', id])
+  }
   logOut(): void {
     this.authService.logOut();
   }
@@ -92,4 +96,5 @@ export class NavbarComponent implements OnInit, OnDestroy {
   sanitizaImg(img: string): SafeUrl {
     return this.imgSanitize.sanitiizeUserImg(img);
   }
+
 }

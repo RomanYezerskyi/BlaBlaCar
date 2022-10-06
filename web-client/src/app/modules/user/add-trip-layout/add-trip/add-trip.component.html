@@ -21,7 +21,7 @@
 
     </div>
     <div class="form_item_inputs">
-      <mat-form-field class="input__item date" appearance="outline">
+      <!-- <mat-form-field class="input__item date" appearance="outline">
         <mat-label>Choose start date</mat-label>
         <input matInput [matDatepicker]="pickerStart" required [(ngModel)]="trip.startTime" id="startTime"
           name="startTime">
@@ -29,17 +29,17 @@
           <mat-icon matDatepickerToggleIcon>calendar_month</mat-icon>
         </mat-datepicker-toggle>
         <mat-datepicker #pickerStart></mat-datepicker>
-      </mat-form-field>
+      </mat-form-field> -->
 
-      <mat-form-field class="input__item date" appearance="outline">
+      <!-- <mat-form-field class="input__item date" appearance="outline">
         <mat-label>Choose end date</mat-label>
-        <input matInput [matDatepicker]="picker" required [(ngModel)]="trip.endTime" id="endTime" name="endTime">
+        
         <mat-datepicker-toggle matSuffix [for]="picker">
           <mat-icon matDatepickerToggleIcon>calendar_month</mat-icon>
         </mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
-      <!-- <div class="form_item">
+      </mat-form-field> -->
+      <div class="form_item">
         <label for="startTime" class="sr-only">startTime</label>
         <input type="datetime-local" id="startTime" name="startTime" [(ngModel)]="trip.startTime" class="form-control"
           placeholder="startTime" required>
@@ -48,7 +48,7 @@
         <label for="endTime" class="sr-only">endTime</label>
         <input type="datetime-local" id="endTime" name="endTime" [(ngModel)]="trip.endTime" class="form-control"
           placeholder="endTime" required>
-      </div> -->
+      </div>
     </div>
     <div class="form_item area">
       <mat-form-field class="input__item" appearance="outline">

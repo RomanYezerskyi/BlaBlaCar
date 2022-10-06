@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/core/guards/auth-guard/auth.guard';
+import { UserGuard } from 'src/app/core/guards/user-guard/user.guard';
 import { ChatLayoutComponent } from '../shared/components/chat-layout/chat-layout.component';
 import { InfoPageComponent } from '../shared/components/info-page/info-page.component';
 import { AdminPageComponent } from './admin-page.component';
@@ -14,21 +15,21 @@ import { UsersRequestsComponent } from './users-requests/users-requests.componen
 
 const routes: Routes = [
 
-  { path: '', component: AdminPageComponent, },
   {
-    path: 'admin', component: AdminPageComponent, canActivate: [AuthGuard],
+    path: '', component: AdminPageComponent,
     children: [
-      { path: 'roles', component: RolesComponent, canActivate: [AuthGuard] },
-      { path: 'requests/:id', component: UsersRequestsComponent, canActivate: [AuthGuard], },
-      { path: 'requests-info/:id', component: UserRequestInfoComponent, canActivate: [AuthGuard] },
-      { path: 'main-info', component: MainComponent, canActivate: [AuthGuard] },
-      { path: 'charts', component: ChartsComponent, canActivate: [AuthGuard] },
-      { path: 'users', component: UsersManagementComponent, canActivate: [AuthGuard] },
-      { path: 'chat', component: ChatLayoutComponent, canActivate: [AuthGuard] },
-      { path: 'admins', component: AdministratorsComponent, canActivate: [AuthGuard] },
+      { path: 'roles', component: RolesComponent, canActivate: [AuthGuard, UserGuard] },
+      { path: 'requests/:id', component: UsersRequestsComponent, canActivate: [AuthGuard, UserGuard], },
+      { path: 'requests-info/:id', component: UserRequestInfoComponent, canActivate: [AuthGuard, UserGuard] },
+      { path: 'main-info', component: MainComponent, canActivate: [AuthGuard, UserGuard] },
+      { path: 'charts', component: ChartsComponent, canActivate: [AuthGuard, UserGuard] },
+      { path: 'users', component: UsersManagementComponent, canActivate: [AuthGuard, UserGuard] },
+      { path: 'chat', component: ChatLayoutComponent, canActivate: [AuthGuard, UserGuard] },
+      { path: 'admins', component: AdministratorsComponent, canActivate: [AuthGuard, UserGuard] },
+      { path: 'info', component: InfoPageComponent, canActivate: [AuthGuard, UserGuard] },
     ]
   },
-  { path: 'info', component: InfoPageComponent, canActivate: [AuthGuard] },
+
   // { path: 'chat', component: ChatLayoutComponent, canActivate: [AuthGuard] },
 ];
 

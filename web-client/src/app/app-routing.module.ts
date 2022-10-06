@@ -58,9 +58,20 @@ const routes: Routes = [
   //     { path: 'admins', component: AdministratorsComponent, canActivate: [AuthGuard] },
   //   ]
   // },
-  { path: 'user', loadChildren: () => import('./modules/user/user.module').then(m => m.UserModule) },
-  { path: 'admin', loadChildren: () => import('./modules/admin-page/admin-page.module').then(m => m.AdminPageModule) },
-  { path: 'auth', loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule) },
+  {
+    path: 'user',
+    loadChildren: () => import('./modules/user/user.module').then(m => m.UserModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'admin',
+    loadChildren: () => import('./modules/admin-page/admin-page.module').then(m => m.AdminPageModule),
+    canActivate: [AuthGuard, AdminGuard]
+  },
+  {
+    path: 'auth',
+    loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule)
+  },
 ];
 
 
