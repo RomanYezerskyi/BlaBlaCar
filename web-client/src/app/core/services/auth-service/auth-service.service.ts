@@ -3,14 +3,16 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable } from 'rxjs';
-import { AuthenticatedResponseModel } from 'src/app/interfaces/authenticated-response-model';
-import { LoginModel } from 'src/app/interfaces/login-model';
+import { AuthenticatedResponseModel } from 'src/app/core/models/auth-models/authenticated-response-model';
+import { LoginModel } from 'src/app/core/models/auth-models/login-model';
 import { map } from 'rxjs/operators';
-import { RegisterModel } from 'src/app/interfaces/register-model';
+import { RegisterModel } from 'src/app/core/models/auth-models/register-model';
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private baseIdentityServerUrl = environment.baseIdentityServerUrl;
   public redirectUrl: string | undefined;
   private token: string | null = localStorage.getItem("jwt");
   constructor(private router: Router, private jwtHelper: JwtHelperService, private http: HttpClient) { }
@@ -29,6 +31,7 @@ export class AuthService {
     return isRefreshSuccess;
   }
   private async tryRefreshingTokens(token: string): Promise<boolean> {
+    const url = this.baseIdentityServerUrl + 'token/refresh'
     const refreshToken = localStorage.getItem("refreshToken");
     if (!token || !refreshToken) {
       return false;
@@ -36,7 +39,7 @@ export class AuthService {
     const credentials = JSON.stringify({ accessToken: token, refreshToken: refreshToken });
     let isRefreshSuccess = true;
     const refreshRes = await new Promise<AuthenticatedResponseModel>((resolve, reject) => {
-      this.http.post<AuthenticatedResponseModel>("https://localhost:5001/api/token/refresh", credentials, {
+      this.http.post<AuthenticatedResponseModel>(url, credentials, {
         headers: new HttpHeaders({
           "Content-Type": "application/json"
         })
@@ -57,7 +60,8 @@ export class AuthService {
     this.router.navigate(["auth/login"]);
   }
   login(credentials: LoginModel): Observable<AuthenticatedResponseModel> {
-    return this.http.post<AuthenticatedResponseModel>("https://localhost:5001/api/auth/login", credentials, {
+    const url = this.baseIdentityServerUrl + "auth/login";
+    return this.http.post<AuthenticatedResponseModel>(url, credentials, {
       headers: new HttpHeaders({ "Content-Type": "application/json" })
 
     }).pipe(map(response => {
@@ -69,7 +73,8 @@ export class AuthService {
     }));
   }
   Register(credentials: RegisterModel): Observable<any> {
-    return this.http.post<any>("https://localhost:5001/api/auth/register", credentials, {
+    const url = this.baseIdentityServerUrl + "auth/register";
+    return this.http.post<any>(url, credentials, {
       headers: new HttpHeaders({ "Content-Type": "application/json" })
     }).pipe(map(response => {
       return response;

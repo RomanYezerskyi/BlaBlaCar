@@ -1,4 +1,4 @@
-import { CarType } from "src/app/enums/car-type";
+import { CarType } from "src/app/core/enums/car-type";
 import { CarDocumentsModel } from "./car-documents-model";
 import { SeatModel } from "./seat-model";
 

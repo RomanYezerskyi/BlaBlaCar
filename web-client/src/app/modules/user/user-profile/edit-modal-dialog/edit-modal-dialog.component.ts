@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
+import { UserModel } from 'src/app/core/models/user-models/user-model';
 import { PasswordValidatorService } from 'src/app/core/services/password-validator/password-validator.service';
 import { UserService } from 'src/app/core/services/user-service/user.service';
 

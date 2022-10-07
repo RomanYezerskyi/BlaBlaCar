@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PlaceSuggestionModel } from 'src/app/interfaces/autocomplete-interfaces/place-suggestion-model';
+import { PlaceSuggestionModel } from 'src/app/core/models/autocomplete-models/place-suggestion-model';
 
 @Component({
   selector: 'app-home',

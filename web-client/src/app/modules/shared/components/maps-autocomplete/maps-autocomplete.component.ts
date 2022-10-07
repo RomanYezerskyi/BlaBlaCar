@@ -5,8 +5,8 @@ import { FormControl } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { MapsService } from 'src/app/core/services/maps-service/maps.service';
-import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip-model';
-import { GeocodingFeatureProperties, PlaceSuggestionModel } from 'src/app/interfaces/autocomplete-interfaces/place-suggestion-model';
+import { SearchTripModel } from 'src/app/core/models/trip-models/search-trip-model';
+import { GeocodingFeatureProperties, PlaceSuggestionModel } from 'src/app/core/models/autocomplete-models/place-suggestion-model';
 
 
 // export interface PlaceSuggestion {

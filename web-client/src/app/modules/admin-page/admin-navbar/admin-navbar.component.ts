@@ -8,7 +8,8 @@ import { ChatService } from 'src/app/core/services/chat-service/chat.service';
 import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
 import { SignalRService } from 'src/app/core/services/signalr-services/signalr.service';
 import { UserService } from 'src/app/core/services/user-service/user.service';
-import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
+import { UserStatus } from 'src/app/core/models/user-models/user-status';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-admin-navbar',
@@ -58,10 +59,10 @@ export class AdminNavbarComponent implements OnInit, OnDestroy {
     if (!this.token) { return }
     const currentUserId = this.jwtHelper.decodeToken(this.token!).id;
 
-    this.signal.setConnectionUrl = "https://localhost:6001/chatHub";
-    this.signal.setHubMethod = 'JoinToChatMessagesNotifications';
+    this.signal.setConnectionUrl = environment.chatHubConnectionUrl;
+    this.signal.setHubMethod = environment.chatHubMethod;
     this.signal.setHubMethodParams = currentUserId;
-    this.signal.setHandlerMethod = "BroadcastMessagesFromChats";
+    this.signal.setHandlerMethod = environment.chatHubHandlerMethod;
   }
   connectToChatMessagesSignalRHub(): void {
     this.signal.getDataStream<string>().pipe(takeUntil(this.unsubscribe$)).subscribe(message => {

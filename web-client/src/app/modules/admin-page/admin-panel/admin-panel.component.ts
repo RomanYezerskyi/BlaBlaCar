@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
+import { UserStatus } from 'src/app/core/models/user-models/user-status';
 import * as signalR from '@microsoft/signalr';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ActivatedRoute, Router } from '@angular/router';

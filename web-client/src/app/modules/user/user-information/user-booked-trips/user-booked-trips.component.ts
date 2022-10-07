@@ -3,15 +3,15 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
-import { TripUserModel } from 'src/app/interfaces/trip-interfaces/trip-user-model';
-import { TripsResponseModel } from 'src/app/interfaces/trip-interfaces/trips-response-model';
-import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
+import { TripModel } from 'src/app/core/models/trip-models/trip-model';
+import { TripUserModel } from 'src/app/core/models/trip-models/trip-user-model';
+import { TripsResponseModel } from 'src/app/core/models/trip-models/trips-response-model';
+import { UserModel } from 'src/app/core/models/user-models/user-model';
 import { ChatService } from 'src/app/core/services/chat-service/chat.service';
 import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
 import { MapsService } from 'src/app/core/services/maps-service/maps.service';
 import { TripService } from 'src/app/core/services/trip-service/trip.service';
-import { GeocodingFeatureProperties } from 'src/app/interfaces/autocomplete-interfaces/place-suggestion-model';
+import { GeocodingFeatureProperties } from 'src/app/core/models/autocomplete-models/place-suggestion-model';
 
 @Component({
   selector: 'app-user-booked-trips',

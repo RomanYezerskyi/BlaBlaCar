@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AdminStatisticsModel } from 'src/app/interfaces/admin-interfaces/admin-statistics-model';
+import { AdminStatisticsModel } from 'src/app/core/models/admin-models/admin-statistics-model';
 import { Chart, registerables } from 'chart.js';
 import { ChartService } from 'src/app/core/services/chart-service/chart.service';
 import { AdminService } from 'src/app/core/services/admin/admin.service';

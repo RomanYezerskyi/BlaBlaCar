@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/core/guards/auth-guard/auth.guard';
 import { UserGuard } from 'src/app/core/guards/user-guard/user.guard';
-import { PageAccessGuard } from 'src/app/guards/page-access/page-access.guard';
+import { PageAccessGuard } from 'src/app/core/guards/page-access/page-access.guard';
 import { ChatLayoutComponent } from '../shared/components/chat-layout/chat-layout.component';
 import { InfoPageComponent } from '../shared/components/info-page/info-page.component';
 import { AddCarComponent } from './add-car/add-car.component';

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip-model';
+import { SearchTripModel } from 'src/app/core/models/trip-models/search-trip-model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TripsComponent } from './trips/trips.component';
 

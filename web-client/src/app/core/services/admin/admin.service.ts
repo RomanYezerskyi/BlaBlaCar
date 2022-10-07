@@ -1,23 +1,25 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AdminStatisticsModel } from 'src/app/interfaces/admin-interfaces/admin-statistics-model';
-import { ShortStatisticsModel } from 'src/app/interfaces/admin-interfaces/short-statistics-model';
-import { UsersListRequestModel } from 'src/app/interfaces/admin-interfaces/users-list-request-model';
-import { CarStatus } from 'src/app/interfaces/car-interfaces/car-status';
-import { RoleModel } from 'src/app/interfaces/role-model';
-import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
-import { UserRequestResponseModel } from 'src/app/interfaces/user-interfaces/user-request-response-model';
-import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
+import { AdminStatisticsModel } from 'src/app/core/models/admin-models/admin-statistics-model';
+import { ShortStatisticsModel } from 'src/app/core/models/admin-models/short-statistics-model';
+import { UsersListRequestModel } from 'src/app/core/models/admin-models/users-list-request-model';
+import { CarStatus } from 'src/app/core/models/car-models/car-status';
+import { RoleModel } from 'src/app/core/models/auth-models/role-model';
+import { UserModel } from 'src/app/core/models/user-models/user-model';
+import { UserRequestResponseModel } from 'src/app/core/models/user-models/user-request-response-model';
+import { UserStatus } from 'src/app/core/models/user-models/user-status';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
-
+  private baseApiUrl = environment.baseApiUrl;
+  private baseIdentityServerUrl = environment.baseIdentityServerUrl;
   constructor(private http: HttpClient) { }
   getTopListUsers(request: UsersListRequestModel): Observable<UserModel[]> {
-    const url = 'https://localhost:6001/api/Admin/top-list';
+    const url = this.baseApiUrl + 'Admin/top-list';
     return this.http.get<UserModel[]>(url,
       {
         params: {
@@ -28,41 +30,41 @@ export class AdminService {
       });
   }
   getStatistics(searchDate: string): Observable<AdminStatisticsModel> {
-    const url = 'https://localhost:6001/api/Admin/statistics';
+    const url = this.baseApiUrl + 'Admin/statistics';
     return this.http.get<AdminStatisticsModel>(url, { params: { searchDate: searchDate } });
   }
   getShortStatistics(): Observable<ShortStatisticsModel> {
-    const url = 'https://localhost:6001/api/Admin/short-statistics';
+    const url = this.baseApiUrl + 'Admin/short-statistics';
     return this.http.get<ShortStatisticsModel>(url);
   }
   //
   getRoles(): Observable<RoleModel[]> {
-    const url = 'https://localhost:5001/api/User/roles'
+    const url = this.baseIdentityServerUrl + 'User/roles';
     return this.http.get<RoleModel[]>(url);
   }
   getAdmins(): Observable<UserModel[]> {
-    const url = 'https://localhost:5001/api/User/admins'
+    const url = this.baseIdentityServerUrl + 'User/admins';
     return this.http.get<UserModel[]>(url);
   }
   changeUserRole(data: { roleName: string, userId: string }): Observable<any> {
-    const url = 'https://localhost:5001/api/User/'
+    const url = this.baseIdentityServerUrl + 'User/';
     return this.http.post(url, data);
   }
   getUserByEmail(email: string): Observable<UserModel> {
-    const url = 'https://localhost:5001/api/User/'
+    const url = this.baseIdentityServerUrl + 'User/'
     return this.http.get<UserModel>(url + email);
   }
   getUserRequests(status: UserStatus, take: number, skip: number): Observable<UserRequestResponseModel> {
-    const url = 'https://localhost:6001/api/Admin/requests';
+    const url = this.baseApiUrl + 'Admin/requests';
     return this.http.get<UserRequestResponseModel>(url, { params: { take: take, skip: skip, status: status } });
   }
 
   changeUserDrivingLicenseStatus(newStatus: { status: UserStatus, userId: string }): Observable<any> {
-    const url = 'https://localhost:6001/api/Admin/user/status';
+    const url = this.baseApiUrl + 'Admin/user/status';
     return this.http.patch(url, newStatus);
   }
   changeCarDocumentsStatus(newStatus: { status: CarStatus, carId: number, }): Observable<any> {
-    const url = 'https://localhost:6001/api/Admin/car/status';
+    const url = this.baseApiUrl + 'Admin/car/status';
     return this.http.patch(url, newStatus);
   }
 }

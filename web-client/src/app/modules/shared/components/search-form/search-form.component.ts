@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { TripOrderBy } from 'src/app/enums/trip-order-by';
-import { PlaceSuggestionModel } from 'src/app/interfaces/autocomplete-interfaces/place-suggestion-model';
-import { SearchTripModel } from 'src/app/interfaces/trip-interfaces/search-trip-model';
+import { TripOrderBy } from 'src/app/core/enums/trip-order-by';
+import { PlaceSuggestionModel } from 'src/app/core/models/autocomplete-models/place-suggestion-model';
+import { SearchTripModel } from 'src/app/core/models/trip-models/search-trip-model';
 
 
 @Component({

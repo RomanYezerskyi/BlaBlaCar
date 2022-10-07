@@ -1,13 +1,16 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { UpdateUserDocuments } from 'src/app/interfaces/user-interfaces/update-user-documents';
-import { UserDocumentsModel } from 'src/app/interfaces/user-interfaces/user-documents-model';
-import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
+import { UpdateUserDocuments } from 'src/app/core/models/user-models/update-user-documents';
+import { UserDocumentsModel } from 'src/app/core/models/user-models/user-documents-model';
+import { UserModel } from 'src/app/core/models/user-models/user-model';
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  private baseApiUrl = environment.baseApiUrl;
+  private baseIdentityServerUrl = environment.baseIdentityServerUrl;
   public userProfile: UserModel = {} as UserModel;
   constructor(private http: HttpClient) {
     console.log(this.userProfile);
@@ -23,7 +26,7 @@ export class UserService {
     }
   }
   async chekIfUserExist(): Promise<any> {
-    const url = 'https://localhost:6001/api/User/add-user';
+    const url = this.baseApiUrl + 'User/add-user';
     return await new Promise<any>((resolve, reject) => {
       this.http.get<any>(url).subscribe({
         next: (res) => resolve(res),
@@ -32,20 +35,21 @@ export class UserService {
     });
   }
   searchUsers(userData: string): Observable<UserModel[]> {
-    const url = 'https://localhost:6001/api/User/users/' + userData;
+    const url = this.baseApiUrl + 'User/users/' + userData;
     return this.http.get<UserModel[]>(url);
   }
   getUserFromApi(userId: string): Observable<UserModel> {
-    const url = 'https://localhost:6001/api/User/';
+    const url = this.baseApiUrl + 'User/';
     return this.http.get<UserModel>(url + userId);
   }
 
   getCurrentUser(): Observable<UserModel> {
-    const url = 'https://localhost:6001/api/User';
+    const url = this.baseApiUrl + 'User';
     return this.http.get<UserModel>(url);
   }
   updateUserPassword(newPasswordModel: { userId: string, currentPassword: string, newPassword: string }): Observable<any> {
-    return this.http.post("https://localhost:5001/api/User/update-password", newPasswordModel);
+    const url = this.baseIdentityServerUrl + 'User/update-password'
+    return this.http.post(url, newPasswordModel);
   }
   updateUserInfo(userModel: {
     id: string,
@@ -53,18 +57,23 @@ export class UserService {
     firstName: string,
     phoneNumber: string
   }): Observable<any> {
-    return this.http.post("https://localhost:6001/api/User/update", userModel);
+    const url = this.baseApiUrl + 'User/update';
+    return this.http.post(url, userModel);
   }
   updateUserPhoto(formData: FormData): Observable<any> {
-    return this.http.put('https://localhost:6001/api/User/user-profile-image', formData);
+    const url = this.baseApiUrl + 'User/user-profile-image'
+    return this.http.put(url, formData);
   }
   addDrivingLicense(documents: FormData): Observable<any> {
-    return this.http.post('https://localhost:6001/api/User/license', documents)
+    const url = this.baseApiUrl + 'User/license';
+    return this.http.post(url, documents)
   }
   getUserStatistics(): Observable<any> {
-    return this.http.get<any>('https://localhost:6001/api/User/statistics');
+    const url = this.baseApiUrl + 'User/statistics';
+    return this.http.get<any>(url);
   }
   getUserDrivingDocuments(): Observable<UserDocumentsModel[]> {
-    return this.http.get<UserDocumentsModel[]>('https://localhost:6001/api/User/documents');
+    const url = this.baseApiUrl + 'User/documents';
+    return this.http.get<UserDocumentsModel[]>(url);
   }
 }

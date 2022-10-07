@@ -1,9 +1,9 @@
 import { AvailableSeatsModel } from "./available-seats-model";
 import { BookedTripUsersModel } from "./booked-trip-users-model";
-import { CarModel } from "../car-interfaces/car-model";
+import { CarModel } from "../car-models/car-model";
 import { TripUserModel } from "./trip-user-model";
-import { UserModel } from "../user-interfaces/user-model";
-import { UserPermissionsTrip } from "src/app/enums/user-permissions-trip";
+import { UserModel } from "../user-models/user-model";
+import { UserPermissionsTrip } from "src/app/core/enums/user-permissions-trip";
 
 export interface TripModel {
     id: number;

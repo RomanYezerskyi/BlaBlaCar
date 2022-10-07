@@ -3,11 +3,11 @@ import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, OnDestro
 import { SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { skip, Subject, Subscription, takeUntil } from 'rxjs';
-import { ChatModel } from 'src/app/interfaces/chat-interfaces/chat-model';
+import { ChatModel } from 'src/app/core/models/chat-models/chat-model';
 import { ChatService } from 'src/app/core/services/chat-service/chat.service';
 import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
-import { MessageStatus } from 'src/app/enums/message-status';
-import { MessageModel } from 'src/app/interfaces/chat-interfaces/message-model';
+import { MessageStatus } from 'src/app/core/enums/message-status';
+import { MessageModel } from 'src/app/core/models/chat-models/message-model';
 import { SignalRService } from 'src/app/core/services/signalr-services/signalr.service';
 
 @Component({

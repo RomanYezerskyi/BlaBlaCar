@@ -1,5 +1,5 @@
-import { NotificationStatus } from "../enums/notification-status";
-import { UserModel } from "./user-interfaces/user-model";
+import { NotificationStatus } from "../../enums/notification-status";
+import { UserModel } from "../user-models/user-model";
 
 export interface NotificationsModel {
     id?: string;

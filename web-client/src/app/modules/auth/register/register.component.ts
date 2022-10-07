@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { RegisterModel } from 'src/app/interfaces/register-model';
+import { RegisterModel } from 'src/app/core/models/auth-models/register-model';
 import { AuthService } from 'src/app/core/services/auth-service/auth-service.service';
 import { PasswordValidatorService } from 'src/app/core/services/password-validator/password-validator.service';
 import { AlertsComponent } from '../../shared/components/alerts/alerts.component';

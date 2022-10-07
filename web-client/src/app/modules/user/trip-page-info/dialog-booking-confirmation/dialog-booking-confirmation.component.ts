@@ -2,11 +2,11 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angul
 import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { BookedTripModel } from 'src/app/interfaces/trip-interfaces/booked-trip-model';
-import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
-import { CarModel } from "src/app/interfaces/car-interfaces/car-model";
-import { AvailableSeatsType } from 'src/app/enums/available-seats-type';
-import { SeatModel } from 'src/app/interfaces/car-interfaces/seat-model';
+import { BookedTripModel } from 'src/app/core/models/trip-models/booked-trip-model';
+import { TripModel } from 'src/app/core/models/trip-models/trip-model';
+import { CarModel } from "src/app/core/models/car-models/car-model";
+import { AvailableSeatsType } from 'src/app/core/enums/available-seats-type';
+import { SeatModel } from 'src/app/core/models/car-models/seat-model';
 import { TripService } from 'src/app/core/services/trip-service/trip.service';
 import { Subject, takeUntil } from 'rxjs';
 @Component({

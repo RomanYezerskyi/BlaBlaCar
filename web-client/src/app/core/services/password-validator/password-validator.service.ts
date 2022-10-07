@@ -15,11 +15,11 @@ export class PasswordValidatorService {
         return;
       }
       if (control.value !== matchingControl.value) {
-        console.log("aa");
+
         // this.form.controls['confirm_password'].setErrors({ confirmedValidator: true });
         matchingControl.setErrors({ confirmedValidator: true });
       } else {
-        console.log("bb");
+
         matchingControl.setErrors(null);
       }
     }

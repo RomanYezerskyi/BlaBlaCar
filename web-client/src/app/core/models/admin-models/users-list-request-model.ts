@@ -1,4 +1,4 @@
-import { UserListOrderby } from "src/app/enums/user-list-orderby";
+import { UserListOrderby } from "src/app/core/enums/user-list-orderby";
 
 export interface UsersListRequestModel {
     take: number;

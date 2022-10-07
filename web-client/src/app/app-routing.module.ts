@@ -19,7 +19,7 @@ import { UserProfileComponent } from './modules/user/user-profile/user-profile.c
 // import { UserInformationComponent } from './components/user/user-information/user-information.component';
 // import { UserCarsComponent } from './components/user/user-cars/user-cars.component';
 // import { UserTripsComponent } from './components/user/user-information/user-trips/user-trips.component';
-import { PageAccessGuard } from './guards/page-access/page-access.guard';
+import { PageAccessGuard } from './core/guards/page-access/page-access.guard';
 // import { InfoPageComponent } from './components/info-page/info-page.component';
 import { AdminGuard } from './core/guards/admin-guard/admin.guard';
 // import { MainComponent } from './components/admin-page/main/main.component';

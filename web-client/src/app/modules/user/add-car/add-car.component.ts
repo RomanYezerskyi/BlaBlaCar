@@ -3,8 +3,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { CarType } from 'src/app/enums/car-type';
-import { AddNewCarModel } from 'src/app/interfaces/car-interfaces/addnew-car-model';
+import { CarType } from 'src/app/core/enums/car-type';
+import { AddNewCarModel } from 'src/app/core/models/car-models/addnew-car-model';
 import { CarService } from 'src/app/core/services/car-service/car.service';
 
 @Component({

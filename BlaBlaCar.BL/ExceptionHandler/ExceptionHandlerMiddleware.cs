@@ -2,6 +2,7 @@
 using System.Net;
 using System.Text.Json;
 using BlaBlaCar.BL.Exceptions;
+using BlaBlaCar.BL.Logger;
 using Microsoft.AspNetCore.Http;
 
 namespace BlaBlaCar.BL.ExceptionHandler
@@ -9,9 +10,12 @@ namespace BlaBlaCar.BL.ExceptionHandler
     public class ExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
-
-        public ExceptionHandlerMiddleware(RequestDelegate next) =>
+        private readonly ILog _logger;
+        public ExceptionHandlerMiddleware(RequestDelegate next, ILog logger)
+        {
             _next = next;
+            _logger = logger;
+        }
 
         public async Task Invoke(HttpContext context)
         {
@@ -55,6 +59,7 @@ namespace BlaBlaCar.BL.ExceptionHandler
             {
                 result = JsonSerializer.Serialize(new { error = exception.Message });
             }
+            _logger.Error(exception.Message);
 
             return context.Response.WriteAsync(result);
         }

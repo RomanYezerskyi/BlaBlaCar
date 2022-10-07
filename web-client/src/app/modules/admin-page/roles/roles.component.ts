@@ -3,9 +3,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CheckboxControlValueAccessor, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { RoleModel } from 'src/app/interfaces/role-model';
-import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
-import { UserStatus } from 'src/app/interfaces/user-interfaces/user-status';
+import { RoleModel } from 'src/app/core/models/auth-models/role-model';
+import { UserModel } from 'src/app/core/models/user-models/user-model';
+import { UserStatus } from 'src/app/core/models/user-models/user-status';
 import { AdminService } from 'src/app/core/services/admin/admin.service';
 
 @Component({

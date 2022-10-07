@@ -1,6 +1,6 @@
-import { AvailableSeatsModel } from "../trip-interfaces/available-seats-model";
-import { BookedTripUsersModel } from "../trip-interfaces/booked-trip-users-model";
-import { CarModel } from "../car-interfaces/car-model";
+import { AvailableSeatsModel } from "../trip-models/available-seats-model";
+import { BookedTripUsersModel } from "../trip-models/booked-trip-users-model";
+import { CarModel } from "../car-models/car-model";
 import { UserModel } from "./user-model";
 
 export interface UserTripsResponseModel {

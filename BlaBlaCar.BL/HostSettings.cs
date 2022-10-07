@@ -11,5 +11,7 @@ namespace BlaBlaCar.BL
         public string CurrentHost { get; set; }
         public string IdentityServerUpdateUserHost { get; set; }
         public string IdentityServerUpdateUserPasswordHost { get; set; }
+        public string GeoapifyApiUrl { get; set; }
+        public string GeoapifyApiKey { get; set; }
     }
 }

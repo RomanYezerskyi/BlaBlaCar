@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ShortStatisticsModel } from 'src/app/interfaces/admin-interfaces/short-statistics-model';
+import { ShortStatisticsModel } from 'src/app/core/models/admin-models/short-statistics-model';
 import { AdminService } from 'src/app/core/services/admin/admin.service';
 
 @Component({

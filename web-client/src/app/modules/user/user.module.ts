@@ -20,7 +20,7 @@ import { SearchTripComponent } from './search-trip/search-trip.component';
 import { AddTripComponent } from './add-trip-layout/add-trip/add-trip.component';
 import { AddTripLayoutComponent } from './add-trip-layout/add-trip-layout.component';
 import { AddAvailableSeatsComponent } from './add-trip-layout/add-available-seats/add-available-seats.component';
-import { PageAccessGuard } from 'src/app/guards/page-access/page-access.guard';
+import { PageAccessGuard } from 'src/app/core/guards/page-access/page-access.guard';
 import { UserGuard } from 'src/app/core/guards/user-guard/user.guard';
 import { RequestDrivingLicenseComponent } from './user-profile/request-driving-license/request-driving-license.component';
 import { EditModalDialogComponent } from './user-profile/edit-modal-dialog/edit-modal-dialog.component';

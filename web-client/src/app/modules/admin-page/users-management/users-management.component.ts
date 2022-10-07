@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 import { Subject, Subscription, takeUntil } from 'rxjs';
-import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
+import { UserModel } from 'src/app/core/models/user-models/user-model';
 import { ChatService } from 'src/app/core/services/chat-service/chat.service';
 import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
 import { UserService } from 'src/app/core/services/user-service/user.service';

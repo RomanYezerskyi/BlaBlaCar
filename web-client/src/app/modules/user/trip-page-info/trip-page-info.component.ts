@@ -1,18 +1,18 @@
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
+import { TripModel } from 'src/app/core/models/trip-models/trip-model';
 import { DialogBookingConfirmationComponent } from './dialog-booking-confirmation/dialog-booking-confirmation.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { CarModel } from 'src/app/interfaces/car-interfaces/car-model';
+import { CarModel } from 'src/app/core/models/car-models/car-model';
 import { SafeUrl } from '@angular/platform-browser';
 import { TripService } from 'src/app/core/services/trip-service/trip.service';
 import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
-import { UserPermissionsTrip } from 'src/app/enums/user-permissions-trip';
+import { UserPermissionsTrip } from 'src/app/core/enums/user-permissions-trip';
 import { ChatService } from 'src/app/core/services/chat-service/chat.service';
 import { Subject, takeUntil } from 'rxjs';
 import { MapsService } from 'src/app/core/services/maps-service/maps.service';
-import { GeocodingFeatureProperties } from 'src/app/interfaces/autocomplete-interfaces/place-suggestion-model';
+import { GeocodingFeatureProperties } from 'src/app/core/models/autocomplete-models/place-suggestion-model';
 
 @Component({
 	selector: 'app-trip-page-info',

@@ -1,6 +1,6 @@
-import { CarModel } from "../car-interfaces/car-model";
-import { RoleModel } from "../role-model";
-import { TripModel } from "../trip-interfaces/trip-model";
+import { CarModel } from "../car-models/car-model";
+import { RoleModel } from "../auth-models/role-model";
+import { TripModel } from "../trip-models/trip-model";
 import { UserDocumentsModel } from "./user-documents-model";
 import { UserStatus } from "./user-status";
 

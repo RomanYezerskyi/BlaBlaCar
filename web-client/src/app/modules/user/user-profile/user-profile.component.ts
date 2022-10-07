@@ -5,7 +5,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { SafeUrl } from '@angular/platform-browser';
 import { Chart, registerables } from 'chart.js';
 import { Subject, takeUntil } from 'rxjs';
-import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
+import { UserModel } from 'src/app/core/models/user-models/user-model';
 import { CarService } from 'src/app/core/services/car-service/car.service';
 import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
 import { PasswordValidatorService } from 'src/app/core/services/password-validator/password-validator.service';

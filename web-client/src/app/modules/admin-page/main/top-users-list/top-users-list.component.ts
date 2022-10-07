@@ -2,9 +2,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 import { Subject, takeUntil } from 'rxjs';
-import { UserListOrderby } from 'src/app/enums/user-list-orderby';
-import { UsersListRequestModel } from 'src/app/interfaces/admin-interfaces/users-list-request-model';
-import { UserModel } from 'src/app/interfaces/user-interfaces/user-model';
+import { UserListOrderby } from 'src/app/core/enums/user-list-orderby';
+import { UsersListRequestModel } from 'src/app/core/models/admin-models/users-list-request-model';
+import { UserModel } from 'src/app/core/models/user-models/user-model';
 import { AdminService } from 'src/app/core/services/admin/admin.service';
 import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
 

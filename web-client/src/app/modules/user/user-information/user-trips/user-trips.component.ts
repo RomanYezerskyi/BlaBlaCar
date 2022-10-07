@@ -1,15 +1,15 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
-import { UserTrips, UserTripsResponseModel } from 'src/app/interfaces/user-interfaces/user-trips-response-model';
+import { UserTrips, UserTripsResponseModel } from 'src/app/core/models/user-models/user-trips-response-model';
 import { TripService } from 'src/app/core/services/trip-service/trip.service';
 import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
 import { skip, Subject, Subscription, takeUntil } from 'rxjs';
 import { ChatService } from 'src/app/core/services/chat-service/chat.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TripModel } from 'src/app/interfaces/trip-interfaces/trip-model';
+import { TripModel } from 'src/app/core/models/trip-models/trip-model';
 import { MapsService } from 'src/app/core/services/maps-service/maps.service';
-import { GeocodingFeatureProperties } from 'src/app/interfaces/autocomplete-interfaces/place-suggestion-model';
+import { GeocodingFeatureProperties } from 'src/app/core/models/autocomplete-models/place-suggestion-model';
 
 @Component({
   selector: 'app-user-trips',

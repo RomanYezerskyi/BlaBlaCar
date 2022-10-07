@@ -1,11 +1,11 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { CarType } from 'src/app/enums/car-type';
-import { CarModel } from 'src/app/interfaces/car-interfaces/car-model';
+import { CarType } from 'src/app/core/enums/car-type';
+import { CarModel } from 'src/app/core/models/car-models/car-model';
 import { CarService } from 'src/app/core/services/car-service/car.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { CarUpdateModel } from 'src/app/interfaces/car-interfaces/car-update-model';
+import { CarUpdateModel } from 'src/app/core/models/car-models/car-update-model';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({

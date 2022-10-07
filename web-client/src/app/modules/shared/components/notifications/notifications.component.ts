@@ -1,14 +1,15 @@
 import { HttpClient, HttpErrorResponse, HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { NotificationsModel } from 'src/app/interfaces/notifications-model';
+import { NotificationsModel } from 'src/app/core/models/notifications-models/notifications-model';
 import { NotificationsService } from 'src/app/core/services/notifications-service/notifications.service';
 import * as signalR from '@microsoft/signalr';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { SignalRService } from 'src/app/core/services/signalr-services/signalr.service';
-import { NotificationStatus } from 'src/app/enums/notification-status';
+import { NotificationStatus } from 'src/app/core/enums/notification-status';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CreateNotificationDialogComponent } from '../create-notification-dialog/create-notification-dialog.component';
 import { Subject, takeUntil } from 'rxjs';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.component.html',
@@ -41,10 +42,10 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
   setSignalRConnectionUrls() {
-    this.signal.setConnectionUrl = "https://localhost:6001/notify";
-    this.signal.setHubMethod = 'JoinToNotificationsHub';
+    this.signal.setConnectionUrl = environment.notificationsHubConnectionUrl;
+    this.signal.setHubMethod = environment.notificationsHubMethod;
     this.signal.setHubMethodParams = this.currentUserId;
-    this.signal.setHandlerMethod = "BroadcastNotification";
+    this.signal.setHandlerMethod = environment.notificationsHubHandlerMethod;
   }
   connectToNotificationsSignalRHub() {
     this.signal.getDataStream<any>().pipe(takeUntil(this.unsubscribe$)).subscribe(message => {

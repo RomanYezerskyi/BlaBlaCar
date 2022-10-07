@@ -4,8 +4,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { UpdateModeEnum } from 'chart.js';
 import { Subject, takeUntil } from 'rxjs';
-import { UpdateUserDocuments } from 'src/app/interfaces/user-interfaces/update-user-documents';
-import { UserDocumentsModel } from 'src/app/interfaces/user-interfaces/user-documents-model';
+import { UpdateUserDocuments } from 'src/app/core/models/user-models/update-user-documents';
+import { UserDocumentsModel } from 'src/app/core/models/user-models/user-documents-model';
 import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
 import { UserService } from 'src/app/core/services/user-service/user.service';
 

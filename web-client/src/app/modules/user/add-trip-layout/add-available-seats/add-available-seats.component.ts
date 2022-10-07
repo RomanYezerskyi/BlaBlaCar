@@ -2,10 +2,10 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CarType } from 'src/app/enums/car-type';
-import { AddAvailableSeatsModel } from 'src/app/interfaces/trip-interfaces/add-available-seats-model';
-import { AddTripModel } from 'src/app/interfaces/trip-interfaces/add-trip-model';
-import { CarModel } from 'src/app/interfaces/car-interfaces/car-model';
+import { CarType } from 'src/app/core/enums/car-type';
+import { AddAvailableSeatsModel } from 'src/app/core/models/trip-models/add-available-seats-model';
+import { AddTripModel } from 'src/app/core/models/trip-models/add-trip-model';
+import { CarModel } from 'src/app/core/models/car-models/car-model';
 import { TripService } from 'src/app/core/services/trip-service/trip.service';
 import { Subject, takeUntil } from 'rxjs';
 @Component({

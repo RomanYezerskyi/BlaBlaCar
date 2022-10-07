@@ -1,8 +1,8 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AddTripModel } from 'src/app/interfaces/trip-interfaces/add-trip-model';
-import { CarModel } from 'src/app/interfaces/car-interfaces/car-model';
+import { AddTripModel } from 'src/app/core/models/trip-models/add-trip-model';
+import { CarModel } from 'src/app/core/models/car-models/car-model';
 import { CarService } from 'src/app/core/services/car-service/car.service';
 import { Subject, takeUntil } from 'rxjs';
 

@@ -12,6 +12,7 @@ using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.BL;
 using BlaBlaCar.BL.ExceptionHandler;
 using BlaBlaCar.BL.Hubs;
+using BlaBlaCar.BL.Logger;
 using BlaBlaCar.BL.Services.Admin;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -29,7 +30,11 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Builder;
+using NLog;
+
 var builder = WebApplication.CreateBuilder(args);
+
+LogManager.LoadConfiguration(System.String.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
 // Add services to the container.
 builder.Services.AddControllers()
@@ -82,7 +87,7 @@ builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IChatHubService, ChatHubService>();
 builder.Services.AddScoped<IMapService, MapsService>();
-
+builder.Services.AddSingleton<ILog, NLogger>();
 
 var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
 builder.Services.AddAuthentication(opt => {
@@ -111,14 +116,12 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()
-            .WithOrigins("http://localhost:4200");
+            .WithOrigins(jwtSettings.WebClientUrl);
     });
 });
 
 builder.Services.AddSignalR();
-//app.UseCors(builder => builder.WithOrigins("https://localhost:44321")
-//    .AllowAnyHeader()
-//    .AllowAnyMethod());
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

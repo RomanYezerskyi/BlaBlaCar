@@ -2,12 +2,12 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CarType } from 'src/app/enums/car-type';
-import { AddTripModel } from 'src/app/interfaces/trip-interfaces/add-trip-model';
-import { AvailableSeatsModel } from 'src/app/interfaces/trip-interfaces/available-seats-model';
-import { CarModel } from 'src/app/interfaces/car-interfaces/car-model';
-import { SeatModel } from 'src/app/interfaces/car-interfaces/seat-model';
-import { PlaceSuggestionModel } from 'src/app/interfaces/autocomplete-interfaces/place-suggestion-model';
+import { CarType } from 'src/app/core/enums/car-type';
+import { AddTripModel } from 'src/app/core/models/trip-models/add-trip-model';
+import { AvailableSeatsModel } from 'src/app/core/models/trip-models/available-seats-model';
+import { CarModel } from 'src/app/core/models/car-models/car-model';
+import { SeatModel } from 'src/app/core/models/car-models/seat-model';
+import { PlaceSuggestionModel } from 'src/app/core/models/autocomplete-models/place-suggestion-model';
 @Component({
   selector: 'app-add-trip',
   templateUrl: './add-trip.component.html',

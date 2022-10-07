@@ -1,5 +1,5 @@
-import { MessageStatus } from "src/app/enums/message-status";
-import { UserModel } from "../user-interfaces/user-model";
+import { MessageStatus } from "src/app/core/enums/message-status";
+import { UserModel } from "../user-models/user-model";
 import { ChatModel } from "./chat-model";
 
 export interface MessageModel {

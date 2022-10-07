@@ -3,9 +3,9 @@ import { Component, EventEmitter, Inject, OnDestroy, OnInit } from '@angular/cor
 import { FormControl, NgForm, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subject, Subscription, takeUntil, timeout } from 'rxjs';
-import { NotificationStatus } from 'src/app/enums/notification-status';
-import { FeedBackModel } from 'src/app/interfaces/feed-back-model';
-import { NotificationsModel } from 'src/app/interfaces/notifications-model';
+import { NotificationStatus } from 'src/app/core/enums/notification-status';
+import { FeedBackModel } from 'src/app/core/models/notifications-models/feed-back-model';
+import { NotificationsModel } from 'src/app/core/models/notifications-models/notifications-model';
 import { NotificationsService } from 'src/app/core/services/notifications-service/notifications.service';
 
 @Component({

@@ -5,7 +5,7 @@ import { FormControl, NgForm, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/core/services/auth-service/auth-service.service';
 import { first, Subject, takeUntil } from 'rxjs';
 import { AlertsComponent } from '../../shared/components/alerts/alerts.component';
-import { LoginModel } from 'src/app/interfaces/login-model';
+import { LoginModel } from 'src/app/core/models/auth-models/login-model';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
