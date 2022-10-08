@@ -34,7 +34,14 @@ export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
   userStatus = UserStatus;
   carStatus = CarStatus;
   carType = CarType;
-  selectedUser: UserModel = {} as UserModel;
+  selectedUser: UserModel = {
+    cars: [] = [],
+    email: '',
+    firstName: '',
+    id: '',
+    phoneNumber: '',
+    roles: [] = [], userDocuments: [] = [], userStatus: 0, trips: [] = [], tripUsers: [] = [],
+  };
   constructor(private userService: UserService,
     private sanitizeImgService: ImgSanitizerService,
     private route: ActivatedRoute,

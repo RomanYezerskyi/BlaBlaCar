@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/core/guards/auth-guard/auth.guard';
-import { UserGuard } from 'src/app/core/guards/user-guard/user.guard';
+import { UserGuard } from 'src/app/core/guards/user-guard/user-exist.guard';
 import { ChatLayoutComponent } from '../shared/components/chat-layout/chat-layout.component';
 import { InfoPageComponent } from '../shared/components/info-page/info-page.component';
 import { AdminPageComponent } from './admin-page.component';
@@ -18,6 +18,7 @@ const routes: Routes = [
   {
     path: '', component: AdminPageComponent,
     children: [
+      { path: '', redirectTo: '/admin/main-info', pathMatch: 'full' },
       { path: 'roles', component: RolesComponent, canActivate: [AuthGuard, UserGuard] },
       { path: 'requests/:id', component: UsersRequestsComponent, canActivate: [AuthGuard, UserGuard], },
       { path: 'requests-info/:id', component: UserRequestInfoComponent, canActivate: [AuthGuard, UserGuard] },

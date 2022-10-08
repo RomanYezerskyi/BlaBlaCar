@@ -59,7 +59,7 @@ import { PageAccessGuard } from './core/guards/page-access/page-access.guard';
 // import { ChatListComponent } from './components/chat-layout/chat-list/chat-list.component';
 // import { ChatComponent } from './components/chat-layout/chat/chat.component';
 // import { AdministratorsComponent } from './components/admin-page/administrators/administrators.component';
-import { UserGuard } from './core/guards/user-guard/user.guard';
+import { UserGuard } from './core/guards/user-guard/user-exist.guard';
 import { EditModalDialogComponent } from './modules/user/user-profile/edit-modal-dialog/edit-modal-dialog.component';
 // import { EditCarModalDialogComponent } from './components/user/user-cars/edit-car-modal-dialog/edit-car-modal-dialog.component';
 import { LightgalleryModule } from 'lightgallery/angular';

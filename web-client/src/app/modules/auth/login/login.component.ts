@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/core/services/auth-service/auth-service.ser
 import { first, Subject, takeUntil } from 'rxjs';
 import { AlertsComponent } from '../../shared/components/alerts/alerts.component';
 import { LoginModel } from 'src/app/core/models/auth-models/login-model';
+import { UserService } from 'src/app/core/services/user-service/user.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -21,10 +22,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   returnUrl: string | undefined;
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private authService: AuthService) { }
+    private authService: AuthService, private userService: UserService) { }
 
   ngOnInit(): void {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'user/search';
   }
   ngOnDestroy(): void {
     this.unsubscribe$.next();
@@ -36,7 +37,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.authService.login(this.credentials)
         .pipe(takeUntil(this.unsubscribe$)).subscribe(
           response => {
-            this.router.navigateByUrl(this.returnUrl!);
+            console.log(this.returnUrl);
+            if (this.returnUrl)
+              this.router.navigateByUrl(this.returnUrl!);
           },
           (error: HttpErrorResponse) => { this.alertsComponent.showError(error.error) }
         )

@@ -65,7 +65,7 @@ export class AdministratorsComponent implements OnInit, OnDestroy {
   getChat(userId: string) {
     this.chatService.GetPrivateChat(userId).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        this.router.navigate(['/chat'], {
+        this.router.navigate(['admin/chat'], {
           queryParams: {
             chatId: response
           }

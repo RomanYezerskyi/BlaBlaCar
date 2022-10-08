@@ -10,6 +10,7 @@ import { SignalRService } from 'src/app/core/services/signalr-services/signalr.s
 import { UserService } from 'src/app/core/services/user-service/user.service';
 import { UserStatus } from 'src/app/core/models/user-models/user-status';
 import { environment } from 'src/environments/environment';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-user-navbar',
@@ -38,6 +39,7 @@ export class UserNavbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.getUser();
     this.isUnreadMessages();
     this.connectToChatMessagesSignalRHub();
     this.router.events.subscribe(val => {
@@ -45,6 +47,16 @@ export class UserNavbarComponent implements OnInit, OnDestroy {
         this.unreadMessages = 0;
       }
     });
+  }
+  getUser(): void {
+    this.userService.getCurrentUser().pipe(takeUntil(this.unsubscribe$)).subscribe(
+      response => {
+        console.log("get user");
+        console.log(response);
+        this.userService.userProfile = response;
+      },
+      (error: HttpErrorResponse) => { console.log(error.error); }
+    );;
   }
   ngOnDestroy(): void {
     this.unsubscribe$.next();

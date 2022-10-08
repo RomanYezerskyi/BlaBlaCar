@@ -8,6 +8,8 @@ import { LoginModel } from 'src/app/core/models/auth-models/login-model';
 import { map } from 'rxjs/operators';
 import { RegisterModel } from 'src/app/core/models/auth-models/register-model';
 import { environment } from 'src/environments/environment';
+import { UserService } from '../user-service/user.service';
+import { UserModel } from '../../models/user-models/user-model';
 @Injectable({
   providedIn: 'root'
 })
@@ -15,7 +17,8 @@ export class AuthService {
   private baseIdentityServerUrl = environment.baseIdentityServerUrl;
   public redirectUrl: string | undefined;
   private token: string | null = localStorage.getItem("jwt");
-  constructor(private router: Router, private jwtHelper: JwtHelperService, private http: HttpClient) { }
+  constructor(private router: Router, private jwtHelper: JwtHelperService,
+    private http: HttpClient, private userService: UserService) { }
 
   async IsLogged(): Promise<boolean> {
     const token = localStorage.getItem("jwt");
@@ -55,8 +58,10 @@ export class AuthService {
     return isRefreshSuccess;
   }
   logOut(): void {
+    this.token = null;
     localStorage.removeItem("jwt");
     localStorage.removeItem("refreshToken");
+    this.userService.userProfile = {} as UserModel;
     this.router.navigate(["auth/login"]);
   }
   login(credentials: LoginModel): Observable<AuthenticatedResponseModel> {
@@ -81,9 +86,11 @@ export class AuthService {
     }));
   }
   isAdmin = (): boolean => {
+    this.token = localStorage.getItem("jwt");
     if (this.token && !this.jwtHelper.isTokenExpired(this.token)) {
       let check = this.jwtHelper.decodeToken(this.token).role == 'blablacar.admin';
       let check1 = this.jwtHelper.decodeToken(this.token)['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] == 'blablacar.admin';
+      console.log(this.jwtHelper.decodeToken(this.token));
       if (check || check1) {
         return true;
       }
