@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -10,6 +10,8 @@ import { RegisterModel } from 'src/app/core/models/auth-models/register-model';
 import { environment } from 'src/environments/environment';
 import { UserService } from '../user-service/user.service';
 import { UserModel } from '../../models/user-models/user-model';
+import { ForgotPasswordModel } from '../../models/auth-models/forgot-password-model';
+import { ResetPasswordModel } from '../../models/auth-models/reset-password-model';
 @Injectable({
   providedIn: 'root'
 })
@@ -96,5 +98,20 @@ export class AuthService {
       }
     }
     return false
+  }
+  forgotPassword(body: ForgotPasswordModel): Observable<any> {
+    const url = this.baseIdentityServerUrl + 'auth/forgot-password';
+    return this.http.post<any>(url, body);
+  }
+  resetPassword(body: ResetPasswordModel): Observable<any> {
+    const url = this.baseIdentityServerUrl + 'auth/reset-password';
+    return this.http.post(url, body);
+  }
+  confirmEmail(token: string, email: string): Observable<any> {
+    const url = this.baseIdentityServerUrl + "auth/email-confirmation";
+    let params = new HttpParams();
+    params = params.append('token', token);
+    params = params.append('email', email);
+    return this.http.get(url, { params: params });
   }
 }

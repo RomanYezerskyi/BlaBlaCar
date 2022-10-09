@@ -25,6 +25,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { HomeComponent } from './home/home.component';
 import { AuthNavbarComponent } from './auth-navbar/auth-navbar.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { EmailConfirmationComponent } from './email-confirmation/email-confirmation.component';
 
 
 @NgModule({
@@ -34,6 +37,9 @@ import { AuthNavbarComponent } from './auth-navbar/auth-navbar.component';
     RegisterComponent,
     HomeComponent,
     AuthNavbarComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent,
+    EmailConfirmationComponent,
   ],
   imports: [
     CommonModule,

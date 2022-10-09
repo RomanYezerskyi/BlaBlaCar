@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CarType } from 'src/app/core/enums/car-type';
@@ -14,16 +14,20 @@ import { PlaceSuggestionModel } from 'src/app/core/models/autocomplete-models/pl
   styleUrls: ['./add-trip.component.scss'],
 })
 export class AddTripComponent implements OnInit {
+
   @Input() trip: AddTripModel = {} as AddTripModel;
   @Output() tripOutput: EventEmitter<AddTripModel> = new EventEmitter<AddTripModel>;
   @Output() pageOutput: EventEmitter<number> = new EventEmitter<number>;
+  dateNow: string = new Date().toISOString();
   message: string | undefined;
   invalidForm: boolean | undefined;
   data: any = []
   constructor() { }
   ngOnInit(): void {
+    console.log(this.dateNow);
   }
   navigateToAvailableSeats() {
+    console.log(this.trip);
     this.tripOutput.emit(this.trip);
     this.pageOutput.emit(2);
   }

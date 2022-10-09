@@ -22,6 +22,7 @@ export class AddAvailableSeatsComponent implements OnInit, OnDestroy {
   constructor(private tripService: TripService) { }
 
   ngOnInit(): void {
+    console.log(this.trip);
   }
   ngOnDestroy(): void {
     this.unsubscribe$.next();
@@ -72,8 +73,10 @@ export class AddAvailableSeatsComponent implements OnInit, OnDestroy {
         alert("Add cars!");
         return;
       }
-      this.trip.startTime = new Date(this.trip.startTime!).toDateString();
-      this.trip.endTime = new Date(this.trip.endTime!).toDateString();
+      // console.log(this.trip);
+      this.trip.startTime = this.trip.startTime?.toLocaleString();
+      this.trip.endTime = this.trip.endTime?.toLocaleString();
+      // console.log(this.trip);
       this.tripService.addNewtrip(this.trip).pipe(takeUntil(this.unsubscribe$)).subscribe(
         response => {
           console.log(response)

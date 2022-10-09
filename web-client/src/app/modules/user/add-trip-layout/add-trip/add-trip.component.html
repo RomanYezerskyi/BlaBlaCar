@@ -39,16 +39,32 @@
         </mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field> -->
-      <div class="form_item">
+
+      <!-- <div class="form_item">
         <label for="startTime" class="sr-only">startTime</label>
-        <input type="datetime-local" id="startTime" name="startTime" [(ngModel)]="trip.startTime" class="form-control"
-          placeholder="startTime" required>
-      </div>
-      <div class="form_item">
+        <input type="datetime-local" id="startTime" min="{{dateNow}}" name="startTime" 
+          class="form-control" placeholder="startTime" required>
+      </div> -->
+
+      <mat-form-field>
+        <input matInput [ngxMatDatetimePicker]="picker" placeholder="Choose a date" [min]="dateNow"
+          [(ngModel)]="trip.startTime" name="startTime" id="startTime">
+        <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #picker>
+        </ngx-mat-datetime-picker>
+      </mat-form-field>
+      <!-- <div class="form_item">
         <label for="endTime" class="sr-only">endTime</label>
         <input type="datetime-local" id="endTime" name="endTime" [(ngModel)]="trip.endTime" class="form-control"
           placeholder="endTime" required>
-      </div>
+      </div> -->
+      <mat-form-field>
+        <input matInput [ngxMatDatetimePicker]="picker1" placeholder="Choose a date" [min]="dateNow" id="endTime"
+          name="endTime" [(ngModel)]="trip.endTime">
+        <mat-datepicker-toggle matSuffix [for]="$any(picker1)"></mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #picker1>
+        </ngx-mat-datetime-picker>
+      </mat-form-field>
     </div>
     <div class="form_item area">
       <mat-form-field class="input__item" appearance="outline">

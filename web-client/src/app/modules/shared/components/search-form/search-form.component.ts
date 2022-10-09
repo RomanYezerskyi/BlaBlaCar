@@ -12,6 +12,7 @@ import { SearchTripModel } from 'src/app/core/models/trip-models/search-trip-mod
 })
 export class SearchFormComponent implements OnInit {
   @Input() trip: SearchTripModel = { countOfSeats: 1 } as SearchTripModel;
+  dateNow: string = new Date().toISOString();
   counterActive: boolean = false;
   constructor(private router: Router,) { }
 

@@ -1,11 +1,12 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { RegisterModel } from 'src/app/core/models/auth-models/register-model';
 import { AuthService } from 'src/app/core/services/auth-service/auth-service.service';
 import { PasswordValidatorService } from 'src/app/core/services/password-validator/password-validator.service';
+import { environment } from 'src/environments/environment';
 import { AlertsComponent } from '../../shared/components/alerts/alerts.component';
 
 
@@ -17,6 +18,8 @@ import { AlertsComponent } from '../../shared/components/alerts/alerts.component
 export class RegisterComponent implements OnInit, OnDestroy {
   @ViewChild(AlertsComponent)
   private alertsComponent: AlertsComponent = new AlertsComponent;
+  @ViewChild('registerFormDiv') registerForm!: ElementRef;
+  @ViewChild('login') login!: ElementRef;
   private unsubscribe$: Subject<void> = new Subject<void>();
   credentials: RegisterModel = {} as RegisterModel;
   form: FormGroup = new FormGroup({});
@@ -44,15 +47,17 @@ export class RegisterComponent implements OnInit, OnDestroy {
     return this.form.controls;
   }
   register(form: FormGroupDirective): void {
-
+    this.credentials.clientURI = environment.emailConfirmation;
     if (form.valid) {
       this.authService.Register(this.credentials).pipe(takeUntil(this.unsubscribe$)).subscribe(
         response => {
-          console.log(response);
+          this.registerForm.nativeElement.style.display = 'none';
+          this.login.nativeElement.style.margin = 'auto';
+          this.alertsComponent.showSuccessMessages("You have successfully registered!\n Now go to your email and verify it", 10000);
         },
         (error: HttpErrorResponse) => {
           console.log(error.error);
-          this.alertsComponent.showError("Something went wrong! Try again!");
+          this.alertsComponent.showError(error.error, 10000);
         }
       )
     }

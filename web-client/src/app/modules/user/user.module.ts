@@ -41,7 +41,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserNavbarComponent } from './user-navbar/user-navbar.component';
-
+import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 
 
 @NgModule({
@@ -96,7 +96,11 @@ import { UserNavbarComponent } from './user-navbar/user-navbar.component';
     MatProgressSpinnerModule,
     LightgalleryModule,
     MatAutocompleteModule,
-    MatTooltipModule
+    MatTooltipModule,
+
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
+    NgxMatNativeDateModule,
 
   ]
 })

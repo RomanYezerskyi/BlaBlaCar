@@ -9,6 +9,8 @@
         <h5>Don't have an account?</h5>
         <button class="btn" type="submit" routerLink="/auth/register">Sing
           up</button>
+        <!-- <button class="btn" type="submit" >Sing
+          up</button> -->
       </div>
       <form #loginForm="ngForm" class="form" (ngSubmit)="login(loginForm)">
         <mat-form-field class="example-full-width" appearance="outline">
@@ -33,6 +35,7 @@
         </mat-form-field>
         <button class="btn" type="submit" [disabled]="!passwordFormControl.valid || !emailFormControl.valid">Log
           in</button>
+        <h6 class="forgot-password" routerLink="/auth/forgotpassword">Fogot password?</h6>
       </form>
     </div>
   </div>

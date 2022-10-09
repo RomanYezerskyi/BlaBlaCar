@@ -1,12 +1,15 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using EmailService.Models;
+using EmailService.Services;
 using IdentityModel;
 using IdentityServerJWT.API.Models;
 using IdentityServerJWT.API.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.IdentityModel.Tokens;
 
 namespace IdentityServerJWT.API.Controllers
@@ -55,6 +58,54 @@ namespace IdentityServerJWT.API.Controllers
                 return BadRequest(e.Message);
             }
         }
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordModel model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest();
+                await _authorizationService.GenerateForgotPasswordTokenAsync(model);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+           
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest();
+                await _authorizationService.ResetPasswordAsync(model);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+           
+        }
+
+        [HttpGet("email-confirmation")]
+        public async Task<IActionResult> EmailConfirmation([FromQuery] string email, [FromQuery] string token)
+        {
+            try
+            {
+                await _authorizationService.EmailConfirmationAsync(email, token);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpPost("logout")]
         public async Task<IActionResult> LogOut()
         {
