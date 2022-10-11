@@ -22,14 +22,17 @@ export class UserBookedTripsComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject<void>();
   trips: TripsResponseModel = { totalTrips: 0, trips: [] = [] };
   public isFullListDisplayed: boolean = false;
-  totalTrips: number = 0;
-  private Skip: number = 0;
-  private Take: number = 5;
+  totalTrips!: number;
+  private Skip!: number;
+  private Take!: number;
   constructor(
     private tripService: TripService, private router: Router,
     private imgSanitaze: ImgSanitizerService, private chatService: ChatService, private mapsService: MapsService) { }
 
   ngOnInit(): void {
+    this.totalTrips = 0;
+    this.Skip = 0;
+    this.Take = 5;
     this.getUserBookedTrips();
   }
   ngOnDestroy(): void {
@@ -69,7 +72,7 @@ export class UserBookedTripsComponent implements OnInit, OnDestroy {
   deleteBookedTrip(trip: TripModel): void {
     this.tripService.deleteBookedTrip(trip).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        this.ngOnInit();
+        this.trips.trips = this.trips.trips.filter(x => x.id != trip.id);
       },
       (error: HttpErrorResponse) => { console.log(error.error); }
     );

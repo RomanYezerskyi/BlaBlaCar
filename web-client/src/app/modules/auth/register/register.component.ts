@@ -22,29 +22,32 @@ export class RegisterComponent implements OnInit, OnDestroy {
   @ViewChild('login') login!: ElementRef;
   private unsubscribe$: Subject<void> = new Subject<void>();
   credentials: RegisterModel = {} as RegisterModel;
-  form: FormGroup = new FormGroup({});
-  constructor(private router: Router, private http: HttpClient, private fb: FormBuilder,
-    private validator: PasswordValidatorService, private authService: AuthService) {
-    this.form = fb.group({
-      password: ['', [Validators.required]],
-      confirm_password: ['', [Validators.required]],
-      userName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', [Validators.required]],
-    }, {
-      validator: this.validator.ConfirmedPasswordValidator('password', 'confirm_password')  // this.ConfirmedPasswordValidator('password', 'confirm_password')
-    });
+  form!: FormGroup;
+  constructor(private validator: PasswordValidatorService, private authService: AuthService) {
   }
 
   ngOnInit(): void {
-    // this.alertsComponent.showError("aa");
+
+    this.form = new FormGroup({
+      password: new FormControl(['', [Validators.required]]),
+      confirmPassword: new FormControl(['']),
+      userName: new FormControl(['', [Validators.required]]),
+      email: new FormControl(['', [Validators.required, Validators.email]]),
+      phoneNumber: new FormControl(['', [Validators.required]]),
+    });
+    this.form.get('confirmPassword')!.setValidators([Validators.required,
+    this.validator.validateConfirmPassword(this.form.get('password')!)!]);
+
   }
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
-  get formData() {
-    return this.form.controls;
+  public validateControl = (controlName: string) => {
+    return this.form.get(controlName)?.invalid && this.form.get(controlName)?.touched;
+  }
+  public hasError = (controlName: string, errorName: string) => {
+    return this.form.get(controlName)?.hasError(errorName);
   }
   register(form: FormGroupDirective): void {
     this.credentials.clientURI = environment.emailConfirmation;

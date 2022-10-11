@@ -46,6 +46,7 @@ export class ForgotPasswordComponent implements OnInit {
         error: (err: HttpErrorResponse) => {
           this.showError = true;
           this.errorMessage = err.error;
+          // console.log(err);
           ;
         }
       })

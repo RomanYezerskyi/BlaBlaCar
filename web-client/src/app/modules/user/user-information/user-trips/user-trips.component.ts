@@ -72,7 +72,9 @@ export class UserTripsComponent implements OnInit, OnDestroy {
     };
     this.tripService.deleteUserFromTrip(tripUser).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        this.ngOnInit();
+        this.trips.trips.forEach(x => {
+          if (x.id == tripId) { x.tripUsers = x.bookedTripUsers.filter(u => u.userId != userId); }
+        });
       },
       (error: HttpErrorResponse) => { console.log(error.error); }
     );
@@ -81,23 +83,22 @@ export class UserTripsComponent implements OnInit, OnDestroy {
   deleteTrip(id: number): void {
     this.tripService.deleteTrip(id).pipe().subscribe(
       response => {
-        this.Skip = 0;
-        this.totalTrips = 0;
-        this.getUserTrips();
-
+        // this.Skip = 0;
+        // this.totalTrips = 0;
+        // this.getUserTrips();
+        this.trips.trips = this.trips.trips.filter(x => x.id != id);
       },
       (error: HttpErrorResponse) => { console.log(error.error); }
     );
   }
   isTripCompleted(endDate: Date): boolean {
-
     if (new Date(endDate) < new Date()) return true;
     return false
   }
   getChat(userId: string) {
     this.chatService.GetPrivateChat(userId).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        this.router.navigate(['/chat'], {
+        this.router.navigate(['chat'], {
           queryParams: {
             chatId: response
           }

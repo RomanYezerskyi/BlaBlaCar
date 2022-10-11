@@ -5,8 +5,8 @@ export interface AddTripModel {
     startLon?: number;
     endLat?: number;
     endLon?: number;
-    startPlace?: string;
-    endPlace?: string;
+    // startPlace?: string;
+    // endPlace?: string;
     startTime?: Date | string;
     endTime?: Date | string;
     pricePerSeat?: number;

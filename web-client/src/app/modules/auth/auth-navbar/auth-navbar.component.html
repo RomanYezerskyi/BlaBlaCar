@@ -10,7 +10,7 @@
                 </ul>
             </div>
         </div>
-        <div class="navbar-section-main actions" *ngIf="!isUserAuthenticated()">
+        <div class="navbar-section-main actions" *ngIf="!isUserAuthenticated(); else elseBlock">
             <ul class="navbar-nav">
                 <li class="nav-item"><button class="btn btn-main" routerLink="login">Log in</button></li>
                 <li class="nav-item"><button class="btn btn-secondary" routerLink="register">Sing up</button></li>
@@ -19,5 +19,14 @@
 
             </ul>
         </div>
+        <ng-template #elseBlock>
+            <div class="navbar-section-main actions">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><button class="btn btn-main" routerLink="/user/profile">Profile</button></li>
+
+
+                </ul>
+            </div>
+        </ng-template>
     </nav>
 </div>

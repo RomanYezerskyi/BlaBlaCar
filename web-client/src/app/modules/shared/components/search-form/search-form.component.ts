@@ -48,13 +48,11 @@ export class SearchFormComponent implements OnInit {
     this.trip.startLat = value.data.lat;
     this.trip.startLon = value.data.lon;
     this.trip.startPlace = value.data.formatted
-    console.log(value.data.lat);
   }
   endPlaceChanged(value: PlaceSuggestionModel) {
     this.trip.endLat = value.data.lat;
     this.trip.endLon = value.data.lon;
     this.trip.endPlace = value.data.formatted
-    console.log(value);
   }
 }
 

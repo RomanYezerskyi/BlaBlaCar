@@ -15,8 +15,8 @@
         <div class="search_item" *ngFor="let trip of trips.trips" (click)="navigateToTripPage(trip.id)">
             <div class="header">
                 <div class="time">
-                    <p>{{trip.startTime | date:'hh:mm'}}</p>
-                    <p>{{trip.endTime | date:'hh:mm'}}</p>
+                    <p>{{trip.startTime | date:'MMM d, y, h:mm a'}}</p>
+                    <p>{{trip.endTime | date:'MMM d, y, h:mm a'}}</p>
                 </div>
                 <div class="line">
                 </div>

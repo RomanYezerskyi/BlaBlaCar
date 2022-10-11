@@ -31,6 +31,10 @@ export class SearchTripComponent implements OnInit {
         this.trip.endPlace = params['endPlace'];
         this.trip.startTime = new Date(params['startTime']);
         this.trip.countOfSeats = params['seats'];
+        this.trip.startLat = params['startLat'];
+        this.trip.startLon = params['startLon'];
+        this.trip.endLat = params['endLat'];
+        this.trip.endLon = params['endLon'];
         if (params['orderBy']) {
           this.trip.orderBy = params['orderBy'];
         }

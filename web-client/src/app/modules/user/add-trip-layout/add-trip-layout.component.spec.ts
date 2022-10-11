@@ -8,9 +8,9 @@ describe('AddTripLayoutComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddTripLayoutComponent ]
+      declarations: [AddTripLayoutComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(AddTripLayoutComponent);
     component = fixture.componentInstance;

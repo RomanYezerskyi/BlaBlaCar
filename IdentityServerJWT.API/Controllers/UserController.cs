@@ -22,7 +22,7 @@ namespace IdentityServerJWT.API.Controllers
         }
 
         [HttpGet("roles")]
-        [Authorize(Roles = "blablacar.admin")]
+        [Authorize(Roles = Constants.AdminRole)]
         public async Task<IActionResult> Roles()
         {
             try
@@ -37,7 +37,7 @@ namespace IdentityServerJWT.API.Controllers
 
         }
         [HttpGet("admins")]
-        [Authorize(Roles = "blablacar.admin")]
+        [Authorize(Roles = Constants.AdminRole)]
         public async Task<IActionResult> GetAdmins()
         {
             try
@@ -52,7 +52,7 @@ namespace IdentityServerJWT.API.Controllers
 
         }
         [HttpGet("{email}")]
-        [Authorize(Roles = "blablacar.admin")]
+        [Authorize(Roles = Constants.AdminRole)]
         public async Task<IActionResult> GetUser(string email)
         {
             try
@@ -67,7 +67,7 @@ namespace IdentityServerJWT.API.Controllers
            
         }
         [HttpPost]
-        [Authorize(Roles = "blablacar.admin")]
+        [Authorize(Roles = Constants.AdminRole)]
         public async Task<IActionResult>ChangeRole(UserChangeRoleModel roleModel)
         {
 

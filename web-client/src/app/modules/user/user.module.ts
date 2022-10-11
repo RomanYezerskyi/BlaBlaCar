@@ -16,9 +16,7 @@ import { DialogBookingConfirmationComponent } from './trip-page-info/dialog-book
 import { SortingPanelComponent } from './search-trip/sorting-panel/sorting-panel.component';
 import { TripsComponent } from './search-trip/trips/trips.component';
 import { SearchTripComponent } from './search-trip/search-trip.component';
-import { AddTripComponent } from './add-trip-layout/add-trip/add-trip.component';
 import { AddTripLayoutComponent } from './add-trip-layout/add-trip-layout.component';
-import { AddAvailableSeatsComponent } from './add-trip-layout/add-available-seats/add-available-seats.component';
 import { PageAccessGuard } from 'src/app/core/guards/page-access/page-access.guard';
 import { UserGuard } from 'src/app/core/guards/user-guard/user-exist.guard';
 import { RequestDrivingLicenseComponent } from './user-profile/request-driving-license/request-driving-license.component';
@@ -42,7 +40,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserNavbarComponent } from './user-navbar/user-navbar.component';
 import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
-
+import { MatStepperModule } from '@angular/material/stepper';
 
 @NgModule({
   declarations: [
@@ -60,13 +58,11 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
     SortingPanelComponent,
     TripsComponent,
     SearchTripComponent,
-    AddTripComponent,
     AddTripLayoutComponent,
-    AddAvailableSeatsComponent,
     EditModalDialogComponent,
     UserNavbarComponent,
   ],
-  providers: [AuthGuard, PageAccessGuard, UserGuard],
+  providers: [AuthGuard, PageAccessGuard, UserGuard,],
   entryComponents: [
     DialogBookingConfirmationComponent,
     EditCarModalDialogComponent,
@@ -101,6 +97,8 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
     NgxMatNativeDateModule,
+
+    MatStepperModule
 
   ]
 })

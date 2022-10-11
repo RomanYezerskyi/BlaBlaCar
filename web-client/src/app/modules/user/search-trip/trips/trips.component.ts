@@ -61,7 +61,7 @@ export class TripsComponent implements OnInit, OnDestroy {
 
   navigateToTripPage(id: number): void {
     const url = this.router.serializeUrl(
-      this.router.createUrlTree(['trip-page-info', id], { queryParams: { requestedSeats: this.trip.countOfSeats } })
+      this.router.createUrlTree(['/user/trip-page-info', id], { queryParams: { requestedSeats: this.trip.countOfSeats } })
     );
     window.open(url, '_blank');
   }
@@ -91,7 +91,6 @@ export class TripsComponent implements OnInit, OnDestroy {
     this.tripService.SearchTrip(this.trip).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         this.isSpinner = false;
-        console.log(response);
         if (response != null) {
           response.trips.forEach(x => { x.startLat! > 0 ? this.getPlaces(x) : x; })
           if (event != undefined) {
@@ -106,7 +105,7 @@ export class TripsComponent implements OnInit, OnDestroy {
         }
         else { this.isTrips = false; }
       },
-      (error: HttpErrorResponse) => { console.error(error.error); }
+      (error: HttpErrorResponse) => { console.error(error.error); this.isSpinner = false; }
     );
 
   }
@@ -122,7 +121,6 @@ export class TripsComponent implements OnInit, OnDestroy {
         }
       });
       trip.startPlace = placeSuggestions[0].data.city;
-      console.log(placeSuggestions);
     }, err => {
       console.log(err);
     });
@@ -137,7 +135,6 @@ export class TripsComponent implements OnInit, OnDestroy {
         }
       });
       trip.endPlace = placeSuggestions[0].data.city;
-      console.log(placeSuggestions);
     }, err => {
       console.log(err);
     });

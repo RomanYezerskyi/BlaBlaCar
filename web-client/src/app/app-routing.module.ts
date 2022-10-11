@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth-guard/auth.guard';
 import { AdminGuard } from './core/guards/admin-guard/admin.guard';
 import { IsUserGuard } from './core/guards/user-guard/isuser.guard';
+import { InfoPageComponent } from './modules/shared/components/info-page/info-page.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "auth/home", pathMatch: "full" },
@@ -20,6 +21,8 @@ const routes: Routes = [
     path: 'auth',
     loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule)
   },
+  { path: 'info', component: InfoPageComponent },
+  { path: '**', redirectTo: 'info' }
 ];
 
 @NgModule({

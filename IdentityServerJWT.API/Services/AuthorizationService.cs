@@ -93,7 +93,7 @@ namespace IdentityServerJWT.API.Services
             var message = new Message(new string[] { user.Email }, "Email Confirmation token", callback);
             await _emailSender.SendEmailAsync(message);
 
-            var result1 = await _userManager.AddToRoleAsync(user, "blablacar.user");
+            var result1 = await _userManager.AddToRoleAsync(user, Constants.UserRole);
 
             var roles = await _userManager.GetRolesAsync(user);
             var roleClaims = roles.Select(r => new Claim(JwtClaimTypes.Role, r));

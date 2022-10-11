@@ -12,7 +12,7 @@
           <input type="text" matInput placeholder="Ex. John Doe" id="UserName" name="UserName"
             formControlName="userName" [(ngModel)]="credentials.firstName" required>
           <mat-icon matSuffix> person</mat-icon>
-          <mat-error *ngIf="formData['userName'].touched && formData['userName'].invalid">
+          <mat-error *ngIf="validateControl('userName') && hasError('userName', 'required')">
             Name is <strong>required</strong>
           </mat-error>
         </mat-form-field>
@@ -21,21 +21,21 @@
           <input type="email" matInput placeholder="Ex. pat@example.com" id="email" name="email" formControlName="email"
             [(ngModel)]="credentials.email" required>
           <mat-icon matSuffix> email</mat-icon>
-          <mat-error *ngIf="formData['email'].touched && formData['email'].invalid">
-            <mat-error *ngIf="formData['email'].errors!['required']">
-              Email is <strong>required</strong>
-            </mat-error>
-            <mat-error *ngIf="formData['email'].errors!['email']">
-              Please enter a <strong>valid</strong> address
-            </mat-error>
+          <!-- <mat-error *ngIf="formData['email'].touched && formData['email'].invalid"> -->
+          <mat-error *ngIf="validateControl('email') && hasError('email', 'required')">
+            Email is <strong>required</strong>
           </mat-error>
+          <mat-error *ngIf="validateControl('email') && hasError('email', 'email')">
+            Please enter a <strong>valid</strong> address
+          </mat-error>
+          <!-- </mat-error> -->
         </mat-form-field>
         <mat-form-field class="example-full-width" appearance="outline">
           <mat-label>Phone number</mat-label>
           <input type="tel" matInput placeholder="Ex. +380(000)-00-00" id=" phoneNum" name="phoneNum"
             formControlName="phoneNumber" [(ngModel)]="credentials.phoneNum" required>
           <mat-icon matSuffix>phone_iphone</mat-icon>
-          <mat-error *ngIf="formData['phoneNumber'].touched && formData['phoneNumber'].invalid">
+          <mat-error *ngIf="validateControl('phoneNumber') && hasError('phoneNumber', 'required')">
             Phone number is <strong>required</strong>
           </mat-error>
         </mat-form-field>
@@ -44,21 +44,22 @@
           <input formControlName="password" id="password" type="password" [(ngModel)]="credentials.password" matInput
             required>
           <i class="material-icons" matSuffix>key</i>
-          <mat-error *ngIf="formData['password'].touched && formData['password'].invalid">
+          <mat-error *ngIf="validateControl('password') && hasError('password', 'required')">
             Password is <strong>required</strong>
           </mat-error>
         </mat-form-field>
         <mat-form-field class="example-full-width" appearance="outline">
           <mat-label>Confirm password</mat-label>
-          <input type="password" matInput formControlName="confirm_password" id="confirm_password" required>
+          <input type="password" matInput formControlName="confirmPassword" id="confirmPassword" required>
           <i class="material-icons" matSuffix>key</i>
-          <mat-error *ngIf="formData['confirm_password'].touched && formData['confirm_password'].invalid"
-            class="alert alert-danger">
-            <mat-error *ngIf="formData['confirm_password'].errors!['required']">Password is required.</mat-error>
-            <mat-error *ngIf="formData['confirm_password'].errors!['confirmedValidator']">
-              Password and Confirm Password<strong> must be match.</strong>
-            </mat-error>
+          <!-- <mat-error *ngIf="formData['confirm_password'].touched && formData['confirm_password'].invalid"
+            class="alert alert-danger"> -->
+          <mat-error *ngIf="validateControl('confirmPassword') && hasError('confirmPassword', 'required')">Password is
+            required.</mat-error>
+          <mat-error *ngIf="hasError('confirmPassword', 'mustMatch')">
+            Password and Confirm Password<strong> must be match.</strong>
           </mat-error>
+          <!-- </mat-error> -->
         </mat-form-field>
         <button class="btn" type="submit" [disabled]="!registerForm.valid">Register</button>
       </form>
