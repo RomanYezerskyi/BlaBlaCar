@@ -27,9 +27,7 @@ namespace BlaBlaCar.API.Controllers
         public async Task<IActionResult> GetRequests([FromQuery] int take,[FromQuery] int skip,[FromQuery] UserStatusDTO status)
         {
             var res = await _adminService.GetRequestsAsync(take, skip, status);
-            if (res.Users.Any()) return Ok(res);
-            return NoContent();
-          
+            return Ok(res);
         }
         
         [HttpPatch("user/status")]

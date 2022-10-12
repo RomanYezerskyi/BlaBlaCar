@@ -14,6 +14,7 @@ namespace BlaBlaCar.BL.DTOs.NotificationDTOs
         public UserDTO? User { get; set; }
         public NotificationStatusDTO? NotificationStatus { get; set; }
         public Guid? FeedBackOnUser { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; }
         public ICollection<ReadNotificationsDTO>? ReadNotifications { get; set; }
     }
 }

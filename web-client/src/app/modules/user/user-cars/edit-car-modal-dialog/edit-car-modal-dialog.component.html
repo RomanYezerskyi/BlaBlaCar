@@ -25,16 +25,6 @@
                     Registration number is <strong>required</strong>
                 </mat-error>
             </mat-form-field>
-            <!-- <mat-form-field class="form-item" appearance="outline">
-            <mat-label>Count of seats</mat-label>
-           
-            <input matInput type="number" min="1" id=" countOfSeats" name="countOfSeats"
-                [(ngModel)]="updateCarModel.countOfSeats" placeholder="Ex. 4" required>
-            <mat-icon matSuffix>airline_seat_recline_normal</mat-icon>
-            <mat-error *ngIf="CarFormControl.hasError('required')">
-                Count of seats is <strong>required</strong>
-            </mat-error>
-        </mat-form-field> -->
             <mat-form-field class="form-item" appearance="outline">
                 <mat-label>Car type</mat-label>
                 <mat-select name="carId" id="carId" [(ngModel)]="updateCarModel.carType" required>

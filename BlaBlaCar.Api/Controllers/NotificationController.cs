@@ -68,5 +68,11 @@ namespace BlaBlaCar.API.Controllers
             await _notificationService.AddFeedBack(feedback, UserId);
             return NoContent();
         }
+        [HttpGet("user-feedbacks")]
+        public async Task<IActionResult> CreateFeedBack([FromQuery] int take, [FromQuery] int skip)
+        {
+            var result = await _notificationService.GetUserFeedBacks(UserId, take, skip);
+            return Ok(result);
+        }
     }
 }

@@ -7,20 +7,19 @@ import { first, Subject, takeUntil } from 'rxjs';
 import { AlertsComponent } from '../../shared/components/alerts/alerts.component';
 import { LoginModel } from 'src/app/core/models/auth-models/login-model';
 import { UserService } from 'src/app/core/services/user-service/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  @ViewChild(AlertsComponent)
-  private alertsComponent: AlertsComponent = new AlertsComponent;
   private unsubscribe$: Subject<void> = new Subject<void>();
   credentials: LoginModel = { email: '', password: '' };
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   passwordFormControl = new FormControl('', [Validators.required]);
   returnUrl: string | undefined;
-  constructor(private router: Router,
+  constructor(private router: Router, private _snackBar: MatSnackBar,
     private route: ActivatedRoute,
     private authService: AuthService, private userService: UserService) { }
 
@@ -42,9 +41,11 @@ export class LoginComponent implements OnInit, OnDestroy {
             if (this.returnUrl)
               this.router.navigateByUrl(this.returnUrl!);
           },
-          (error: HttpErrorResponse) => { this.alertsComponent.showError(error.error) }
+          (error: HttpErrorResponse) => { this.openSnackBar(error.error); }
         )
     }
   }
-
+  private openSnackBar(message: string) {
+    this._snackBar.open(message, "Close");
+  }
 }

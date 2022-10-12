@@ -1,0 +1,34 @@
+<button class="btn-close" mat-button (click)=" closeDialog()"><i class="material-icons">highlight_remove</i></button>
+
+<mat-dialog-content>
+
+    <div class="" *ngIf="feedBacks.length > 0; else elseBlock">
+        <h3 class="title">Feedback on your trips</h3>
+        <div class="container">
+            <div class="feedbacks" *ngFor="let feedback of feedBacks">
+                <div class="icon">
+                    <i class="material-icons">feedback</i>
+                </div>
+                <div class="text-info">
+                    <div class="rate">
+                        <i class="material-icons" *ngFor="let item of [].constructor(feedback.rate)">star_rate</i>
+                        <!-- {{feedback.rate}} -->
+                    </div>
+                    <p class="text">
+                        {{feedback.text}}
+                    </p>
+                    <p class="date">
+                        {{feedback.createdAt | date:'MMM d, y, h:mm a'}}
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <ng-template #elseBlock>
+        <h3 class="title else-title">Unfortunately, no one has rated your trips yet!</h3>
+    </ng-template>
+    <div class="notification_dropdown__footer">
+        <button mat-button (click)="loadMore()">Load more</button>
+    </div>
+</mat-dialog-content>

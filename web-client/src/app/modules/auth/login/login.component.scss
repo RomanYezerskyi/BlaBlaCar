@@ -2,15 +2,6 @@
     position: relative;
 }
 
-app-alerts {
-    width: 325px;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: -95px;
-    z-index: 3;
-}
-
 .login-form {
     border-radius: 10px;
     display: flex;

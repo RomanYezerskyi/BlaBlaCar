@@ -4,7 +4,7 @@
         <h2 class="title">{{title}}</h2>
 
 
-        <div class="rate">
+        <div class="rate" *ngIf="notification.notificationStatus ==  4">
             <input type="radio" id="star5" name="rate" value="5" />
             <label for="star5" (click)="rate(5)" title="text">5 stars</label>
             <input type="radio" id="star4" name="rate" value="4" />
@@ -44,19 +44,7 @@
                 </mat-error>
             </mat-form-field>
 
-            <button class="btn" type="submit"
-                [ngStyle]="{'display':notificationStatus == true || notificationStatus == false?'none':'inline-block'}"
-                [disabled]="!textFormControl.valid">Send</button>
-            <button class="btn-status btn-success" [ngStyle]="{'display':notificationStatus?'flex':'none'}"
-                [disabled]="true">
-                <i class="material-icons">check</i>
-                <p>Success</p>
-            </button>
-            <button class="btn-status btn-error" [ngStyle]="{'display':notificationStatus == false?'flex':'none'}"
-                [disabled]="true">
-                <i class="material-icons">check</i>
-                <p><strong>Error!</strong> Try again later!</p>
-            </button>
+            <button class="btn" type="submit" [disabled]="!textFormControl.valid">Send</button>
         </form>
     </div>
 </mat-dialog-content>

@@ -9,6 +9,7 @@ import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-servi
 import { MessageStatus } from 'src/app/core/enums/message-status';
 import { MessageModel } from 'src/app/core/models/chat-models/message-model';
 import { SignalRService } from 'src/app/core/services/signalr-services/signalr.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-chat',
@@ -29,7 +30,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   constructor(private route: ActivatedRoute,
     private chatService: ChatService,
     private sanitizeImgService: ImgSanitizerService,
-    private router: Router,
+    private _snackBar: MatSnackBar,
     private signal: SignalRService) {
     this.route.queryParams.subscribe(params => {
       if (params['chatId']) {
@@ -157,8 +158,12 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.chatService.createMessage(message).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         console.log(response);
+        this.text = '';
       },
-      (error: HttpErrorResponse) => { console.error(error.error); }
+      (error: HttpErrorResponse) => { console.error(error.error); this.openSnackBar(error.error); }
     );
+  }
+  private openSnackBar(message: string) {
+    this._snackBar.open(message, "Close");
   }
 }

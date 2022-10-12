@@ -9,5 +9,6 @@ namespace BlaBlaCar.BL.DTOs.NotificationDTOs
         public NotificationsDTO Notification { get; set; }
         public Guid UserId { get; set; }
         public UserDTO User { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; }
     }
 }

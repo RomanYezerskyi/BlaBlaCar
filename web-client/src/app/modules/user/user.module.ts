@@ -41,6 +41,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserNavbarComponent } from './user-navbar/user-navbar.component';
 import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 import { MatStepperModule } from '@angular/material/stepper';
+import { FeedBacksComponent } from './feed-backs/feed-backs.component';
+import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -61,13 +63,15 @@ import { MatStepperModule } from '@angular/material/stepper';
     AddTripLayoutComponent,
     EditModalDialogComponent,
     UserNavbarComponent,
+    FeedBacksComponent,
   ],
-  providers: [AuthGuard, PageAccessGuard, UserGuard,],
+  providers: [AuthGuard, PageAccessGuard, UserGuard, { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 5000 } }],
   entryComponents: [
     DialogBookingConfirmationComponent,
     EditCarModalDialogComponent,
     RequestDrivingLicenseComponent,
     EditModalDialogComponent,
+    FeedBacksComponent,
   ],
   imports: [
     CommonModule,
@@ -98,7 +102,9 @@ import { MatStepperModule } from '@angular/material/stepper';
     NgxMatTimepickerModule,
     NgxMatNativeDateModule,
 
-    MatStepperModule
+    MatStepperModule,
+
+    MatSnackBarModule
 
   ]
 })

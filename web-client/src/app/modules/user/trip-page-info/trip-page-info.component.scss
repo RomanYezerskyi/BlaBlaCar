@@ -16,7 +16,25 @@
 }
 
 .container .header {
-    justify-content: center;
+    display: flex;
+    margin: 20px 0;
+    // justify-content: center;
+}
+
+.start,
+.destination {
+    display: flex;
+
+    .item_icon {
+        margin-right: 10px;
+    }
+}
+
+.line {
+    margin: 0 10px;
+    height: 55px;
+    width: 2px;
+    background-color: #000;
 }
 
 .date {
@@ -79,12 +97,14 @@
 }
 
 .btn_continue {
-    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 10%) !important;
-    background: teal;
-    color: white;
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 6%) !important;
+    color: #000;
     font-size: 20px;
     margin: 10px;
-    width: 100%;
+    // width: 100%;
+    margin: 10px auto;
+    padding: 7px 20px;
+    background-color: #ccc;
 }
 
 .owner-info {

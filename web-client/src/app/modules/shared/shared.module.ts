@@ -31,7 +31,7 @@ import { RouterModule } from '@angular/router';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SearchFormComponent } from './components/search-form/search-form.component';
 import { MapsAutocompleteComponent } from './components/maps-autocomplete/maps-autocomplete.component';
-
+import { MatSnackBar, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 
 
 
@@ -75,7 +75,7 @@ import { MapsAutocompleteComponent } from './components/maps-autocomplete/maps-a
     MatProgressSpinnerModule,
     LightgalleryModule,
     MatAutocompleteModule,
-    MatTooltipModule
+    MatTooltipModule,
 
 
 
@@ -84,26 +84,8 @@ import { MapsAutocompleteComponent } from './components/maps-autocomplete/maps-a
   ],
   entryComponents: [/*DialogBookingConfirmationComponent*/
     CreateNotificationDialogComponent, /*EditModalDialogComponent,*/ /*EditCarModalDialogComponent,*/ /*RequestDrivingLicenseComponent*/],
+
   exports: [
-    // MatDialogModule,
-    // MatToolbarModule,
-    // MatButtonModule,
-    // MatIconModule,
-    // InfiniteScrollModule,
-    // MatFormFieldModule,
-    // MatInputModule,
-    // MatSelectModule,
-    // MatRippleModule,
-    // NgxMatFileInputModule,
-    // MatNativeDateModule,
-    // MatDatepickerModule,
-    // MatRadioModule,
-    // MatProgressSpinnerModule,
-    // LightgalleryModule,
-    // MatAutocompleteModule,
-    // MatTooltipModule,
-
-
     ImagesGalleryComponent,
     CreateNotificationDialogComponent,
     NotificationsComponent,

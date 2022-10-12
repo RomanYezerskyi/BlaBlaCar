@@ -32,7 +32,8 @@
         <p>{{trip.pricePerSeat*requestedSeats | currency:"UAH":"symbol"}}</p>
     </div>
     <div class="horizontal_line"></div>
-    <div class="owner-info" *ngIf="trip.userPermission == userPermission.canSeeTheOwnersData">
+    <div class="owner-info"
+        *ngIf="trip.userPermission == userPermission.canSeeTheOwnersData || trip.userPermission == userPermission.owner">
         <p>Tel:{{trip.user?.phoneNumber}}</p>
         <!-- <div class="chat">
             <p>Chat with {{trip.user?.firstName}}</p>
@@ -44,7 +45,7 @@
     </div> -->
     <div class="horizontal_line"></div>
     <div class="user">
-        <i class="material-icons" *ngIf="trip.userPermission == userPermission.canSeeTheOwnersData"
+        <i class="material-icons" *ngIf="trip.userPermission == userPermission.canSeeTheOwnersData "
             (click)="getChat(trip.user!.id)">chat</i>
         <div class="user_img">
             <img [src]="sanitizeUserImg(trip.user?.userImg!)" alt="" class="img">

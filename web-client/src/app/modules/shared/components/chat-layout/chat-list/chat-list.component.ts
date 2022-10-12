@@ -104,21 +104,12 @@ export class ChatListComponent implements OnInit, OnDestroy {
     );
   }
   goToChat(chatId: string) {
-    console.log(this.role);
-    if (this.role == 'blablacar.user') {
-      this.router.navigate(['/chat'], {
-        queryParams: {
-          chatId: chatId
-        }
-      });
-    }
-    else {
-      this.router.navigate(['admin/chat'], {
-        queryParams: {
-          chatId: chatId
-        }
-      });
-    }
+    console.log(this.router);
+    this.router.navigate([this.router.url.split('?')[0]], {
+      queryParams: {
+        chatId: chatId
+      }
+    });
   }
   sanitizeImg(img: string): SafeUrl {
     return this.sanitizeImgService.sanitiizeUserImg(img);

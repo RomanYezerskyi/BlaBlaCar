@@ -1,6 +1,7 @@
 import { HttpErrorResponse, } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, NgForm, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { CarType } from 'src/app/core/enums/car-type';
@@ -21,6 +22,7 @@ export class AddCarComponent implements OnInit, OnDestroy {
   fileControl: FormControl;
   public files: any;
   constructor(
+    private _snackBar: MatSnackBar,
     private carService: CarService,
     private router: Router) {
     this.fileControl = new FormControl(this.files, [
@@ -55,11 +57,15 @@ export class AddCarComponent implements OnInit, OnDestroy {
       this.formData.append("CountOfSeats", this.newCar.countOfSeats.toString());
       this.carService.addCar(this.formData).pipe(takeUntil(this.unsubscribe$)).subscribe(
         response => {
+          this.openSnackBar("Car saved!")
           this.router.navigate(['/profile']);
         },
         (error: HttpErrorResponse) => { console.error(error.error); }
       );
     }
+  }
+  private openSnackBar(message: string) {
+    this._snackBar.open(message, "Close");
   }
 }
 

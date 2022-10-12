@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { RegisterModel } from 'src/app/core/models/auth-models/register-model';
@@ -16,14 +17,12 @@ import { AlertsComponent } from '../../shared/components/alerts/alerts.component
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit, OnDestroy {
-  @ViewChild(AlertsComponent)
-  private alertsComponent: AlertsComponent = new AlertsComponent;
   @ViewChild('registerFormDiv') registerForm!: ElementRef;
   @ViewChild('login') login!: ElementRef;
   private unsubscribe$: Subject<void> = new Subject<void>();
   credentials: RegisterModel = {} as RegisterModel;
   form!: FormGroup;
-  constructor(private validator: PasswordValidatorService, private authService: AuthService) {
+  constructor(private _snackBar: MatSnackBar, private validator: PasswordValidatorService, private authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -56,14 +55,17 @@ export class RegisterComponent implements OnInit, OnDestroy {
         response => {
           this.registerForm.nativeElement.style.display = 'none';
           this.login.nativeElement.style.margin = 'auto';
-          this.alertsComponent.showSuccessMessages("You have successfully registered!\n Now go to your email and verify it", 10000);
+          this.openSnackBar("You have successfully registered!\n Now go to your email and verify it");
         },
         (error: HttpErrorResponse) => {
           console.log(error.error);
-          this.alertsComponent.showError(error.error, 10000);
+          this.openSnackBar(error.error);
         }
       )
     }
+  }
+  private openSnackBar(message: string) {
+    this._snackBar.open(message, "Close");
   }
 
 }

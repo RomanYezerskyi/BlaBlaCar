@@ -12,6 +12,7 @@ import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-servi
 import { MapsService } from 'src/app/core/services/maps-service/maps.service';
 import { TripService } from 'src/app/core/services/trip-service/trip.service';
 import { GeocodingFeatureProperties } from 'src/app/core/models/autocomplete-models/place-suggestion-model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-booked-trips',
@@ -25,7 +26,7 @@ export class UserBookedTripsComponent implements OnInit, OnDestroy {
   totalTrips!: number;
   private Skip!: number;
   private Take!: number;
-  constructor(
+  constructor(private _snackBar: MatSnackBar,
     private tripService: TripService, private router: Router,
     private imgSanitaze: ImgSanitizerService, private chatService: ChatService, private mapsService: MapsService) { }
 
@@ -73,17 +74,18 @@ export class UserBookedTripsComponent implements OnInit, OnDestroy {
     this.tripService.deleteBookedTrip(trip).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         this.trips.trips = this.trips.trips.filter(x => x.id != trip.id);
+        this.openSnackBar("You have been removed from the trip!");
       },
-      (error: HttpErrorResponse) => { console.log(error.error); }
+      (error: HttpErrorResponse) => { console.log(error.error); this.openSnackBar(error.error); }
     );
   }
   deleteBookedSeat(tripUser: TripUserModel): void {
     this.tripService.deleteBookedSeat(tripUser).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         this.ngOnInit();
-        console.log(response)
+        this.openSnackBar(`You have canceled your seat ${tripUser.seat.seatNumber} reservation`);
       },
-      (error: HttpErrorResponse) => { console.log(error.error); }
+      (error: HttpErrorResponse) => { console.log(error.error); this.openSnackBar(error.error); }
     );
   }
   isTripCompleted(endDate: Date): boolean {
@@ -103,6 +105,9 @@ export class UserBookedTripsComponent implements OnInit, OnDestroy {
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
+  }
+  private openSnackBar(message: string) {
+    this._snackBar.open(message, "Close");
   }
   private getPlaces(trip: TripModel) {
     let text = `${trip.startLat}%20${trip.startLon}`;

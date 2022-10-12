@@ -32,6 +32,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminNavbarComponent } from './admin-navbar/admin-navbar.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 // import { CreateNotificationDialogComponent } from 'src/app/components/create-notification-dialog/create-notification-dialog.component';
 
 
@@ -74,7 +75,9 @@ import { AdminNavbarComponent } from './admin-navbar/admin-navbar.component';
     MatProgressSpinnerModule,
     LightgalleryModule,
     MatAutocompleteModule,
-    MatTooltipModule
+    MatTooltipModule,
+
+    MatSnackBarModule
   ]
 })
 export class AdminPageModule { }

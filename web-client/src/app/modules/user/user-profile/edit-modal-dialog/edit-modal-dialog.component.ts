@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserModel } from 'src/app/core/models/user-models/user-model';
 import { PasswordValidatorService } from 'src/app/core/services/password-validator/password-validator.service';
 import { UserService } from 'src/app/core/services/user-service/user.service';
@@ -20,6 +21,7 @@ export class EditModalDialogComponent implements OnInit {
   passwordForm: FormGroup = new FormGroup({});
   newPasswordModel = { userId: '', currentPassword: '', newPassword: '' };
   constructor(
+    private _snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<EditModalDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data: any,
     private fb: FormBuilder,
@@ -62,8 +64,9 @@ export class EditModalDialogComponent implements OnInit {
     this.userService.updateUserPassword(this.newPasswordModel).pipe().subscribe(
       response => {
         console.log(response)
+        this.openSnackBar("Password has been changed!");
       },
-      (error: HttpErrorResponse) => { console.log(error.error); }
+      (error: HttpErrorResponse) => { console.log(error.error); this.openSnackBar(error.error); }
     );
   }
   updateUser(form: FormGroupDirective) {
@@ -76,9 +79,13 @@ export class EditModalDialogComponent implements OnInit {
     }
     this.userService.updateUserInfo(userModel).pipe().subscribe(
       response => {
-        console.log(response)
+        console.log(response);
+        this.openSnackBar("Changes saved");
       },
-      (error: HttpErrorResponse) => { console.log(error.error); }
+      (error: HttpErrorResponse) => { console.log(error.error); this.openSnackBar(error.error); }
     );
+  }
+  private openSnackBar(message: string) {
+    this._snackBar.open(message, "Close");
   }
 }

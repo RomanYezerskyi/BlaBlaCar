@@ -28,6 +28,7 @@ import { AuthNavbarComponent } from './auth-navbar/auth-navbar.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { EmailConfirmationComponent } from './email-confirmation/email-confirmation.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -68,7 +69,9 @@ import { EmailConfirmationComponent } from './email-confirmation/email-confirmat
     MatProgressSpinnerModule,
     LightgalleryModule,
     MatAutocompleteModule,
-    MatTooltipModule
+    MatTooltipModule,
+
+    MatSnackBarModule
   ]
 })
 export class AuthModule { }

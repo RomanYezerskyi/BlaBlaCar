@@ -40,10 +40,14 @@ export class NotificationsService {
   }
   readNotifications(notifications: NotificationsModel[]): Observable<any> {
     const url = this.baseApiUrl + 'Notification/'
-    return this.http.put(url, notifications)
+    return this.http.put(url, notifications);
   }
   addFeedBack(feedback: FeedBackModel): Observable<any> {
     const url = this.baseApiUrl + 'Notification/feedback'
-    return this.http.post(url, feedback)
+    return this.http.post(url, feedback);
+  }
+  getUserFeedBacks(take: number = 0, skip: number = 0): Observable<FeedBackModel[]> {
+    const url = this.baseApiUrl + 'Notification/user-feedbacks'
+    return this.http.get<FeedBackModel[]>(url, { params: { take: take, skip: skip } });
   }
 }

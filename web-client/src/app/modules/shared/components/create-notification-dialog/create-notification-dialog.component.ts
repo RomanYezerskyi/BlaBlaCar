@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, NgForm, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, Subscription, takeUntil, timeout } from 'rxjs';
 import { NotificationStatus } from 'src/app/core/enums/notification-status';
 import { FeedBackModel } from 'src/app/core/models/notifications-models/feed-back-model';
@@ -21,8 +22,8 @@ export class CreateNotificationDialogComponent implements OnInit, OnDestroy {
   notification: NotificationsModel = {} as NotificationsModel;
   feedback: FeedBackModel = { rate: 0 } as FeedBackModel;
   onSubmitReason = new EventEmitter();
-  notificationStatus: boolean | null = null;
   constructor(
+    private _snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<CreateNotificationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data: any,
     private notificationsService: NotificationsService) {
@@ -46,11 +47,11 @@ export class CreateNotificationDialogComponent implements OnInit, OnDestroy {
     if (this.notification.notificationStatus == NotificationStatus.Global || this.notification.notificationStatus == NotificationStatus.SpecificUser) {
       this.notificationsService.createNotification(this.notification).pipe(takeUntil(this.unsubscribe$)).subscribe(
         response => {
-          console.log(response);
+          this.notification.text = '';
           this.onSubmitReason.emit();
-          this.notificationStatus = true;
+          this.openSnackBar("Notification sent!");
         },
-        (error: HttpErrorResponse) => { console.error(error.error); this.notificationStatus = false; }
+        (error: HttpErrorResponse) => { console.error(error.error); this.openSnackBar(error.error) }
       );
     }
     else if (this.notification.notificationStatus == NotificationStatus.FeedBack) {
@@ -60,13 +61,13 @@ export class CreateNotificationDialogComponent implements OnInit, OnDestroy {
         response => {
           console.log(response);
           this.onSubmitReason.emit();
-          this.notificationStatus = true;
+          this.openSnackBar("Feedback sent!");
           this.closeWithTimeOut();
         },
         (error: HttpErrorResponse) => {
           console.error(error.error);
-          this.notificationStatus = false;
           this.closeWithTimeOut();
+          this.openSnackBar(error.error);
         }
       );
     }
@@ -79,5 +80,8 @@ export class CreateNotificationDialogComponent implements OnInit, OnDestroy {
   }
   closeWithTimeOut(): void {
     setTimeout(() => this.close(), 2000);
+  }
+  private openSnackBar(message: string) {
+    this._snackBar.open(message, "Close");
   }
 }

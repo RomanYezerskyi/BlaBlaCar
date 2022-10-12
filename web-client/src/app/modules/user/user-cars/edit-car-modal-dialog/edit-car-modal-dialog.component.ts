@@ -7,6 +7,7 @@ import { CarService } from 'src/app/core/services/car-service/car.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CarUpdateModel } from 'src/app/core/models/car-models/car-update-model';
 import { Subject, takeUntil } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-edit-car-modal-dialog',
@@ -23,7 +24,9 @@ export class EditCarModalDialogComponent implements OnInit, OnDestroy {
   private formData = new FormData();
   images: Array<string> = [];
   fileToUpload: Array<File> = [];
-  constructor(private dialogRef: MatDialogRef<EditCarModalDialogComponent>,
+  constructor(
+    private _snackBar: MatSnackBar,
+    private dialogRef: MatDialogRef<EditCarModalDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data: any,
     private carService: CarService) {
     this.car = data.car;
@@ -55,18 +58,19 @@ export class EditCarModalDialogComponent implements OnInit, OnDestroy {
     this.updateCarModel.deletedDocuments.push(doc!);
   }
   updateCar(): void {
-    if (this.car.carDocuments == this.updateCarModel.deletedDocuments && this.fileToUpload == null) {
-      alert("No files");
-      return;
-    }
+    // if (this.car.carDocuments == this.updateCarModel.deletedDocuments && this.fileToUpload == null) {
+    //   alert("No files");
+    //   return;
+    // }
     this.formData.append("Id", this.updateCarModel.id.toString());
     this.formData.append("ModelName", this.updateCarModel.modelName);
     this.formData.append("RegistNum", this.updateCarModel.registNum);
     this.carService.updateCar(this.formData).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        console.log(response)
+        console.log(response);
+        this.openSnackBar("Car info updated!");
       },
-      (error: HttpErrorResponse) => { console.log(error); }
+      (error: HttpErrorResponse) => { console.log(error); this.openSnackBar(error.error); }
     );
   }
   updateCarDocuments(): void {
@@ -75,9 +79,10 @@ export class EditCarModalDialogComponent implements OnInit, OnDestroy {
     this.formData.append("Id", this.updateCarModel.id.toString());
     this.carService.updateCarDocuments(this.formData).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        console.log(response)
+        console.log(response);
+        this.openSnackBar("Car documents updated!");
       },
-      (error: HttpErrorResponse) => { console.log(error); }
+      (error: HttpErrorResponse) => { console.log(error); this.openSnackBar(error.error); }
     );
   }
   uploadFile(): void {
@@ -94,5 +99,8 @@ export class EditCarModalDialogComponent implements OnInit, OnDestroy {
   }
   closeDialog(): void {
     this.dialogRef.close();
+  }
+  private openSnackBar(message: string) {
+    this._snackBar.open(message, "Close");
   }
 }

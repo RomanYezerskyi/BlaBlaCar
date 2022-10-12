@@ -20,5 +20,6 @@ namespace BlaBlaCar.BL.Interfaces
         Task<IEnumerable<GetNotificationsDTO>> GetUsersNotificationsAsync(int take, int skip);
         Task GenerateFeedBackNotificationAsync(Guid tripId);
         Task AddFeedBack(CreateFeedbackDTO newFeedback, Guid currentUserId);
+        Task<IEnumerable<FeedBackDTO>> GetUserFeedBacks(Guid currentUserId, int take, int skip);
     }
 }

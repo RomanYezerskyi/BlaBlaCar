@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { UpdateModeEnum } from 'chart.js';
 import { Subject, takeUntil } from 'rxjs';
@@ -21,7 +22,11 @@ export class RequestDrivingLicenseComponent implements OnInit, OnDestroy {
   images: Array<string> = [];
   fileToUpload: Array<File> = [];
   updateModel: UpdateUserDocuments = {} as UpdateUserDocuments;
-  constructor(private imgSanitize: ImgSanitizerService, private userService: UserService, private dialogRef: MatDialogRef<RequestDrivingLicenseComponent>,
+  constructor(
+    private _snackBar: MatSnackBar,
+    private imgSanitize: ImgSanitizerService,
+    private userService: UserService,
+    private dialogRef: MatDialogRef<RequestDrivingLicenseComponent>,
     @Inject(MAT_DIALOG_DATA) data: any) { }
 
   ngOnInit(): void {
@@ -43,7 +48,7 @@ export class RequestDrivingLicenseComponent implements OnInit, OnDestroy {
           this.documents.forEach(x => this.images.push(x.drivingLicense));
         }
       },
-      (error: HttpErrorResponse) => { console.error(error.error); }
+      (error: HttpErrorResponse) => { console.error(error.error); this.openSnackBar(error.error); }
     );
   }
   deleteImg(img: string): void {
@@ -78,8 +83,12 @@ export class RequestDrivingLicenseComponent implements OnInit, OnDestroy {
     this.userService.addDrivingLicense(this.formData).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         console.log(response);
+        this.openSnackBar("Documents saved!");
       },
-      (error: HttpErrorResponse) => { console.error(error.error); }
+      (error: HttpErrorResponse) => { console.error(error.error); this.openSnackBar(error.error) }
     );
+  }
+  private openSnackBar(message: string) {
+    this._snackBar.open(message, "Close");
   }
 }

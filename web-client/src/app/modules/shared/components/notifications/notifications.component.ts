@@ -8,7 +8,7 @@ import { SignalRService } from 'src/app/core/services/signalr-services/signalr.s
 import { NotificationStatus } from 'src/app/core/enums/notification-status';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CreateNotificationDialogComponent } from '../create-notification-dialog/create-notification-dialog.component';
-import { Subject, takeUntil } from 'rxjs';
+import { skip, Subject, takeUntil } from 'rxjs';
 import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-notifications',
@@ -64,6 +64,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
       response => {
         if (response != null) {
           this.notifications = response;
+          this.Skip = this.notifications.length;
           this.checkIfNotRead();
         }
         console.log(response);
@@ -76,9 +77,11 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     if (this.Skip <= this.notifications.length) {
       this.notificationsService.getUserNotifications(this.Take, this.Skip).pipe(takeUntil(this.unsubscribe$)).subscribe(
         response => {
-          this.notifications = this.notifications.concat(response);
-          this.checkIfNotRead();
-          console.log(response);
+          if (response != null) {
+            this.notifications = this.notifications.concat(response);
+            this.checkIfNotRead();
+            console.log(response);
+          }
         },
         (error: HttpErrorResponse) => { console.error(error.error); }
       );

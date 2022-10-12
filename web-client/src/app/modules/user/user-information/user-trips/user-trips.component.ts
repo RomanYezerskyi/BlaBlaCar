@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 import { UserTrips, UserTripsResponseModel } from 'src/app/core/models/user-models/user-trips-response-model';
 import { TripService } from 'src/app/core/services/trip-service/trip.service';
@@ -10,6 +10,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TripModel } from 'src/app/core/models/trip-models/trip-model';
 import { MapsService } from 'src/app/core/services/maps-service/maps.service';
 import { GeocodingFeatureProperties } from 'src/app/core/models/autocomplete-models/place-suggestion-model';
+import { AlertsComponent } from 'src/app/modules/shared/components/alerts/alerts.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-trips',
@@ -23,12 +25,13 @@ export class UserTripsComponent implements OnInit, OnDestroy {
   totalTrips: number = 0;
   private Skip: number = 0;
   private Take: number = 5;
-  constructor(private http: HttpClient,
+  constructor(private _snackBar: MatSnackBar,
     private imgSanitaze: ImgSanitizerService, private router: Router,
     private tripService: TripService, private chatService: ChatService, private mapsService: MapsService) { }
 
   ngOnInit(): void {
     this.getUserTrips();
+
   }
   ngOnDestroy(): void {
     this.unsubscribe$.next();
@@ -75,20 +78,19 @@ export class UserTripsComponent implements OnInit, OnDestroy {
         this.trips.trips.forEach(x => {
           if (x.id == tripId) { x.tripUsers = x.bookedTripUsers.filter(u => u.userId != userId); }
         });
+        this.openSnackBar("User removed form trip!");
       },
-      (error: HttpErrorResponse) => { console.log(error.error); }
+      (error: HttpErrorResponse) => { console.log(error.error); this.openSnackBar(error.error); }
     );
   }
 
   deleteTrip(id: number): void {
     this.tripService.deleteTrip(id).pipe().subscribe(
       response => {
-        // this.Skip = 0;
-        // this.totalTrips = 0;
-        // this.getUserTrips();
         this.trips.trips = this.trips.trips.filter(x => x.id != id);
+        this.openSnackBar("Trip delete!");
       },
-      (error: HttpErrorResponse) => { console.log(error.error); }
+      (error: HttpErrorResponse) => { console.log(error.error); this.openSnackBar(error.error); }
     );
   }
   isTripCompleted(endDate: Date): boolean {
@@ -107,6 +109,10 @@ export class UserTripsComponent implements OnInit, OnDestroy {
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
+  }
+
+  private openSnackBar(message: string) {
+    this._snackBar.open(message, "Close");
   }
   private getPlaces(trip: TripModel) {
     let text = `${trip.startLat}%20${trip.startLon}`;

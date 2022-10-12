@@ -158,7 +158,7 @@ namespace BlaBlaCar.BL.Services.TripServices
                 _ => trip => trip.OrderBy(t => t.StartTime)
             };
 
-            var radius = 50000;
+            var radius = 80000;
 
             var startLocationLat = model.StartLat.ToString(CultureInfo.InvariantCulture);
             var startLocationLon = model.StartLon.ToString(CultureInfo.InvariantCulture);
@@ -167,7 +167,7 @@ namespace BlaBlaCar.BL.Services.TripServices
 
             var sqlRaw = $"SELECT * FROM [Trips] AS [t]" +
                          $"WHERE (CONVERT(date, [t].[StartTime]) = '{model.StartTime.Date:yyyy-MM-dd}') AND" +
-                         $"([t].StartLocation.STDistance(geography::STGeomFromText('POINT({startLocationLat} {startLocationLon})', 4326)) < {radius}) " +
+                         $"  ([t].StartLocation.STDistance(geography::STGeomFromText('POINT({startLocationLat} {startLocationLon})', 4326)) < {radius}) " +
                          $" AND ([t].EndLocation.STDistance(geography::STGeomFromText('POINT({endLocationLat} {endLocationLon})', 4326)) < {radius})  AND" +
                          $" ((SELECT COUNT(*)FROM [AvailableSeats] AS [a] WHERE ([t].[Id] = [a].[TripId]) AND NOT EXISTS (SELECT 1 FROM [TripUsers] AS [t0]" +
                          $" WHERE ([t].[Id] = [t0].[TripId]) AND (([t0].[SeatId] = [a].[SeatId]) AND ([t0].[SeatId] IS NOT NULL)))) >= {model.CountOfSeats})";
@@ -192,10 +192,6 @@ namespace BlaBlaCar.BL.Services.TripServices
             {
                 Trips = _mapper.Map<IEnumerable<Trip>, IEnumerable<TripDTO>>(trips),
             };
-            //if (model.Skip == 0)
-            //{
-            //    result.TotalTrips = 10; //await _unitOfWork.Trips.GetCountAsync(tripFilter);
-            //}
             return result;
         }
 

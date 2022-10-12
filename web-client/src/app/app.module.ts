@@ -27,6 +27,7 @@ import { LightgalleryModule } from 'lightgallery/angular';
 import { UserService } from './core/services/user-service/user.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 export function tokenGetter() {
   return localStorage.getItem("jwt");
 }
@@ -69,7 +70,8 @@ export function tokenGetter() {
     MatTooltipModule
 
   ],
-  providers: [AuthGuard, AdminGuard, PageAccessGuard, UserGuard, UserService],
+  providers: [AuthGuard, AdminGuard, PageAccessGuard, UserGuard, UserService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

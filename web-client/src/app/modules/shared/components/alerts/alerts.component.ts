@@ -19,6 +19,12 @@ export class AlertsComponent implements OnInit {
   }
   showSuccessMessages(message: string, time: number = 0): void {
     this.successMessages.push(message);
-    let myTimer = setTimeout(() => { this.errorMessages.shift(); }, time == 0 ? 4000 : time);
+    let myTimer = setTimeout(() => { this.successMessages.shift(); }, time == 0 ? 4000 : time);
+  }
+  hideSuccessMessages(): void {
+    this.successMessages.shift();
+  }
+  hideErrorMessages(): void {
+    this.errorMessages.shift();
   }
 }

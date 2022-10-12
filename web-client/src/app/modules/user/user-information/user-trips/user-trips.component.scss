@@ -1,3 +1,18 @@
+.container {
+    position: relative;
+}
+
+app-alerts {
+    width: 325px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 45px;
+    z-index: 37;
+    // height: 100px;
+    // background: rgb(246, 143, 143);
+}
+
 .items {
     padding-bottom: 10px;
     display: flex;

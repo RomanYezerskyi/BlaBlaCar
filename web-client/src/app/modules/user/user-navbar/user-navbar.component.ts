@@ -11,6 +11,8 @@ import { UserService } from 'src/app/core/services/user-service/user.service';
 import { UserStatus } from 'src/app/core/models/user-models/user-status';
 import { environment } from 'src/environments/environment';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { FeedBacksComponent } from '../feed-backs/feed-backs.component';
 
 @Component({
   selector: 'app-user-navbar',
@@ -28,7 +30,7 @@ export class UserNavbarComponent implements OnInit, OnDestroy {
   constructor(
     private jwtHelper: JwtHelperService,
     private router: Router,
-    private route: ActivatedRoute,
+    private dialog: MatDialog,
     public userService: UserService,
     private authService: AuthService,
     private signal: SignalRService,
@@ -109,5 +111,9 @@ export class UserNavbarComponent implements OnInit, OnDestroy {
   sanitizaImg(img: string): SafeUrl {
     return this.imgSanitize.sanitiizeUserImg(img);
   }
-
+  openFeedBacksList(): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = true;
+    const dRef = this.dialog.open(FeedBacksComponent, dialogConfig);
+  }
 }

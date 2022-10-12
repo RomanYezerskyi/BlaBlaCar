@@ -45,7 +45,10 @@ export class AddTripLayoutComponent implements OnInit, OnDestroy, AfterViewInit 
   showSuccess!: boolean;
   showError!: boolean;
   errorMessage!: string;
-  constructor(private carService: CarService, private tripService: TripService, private _formBuilder: FormBuilder) { }
+  constructor(
+    private carService: CarService,
+    private tripService: TripService,
+    private _formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.getUserCars();
