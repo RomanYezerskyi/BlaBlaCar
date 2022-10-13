@@ -1,3 +1,18 @@
-<!-- <app-user-profile [user]="user" id="profile"></app-user-profile>
-    <app-user-booked-trips [user]="user"></app-user-booked-trips> -->
-<router-outlet></router-outlet>
+<mat-tab-group mat-align-tabs="center">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <i class="material-icons">location_on</i>
+            My Trips
+        </ng-template>
+        <app-user-trips></app-user-trips>
+    </mat-tab>
+
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <i class="material-icons">card_travel</i>
+            Booked trips
+        </ng-template>
+        <app-user-booked-trips></app-user-booked-trips>
+    </mat-tab>
+</mat-tab-group>
+<!-- <router-outlet></router-outlet> -->

@@ -1,5 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { CarStatus } from 'src/app/core/models/car-models/car-status';
@@ -7,6 +8,7 @@ import { UserModel } from 'src/app/core/models/user-models/user-model';
 import { UserRequestResponseModel } from 'src/app/core/models/user-models/user-request-response-model';
 import { UserStatus } from 'src/app/core/models/user-models/user-status';
 import { AdminService } from 'src/app/core/services/admin/admin.service';
+import { ImgSanitizerService } from 'src/app/core/services/image-sanitizer-service/img-sanitizer.service';
 
 @Component({
   selector: 'app-user-requests',
@@ -23,7 +25,10 @@ export class UsersRequestsComponent implements OnInit, OnDestroy {
   private Skip: number = 0;
   private Take: number = 5;
   isFullListDisplayed: boolean = false;
+  displayedColumns: string[] = ['Img', 'CreatedAt', 'Name', 'Phone', 'Email', 'User documents', 'Cars',];
+  isSpinner: boolean = false;
   constructor(
+    private sanitizeImgService: ImgSanitizerService,
     private router: Router,
     private route: ActivatedRoute,
     private adminService: AdminService) {
@@ -42,6 +47,7 @@ export class UsersRequestsComponent implements OnInit, OnDestroy {
 
   public getRequests(): void {
     if (this.Skip <= this.totalRequests) {
+      this.isSpinner = true;
       this.adminService.getUserRequests(this.requestsId, this.Take, this.Skip).subscribe(
         response => {
           console.log(response);
@@ -51,8 +57,9 @@ export class UsersRequestsComponent implements OnInit, OnDestroy {
             if (this.totalRequests == 0)
               this.totalRequests = response.totalRequests!;
           }
+          this.isSpinner = false;
         },
-        (error: HttpErrorResponse) => { console.error(error.error); }
+        (error: HttpErrorResponse) => { console.error(error.error); this.isSpinner = false; }
       );
     }
     else {
@@ -62,5 +69,8 @@ export class UsersRequestsComponent implements OnInit, OnDestroy {
   }
   navigateToRequestInfo(id: string): void {
     this.router.navigate(['admin/requests-info/', id])
+  }
+  sanitizeImg(img: string): SafeUrl {
+    return this.sanitizeImgService.sanitiizeUserImg(img);
   }
 }

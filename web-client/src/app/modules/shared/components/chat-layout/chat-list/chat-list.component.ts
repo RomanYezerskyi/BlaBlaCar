@@ -103,8 +103,8 @@ export class ChatListComponent implements OnInit, OnDestroy {
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
   }
-  goToChat(chatId: string) {
-    console.log(this.router);
+  goToChat(chatId: string): void {
+
     this.router.navigate([this.router.url.split('?')[0]], {
       queryParams: {
         chatId: chatId
@@ -120,7 +120,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
     }
     return false;
   }
-  getUnreadMessagesCount(chatId: string) {
+  getUnreadMessagesCount(chatId: string): number | undefined {
     return this.unreadMessagesChats.find(x => x.chatId == chatId)?.count;
   }
 }

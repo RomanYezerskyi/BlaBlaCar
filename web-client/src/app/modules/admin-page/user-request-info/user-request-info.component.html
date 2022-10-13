@@ -1,4 +1,128 @@
-<div class="container">
+<div class="wrapper">
+
+    <div [ngClass]="isSpinner ? 'hide-spinner': ''"></div>
+    <mat-progress-spinner mode="indeterminate" *ngIf="isSpinner"></mat-progress-spinner>
+    <mat-tab-group mat-align-tabs="center">
+        <mat-tab label="User information - {{userStatus[selectedUser.userStatus]}}">
+            <div class="container">
+                <div class="user-block">
+                    <div class="img">
+                        <p class="user_avatar">
+                            <img [src]="sanitizeImg(selectedUser.userImg!)" alt="">
+                        </p>
+                    </div>
+                    <div class="title">
+                        <p>Name</p>
+                        <p>Email</p>
+                        <p>Phone</p>
+                        <p>Date of creation</p>
+                        <p>Licenses status</p>
+                        <p>Total trips</p>
+                        <p>Booked seats</p>
+                    </div>
+                    <div class="user-info">
+                        <p>{{selectedUser.firstName}}</p>
+                        <p>{{selectedUser.email}}</p>
+                        <p>{{selectedUser.phoneNumber}}</p>
+                        <p>{{selectedUser.createdAt | date}}</p>
+                        <p *ngIf="selectedUser.userStatus == userStatus.Confirmed"> <i
+                                class="material-icons btn btn_actions">thumb_up</i></p>
+                        <p *ngIf="selectedUser.userStatus == userStatus.Rejected"> <i
+                                class="material-icons btn btn_actions">thumb_down</i></p>
+                        <p *ngIf="selectedUser.userStatus == userStatus.NeedMoreData"> <i
+                                class="material-icons btn btn_actions">thumb_up_down</i></p>
+                        <p *ngIf="selectedUser.userStatus == userStatus.Pending"> <i
+                                class="material-icons">access_time</i>
+                        </p>
+                        <p>{{selectedUser.trips?.length}}</p>
+                        <p>{{selectedUser.tripUsers?.length}}</p>
+                    </div>
+                </div>
+                <div class="user__documents" *ngIf="selectedUser.userDocuments.length > 0">
+                    <h3 class="title">User documents</h3>
+                    <div class="list">
+                        <div class="documents__item">
+                            <app-images-gallery [images]="userDocs" [editMode]="false">
+                            </app-images-gallery>
+                        </div>
+                        <div class="actions">
+                            <i class="material-icons btn btn_actions"
+                                [ngClass]="{'': !(selectedUser.userStatus == userStatus.Confirmed), 'active': selectedUser.userStatus == userStatus.Confirmed}"
+                                (click)="changeUserStatus(userStatus.Confirmed)">thumb_up</i>
+                            <i class="material-icons btn btn_actions"
+                                [ngClass]="{'': !(selectedUser.userStatus == userStatus.NeedMoreData), 'active': selectedUser.userStatus == userStatus.NeedMoreData}"
+                                (click)="addNotitfication()">thumbs_up_down</i>
+                            <i class="material-icons btn btn_actions"
+                                [ngClass]="{'': !(selectedUser.userStatus == userStatus.Rejected), 'active': selectedUser.userStatus == userStatus.Rejected}"
+                                (click)="changeUserStatus(userStatus.Rejected)">thumb_down</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </mat-tab>
+        <mat-tab *ngFor="let car of selectedUser.cars; let i = index"
+            label="Car {{car.modelName}} - {{carStatus[ car.carStatus]}}">
+            <div class="container">
+                <div class="user-block">
+                    <div class="title">
+                        <p>Model</p>
+                        <p>Registration number</p>
+                        <p>Type</p>
+                        <p>Status</p>
+                        <p>Date of creation</p>
+                        <p>Seats</p>
+                    </div>
+                    <div class="user-info">
+                        <p>{{car.modelName}}</p>
+                        <p>{{car.registrationNumber}}</p>
+                        <p *ngIf="car.carType == carType.Sedan">
+                            <mat-icon>drive_eta</mat-icon>
+                        </p>
+                        <p *ngIf="car.carType == carType.Bus">
+                            <mat-icon>airport_shuttle</mat-icon>
+                        </p>
+                        <p *ngIf="car.carStatus == carStatus.NeedMoreData"> <i
+                                class="material-icons btn btn_actions">thumb_up_down</i></p>
+                        <p *ngIf="car.carStatus == carStatus.Confirmed"> <i
+                                class="material-icons btn btn_actions">thumb_up</i></p>
+                        <p *ngIf="car.carStatus == carStatus.Rejected"> <i
+                                class="material-icons btn btn_actions">thumb_down</i></p>
+                        <p *ngIf="car.carStatus == carStatus.Pending"> <i
+                                class=" material-icons btn btn_actions">access_time</i>
+                        </p>
+                        <p>{{car.createdAt | date}}</p>
+                        <p>{{car.seats.length}}</p>
+                    </div>
+                </div>
+                <div class="user__documents car_documents" *ngIf="selectedUser.userDocuments.length > 0">
+                    <h3 class="title">Car documents</h3>
+                    <div class="list">
+                        <div class="documents__item car_item">
+                            <app-images-gallery [images]="getCarDoc(car.carDocuments)" [editMode]="false">
+                            </app-images-gallery>
+                        </div>
+                        <div class="actions">
+                            <i class="material-icons btn btn_actions"
+                                [ngClass]="{'': !(selectedUser.userStatus == userStatus.Confirmed), 'active': selectedUser.userStatus == userStatus.Confirmed}"
+                                (click)="changeUserStatus(userStatus.Confirmed)">thumb_up</i>
+                            <i class="material-icons btn btn_actions"
+                                [ngClass]="{'': !(selectedUser.userStatus == userStatus.NeedMoreData), 'active': selectedUser.userStatus == userStatus.NeedMoreData}"
+                                (click)="addNotitfication()">thumbs_up_down</i>
+                            <i class="material-icons btn btn_actions"
+                                [ngClass]="{'': !(selectedUser.userStatus == userStatus.Rejected), 'active': selectedUser.userStatus == userStatus.Rejected}"
+                                (click)="changeUserStatus(userStatus.Rejected)">thumb_down</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+
+    </mat-tab-group>
+</div>
+<!-- <div class="container">
     <div class="users-list" *ngIf="selectedUser.email != ''">
         <div class="title">
             <h4 class="userId">#</h4>
@@ -51,8 +175,8 @@
                         (click)="changeUserStatus(userStatus.Rejected)">thumb_down</i>
                 </div>
             </div>
-        </div>
-        <div class="user__cars" *ngIf="selectedUser.cars.length > 0">
+        </div> -->
+<!-- <div class="user__cars" *ngIf="selectedUser.cars.length > 0">
             <h3 class="head">Cars</h3>
             <div class="title">
                 <h4 class="userId">#</h4>
@@ -101,6 +225,6 @@
                         [ngClass]="{'': !(car.carStatus == carStatus.Confirmed), 'active': car.carStatus == carStatus.Rejected}"
                         (click)="changeCarStatus(carStatus.Rejected, car.id)">thumb_down</i>
                 </div>
-            </div>
-        </div>
-    </div>
+            </div> -->
+<!-- </div>
+</div> -->

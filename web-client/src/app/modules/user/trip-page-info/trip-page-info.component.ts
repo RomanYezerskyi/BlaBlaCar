@@ -72,6 +72,7 @@ export class TripPageInfoComponent implements OnInit, OnDestroy {
 		dRef.componentInstance.onSubmitReason.pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
 			this.searchData();
 		});
+
 	}
 	getChat(userId: string) {
 		this.chatService.GetPrivateChat(userId).pipe(takeUntil(this.unsubscribe$)).subscribe(

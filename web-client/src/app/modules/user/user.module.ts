@@ -43,7 +43,7 @@ import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerMod
 import { MatStepperModule } from '@angular/material/stepper';
 import { FeedBacksComponent } from './feed-backs/feed-backs.component';
 import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
-
+import { MatTabsModule } from '@angular/material/tabs';
 @NgModule({
   declarations: [
     UserComponent,
@@ -104,7 +104,8 @@ import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/mater
 
     MatStepperModule,
 
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTabsModule
 
   ]
 })

@@ -24,11 +24,11 @@ const routes: Routes = [
       { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard, UserGuard, IsUserGuard] },
       {
         path: 'user-information', component: UserInformationComponent, canActivate: [AuthGuard, UserGuard, IsUserGuard],
-        children: [
-          { path: '', pathMatch: 'full', redirectTo: '/user-information/user-trips' },
-          { path: 'booked-trips', component: UserBookedTripsComponent, canActivate: [AuthGuard, UserGuard, IsUserGuard], },
-          { path: 'user-trips', component: UserTripsComponent, canActivate: [AuthGuard, UserGuard, IsUserGuard], },
-        ]
+        // children: [
+        //   { path: '', pathMatch: 'full', redirectTo: '/user-information/user-trips' },
+        //   { path: 'booked-trips', component: UserBookedTripsComponent, canActivate: [AuthGuard, UserGuard, IsUserGuard], },
+        //   { path: 'user-trips', component: UserTripsComponent, canActivate: [AuthGuard, UserGuard, IsUserGuard], },
+        // ]
       },
       { path: 'add-car', component: AddCarComponent, canActivate: [AuthGuard, UserGuard, IsUserGuard] },
       { path: 'trip-page-info/:id', component: TripPageInfoComponent, canActivate: [AuthGuard, UserGuard, IsUserGuard] },

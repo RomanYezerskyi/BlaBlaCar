@@ -17,31 +17,4 @@
             <button class="btn btn-load-more" (click)="getGlobalNotitifications()">load more</button>
         </div>
     </div>
-    <div class="users_notifications">
-        <div class="title">
-            <div class="title__text">
-                <i class="material-icons">calendar_month</i>
-                <h3>Notifcations</h3>
-                <button class="btn btn-add-notification">+</button>
-            </div>
-        </div>
-
-        <div class="notifcations_items">
-            <div class="notifications__list" *ngFor="let notifi of usersNotifications">
-                <div class="user_info">
-                    <p class="user_avatar">
-                        <img [src]="sanitizeImg(notifi.user?.userImg!)" alt="">
-                    </p>
-                    <p>{{notifi.user?.firstName}}</p>
-                    <p>{{notifi.user?.email}}</p>
-                </div>
-
-                <p>{{notifi.text}}</p>
-                <h4>{{notifi.createdAt | date}}</h4>
-            </div>
-        </div>
-        <div class="actions">
-            <button class="btn btn-load-more" (click)="getUsersNotitifications()">load more</button>
-        </div>
-    </div>
 </div>

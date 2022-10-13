@@ -77,7 +77,7 @@ namespace BlaBlaCar.BL.Services
         {
             var user = _mapper.Map<UserDTO>(await _unitOfWork.Users.GetAsync(
                 x => x.Include(x => x.UserDocuments)
-                    .Include(x => x.Cars)
+                    .Include(x => x.Cars.OrderBy(x=>x.CarStatus))
                     .ThenInclude(x => x.CarDocuments)
                     .Include(x => x.Trips)
                     .Include(x => x.TripUsers),
@@ -166,7 +166,7 @@ namespace BlaBlaCar.BL.Services
             {
                 var documents = userModel.UserDocuments.Select(x =>
                 {
-                    return model.DeletedDocuments.All(d => d == x.Id.ToString()) ? x : null;
+                    return model.DeletedDocuments.Any(d => d == x.Id.ToString()) ? x : null;
                 }).Where(x=>x != null).ToList();
                 _unitOfWork.UserDocuments.Delete(_mapper.Map<IEnumerable<UserDocuments>>(documents));
                 _fileService.DeleteFileFormApi(documents.Where(x => x != null).Select(x => x.DrivingLicense));

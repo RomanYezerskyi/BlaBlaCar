@@ -25,6 +25,7 @@
                 </li>
                 <li class="nav-item notification">
                     <p class="notifi__count" *ngIf="notifiNotReadCount > 0">{{notifiNotReadCount}}</p>
+
                     <i class="material-icons">notifications</i>
                     <app-notifications class="notification_list" (notReadedNotifiEvent)="countNotify($event)">
                     </app-notifications>
@@ -56,51 +57,29 @@
                                 </a>
                             </li>
                             <li>
-                                <a [routerLink]="'user-information/user-trips'" class="submenu_item">
-                                    <i class="material-icons">location_on</i>
+                                <a [routerLink]="'user-information'" class="submenu_item">
+                                    <i class="material-icons">explore</i>
                                     <a class="submenu_text">My trips</a>
                                 </a>
                             </li>
-                            <li>
+                            <!-- <li>
                                 <a [routerLink]="'user-information/booked-trips'" class="submenu_item">
                                     <i class="material-icons">card_travel</i>
                                     <a class="submenu_text">Booked trips</a>
                                 </a>
-                            </li>
+                            </li> -->
                             <li>
                                 <a class="submenu_item" (click)=" openFeedBacksList()">
                                     <i class="material-icons">feedback</i>
                                     <a class="submenu_text">Feedbacks</a>
                                 </a>
                             </li>
-                            <!-- <li>
-                                <a [routerLink]="'/chat'" class="submenu_item">
-                                    <i class="material-icons">chat</i>
-                                    <a class="submenu_text">Chats</a>
-                                </a>
-                            </li> -->
                             <li class="logout">
                                 <a (click)="logOut()" class="submenu_item">
                                     <i class="material-icons">logout</i>
                                     <a class="submenu_text">Logout</a>
                                 </a>
                             </li>
-                            <!-- <li class="submenu_item">
-                                <a class="submenu_text" [routerLink]="'/user-information'">My trips</a>
-                            </li>
-                            <li class="submenu_item">
-                                <a class="submenu_text" [routerLink]="'/user-information/booked-trips'">Reserved
-                                    trips</a>
-                            </li>
-                            <li class="submenu_item">
-                                <a class="submenu_text" [routerLink]="'/cars'">My cars</a>
-                            </li>
-                            <li class="submenu_item"><a [routerLink]="'/add-car'" class="submenu_text">New car</a>
-                            </li>
-                            <li class="submenu_item"><a [routerLink]="'/driving-license'" class="submenu_text">Add
-                                    driving
-                                    license</a>
-                            </li> -->
                         </ul>
                     </div>
                 </li>

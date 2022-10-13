@@ -25,6 +25,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   changeUserPhoto = false;
   message: string | undefined;
   private formData = new FormData();
+  isSpinner: boolean = false;
   constructor(
     private dialog: MatDialog,
     private imgSanitaze: ImgSanitizerService,
@@ -91,12 +92,13 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     return this.imgSanitaze.sanitiizeUserImg(img);
   }
   getUser(): void {
+    this.isSpinner = true;
     this.userService.getCurrentUser().pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         this.user = response;
-        console.log(response)
+        this.isSpinner = false;
       },
-      (error: HttpErrorResponse) => { console.log(error.error); }
+      (error: HttpErrorResponse) => { console.log(error.error); this.isSpinner = false; }
     );
   }
 

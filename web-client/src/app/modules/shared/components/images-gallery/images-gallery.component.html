@@ -20,13 +20,10 @@
     </div>
     <lightgallery class="doc-list" *ngIf="images.length > 0" [ngStyle]="{'display': editImages ? 'none':'flex'}"
         [settings]="settings" [onInit]="onInit">
-
         <a class="gallery-item" *ngFor="let doc of images" [attr.data-src]="doc">
             <div class="doc-item">
                 <img [src]="sanitizeImg(doc)" alt="">
             </div>
         </a>
-
-
     </lightgallery>
 </div>

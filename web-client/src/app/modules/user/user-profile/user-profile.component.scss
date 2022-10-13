@@ -1,3 +1,26 @@
+mat-progress-spinner {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 50%;
+
+    right: 50%;
+    transform: translate(50%, -50%);
+    z-index: 3;
+}
+
+.wrapper {
+    position: relative;
+}
+
+.hide-spinner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    z-index: 2;
+}
+
 hr {
     border: none;
     background-color: rgb(237, 237, 237);

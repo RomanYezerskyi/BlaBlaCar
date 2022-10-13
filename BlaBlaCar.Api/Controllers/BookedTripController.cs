@@ -21,7 +21,7 @@ namespace BlaBlaCar.API.Controllers
         public async Task<IActionResult> BookTrip([FromBody] NewBookTripModel bookedTrip)
         {
 
-            var res = await _tripService.AddBookedTripAsync(bookedTrip, UserId, UserName);
+            var res = await _tripService.AddBookedTripAsync(bookedTrip, GetUserInformation());
             return NoContent();
         }
         [HttpGet("trips")]

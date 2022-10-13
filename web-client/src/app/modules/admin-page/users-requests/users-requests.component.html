@@ -1,4 +1,4 @@
-<div class="container" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+<!-- <div class="container" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
     (scrolled)="getRequests();" [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false"
     style="height: 88.9vh; overflow: auto;">
 
@@ -6,8 +6,67 @@
         <div (click)="navigateToRequestInfo(user.id)" style="border: 1px solid #000;">
             {{user.firstName}}
             <p>Driving License - {{user.userStatus == userStatus.Pending}}</p>
-            <!-- <img  style="width: 30%;" src="{{user.drivingLicense}}" alt=""> -->
+            
         </div>
     </div>
 
+</div> -->
+<div class="wrapper">
+    <div [ngClass]="isSpinner ? 'hide-spinner': ''"></div>
+    <mat-progress-spinner mode="indeterminate" *ngIf="isSpinner"></mat-progress-spinner>
+    <table mat-table [dataSource]="requests.users" class="example-table-container" infiniteScroll
+        [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="getRequests();"
+        [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false" *ngIf="totalRequests > 0">
+        <ng-container matColumnDef="Img">
+            <th mat-header-cell *matHeaderCellDef> # </th>
+            <td mat-cell *matCellDef="let user" (click)="navigateToRequestInfo(user.id)">
+                <div class="img">
+                    <p class="user_avatar">
+                        <img [src]="sanitizeImg(user.userImg!)" alt="">
+                    </p>
+                </div>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="CreatedAt">
+            <th mat-header-cell *matHeaderCellDef> Created At </th>
+            <td mat-cell *matCellDef="let user" (click)="navigateToRequestInfo(user.id)">
+                <p class="userName">{{user.createdAt | date:'MMM d, y, h:mm a'}}</p>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="Phone">
+            <th mat-header-cell *matHeaderCellDef> Phone </th>
+            <td mat-cell *matCellDef="let user" (click)="navigateToRequestInfo(user.id)">
+                <p class="userName">{{user.phoneNumber}}</p>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="Name">
+            <th mat-header-cell *matHeaderCellDef> Name </th>
+            <td mat-cell *matCellDef="let user" (click)="navigateToRequestInfo(user.id)">
+                <p class="userName">{{user.firstName}}</p>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="Email">
+            <th mat-header-cell *matHeaderCellDef> Email </th>
+            <td mat-cell *matCellDef="let user" (click)="navigateToRequestInfo(user.id)">
+                <p class="userName">{{user.email}}</p>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="User documents">
+            <th mat-header-cell *matHeaderCellDef> User documents </th>
+            <td mat-cell *matCellDef="let user" (click)="navigateToRequestInfo(user.id)">
+                <p class="userName">{{userStatus[user.userStatus]}}</p>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="Cars">
+            <th mat-header-cell *matHeaderCellDef> Cars</th>
+            <td mat-cell *matCellDef="let user" (click)="navigateToRequestInfo(user.id)">
+                <div class="cars">
+                    <p>{{user.cars.length}} - {{carStatus[user.cars[0].carStatus]}}</p>
+                </div>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
 </div>

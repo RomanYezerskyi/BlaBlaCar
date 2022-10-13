@@ -9,6 +9,7 @@ import { AvailableSeatsType } from 'src/app/core/enums/available-seats-type';
 import { SeatModel } from 'src/app/core/models/car-models/seat-model';
 import { TripService } from 'src/app/core/services/trip-service/trip.service';
 import { Subject, takeUntil } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-dialog-booking-confirmation',
   templateUrl: './dialog-booking-confirmation.component.html',
@@ -23,7 +24,7 @@ export class DialogBookingConfirmationComponent implements OnInit, OnDestroy {
   requestedSeats = 0;
   bookedtrip: BookedTripModel = { bookedSeats: [], id: 0, requestedSeats: 1, tripId: 0 };
 
-  constructor(
+  constructor(private _snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<DialogBookingConfirmationComponent>, private http: HttpClient,
     @Inject(MAT_DIALOG_DATA) data: any, private tripService: TripService) {
     this.trip = data.trip as TripModel;
@@ -57,13 +58,14 @@ export class DialogBookingConfirmationComponent implements OnInit, OnDestroy {
     console.log(this.bookedtrip)
     this.tripService.bookSeatsInTrip(this.bookedtrip).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
+        this.onSubmitReason.emit();
         this.dialogRef.close();
-        alert(response);
-        console.log(response);
+        this.openSnackBar("Booking confirmed! Check your email!");
+
       },
-      (error: HttpErrorResponse) => { alert(error.error); console.log(error.error); }
+      (error: HttpErrorResponse) => { this.openSnackBar(error.error); console.log(error.error); }
     )
-    this.onSubmitReason.emit();
+
   }
   close(): void {
     this.dialogRef.close();
@@ -89,5 +91,8 @@ export class DialogBookingConfirmationComponent implements OnInit, OnDestroy {
         console.log(seat);
       }
     });
+  }
+  private openSnackBar(message: string) {
+    this._snackBar.open(message, "Close");
   }
 }

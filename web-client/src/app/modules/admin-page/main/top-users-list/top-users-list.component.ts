@@ -38,13 +38,6 @@ export class TopUsersListComponent implements OnInit, OnDestroy {
   sanitizeImg(img: string): SafeUrl {
     return this.imgSanitizer.sanitiizeUserImg(img);
   }
-  usersOrderBy(orderBy: UserListOrderby): void {
-    this.usersReuest.orderBy = orderBy;
-    this.usersReuest.skip = this.Skip;
-    this.usersReuest.take = this.Take;
-    this.users = [];
-    this.getUsers();
-  }
   getUsers(): void {
     if (this.usersReuest.skip <= this.users.length) {
       this.adminService.getTopListUsers(this.usersReuest).pipe(takeUntil(this.unsubscribe$)).subscribe(

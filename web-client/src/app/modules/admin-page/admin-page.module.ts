@@ -32,9 +32,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminNavbarComponent } from './admin-navbar/admin-navbar.component';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-// import { CreateNotificationDialogComponent } from 'src/app/components/create-notification-dialog/create-notification-dialog.component';
-
+import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -51,7 +51,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     AdministratorsComponent,
     AdminNavbarComponent,
   ],
-
+  providers: [{ provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 5000 } }],
   imports: [
     CommonModule,
     AdminPageRoutingModule,
@@ -77,7 +77,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatAutocompleteModule,
     MatTooltipModule,
 
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTabsModule,
+    MatTableModule
   ]
 })
 export class AdminPageModule { }

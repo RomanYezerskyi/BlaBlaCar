@@ -4,7 +4,8 @@
 
 .btn-close {
     position: absolute;
-    right: 22px;
+    right: 1px;
+    top: 0px
 }
 
 .container {
@@ -16,7 +17,7 @@
     justify-content: center;
 
     .title {
-        font-size: 30px;
+        font-size: 20px;
         font-weight: 500;
         color: #495057;
         width: 100%;

@@ -28,7 +28,7 @@ import { AuthNavbarComponent } from './auth-navbar/auth-navbar.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { EmailConfirmationComponent } from './email-confirmation/email-confirmation.component';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -42,6 +42,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     ResetPasswordComponent,
     EmailConfirmationComponent,
   ],
+  providers: [{ provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 5000 } }],
   imports: [
     CommonModule,
     AuthRoutingModule,

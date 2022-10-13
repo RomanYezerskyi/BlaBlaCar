@@ -101,7 +101,7 @@ namespace IdentityServerJWT.API.Services
             {
                 new Claim(JwtClaimTypes.Name, user.UserName),
                 new Claim(JwtClaimTypes.Id, user.Id),
-                new Claim(JwtClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Email, user.Email),
                 new Claim(JwtClaimTypes.PhoneNumber, user.PhoneNumber),
                 new Claim(ClaimTypes.GivenName, user.FirstName)
             };

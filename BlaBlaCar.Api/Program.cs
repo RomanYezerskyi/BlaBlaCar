@@ -23,6 +23,7 @@ using BlaBlaCar.BL.Services.ChatServices;
 using BlaBlaCar.BL.Services.MapsServices;
 using BlaBlaCar.BL.Services.NotificationServices;
 using BlaBlaCar.BL.Services.TripServices;
+using EmailService.Models;
 using Hangfire;
 using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Http.Features;
@@ -31,11 +32,16 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Builder;
 using NLog;
+using EmailService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-LogManager.LoadConfiguration(System.String.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
+LogManager.LoadConfiguration(String.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
+var emailConfig = builder.Configuration
+    .GetSection("EmailConfiguration")
+    .Get<EmailConfiguration>();
+builder.Services.AddSingleton(emailConfig);
 // Add services to the container.
 builder.Services.AddControllers()
     .AddNewtonsoftJson(options =>
@@ -71,10 +77,12 @@ builder.Services.Configure<FormOptions>(o =>
     o.MultipartBodyLengthLimit = int.MaxValue;
     o.MemoryBufferThreshold = int.MaxValue;
 });
+
+
+
+
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
-
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ITripService, TripService>();
 builder.Services.AddScoped<IBookedTripsService, BookedTripsService>();
@@ -88,6 +96,7 @@ builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IChatHubService, ChatHubService>();
 builder.Services.AddScoped<IMapService, MapsService>();
 builder.Services.AddSingleton<ILog, NLogger>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
 builder.Services.AddAuthentication(opt => {
@@ -119,6 +128,7 @@ builder.Services.AddCors(options =>
             .WithOrigins(jwtSettings.WebClientUrl);
     });
 });
+
 
 builder.Services.AddSignalR();
 

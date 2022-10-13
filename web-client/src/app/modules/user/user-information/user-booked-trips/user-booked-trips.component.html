@@ -1,57 +1,62 @@
-<div class="container" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
-    (scrolled)=" getUserBookedTrips();" [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false"
-    style="height: 88.9vh; overflow: auto;">
-    <div class="search_results" *ngIf="trips.trips.length > 0">
-        <div class="items">
-            <div class="search_item" [ngClass]="isTripCompleted(item.endTime) ? 'is-disabled':''"
-                *ngFor="let item of trips.trips">
-                <div class="trip-main-info">
-                    <i class="material-icons message" title="Open chat" (click)="getChat(item.user!.id)">chat</i>
-                    <div class="profile_img">
-                        <img [src]="sanitizeUserImg(item.user?.userImg!)" class="img" alt="">
-                    </div>
-                    <div class="time">
-                        <p>{{item.startTime | date:'MMM d, y, h:mm a'}}</p>
-                        <p>{{item.endTime | date:'MMM d, y, h:mm a'}}</p>
-                    </div>
-                    <div class="line">
-                    </div>
-                    <div class="price_item">
-                        <div class="cities">
-                            <div class="place">
-                                <mat-icon class="item_icon">gps_fixed</mat-icon>
-                                <p>{{item.startPlace}}</p>
+<div class="wrapper">
+    <div [ngClass]="isSpinner ? 'hide-spinner': ''"></div>
+    <mat-progress-spinner mode="indeterminate" *ngIf="isSpinner"></mat-progress-spinner>
+
+    <div class="container" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+        (scrolled)=" getUserBookedTrips();" [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false"
+        style="height: 88.9vh; overflow: auto;">
+        <div class="search_results" *ngIf="trips.trips.length > 0">
+            <div class="items">
+                <div class="search_item" [ngClass]="isTripCompleted(item.endTime) ? 'is-disabled':''"
+                    *ngFor="let item of trips.trips">
+                    <div class="trip-main-info">
+                        <i class="material-icons message" title="Open chat" (click)="getChat(item.user!.id)">chat</i>
+                        <div class="profile_img">
+                            <img [src]="sanitizeUserImg(item.user?.userImg!)" class="img" alt="">
+                        </div>
+                        <div class="time">
+                            <p>{{item.startTime | date:'MMM d, y, h:mm a'}}</p>
+                            <p>{{item.endTime | date:'MMM d, y, h:mm a'}}</p>
+                        </div>
+                        <div class="line">
+                        </div>
+                        <div class="price_item">
+                            <div class="cities">
+                                <div class="place">
+                                    <mat-icon class="item_icon">gps_fixed</mat-icon>
+                                    <p>{{item.startPlace}}</p>
+                                </div>
+                                <div class="place">
+                                    <mat-icon class="item_icon"> place</mat-icon>
+                                    <p>{{item.endPlace}}</p>
+                                </div>
                             </div>
-                            <div class="place">
-                                <mat-icon class="item_icon"> place</mat-icon>
-                                <p>{{item.endPlace}}</p>
+                            <div class="price">
+                                <p>{{item.pricePerSeat | currency:"UAH":"symbol"}}</p>
                             </div>
                         </div>
-                        <div class="price">
-                            <p>{{item.pricePerSeat | currency:"UAH":"symbol"}}</p>
-                        </div>
-                    </div>
-                    <!-- <div class="actions">
+                        <!-- <div class="actions">
                         <i class="material-icons" >cancel</i>
                     </div> -->
 
-                </div>
-                <div class="btn-delete-trip">
-                    <div class="actions" (click)="deleteBookedTrip(item)">
-                        <i class="material-icons">remove_circle_outline</i>
-                        <p>Cancel book</p>
+                    </div>
+                    <div class="btn-delete-trip">
+                        <div class="actions" (click)="deleteBookedTrip(item)">
+                            <i class="material-icons">remove_circle_outline</i>
+                            <p>Cancel book</p>
+                        </div>
+                    </div>
+                    <div class="booked-seats">
+                        <p class="title">You have booked seats:</p>
+                        <div *ngFor="let tripUser of item.tripUsers" class="booked_seats_num">
+                            <p>{{tripUser.seat.seatNumber}}</p>
+                            <i class="material-icons" title="Cancel reservation"
+                                (click)="deleteBookedSeat(tripUser)">remove_circle_outline</i>
+                        </div>
                     </div>
                 </div>
-                <div class="booked-seats">
-                    <p class="title">You have booked seats:</p>
-                    <div *ngFor="let tripUser of item.tripUsers" class="booked_seats_num">
-                        <p>{{tripUser.seat.seatNumber}}</p>
-                        <i class="material-icons" title="Cancel reservation"
-                            (click)="deleteBookedSeat(tripUser)">remove_circle_outline</i>
-                    </div>
-                </div>
-            </div>
 
+            </div>
         </div>
     </div>
 </div>

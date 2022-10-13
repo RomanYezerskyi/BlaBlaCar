@@ -46,6 +46,9 @@ namespace BlaBlaCar.BL.Services.Admin
                         x.Include(x=> x.Cars.Where(x=>x.CarStatus == (Status)status))
                             .ThenInclude(x => x.CarDocuments),
                 filter:x=>x.UserStatus == (Status)status || x.Cars.Any(c=>c.CarStatus == (Status)status)));
+           
+            
+            
             if (!users.Any())
                 return null;
             var usersCount = await _unitOfWork.Users.GetCountAsync(x=>x.UserStatus == (Status)status 

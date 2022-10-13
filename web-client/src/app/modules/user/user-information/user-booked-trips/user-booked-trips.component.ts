@@ -26,6 +26,7 @@ export class UserBookedTripsComponent implements OnInit, OnDestroy {
   totalTrips!: number;
   private Skip!: number;
   private Take!: number;
+  isSpinner: boolean = false;
   constructor(private _snackBar: MatSnackBar,
     private tripService: TripService, private router: Router,
     private imgSanitaze: ImgSanitizerService, private chatService: ChatService, private mapsService: MapsService) { }
@@ -46,7 +47,9 @@ export class UserBookedTripsComponent implements OnInit, OnDestroy {
   }
 
   getUserBookedTrips(): void {
+
     if (this.Skip <= this.totalTrips) {
+      this.isSpinner = true;
       this.tripService.getUserBookedTrips(this.Take, this.Skip).pipe(takeUntil(this.unsubscribe$)).subscribe(
         response => {
           console.log(response);
@@ -61,8 +64,9 @@ export class UserBookedTripsComponent implements OnInit, OnDestroy {
             if (this.totalTrips == 0)
               this.totalTrips = response.totalTrips!;
           }
+          this.isSpinner = false;
         },
-        (error: HttpErrorResponse) => { console.log(error.error); }
+        (error: HttpErrorResponse) => { console.log(error.error); this.isSpinner = false; }
       );
     }
     else {

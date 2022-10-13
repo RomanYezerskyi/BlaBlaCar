@@ -345,6 +345,8 @@ a {
         }
     }
 
+
+
     .user-profile-submenu::after {
         content: '';
         display: block;
@@ -400,7 +402,8 @@ a {
     padding-right: 30px;
     width: 150px;
     padding: 10px;
-    top: 30px;
+    top: 35px;
+    left: 1px;
 
     .submenu,
     .list__item {
@@ -412,6 +415,17 @@ a {
         padding: 15px 0;
         display: flex;
     }
+}
+
+.sub__navbar::after {
+    content: '';
+    display: block;
+    border-bottom: 9px solid #fff;
+    border-top: 9px solid transparent;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    position: absolute;
+    top: -18px;
 }
 
 .sub_menu:hover .sub__navbar {

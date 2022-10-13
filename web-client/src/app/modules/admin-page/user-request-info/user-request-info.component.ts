@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subject, Subscription, takeUntil } from 'rxjs';
@@ -42,11 +43,13 @@ export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
     phoneNumber: '',
     roles: [] = [], userDocuments: [] = [], userStatus: 0, trips: [] = [], tripUsers: [] = [],
   };
+  isSpinner: boolean = false;
   constructor(private userService: UserService,
     private sanitizeImgService: ImgSanitizerService,
     private route: ActivatedRoute,
     private adminService: AdminService,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,
+    private _snackBar: MatSnackBar,) { }
 
   ngOnInit(): void {
     if (this.userId == '') {
@@ -72,29 +75,27 @@ export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
   }
   private openNotificationDialog(notificationStatus: NotificationStatus, userId: string | null): void {
     const dialogConfig = new MatDialogConfig();
-    // dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.data = {
       notificationStatus: notificationStatus,
       userId: userId,
-      title: "Notification"
+      title: "Explain what is wrong with the user documents"
     };
     const dRef = this.dialog.open(CreateNotificationDialogComponent, dialogConfig);
-    // dRef.componentInstance.onSubmitReason.subscribe(() => {
-    //   this.changeUserStatus(this.userStatus.NeedMoreData);
-    // });
   }
   sanitizeImg(img: string): SafeUrl {
     return this.sanitizeImgService.sanitiizeUserImg(img);
   }
   getUser(userId: string) {
+    this.isSpinner = true;
     this.userService.getUserFromApi(userId).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         console.log(response);
         this.selectedUser = response;
         this.selectedUser.userDocuments.forEach(x => this.userDocs.push(x.drivingLicense));
+        this.isSpinner = false;
       },
-      (error: HttpErrorResponse) => { console.error(error.error); }
+      (error: HttpErrorResponse) => { console.error(error.error); this.isSpinner = false; }
     );
   }
   changeUserStatus(status: UserStatus): void {
@@ -105,8 +106,8 @@ export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
     };
     this.adminService.changeUserDrivingLicenseStatus(newStatus).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        window.alert(response);
-        console.log(response);
+        this.openSnackBar("User status changed!");
+        this.getUser(this.userId);
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
@@ -119,7 +120,8 @@ export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
     };
     this.adminService.changeCarDocumentsStatus(newStatus).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        console.log(response);
+        this.openSnackBar("User status changed!");
+        this.getUser(this.userId);
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
@@ -129,6 +131,9 @@ export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
     let images: Array<string> = [];
     carDocuments.forEach(x => images.push(x.technicalPassport));
     return images;
+  }
+  private openSnackBar(message: string) {
+    this._snackBar.open(message, "Close");
   }
 
 }
