@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Subject, Subscription, takeUntil } from 'rxjs';
@@ -23,7 +24,7 @@ export class AdministratorsComponent implements OnInit, OnDestroy {
   userEmail: string = '';
   searchUser: UserModel = {} as UserModel;
   filter = new FormControl();
-  constructor(private sanitizeImgService: ImgSanitizerService,
+  constructor(private sanitizeImgService: ImgSanitizerService, private _snackBar: MatSnackBar,
     private adminService: AdminService, private chatService: ChatService, private router: Router,) { }
 
   ngOnInit(): void {
@@ -55,9 +56,15 @@ export class AdministratorsComponent implements OnInit, OnDestroy {
     if (this.userEmail == '') return;
     this.adminService.getUserByEmail(this.userEmail).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        this.searchUser = response;
-        this.searchUser.newRole = response.roles[0].name;
-        console.log(response);
+        if (response != null) {
+          this.searchUser = response;
+          this.searchUser.newRole = response.roles[0].name;
+          console.log(response);
+        }
+        else {
+          this.openSnackBar("No users found!");
+
+        }
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
@@ -92,5 +99,8 @@ export class AdministratorsComponent implements OnInit, OnDestroy {
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
+  }
+  private openSnackBar(message: string) {
+    this._snackBar.open(message, "Close");
   }
 }

@@ -1,31 +1,36 @@
-<h2 mat-dialog-title>Choose {{requestedSeats}} places</h2>
-<mat-dialog-content>
-  <div class="box">
-    <div class="seats">
-      <div class="wheel">
-        <img src="../../../../assets/images/wheel.png" class="img__wheel" alt="">
-      </div>
-      <div class="seats_list">
-        <div *ngFor="let item of  trip.car.seats" class="seat_item">
-          <button class="btn seat booked" disabled *ngIf="cheackSeat(item); else elseItem">
-            {{item.seatNumber}}
-          </button>
-          <ng-template #elseItem>
-            <button class="btn seat" (click)="bookSeat(item.id)"
-              *ngIf="!item.isSelected; else elseSeat">{{item.seatNumber}}</button>
-            <ng-template #elseSeat>
-              <button class="btn seat seat_selected" (click)="bookSeat(item.id)">{{item.seatNumber}}</button>
+<div class="wrapper">
+  <div [ngClass]="isSpinner ? 'hide-spinner': ''"></div>
+  <mat-progress-spinner mode="indeterminate" *ngIf="isSpinner"></mat-progress-spinner>
+
+  <h2 mat-dialog-title>Choose {{requestedSeats}} places</h2>
+  <mat-dialog-content>
+    <div class="box">
+      <div class="seats">
+        <div class="wheel">
+          <img src="../../../../assets/images/wheel.png" class="img__wheel" alt="">
+        </div>
+        <div class="seats_list">
+          <div *ngFor="let item of  trip.car.seats" class="seat_item">
+            <button class="btn seat booked" disabled *ngIf="cheackSeat(item); else elseItem">
+              {{item.seatNumber}}
+            </button>
+            <ng-template #elseItem>
+              <button class="btn seat" (click)="bookSeat(item.id)"
+                *ngIf="!item.isSelected; else elseSeat">{{item.seatNumber}}</button>
+              <ng-template #elseSeat>
+                <button class="btn seat seat_selected" (click)="bookSeat(item.id)">{{item.seatNumber}}</button>
+              </ng-template>
             </ng-template>
-          </ng-template>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</mat-dialog-content>
+  </mat-dialog-content>
 
-<mat-dialog-actions>
-  <div class="actions">
-    <button class="btn_action" (click)="close()">Close</button>
-    <button class="btn_action" (click)="confirmBook()">Confirm</button>
-  </div>
-</mat-dialog-actions>
+  <mat-dialog-actions>
+    <div class="actions">
+      <button class="btn_action" (click)="close()">Close</button>
+      <button class="btn_action" (click)="confirmBook()">Confirm</button>
+    </div>
+  </mat-dialog-actions>
+</div>

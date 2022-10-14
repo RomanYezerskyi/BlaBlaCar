@@ -47,13 +47,13 @@
                         </div>
                         <div class="actions">
                             <i class="material-icons btn btn_actions"
-                                [ngClass]="{'': !(selectedUser.userStatus == userStatus.Confirmed), 'active': selectedUser.userStatus == userStatus.Confirmed}"
+                                [ngClass]="{'': selectedUser.userStatus == userStatus.Confirmed, 'active': !(selectedUser.userStatus == userStatus.Confirmed)}"
                                 (click)="changeUserStatus(userStatus.Confirmed)">thumb_up</i>
                             <i class="material-icons btn btn_actions"
-                                [ngClass]="{'': !(selectedUser.userStatus == userStatus.NeedMoreData), 'active': selectedUser.userStatus == userStatus.NeedMoreData}"
+                                [ngClass]="{'': (selectedUser.userStatus == userStatus.NeedMoreData), 'active': !(selectedUser.userStatus == userStatus.NeedMoreData)}"
                                 (click)="addNotitfication()">thumbs_up_down</i>
                             <i class="material-icons btn btn_actions"
-                                [ngClass]="{'': !(selectedUser.userStatus == userStatus.Rejected), 'active': selectedUser.userStatus == userStatus.Rejected}"
+                                [ngClass]="{'': (selectedUser.userStatus == userStatus.Rejected), 'active': !(selectedUser.userStatus == userStatus.Rejected)}"
                                 (click)="changeUserStatus(userStatus.Rejected)">thumb_down</i>
                         </div>
                     </div>
@@ -106,14 +106,14 @@
                         </div>
                         <div class="actions">
                             <i class="material-icons btn btn_actions"
-                                [ngClass]="{'': !(selectedUser.userStatus == userStatus.Confirmed), 'active': selectedUser.userStatus == userStatus.Confirmed}"
-                                (click)="changeUserStatus(userStatus.Confirmed)">thumb_up</i>
+                                [ngClass]="{'active': !(car.carStatus == carStatus.Confirmed), '': car.carStatus == carStatus.Confirmed}"
+                                (click)="changeCarStatus(carStatus.Confirmed, car.id)">thumb_up</i>
                             <i class="material-icons btn btn_actions"
-                                [ngClass]="{'': !(selectedUser.userStatus == userStatus.NeedMoreData), 'active': selectedUser.userStatus == userStatus.NeedMoreData}"
+                                [ngClass]="{'active': !(car.carStatus == carStatus.NeedMoreData), '': car.carStatus == carStatus.NeedMoreData}"
                                 (click)="addNotitfication()">thumbs_up_down</i>
                             <i class="material-icons btn btn_actions"
-                                [ngClass]="{'': !(selectedUser.userStatus == userStatus.Rejected), 'active': selectedUser.userStatus == userStatus.Rejected}"
-                                (click)="changeUserStatus(userStatus.Rejected)">thumb_down</i>
+                                [ngClass]="{'active': !(car.carStatus == carStatus.Rejected), '': car.carStatus == carStatus.Rejected}"
+                                (click)="changeCarStatus(carStatus.Rejected, car.id)">thumb_down</i>
                         </div>
                     </div>
                 </div>

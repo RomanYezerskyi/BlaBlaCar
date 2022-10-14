@@ -12,11 +12,9 @@ export class IsUserGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     if (!this.authService.isAdmin()) {
-      console.log("aaa");
       return true;
 
     }
-    console.log("bbb");
     this.router.navigate(["admin"]);
     return false;
   }

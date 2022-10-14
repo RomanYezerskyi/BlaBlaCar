@@ -58,7 +58,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
           this.openSnackBar("You have successfully registered!\n Now go to your email and verify it");
         },
         (error: HttpErrorResponse) => {
-          console.log(error.error);
           this.openSnackBar(error.error);
         }
       )

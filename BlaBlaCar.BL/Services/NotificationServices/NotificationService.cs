@@ -111,23 +111,25 @@ namespace BlaBlaCar.BL.Services.NotificationServices
                 .GetAsync( x=>x.Include(x=>x.TripUsers)
                     .Include(x=>x.User), x => x.Id == tripId);
             if (trip == null) throw new NotFoundException($"Trips with id {tripId}");
-            var users = trip.TripUsers.Distinct();
+            var users = trip.TripUsers.ToList().GroupBy(x => x.UserId).Select(x => x.FirstOrDefault());
 
             var startPlace = await _mapService.GetPlaceInformation(trip.StartLocation.X, trip.StartLocation.Y);
             var endPlace = await _mapService.GetPlaceInformation(trip.EndLocation.X, trip.EndLocation.Y);
+
+
             foreach (var user in users)
             {
                 var notificationDTO = new NotificationsDTO()
                 {
                     UserId = user.UserId,
-                    NotificationStatus = NotificationStatusDTO.FeedBack,
+                    NotificationStatus = NotificationStatusDTO.RequestForFeedBack,
                     Text = $"Please write a feedback about the driver {trip.User.FirstName}." +
-                           $"\nDescribe how your trip {startPlace?.FeaturesList.First().Properties.Formatted} - {endPlace?.FeaturesList.First().Properties.Formatted} went.",
+                           $"\nDescribe how your trip {startPlace?.FeaturesList.First().Properties.City} - {endPlace?.FeaturesList.First().Properties.City} went.",
                     FeedBackOnUser = trip.UserId,
                 };
                 await _unitOfWork.Notifications.InsertAsync(_mapper.Map<Notifications>(notificationDTO));
                 await _unitOfWork.SaveAsync(trip.UserId);
-                await _hubContext.Clients.Group(user.Id.ToString()).BroadcastNotification();
+                await _hubContext.Clients.Group(user.UserId.ToString()).BroadcastNotification();
             }
         }
 

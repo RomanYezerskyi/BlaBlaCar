@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { SafeUrl } from '@angular/platform-browser';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { UserModel } from 'src/app/core/models/user-models/user-model';
@@ -19,7 +20,7 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
   users: Array<UserModel> = [];
   userId: string = '';
   userData: string = '';
-  constructor(private userService: UserService, private sanitizeImgService: ImgSanitizerService) { }
+  constructor(private userService: UserService, private sanitizeImgService: ImgSanitizerService, private _snackBar: MatSnackBar,) { }
 
   ngOnInit(): void {
   }
@@ -36,13 +37,23 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
     if (this.userData == '') return;
     this.userService.searchUsers(this.userData).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
+        if (response != null) {
+          this.users = response;
+        }
+        else {
+          this.openSnackBar("No users found!");
+          this.users = [];
+        }
         console.log(response);
-        this.users = response;
+
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
   }
   getUser(userId: string): void {
     this.userId = userId;
+  }
+  private openSnackBar(message: string) {
+    this._snackBar.open(message, "Close");
   }
 }

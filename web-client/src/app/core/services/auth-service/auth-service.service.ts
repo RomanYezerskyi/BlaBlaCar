@@ -92,7 +92,6 @@ export class AuthService {
     if (this.token && !this.jwtHelper.isTokenExpired(this.token)) {
       let check = this.jwtHelper.decodeToken(this.token).role == 'blablacar.admin';
       let check1 = this.jwtHelper.decodeToken(this.token)['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] == 'blablacar.admin';
-      console.log(this.jwtHelper.decodeToken(this.token));
       if (check || check1) {
         return true;
       }

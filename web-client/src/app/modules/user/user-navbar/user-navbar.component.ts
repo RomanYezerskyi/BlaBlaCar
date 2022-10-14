@@ -53,8 +53,6 @@ export class UserNavbarComponent implements OnInit, OnDestroy {
   getUser(): void {
     this.userService.getCurrentUser().pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        console.log("get user");
-        console.log(response);
         this.userService.userProfile = response;
       },
       (error: HttpErrorResponse) => { console.log(error.error); }
@@ -80,7 +78,6 @@ export class UserNavbarComponent implements OnInit, OnDestroy {
   }
   connectToChatMessagesSignalRHub(): void {
     this.signal.getDataStream<string>().pipe(takeUntil(this.unsubscribe$)).subscribe(message => {
-      console.log(message.data);
       if (!this.router.url.includes("/chat")) {
         this.unreadMessages += 1;
       }

@@ -4,5 +4,5 @@
     <app-images-gallery (removeImg)="deleteImg($event)" (addedFile)="getImages($event)" [images]="images"
         [editMode]="true">
     </app-images-gallery>
-    <button (click)="addLicense()">Save</button>
+    <button class="btn-save" (click)="addLicense()">Save</button>
 </mat-dialog-content>

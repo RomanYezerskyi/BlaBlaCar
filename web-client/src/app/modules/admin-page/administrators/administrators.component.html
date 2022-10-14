@@ -1,10 +1,11 @@
 <div class="container">
-    <form #searchForm="ngForm" class="form">
+    <form #searchForm="ngForm" class="form" (ngSubmit)="getUser(searchForm)">
         <mat-form-field class="example-full-width" appearance="standard">
-            <input type="search" matInput placeholder="Search users here ..." id="email" name="email"
+            <input type="email" matInput placeholder="Search users here ..." id="email" name="email"
                 [(ngModel)]="userEmail">
-            <i class="material-icons" matSuffix (click)="getUser(searchForm)">search</i>
+
         </mat-form-field>
+        <button type="submit" [disabled]="!searchForm.valid"><i class="material-icons" matSuffix>search</i></button>
     </form>
 
     <div class="users-list admins" *ngIf="searchUser.email != undefined">

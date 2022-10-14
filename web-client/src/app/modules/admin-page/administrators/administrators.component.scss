@@ -7,6 +7,17 @@
     background-color: #fff;
 }
 
+form {
+    display: flex;
+    justify-content: center;
+
+    button {
+        background: none;
+        border: none;
+        display: inline;
+    }
+}
+
 .head {
     padding: 20px 30px;
     font-size: 17px;

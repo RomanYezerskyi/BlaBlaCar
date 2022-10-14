@@ -156,7 +156,13 @@
     background-color: #f5f7fd !important;
 }
 
+form {
+    display: flex;
+    justify-content: center;
+}
+
 mat-form-field {
+
     width: 300px;
     padding: 0 40px;
     border-radius: 30px;
@@ -258,4 +264,8 @@ input.mat-input-element {
             font-weight: 500;
         }
     }
+}
+
+.user {
+    margin-bottom: 50px;
 }

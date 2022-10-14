@@ -23,7 +23,7 @@ export class DialogBookingConfirmationComponent implements OnInit, OnDestroy {
   trip: TripModel = {} as TripModel;
   requestedSeats = 0;
   bookedtrip: BookedTripModel = { bookedSeats: [], id: 0, requestedSeats: 1, tripId: 0 };
-
+  isSpinner: boolean = false;
   constructor(private _snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<DialogBookingConfirmationComponent>, private http: HttpClient,
     @Inject(MAT_DIALOG_DATA) data: any, private tripService: TripService) {
@@ -44,26 +44,23 @@ export class DialogBookingConfirmationComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
   cheackSeat(item: SeatModel): boolean {
-    let res = this.trip.availableSeats.some(x => {
-      if (x.seatId == item.id && x.availableSeatsType == AvailableSeatsType.Booked)
-        return true;
-      return false;
-    });
-    return res;
+    return !this.trip.availableSeats.some(x => x.seatId == item.id);
   }
   confirmBook(): void {
     if (this.requestedSeats != this.bookedtrip.bookedSeats.length) {
       return;
     }
-    console.log(this.bookedtrip)
+    this.isSpinner = true;
     this.tripService.bookSeatsInTrip(this.bookedtrip).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
+        this.isSpinner = false;
         this.onSubmitReason.emit();
         this.dialogRef.close();
+
         this.openSnackBar("Booking confirmed! Check your email!");
 
       },
-      (error: HttpErrorResponse) => { this.openSnackBar(error.error); console.log(error.error); }
+      (error: HttpErrorResponse) => { this.openSnackBar(error.error); console.log(error.error); this.isSpinner = false; }
     )
 
   }

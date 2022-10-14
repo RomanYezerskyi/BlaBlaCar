@@ -108,7 +108,6 @@ export class UserTripsComponent implements OnInit, OnDestroy {
             chatId: response
           }
         });
-        console.log(response);
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
@@ -129,7 +128,6 @@ export class UserTripsComponent implements OnInit, OnDestroy {
         }
       });
       trip.startPlace = placeSuggestions[0].data.city;
-      console.log(placeSuggestions);
     }, err => {
       console.log(err);
     });
@@ -144,7 +142,6 @@ export class UserTripsComponent implements OnInit, OnDestroy {
         }
       });
       trip.endPlace = placeSuggestions[0].data.city;
-      console.log(placeSuggestions);
     }, err => {
       console.log(err);
     });

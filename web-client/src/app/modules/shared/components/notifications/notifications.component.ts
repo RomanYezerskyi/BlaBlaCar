@@ -66,8 +66,8 @@ export class NotificationsComponent implements OnInit, OnDestroy {
           this.notifications = response;
           this.Skip = this.notifications.length;
           this.checkIfNotRead();
+          console.log(response);
         }
-        console.log(response);
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
@@ -89,7 +89,8 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     this.Skip += this.Take;
   }
   readNotifications(): void {
-    this.notificationsService.readNotifications(this.notifications).pipe(takeUntil(this.unsubscribe$)).subscribe(
+    let unreadNotififation = this.notifications.filter(x => x.readNotificationStatus != 1);
+    this.notificationsService.readNotifications(unreadNotififation).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         console.log(response);
       },

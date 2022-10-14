@@ -42,6 +42,7 @@ namespace IdentityServerJWT.API.Services
         public async Task<UserWithRolesModel> GetUser(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
+            if (user == null) return null;
             var roles = await _userManager.GetRolesAsync(user);
             UserWithRolesModel userWithRoles = new UserWithRolesModel(user)
             {

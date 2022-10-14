@@ -36,8 +36,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.authService.login(this.credentials)
         .pipe(takeUntil(this.unsubscribe$)).subscribe(
           response => {
-
-            console.log(this.returnUrl);
             if (this.returnUrl)
               this.router.navigateByUrl(this.returnUrl!);
           },

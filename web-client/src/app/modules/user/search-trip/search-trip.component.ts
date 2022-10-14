@@ -41,7 +41,6 @@ export class SearchTripComponent implements OnInit {
         this.isParams = true;
       }
     });
-    console.log(this.trip);
   }
 
   onScroll(): void {

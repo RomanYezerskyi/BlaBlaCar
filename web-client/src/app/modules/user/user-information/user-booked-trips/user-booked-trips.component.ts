@@ -52,7 +52,6 @@ export class UserBookedTripsComponent implements OnInit, OnDestroy {
       this.isSpinner = true;
       this.tripService.getUserBookedTrips(this.Take, this.Skip).pipe(takeUntil(this.unsubscribe$)).subscribe(
         response => {
-          console.log(response);
           if (response != null) {
             response.trips.forEach(
               x => {
@@ -105,7 +104,6 @@ export class UserBookedTripsComponent implements OnInit, OnDestroy {
             chatId: response
           }
         });
-        console.log(response);
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
@@ -125,7 +123,6 @@ export class UserBookedTripsComponent implements OnInit, OnDestroy {
         }
       });
       trip.startPlace = placeSuggestions[0].data.city;
-      console.log(placeSuggestions);
     }, err => {
       console.log(err);
     });
@@ -140,7 +137,7 @@ export class UserBookedTripsComponent implements OnInit, OnDestroy {
         }
       });
       trip.endPlace = placeSuggestions[0].data.city;
-      console.log(placeSuggestions);
+
     }, err => {
       console.log(err);
     });
