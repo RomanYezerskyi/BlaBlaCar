@@ -34,7 +34,8 @@ export class PageAccessGuard implements CanActivate {
     var user = await this.GetUser();
     switch (user.userStatus) {
       case UserStatus.WithoutCar:
-        this.router.navigate(["driving-license"]);
+        this.router.navigate(['info'],
+          { queryParams: { message: "Go to your profile and add your documents to verify your identity!" } });
         return false;
         break;
       case UserStatus.Pending:

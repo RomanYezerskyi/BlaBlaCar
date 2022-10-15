@@ -154,10 +154,11 @@ namespace BlaBlaCar.BL.Services.TripServices
             var car = await _unitOfWork.Cars.GetAsync(x=>
             x.Include(x=>x.Seats).ThenInclude(x=>x.AvailableSeats).Include(x=>x.Trips), x => x.Id == carId);
 
-            var trips = await _unitOfWork.Trips.GetAsync(null,null,x => x.CarId == carId 
-                && x.StartTime > DateTimeOffset.Now || x.EndTime > DateTimeOffset.Now);
-            if (trips.Any()) throw new PermissionException("You need to complete trips with this car");
-            
+            var trips = await _unitOfWork.Trips.GetAsync(null, null, 
+                x => x.CarId == car.Id
+                && (x.StartTime >= DateTimeOffset.Now || x.EndTime >= DateTimeOffset.Now));
+            if (trips.Any()) throw new Exception("You need to complete trips with this car");
+
             _unitOfWork.Cars.Delete(car);
             return await _unitOfWork.SaveAsync(userId);
         }

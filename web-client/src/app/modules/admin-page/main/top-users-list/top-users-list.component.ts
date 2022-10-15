@@ -42,7 +42,8 @@ export class TopUsersListComponent implements OnInit, OnDestroy {
     if (this.usersReuest.skip <= this.users.length) {
       this.adminService.getTopListUsers(this.usersReuest).pipe(takeUntil(this.unsubscribe$)).subscribe(
         response => {
-          this.users = this.users.concat(response);
+          if (response != null)
+            this.users = this.users.concat(response);
         },
         (error: HttpErrorResponse) => { console.error(error.error); }
       );

@@ -57,7 +57,8 @@ export class UserTripsComponent implements OnInit, OnDestroy {
               }
             )
             this.trips.trips = this.trips.trips.concat(response.trips);
-            console.log(this.trips);
+            console.log(response.totalTrips);
+            console.log(this.totalTrips);
             if (this.totalTrips == 0)
               this.totalTrips = response.totalTrips!;
           }
@@ -79,18 +80,25 @@ export class UserTripsComponent implements OnInit, OnDestroy {
     this.tripService.deleteUserFromTrip(tripUser).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         this.trips.trips.forEach(x => {
-          if (x.id == tripId) { x.tripUsers = x.bookedTripUsers.filter(u => u.userId != userId); }
-        });
+          if (x.id == tripId) { x.bookedTripUsers = x.bookedTripUsers.filter(b => b.userId != userId); }
+        })
         this.openSnackBar("User removed form trip!");
       },
       (error: HttpErrorResponse) => { console.log(error.error); this.openSnackBar(error.error); }
     );
   }
 
+  refreshList(): void {
+    this.totalTrips = 0;
+    this.Skip = 0;
+    this.Take = 5;
+    this.trips.trips = [];
+    this.getUserTrips();
+  }
   deleteTrip(id: number): void {
     this.tripService.deleteTrip(id).pipe().subscribe(
       response => {
-        this.trips.trips = this.trips.trips.filter(x => x.id != id);
+        this.refreshList();
         this.openSnackBar("Trip delete!");
       },
       (error: HttpErrorResponse) => { console.log(error.error); this.openSnackBar(error.error); }
@@ -103,7 +111,7 @@ export class UserTripsComponent implements OnInit, OnDestroy {
   getChat(userId: string) {
     this.chatService.GetPrivateChat(userId).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        this.router.navigate(['chat'], {
+        this.router.navigate(['/user/chat'], {
           queryParams: {
             chatId: response
           }

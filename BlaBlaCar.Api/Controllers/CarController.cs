@@ -57,8 +57,7 @@ namespace BlaBlaCar.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCar(Guid id)
         {
-            var userId = Guid.Parse(User.Claims.First(x => x.Type == JwtClaimTypes.Id).Value);
-            var res = await _carService.DeleteCarAsync(id, userId);
+            var res = await _carService.DeleteCarAsync(id, UserId);
             return NoContent();
         }
     }

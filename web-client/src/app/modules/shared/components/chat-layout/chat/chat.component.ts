@@ -46,13 +46,9 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       if (params['chatId']) {
         this.chat.id = params['chatId'];
         this.getChat();
+        this.connectToSignalRChatHub();
       }
     });
-    if (this.chat.id != undefined) {
-      this.getChat();
-
-      this.connectToSignalRChatHub();
-    }
   }
   ngOnDestroy(): void {
     this.unsubscribe$.next();

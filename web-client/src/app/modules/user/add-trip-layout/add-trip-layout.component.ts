@@ -31,7 +31,7 @@ export class AddTripLayoutComponent implements OnInit, OnDestroy, AfterViewInit 
   private endMap!: L.Map;
   private endMarker!: L.Marker
   private myIcon = L.icon({
-    iconUrl: `https://api.geoapify.com/v1/icon/?type=material&color=red&icon=point&iconType=awesome&apiKey=${environment.geoapifyFirstApiKey}`,
+    iconUrl: `${environment.geoapifyMarkerPoin}${environment.geoapifyFirstApiKey}`,
     iconSize: [25, 45],
   });
   startPlaceIs: string | null = null;
@@ -48,7 +48,9 @@ export class AddTripLayoutComponent implements OnInit, OnDestroy, AfterViewInit 
   constructor(
     private carService: CarService,
     private tripService: TripService,
-    private _formBuilder: FormBuilder) { }
+    private _formBuilder: FormBuilder,
+    private router: Router) {
+  }
 
   ngOnInit(): void {
     this.getUserCars();
@@ -65,14 +67,14 @@ export class AddTripLayoutComponent implements OnInit, OnDestroy, AfterViewInit 
   }
   private createStartMap(): void {
     this.startMap = L.map('map').setView([51.505, -0.09], 15);
-    L.tileLayer(`https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}.png?apiKey=${environment.geoapifyFirstApiKey}`, {
+    L.tileLayer(`${environment.geoapifyTileLayer}${environment.geoapifyFirstApiKey}`, {
       maxZoom: 20,
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(this.startMap);
   }
   private createEndMap(): void {
     this.endMap = L.map('map-end').setView([51.505, -0.09], 15);
-    L.tileLayer(`https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}.png?apiKey=${environment.geoapifyFirstApiKey}`, {
+    L.tileLayer(`${environment.geoapifyTileLayer}${environment.geoapifyFirstApiKey}`, {
       maxZoom: 20,
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(this.endMap);
@@ -123,7 +125,6 @@ export class AddTripLayoutComponent implements OnInit, OnDestroy, AfterViewInit 
     this.carService.getUserCars().pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         this.userCars = response;
-        console.log(response);
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
@@ -135,14 +136,12 @@ export class AddTripLayoutComponent implements OnInit, OnDestroy, AfterViewInit 
         car.seats.forEach(seat => {
           let availableSeat: AddAvailableSeatsModel = { seatId: seat.id };
           this.trip.availableSeats.push(availableSeat);
-          console.log(this.trip.availableSeats);
           seat.isSelected = true;
         });
       }
     });
   }
   addSeat(seatId: number): void {
-    console.log(seatId);
     let seat: AddAvailableSeatsModel = { seatId: seatId }
     if (this.trip.availableSeats!.find(availableSeat => availableSeat.seatId == seat.seatId)) {
       this.trip.availableSeats = this.trip.availableSeats!.filter(x => x.seatId != seatId);
@@ -152,6 +151,11 @@ export class AddTripLayoutComponent implements OnInit, OnDestroy, AfterViewInit 
       this.trip.availableSeats!.push(seat);
       this.changeSeatStatus(seatId);
     }
+  }
+
+  async reload(url: string): Promise<boolean> {
+    await this.router.navigateByUrl('/', { skipLocationChange: true });
+    return this.router.navigateByUrl(url);
   }
   private changeSeatStatus(seatId: number): void {
     this.userCars.forEach(car => {
@@ -165,5 +169,6 @@ export class AddTripLayoutComponent implements OnInit, OnDestroy, AfterViewInit 
       }
     });
   }
+
 
 }

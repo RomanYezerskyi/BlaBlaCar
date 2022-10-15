@@ -14,7 +14,7 @@ namespace BlaBlaCar.BL.Interfaces
         Task<IEnumerable<GetNotificationsDTO>> GetUserUnreadNotificationsAsync(Guid currentUserId);
         Task<IEnumerable<GetNotificationsDTO>> GetUserNotificationsAsync(int take, int skip, Guid currentUserId);
         Task<bool> CreateNotificationAsync(CreateNotificationDTO notificationModel, Guid currentUserId);
-        Task GenerateNotificationAsync(CreateNotificationDTO notificationModel);
+        Task GenerateNotificationAsync(CreateNotificationDTO notificationModel, Guid createdBy);
         Task<bool> ReadAllNotificationAsync(IEnumerable<NotificationsDTO> notification, Guid currentUserId);
         Task<IEnumerable<GetNotificationsDTO>> GetGlobalNotificationsAsync(int take, int skip);
         Task<IEnumerable<GetNotificationsDTO>> GetUsersNotificationsAsync(int take, int skip);

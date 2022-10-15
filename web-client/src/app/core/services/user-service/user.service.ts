@@ -13,16 +13,6 @@ export class UserService {
   private baseIdentityServerUrl = environment.baseIdentityServerUrl;
   public userProfile: UserModel = {} as UserModel;
   constructor(private http: HttpClient) {
-    // console.log(this.userProfile);
-    // this.getCurrentUser().subscribe(
-    //   response => {
-    //     console.log("get user");
-    //     this.userProfile = response;
-    //     console.log(this.userProfile);
-    //   },
-    //   (error: HttpErrorResponse) => { console.log(error.error); }
-    // );
-
   }
   async chekIfUserExist(): Promise<any> {
     const url = this.baseApiUrl + 'User/add-user';
@@ -57,7 +47,7 @@ export class UserService {
     phoneNumber: string
   }): Observable<any> {
     const url = this.baseApiUrl + 'User/update';
-    return this.http.post(url, userModel);
+    return this.http.put(url, userModel);
   }
   updateUserPhoto(formData: FormData): Observable<any> {
     const url = this.baseApiUrl + 'User/user-profile-image'

@@ -23,15 +23,6 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field class="form-item" appearance="outline">
-        <mat-label>Count of seats</mat-label>
-        <input matInput type="number" min="1" id=" countOfSeats" name="countOfSeats" [(ngModel)]="newCar.countOfSeats"
-          placeholder="Ex. 4" required>
-        <mat-icon matSuffix>airline_seat_recline_normal</mat-icon>
-        <mat-error *ngIf="CarFormControl.hasError('required')">
-          Count of seats is <strong>required</strong>
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field class="form-item" appearance="outline">
         <mat-label>Car type</mat-label>
         <mat-select name="carId" id="carId" [(ngModel)]="newCar.carType" required>
           <mat-option [value]="carType.Sedan">
@@ -45,6 +36,17 @@
         <mat-icon matSuffix *ngIf="newCar.carType == carType.Bus">airport_shuttle</mat-icon>
         <mat-error *ngIf="CarFormControl.hasError('required')">
           Car type is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="form-item" appearance="outline">
+        <mat-label>Count of seats</mat-label>
+        <input matInput type="number" min="1" [max]="newCar.carType == carType.Sedan ? '4' : '40' " id="countOfSeats"
+          name="countOfSeats" [(ngModel)]="newCar.countOfSeats" placeholder="Ex. 4" required>
+        <mat-icon matSuffix>airline_seat_recline_normal</mat-icon>
+        <mat-error *ngIf="CarFormControl.hasError('required')">
+          Count of seats is <strong>required </strong>
+          <mat-error *ngIf="newCar.carType == carType.Sedan">No more than 8 seats</mat-error>
+          <mat-error *ngIf="newCar.carType == carType.Bus">No more than 40 seats</mat-error>
         </mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline" class="form-item">

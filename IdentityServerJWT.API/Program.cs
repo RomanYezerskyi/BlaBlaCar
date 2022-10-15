@@ -83,6 +83,11 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+
+await using var scope = app.Services.CreateAsyncScope();
+await using var db = scope.ServiceProvider.GetService<ApplicationDbContext>();
+await db.Database.MigrateAsync();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -24,6 +24,7 @@ mat-progress-spinner {
 
 .container {
     position: relative;
+    box-sizing: border-box;
 }
 
 app-alerts {

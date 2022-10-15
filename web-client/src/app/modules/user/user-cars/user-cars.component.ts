@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
@@ -23,7 +24,9 @@ export class UserCarsComponent implements OnInit, OnDestroy {
   cars: CarModel[] = [];
   carStatus = CarStatus;
   carType = CarType;
-  constructor(private imgSanitize: ImgSanitizerService,
+  constructor(
+    private _snackBar: MatSnackBar,
+    private imgSanitize: ImgSanitizerService,
     private carService: CarService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -41,7 +44,6 @@ export class UserCarsComponent implements OnInit, OnDestroy {
     this.carService.getUserCars().pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         this.cars = response;
-        console.log(response)
       },
       (error: HttpErrorResponse) => { console.log(error); }
     );
@@ -53,16 +55,20 @@ export class UserCarsComponent implements OnInit, OnDestroy {
       car: this.cars.find(x => x.id == carId)
     }
     const dRef = this.dialog.open(EditCarModalDialogComponent, dialogConfig);
-    // dRef.componentInstance.onSubmitReason.subscribe(() => {
-    //   this.searchData();
-    // });
+    dRef.componentInstance.onSubmitReason.subscribe(() => {
+      this.getUserCars();
+    });
   }
   deleteCar(carId: number): void {
     this.carService.deleteCar(carId).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        console.log(response)
+        this.cars = this.cars.filter(x => x.id != carId);
+        this.openSnackBar("Car deleted!");
       },
-      (error: HttpErrorResponse) => { console.log(error.error); }
+      (error: HttpErrorResponse) => { console.log(error.error); this.openSnackBar(error.error.error); }
     );
+  }
+  private openSnackBar(message: string) {
+    this._snackBar.open(message, "Close");
   }
 }

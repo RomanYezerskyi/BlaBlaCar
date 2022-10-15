@@ -15,6 +15,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using EmailService.Models;
 using EmailService.Services;
+using BlaBlaCar.DAL.Entities.CarEntities;
+
 namespace BlaBlaCar.BL.Services.BookedTripServices
 {
     public class BookedTripsService : IBookedTripsService
@@ -99,18 +101,21 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
             var endPlace = await _mapService.GetPlaceInformation(trip.EndLocation.X, trip.EndLocation.Y);
             if (startPlace == null || endPlace == null) throw new Exception("Places not found!");
 
-            await _notificationService.GenerateNotificationAsync(
-                new CreateNotificationDTO()
-                {
-                    NotificationStatus = NotificationStatusDTO.SpecificUser,
-                    Text = $"{startPlace?.FeaturesList.First().Properties.Formatted} - {endPlace?.FeaturesList.First().Properties.Formatted}" +
-                           $"\n{currentUser.FirstName} joined your trip",
-                    UserId = trip.UserId,
-                });
+           
             
             var result = await _unitOfWork.SaveAsync(currentUser.Id);
+           
             if (result)
             {
+                await _notificationService.GenerateNotificationAsync(
+                    new CreateNotificationDTO()
+                    {
+                        NotificationStatus = NotificationStatusDTO.SpecificUser,
+                        Text = $"{startPlace?.FeaturesList.First().Properties.City} - {endPlace?.FeaturesList.First().Properties.City}" +
+                               $"\n{currentUser.FirstName} joined your trip",
+                        UserId = trip.UserId,
+                    }, currentUser.Id);
+
                 var user = await 
                     _unitOfWork.Users.GetAsync(null, x => x.Id == currentUser.Id);
                 var message = new Message(new string[] { user.Email },
@@ -132,6 +137,7 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
                 throw new NotFoundException(nameof(TripUserDTO));
             _unitOfWork.TripUser.Delete(_mapper.Map<IEnumerable<TripUser>>(trip));
 
+            var result = await _unitOfWork.SaveAsync(currentUserId);
             await _notificationService.GenerateNotificationAsync(
                 new CreateNotificationDTO()
                 {
@@ -139,9 +145,9 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
                     Text = $"{tripModel.StartPlace} - {tripModel.EndPlace} " +
                            $"The {userName} canceled all reservations",
                     UserId = tripModel.UserId,
-                });
+                }, currentUserId);
 
-            return await _unitOfWork.SaveAsync(currentUserId);
+            return result;
         }
 
         public async Task<bool> DeleteBookedSeatAsync(UpdateTripUserDTO tripUserModel, Guid currentUserId, string userName)
@@ -152,6 +158,7 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
                 throw new NotFoundException(nameof(TripUserDTO));
             _unitOfWork.TripUser.Delete(_mapper.Map<TripUser>(userTrip));
 
+            var result = await _unitOfWork.SaveAsync(currentUserId);
             var trip = _mapper.Map<TripDTO>(
                 await _unitOfWork.Trips.GetAsync(
                     null,
@@ -165,22 +172,41 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
                 new CreateNotificationDTO()
                 {
                     NotificationStatus = NotificationStatusDTO.SpecificUser,
-                    Text = $"{startPlace?.FeaturesList.First().Properties.Formatted} - {endPlace?.FeaturesList.First().Properties.Formatted} " +
+                    Text = $"{startPlace?.FeaturesList.First().Properties.City} - {endPlace?.FeaturesList.First().Properties.City} " +
                            $"The {userName} canceled the reservation seat {seat.SeatNumber} ",
                     UserId = trip.UserId,
-                });
-            return await _unitOfWork.SaveAsync(currentUserId);
+                }, currentUserId);
+
+            return result;
         }
 
         public async Task<bool> DeleteUserFromTripAsync(UpdateTripUserDTO tripUserModel, Guid currentUserId)
         {
-            var trip = _mapper.Map<IEnumerable<TripUserDTO>>(await _unitOfWork.TripUser.GetAsync(null,null, x =>
+            var tripUsers = _mapper.Map<IEnumerable<TripUserDTO>>(await _unitOfWork.TripUser.GetAsync(null,null, x =>
                 x.TripId == tripUserModel.TripId && x.UserId == tripUserModel.UserId && x.TripId == tripUserModel.TripId));
-            if (trip is null)
+            if (tripUsers is null)
                 throw new NotFoundException(nameof(TripUserDTO));
-            _unitOfWork.TripUser.Delete(_mapper.Map<IEnumerable<TripUser>>(trip));
+            _unitOfWork.TripUser.Delete(_mapper.Map<IEnumerable<TripUser>>(tripUsers));
+            var result = await _unitOfWork.SaveAsync(currentUserId);
 
-            return await _unitOfWork.SaveAsync(currentUserId);
+            var trip = _mapper.Map<TripDTO>(
+                await _unitOfWork.Trips.GetAsync(
+                    x=>x.Include(x=>x.User),
+                    x => x.Id == tripUserModel.TripId));
+            var startPlace = await _mapService.GetPlaceInformation(trip.StartLocation.X, trip.StartLocation.Y);
+            var endPlace = await _mapService.GetPlaceInformation(trip.EndLocation.X, trip.EndLocation.Y);
+            foreach (var tripUser in tripUsers.GroupBy(x=>x.UserId).Select(x=>x.FirstOrDefault()))
+            {
+                await _notificationService.GenerateNotificationAsync(
+                    new CreateNotificationDTO()
+                    {
+                        NotificationStatus = NotificationStatusDTO.SpecificUser,
+                        Text = $"{startPlace?.FeaturesList.First().Properties.City} - {endPlace?.FeaturesList.First().Properties.City} " +
+                               $"The {trip.User.FirstName} canceled the trip !",
+                        UserId = tripUser.UserId,
+                    }, currentUserId);
+            }
+            return result;
         }
     }
     

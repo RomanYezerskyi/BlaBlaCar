@@ -54,6 +54,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(
                    sqlOption =>
                        sqlOption.UseNetTopologySuite()));
 
+
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddHangfire(configuration => configuration
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
@@ -140,6 +142,10 @@ builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
+
+await using var scope = app.Services.CreateAsyncScope();
+await using var db = scope.ServiceProvider.GetService<ApplicationDbContext>();
+await db.Database.MigrateAsync();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -40,11 +40,13 @@ export class DialogBookingConfirmationComponent implements OnInit, OnDestroy {
   ngOnInit() {
   }
   ngOnDestroy(): void {
+
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
   cheackSeat(item: SeatModel): boolean {
-    return !this.trip.availableSeats.some(x => x.seatId == item.id);
+    return (!this.trip.availableSeats.some(x => x.seatId == item.id)
+      || this.trip.availableSeats.find(x => x.seatId == item.id)?.availableSeatsType == 1);
   }
   confirmBook(): void {
     if (this.requestedSeats != this.bookedtrip.bookedSeats.length) {
@@ -60,7 +62,7 @@ export class DialogBookingConfirmationComponent implements OnInit, OnDestroy {
         this.openSnackBar("Booking confirmed! Check your email!");
 
       },
-      (error: HttpErrorResponse) => { this.openSnackBar(error.error); console.log(error.error); this.isSpinner = false; }
+      (error: HttpErrorResponse) => { this.openSnackBar(error.error.error); console.log(error.error); this.isSpinner = false; }
     )
 
   }
@@ -85,7 +87,6 @@ export class DialogBookingConfirmationComponent implements OnInit, OnDestroy {
       if (seat.id == seatId) {
         if (seat.isSelected) { seat.isSelected = false; }
         else if (!seat.isSelected) { seat.isSelected = true; }
-        console.log(seat);
       }
     });
   }

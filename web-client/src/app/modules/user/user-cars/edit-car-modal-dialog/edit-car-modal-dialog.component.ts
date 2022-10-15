@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CarType } from 'src/app/core/enums/car-type';
@@ -16,6 +16,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class EditCarModalDialogComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject<void>();
+  onSubmitReason = new EventEmitter();
   pageIndex: number = 1;
   car: CarModel = {} as CarModel;
   updateCarModel: CarUpdateModel = {} as CarUpdateModel;
@@ -58,16 +59,12 @@ export class EditCarModalDialogComponent implements OnInit, OnDestroy {
     this.updateCarModel.deletedDocuments.push(doc!);
   }
   updateCar(): void {
-    // if (this.car.carDocuments == this.updateCarModel.deletedDocuments && this.fileToUpload == null) {
-    //   alert("No files");
-    //   return;
-    // }
     this.formData.append("Id", this.updateCarModel.id.toString());
     this.formData.append("ModelName", this.updateCarModel.modelName);
-    this.formData.append("RegistNum", this.updateCarModel.registNum);
+    this.formData.append("RegistrationNumber", this.updateCarModel.registNum);
     this.carService.updateCar(this.formData).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        console.log(response);
+        this.onSubmitReason.emit();
         this.openSnackBar("Car info updated!");
       },
       (error: HttpErrorResponse) => { console.log(error); this.openSnackBar(error.error); }

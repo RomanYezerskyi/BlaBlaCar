@@ -5,7 +5,7 @@
     <div *ngIf="showSuccess" class="alert alert-success" role="alert">
         The trip is saved <a [routerLink]="['/user/user-information']"> click here to see. </a>
         <br />
-        Or <a [routerLink]="['/user/add-trip']"> post new trip </a>
+        Or <a (click)=" reload('/user/add-trip')"> post new trip </a>
     </div>
 </div>
 <mat-stepper [linear]="true" #stepper *ngIf="!showSuccess && !showError">

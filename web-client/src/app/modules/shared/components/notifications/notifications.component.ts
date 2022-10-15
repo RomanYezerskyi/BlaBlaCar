@@ -10,6 +10,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CreateNotificationDialogComponent } from '../create-notification-dialog/create-notification-dialog.component';
 import { skip, Subject, takeUntil } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.component.html',
@@ -25,7 +26,9 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   private Take: number = 5;
   private token: string | null = localStorage.getItem("jwt");
   private currentUserId: string = this.jwtHelper.decodeToken(this.token!).id;
+
   constructor(
+    private _snackBar: MatSnackBar,
     private dialog: MatDialog,
     private notificationsService: NotificationsService,
     private jwtHelper: JwtHelperService,
@@ -49,7 +52,6 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   }
   connectToNotificationsSignalRHub() {
     this.signal.getDataStream<any>().pipe(takeUntil(this.unsubscribe$)).subscribe(message => {
-      console.log(message.data);
       this.getUserNotifications();
     });
   }
@@ -92,7 +94,8 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     let unreadNotififation = this.notifications.filter(x => x.readNotificationStatus != 1);
     this.notificationsService.readNotifications(unreadNotififation).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        console.log(response);
+        this.notifications.forEach(x => x.readNotificationStatus = 1);
+        this.notReadedNotifiEvent.emit(0);
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
@@ -111,5 +114,8 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     // dRef.componentInstance.onSubmitReason.subscribe(() => {
     //   this.changeUserStatus(this.userStatus.NeedMoreData);
     // });
+  }
+  private openSnackBar(message: string) {
+    this._snackBar.open(message, "Close");
   }
 }

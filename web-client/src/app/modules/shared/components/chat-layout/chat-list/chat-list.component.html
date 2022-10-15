@@ -6,7 +6,7 @@
         <ul class="chats">
             <li class="chat__item" *ngFor="let chat of chats" (click)=" goToChat(chat.id!)">
                 <p class="unread-messages" *ngIf="checkIfChatHasUnreadMessages(chat.id!)">
-                    {{getUnreadMessagesCount(chat.id!)}}</p>
+                </p>
                 <div class="user__img">
                     <img [src]="sanitizeImg(chat.users![0].user!.userImg!)" alt="">
                 </div>

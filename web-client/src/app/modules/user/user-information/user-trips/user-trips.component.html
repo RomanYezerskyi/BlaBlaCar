@@ -4,7 +4,7 @@
 
     <div class="container" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
         (scrolled)="getUserTrips();" [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false"
-        style="overflow: auto;">
+        style="height: 84.9vh;overflow: auto;">
         <div class="search_results" *ngIf="trips.trips.length > 0">
             <div class="items">
                 <div class="search_item" *ngFor="let item of trips.trips"
@@ -65,7 +65,7 @@
                                     </div>
                                     <p class="user_name">{{user.user.firstName}}</p>
                                 </div>
-                                <div class="booked-seats">
+                                <div class="booked-seats" *ngIf="  user.seats[0]?.seatNumber != null">
                                     <p class="title">Seats:</p>
                                     <div class="booked_seats_num" *ngFor="let seat of user.seats">
                                         <p>{{seat?.seatNumber}}</p>

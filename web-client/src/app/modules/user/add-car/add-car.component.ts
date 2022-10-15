@@ -15,7 +15,7 @@ import { CarService } from 'src/app/core/services/car-service/car.service';
 })
 export class AddCarComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void> = new Subject<void>();
-  newCar: AddNewCarModel = {} as AddNewCarModel;
+  newCar: AddNewCarModel = { carType: CarType.Sedan } as AddNewCarModel;
   carType = CarType;
   private formData = new FormData();
   CarFormControl = new FormControl('', [Validators.required]);
@@ -58,7 +58,7 @@ export class AddCarComponent implements OnInit, OnDestroy {
       this.carService.addCar(this.formData).pipe(takeUntil(this.unsubscribe$)).subscribe(
         response => {
           this.openSnackBar("Car saved!")
-          this.router.navigate(['/profile']);
+          this.router.navigate(['/user/profile']);
         },
         (error: HttpErrorResponse) => { console.error(error.error); }
       );

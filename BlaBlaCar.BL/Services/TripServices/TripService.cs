@@ -61,7 +61,7 @@ namespace BlaBlaCar.BL.Services.TripServices
             if (trip is null)
                 throw new NotFoundException("Trip");
 
-            trip.AvailableSeats.Select(x =>
+            trip.AvailableSeats = trip.AvailableSeats.Select(x =>
             {
                 if (usersBookedTrip.Any(y => y.SeatId == x.SeatId))
                 {
@@ -90,7 +90,7 @@ namespace BlaBlaCar.BL.Services.TripServices
             Guid currentUserId)
         {
             var trips = _mapper.Map<IEnumerable<TripDTO>>
-                (await _unitOfWork.Trips.GetAsync(orderBy:x=>x.OrderByDescending(x=>x.EndTime), 
+                (await _unitOfWork.Trips.GetAsync(orderBy:x=>x.OrderByDescending(x=>x.StartTime).ThenByDescending(x=>x.EndTime), 
                     includes:x=>x.Include(i=>i.Car)
                         .Include(x=>x.AvailableSeats)
                         .Include(i=>i.TripUsers).ThenInclude(i=>i.User)
@@ -166,7 +166,7 @@ namespace BlaBlaCar.BL.Services.TripServices
             var endLocationLon = model.EndLon.ToString(CultureInfo.InvariantCulture);
 
             var sqlRaw = $"SELECT * FROM [Trips] AS [t]" +
-                         $"WHERE (CONVERT(date, [t].[StartTime]) = '{model.StartTime.Date:yyyy-MM-dd}') AND" +
+                         $"WHERE (CONVERT(date, [t].[StartTime]) = '{model.StartTime.Date:yyyy-MM-dd}') AND ([t].[StartTime]) >= '{DateTimeOffset.Now.DateTime:yyyy-MM-dd HH:mm:ss zz:00}' AND" +
                          $"  ([t].StartLocation.STDistance(geography::STGeomFromText('POINT({startLocationLat} {startLocationLon})', 4326)) < {radius}) " +
                          $" AND ([t].EndLocation.STDistance(geography::STGeomFromText('POINT({endLocationLat} {endLocationLon})', 4326)) < {radius})  AND" +
                          $" ((SELECT COUNT(*)FROM [AvailableSeats] AS [a] WHERE ([t].[Id] = [a].[TripId]) AND NOT EXISTS (SELECT 1 FROM [TripUsers] AS [t0]" +
@@ -221,22 +221,22 @@ namespace BlaBlaCar.BL.Services.TripServices
             if (trip is null)
                 throw new NotFoundException(nameof(TripDTO));
 
+            _unitOfWork.Trips.Delete(trip);
+            var result = await _unitOfWork.SaveAsync(currentUserId);
+
             var startPlace = await _mapService.GetPlaceInformation(trip.StartLocation.X, trip.StartLocation.Y);
             var endPlace = await _mapService.GetPlaceInformation(trip.EndLocation.X, trip.EndLocation.Y);
-            trip.TripUsers.ToList().ForEach(u =>
+
+            trip.TripUsers.GroupBy(x => x.UserId).Select(x => x.FirstOrDefault()).ToList().ForEach(u =>
             {
                 _notificationService.GenerateNotificationAsync(new CreateNotificationDTO()
                 {
                     UserId = u.UserId,
                     NotificationStatus = NotificationStatusDTO.SpecificUser,
                     Text = $"The trip {startPlace?.FeaturesList.First().Properties.Formatted} - {endPlace?.FeaturesList.First().Properties.Formatted} was cancelled!"
-                });
+                }, currentUserId);
             });
-
-            //if (tripUsers != null) _unitOfWork.TripUser.Delete(tripUsers);
-            _unitOfWork.Trips.Delete(trip);
-
-            return await _unitOfWork.SaveAsync(currentUserId);
+            return result;
         }
     }
 }

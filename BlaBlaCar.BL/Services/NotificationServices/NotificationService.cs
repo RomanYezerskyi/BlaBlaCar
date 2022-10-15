@@ -99,11 +99,12 @@ namespace BlaBlaCar.BL.Services.NotificationServices
             
         }
 
-        public async Task GenerateNotificationAsync(CreateNotificationDTO notificationModel)
+        public async Task GenerateNotificationAsync(CreateNotificationDTO notificationModel, Guid createdBy)
         {
             var notification = _mapper.Map<Notifications>(notificationModel);
-            await _hubContext.Clients.Group(notificationModel.UserId.ToString()).BroadcastNotification();
             await _unitOfWork.Notifications.InsertAsync(notification);
+            await _unitOfWork.SaveAsync(createdBy);
+            await _hubContext.Clients.Group(notificationModel.UserId.ToString()).BroadcastNotification();
         }
         public async Task GenerateFeedBackNotificationAsync(Guid tripId)
         {
@@ -140,14 +141,16 @@ namespace BlaBlaCar.BL.Services.NotificationServices
 
             var feedbackDTO = _mapper.Map<FeedBackDTO>(newFeedback);
             await _unitOfWork.FeedBacks.InsertAsync(_mapper.Map<FeedBack>(feedbackDTO));
+            
+          
+            await _unitOfWork.SaveAsync(currentUser.Id);
             var notification = new CreateNotificationDTO()
             {
                 UserId = feedbackDTO.UserId,
                 NotificationStatus = NotificationStatusDTO.FeedBack,
                 Text = $"{currentUser.FirstName} added feedback on your trip !"
             };
-            await GenerateNotificationAsync(notification);
-            await _unitOfWork.SaveAsync(currentUser.Id);
+            await GenerateNotificationAsync(notification, currentUserId);
         }
 
         public async Task<IEnumerable<FeedBackDTO>> GetUserFeedBacks(Guid currentUserId, int take, int skip)

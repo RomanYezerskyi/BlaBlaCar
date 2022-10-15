@@ -24,7 +24,7 @@ namespace BlaBlaCar.API.Controllers
             var user = new UserDTO()
             {
                 Id = UserId,
-                Email = UserName,
+                Email = User.FindFirst(x => x.Type == ClaimTypes.Email).Value,
                 FirstName = User.FindFirst(x => x.Type == ClaimTypes.GivenName).Value,
                 PhoneNumber = User.FindFirst(x => x.Type == JwtClaimTypes.PhoneNumber).Value,
                 UserStatus = UserStatusDTO.None

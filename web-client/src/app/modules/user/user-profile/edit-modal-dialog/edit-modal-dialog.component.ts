@@ -1,8 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subject, takeUntil } from 'rxjs';
 import { UserModel } from 'src/app/core/models/user-models/user-model';
 import { PasswordValidatorService } from 'src/app/core/services/password-validator/password-validator.service';
 import { UserService } from 'src/app/core/services/user-service/user.service';
@@ -12,7 +13,8 @@ import { UserService } from 'src/app/core/services/user-service/user.service';
   templateUrl: './edit-modal-dialog.component.html',
   styleUrls: ['./edit-modal-dialog.component.scss']
 })
-export class EditModalDialogComponent implements OnInit {
+export class EditModalDialogComponent implements OnInit, OnDestroy {
+  private unsubscribe$: Subject<void> = new Subject<void>();
   page: number = 1;
   user: UserModel = {} as UserModel;
   onSubmitReason: any;
@@ -46,6 +48,10 @@ export class EditModalDialogComponent implements OnInit {
 
   ngOnInit(): void {
   }
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
   get getUserForm() {
     return this.userDataForm.controls;
   }
@@ -59,9 +65,8 @@ export class EditModalDialogComponent implements OnInit {
     this.dialogRef.close();
   }
   updateUserPassword(form: FormGroupDirective): void {
-    if (!form.valid) return;
     this.newPasswordModel.userId = this.user.id;
-    this.userService.updateUserPassword(this.newPasswordModel).pipe().subscribe(
+    this.userService.updateUserPassword(this.newPasswordModel).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         console.log(response)
         this.openSnackBar("Password has been changed!");
@@ -77,9 +82,9 @@ export class EditModalDialogComponent implements OnInit {
       firstName: this.user.firstName,
       phoneNumber: this.user.phoneNumber
     }
-    this.userService.updateUserInfo(userModel).pipe().subscribe(
+    this.userService.updateUserInfo(userModel).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        console.log(response);
+        this.getUser();
         this.openSnackBar("Changes saved");
       },
       (error: HttpErrorResponse) => { console.log(error.error); this.openSnackBar(error.error); }
@@ -87,5 +92,13 @@ export class EditModalDialogComponent implements OnInit {
   }
   private openSnackBar(message: string) {
     this._snackBar.open(message, "Close");
+  }
+  getUser(): void {
+    this.userService.getCurrentUser().pipe(takeUntil(this.unsubscribe$)).subscribe(
+      response => {
+        this.userService.userProfile = response;
+      },
+      (error: HttpErrorResponse) => { console.log(error.error); }
+    );;
   }
 }

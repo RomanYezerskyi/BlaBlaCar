@@ -60,7 +60,7 @@
         <ng-container matColumnDef="Cars">
             <th mat-header-cell *matHeaderCellDef> Cars</th>
             <td mat-cell *matCellDef="let user" (click)="navigateToRequestInfo(user.id)">
-                <div class="cars">
+                <div class="cars" *ngIf=" user.cars.length > 0">
                     <p>{{user.cars.length}} - {{carStatus[user.cars[0].carStatus]}}</p>
                 </div>
             </td>

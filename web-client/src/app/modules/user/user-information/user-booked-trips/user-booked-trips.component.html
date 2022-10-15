@@ -4,7 +4,7 @@
 
     <div class="container" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
         (scrolled)=" getUserBookedTrips();" [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false"
-        style="height: 88.9vh; overflow: auto;">
+        style="height: 84.9vh; overflow: auto;">
         <div class="search_results" *ngIf="trips.trips.length > 0">
             <div class="items">
                 <div class="search_item" [ngClass]="isTripCompleted(item.endTime) ? 'is-disabled':''"
@@ -46,10 +46,10 @@
                             <p>Cancel book</p>
                         </div>
                     </div>
-                    <div class="booked-seats">
+                    <div class="booked-seats" *ngIf="item.tripUsers[0].seat != null">
                         <p class="title">You have booked seats:</p>
                         <div *ngFor="let tripUser of item.tripUsers" class="booked_seats_num">
-                            <p>{{tripUser.seat.seatNumber}}</p>
+                            <p>{{tripUser.seat?.seatNumber!}}</p>
                             <i class="material-icons" title="Cancel reservation"
                                 (click)="deleteBookedSeat(tripUser)">remove_circle_outline</i>
                         </div>

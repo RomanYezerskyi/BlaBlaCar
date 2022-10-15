@@ -85,7 +85,10 @@ export class UserBookedTripsComponent implements OnInit, OnDestroy {
   deleteBookedSeat(tripUser: TripUserModel): void {
     this.tripService.deleteBookedSeat(tripUser).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        this.ngOnInit();
+        this.trips.trips.forEach(
+          x => { x.tripUsers = x.tripUsers.filter(t => t.seatId != tripUser.seatId) }
+
+        )
         this.openSnackBar(`You have canceled your seat ${tripUser.seat.seatNumber} reservation`);
       },
       (error: HttpErrorResponse) => { console.log(error.error); this.openSnackBar(error.error); }
@@ -99,7 +102,7 @@ export class UserBookedTripsComponent implements OnInit, OnDestroy {
   getChat(userId: string) {
     this.chatService.GetPrivateChat(userId).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        this.router.navigate(['/chat'], {
+        this.router.navigate(['/user/chat'], {
           queryParams: {
             chatId: response
           }
