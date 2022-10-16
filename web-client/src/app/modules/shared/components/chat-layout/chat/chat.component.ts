@@ -60,10 +60,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   scroll(): void {
     let element = this.myScrollContainer.nativeElement;
     let atBottom = (element.scrollTop + 20) >= (element.scrollHeight - element.offsetHeight);
-    // console.log("element Height " + element.scrollHeight);
-    // console.log("element offsetHeight " + element.offsetHeight);
-    // console.log("element scroll " + element.scrollTop)
-    // console.log(atBottom);
     if (atBottom) {
       this.disableScrollDown = false
     } else {
@@ -87,7 +83,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.readMessages(message.data);
       message.data.status = MessageStatus.Read;
       this.chat.messages?.push(message.data);
-      console.log(message);
     });
   }
   setSignalRUrls(): void {
@@ -107,7 +102,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       messages!.push(unreadMessage!);
     if (messages == undefined) return;
     this.chatService.readMessagesInchat(messages!).pipe(takeUntil(this.unsubscribe$)).subscribe(response => {
-      console.log(response);
     },
       (error: HttpErrorResponse) => { console.error(error.error); });
   }
@@ -115,14 +109,11 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.chatService.getChatById(this.chat.id!).pipe(takeUntil(this.unsubscribe$)).subscribe(response => {
       this.chat = response;
       this.chat.messages = [];
-      console.log(response);
       this.getChatMessages()
     },
       (error: HttpErrorResponse) => { console.error(error.error); });
   }
   getChatMessages() {
-    console.log(this.messagesSkip);
-    console.log(this.chat.messages?.length);
     if (this.messagesSkip <= this.chat.messages?.length!) {
       this.chatService.getChatMessages(this.chat.id!, this.messagesTake, this.messagesSkip)
         .pipe(takeUntil(this.unsubscribe$)).subscribe(response => {
@@ -131,11 +122,9 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
               m.user = this.chat.users?.find(x => x.userId == m.userId)?.user!;
             });
             this.chat.messages = response.concat(this.chat.messages!);
-            console.log(this.chat.messages);
             this.readMessages(null);
           }
           else {
-            console.log("aa");
             this.isFullListDisplayed = true;
           }
         },
@@ -150,10 +139,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     if (this.text == '') return;
     const user = this.chat.users?.find(x => x.userId == this.currentUserId)?.user;
     const message = { text: this.text, chatId: this.chat.id!, user: user! };
-    console.log(message);
     this.chatService.createMessage(message).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        console.log(response);
         this.text = '';
       },
       (error: HttpErrorResponse) => { console.error(error.error); this.openSnackBar(error.error); }

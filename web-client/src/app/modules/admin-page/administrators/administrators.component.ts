@@ -95,9 +95,9 @@ export class AdministratorsComponent implements OnInit, OnDestroy {
     const data = { roleName: role, userId: userId };
     this.adminService.changeUserRole(data).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        console.log(response);
+        this.openSnackBar("Changes saved!")
       },
-      (error: HttpErrorResponse) => { console.error(error.error); }
+      (error: HttpErrorResponse) => { console.error(error.error); this.openSnackBar(error.error.error); }
     );
   }
   private openSnackBar(message: string) {

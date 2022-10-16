@@ -22,6 +22,10 @@ mat-progress-spinner {
     z-index: 2;
 }
 
+.message {
+    cursor: pointer;
+}
+
 .no-data {
     text-align: center;
     padding: 30px;
@@ -205,8 +209,6 @@ app-alerts {
             // justify-content: end;
             // margin-left: 100px;
             justify-content: center;
-
-            .material-icons {}
         }
     }
 

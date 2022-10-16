@@ -18,7 +18,6 @@ import { SignalRService } from 'src/app/core/services/signalr-services/signalr.s
 })
 export class ChatListComponent implements OnInit, OnDestroy {
   @Input() currentUserId: string = '';
-  @Input() role: string = '';
   private unsubscribe$: Subject<void> = new Subject<void>();
   private token: string | null = localStorage.getItem("jwt");
   chats: Array<ChatModel> = [];
@@ -62,7 +61,6 @@ export class ChatListComponent implements OnInit, OnDestroy {
 
   connectToSignalRChatHub(): void {
     this.signal.getDataStream<string>().pipe(takeUntil(this.unsubscribe$)).subscribe(message => {
-      console.log(message.data);
       if (this.currentChatId != message.data) {
         if (this.unreadMessagesChats.some(x => x.chatId == message.data)) {
           this.unreadMessagesChats.forEach(x => {
@@ -85,17 +83,18 @@ export class ChatListComponent implements OnInit, OnDestroy {
   getUserChats(): void {
     this.chatService.getUserChats().pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        this.chats = response;
-        this.chats.forEach(chat => {
-          if (chat.lastMessage?.status == MessageStatus.Unread) {
-            const chatMess: UnreadMessagesInChatsModel = {
-              chatId: chat.id!,
-              count: 1
-            };
-            this.unreadMessagesChats.push(chatMess);
-          }
-
-        });
+        if (response != null) {
+          this.chats = response;
+          this.chats.forEach(chat => {
+            if (chat.lastMessage?.status == MessageStatus.Unread) {
+              const chatMess: UnreadMessagesInChatsModel = {
+                chatId: chat.id!,
+                count: 1
+              };
+              this.unreadMessagesChats.push(chatMess);
+            }
+          });
+        }
         console.log(response);
         if (response != null)
           this.connectToSignalRChatHub();

@@ -85,7 +85,7 @@ export class EditCarModalDialogComponent implements OnInit, OnDestroy {
   uploadFile(): void {
     if (this.fileToUpload.length > 0) {
       for (let item of this.fileToUpload) {
-        this.formData.append('techPassportFile', item, item.name);
+        this.formData.append('TechnicalPassportFile', item, item.name);
       }
     }
     if (this.updateCarModel.deletedDocuments?.length > 0) {

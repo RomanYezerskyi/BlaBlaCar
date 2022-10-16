@@ -150,29 +150,32 @@ namespace BlaBlaCar.BL.Services
                 .GetAsync(x=>x.Include(x=>x.UserDocuments), x => x.Id == currentUserId));
             if (userModel.UserStatus == UserStatusDTO.Rejected) throw new PermissionException("This user cannot add driving license!");
 
-           
+
             if (model.DocumentsFile != null)
             {
                 var files = await _fileService.GetFilesDbPathAsync(model.DocumentsFile);
 
-                userModel.UserDocuments = files.Select(f => new UserDocumentDTO() { User = userModel, DrivingLicense = f }).ToList();
+                userModel.UserDocuments = files.Select(f => new UserDocumentDTO() { UserId = userModel.Id, DrivingLicense = f }).ToList();
 
                 userModel.UserStatus = UserStatusDTO.Pending;
                 var user = _mapper.Map<ApplicationUser>(userModel);
                 _unitOfWork.Users.Update(user);
-                
+               
+
             }
 
             if (model.DeletedDocuments != null)
             {
-                var documents = userModel.UserDocuments.Select(x =>
+                var userDocuments = await _unitOfWork.UserDocuments.GetAsync(null, null,
+                    x => x.UserId == userModel.Id);
+                var documents = userDocuments.Select(x =>
                 {
                     return model.DeletedDocuments.Any(d => d == x.Id.ToString()) ? x : null;
-                }).Where(x=>x != null).ToList();
+                }).Where(x => x != null).ToList();
                 _unitOfWork.UserDocuments.Delete(_mapper.Map<IEnumerable<UserDocuments>>(documents));
                 _fileService.DeleteFilesFormApi(documents.Where(x => x != null).Select(x => x.DrivingLicense));
+                
             }
-
             return await _unitOfWork.SaveAsync(currentUserId);
         }
 
