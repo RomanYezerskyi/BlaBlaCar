@@ -62,12 +62,12 @@ namespace BlaBlaCar.BL.Services
                }).ToList();
 
             user.Cars = user.Cars.Select(x =>
-               {
-                   x.CarDocuments.Select(c =>
-                   {
-                       c.TechnicalPassport = _hostSettings.CurrentHost + c.TechnicalPassport;
-                       return c;
-                   }).ToList();
+            {
+                x.CarDocuments.Select(c =>
+                {
+                    c.TechnicalPassport = _hostSettings.CurrentHost + c.TechnicalPassport;
+                    return c;
+                });
                    return x;
                }).ToList();
             return user;
@@ -78,7 +78,7 @@ namespace BlaBlaCar.BL.Services
             var user = _mapper.Map<UserDTO>(await _unitOfWork.Users.GetAsync(
                 x => x.Include(x => x.UserDocuments)
                     .Include(x => x.Cars.OrderBy(x=>x.CarStatus))
-                    .ThenInclude(x => x.CarDocuments)
+                    .ThenInclude(x => x.CarDocuments).Include(x=>x.Cars).ThenInclude(x=>x.Seats)
                     .Include(x => x.Trips)
                     .Include(x => x.TripUsers),
                 x => x.Id == id));
@@ -95,15 +95,16 @@ namespace BlaBlaCar.BL.Services
 
             }).ToList();
 
-            user.Cars = user.Cars.Select(x =>
+
+            foreach (var car in user.Cars)
             {
-                x.CarDocuments.Select(c =>
+                car.CarDocuments = car.CarDocuments.Select(d =>
                 {
-                    c.TechnicalPassport = _hostSettings.CurrentHost + c.TechnicalPassport;
-                    return c;
+                    if (d.TechnicalPassport != null)
+                        d.TechnicalPassport = _hostSettings.CurrentHost + d.TechnicalPassport;
+                    return d;
                 }).ToList();
-                return x;
-            }).ToList();
+            }
 
             return user;
         }
@@ -169,7 +170,7 @@ namespace BlaBlaCar.BL.Services
                     return model.DeletedDocuments.Any(d => d == x.Id.ToString()) ? x : null;
                 }).Where(x=>x != null).ToList();
                 _unitOfWork.UserDocuments.Delete(_mapper.Map<IEnumerable<UserDocuments>>(documents));
-                _fileService.DeleteFileFormApi(documents.Where(x => x != null).Select(x => x.DrivingLicense));
+                _fileService.DeleteFilesFormApi(documents.Where(x => x != null).Select(x => x.DrivingLicense));
             }
 
             return await _unitOfWork.SaveAsync(currentUserId);
@@ -217,8 +218,9 @@ namespace BlaBlaCar.BL.Services
 
             var img = await _fileService.GetFileDbPathAsync(userImg);
 
+            if(user.UserImg != null) _fileService.DeleteFilesFormApi(user.UserImg);
+
             user.UserImg = img;
-            
             _unitOfWork.Users.Update(_mapper.Map<ApplicationUser>(user));
             await _unitOfWork.SaveAsync(currentUserId);
             var imageLink = _hostSettings.CurrentHost + img;

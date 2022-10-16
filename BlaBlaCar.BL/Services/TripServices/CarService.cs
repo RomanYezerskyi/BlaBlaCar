@@ -143,7 +143,7 @@ namespace BlaBlaCar.BL.Services.TripServices
                     return carModel.DeletedDocuments.Any(d => d.Contains(x.TechnicalPassport)) ? x : null;
                 }).Where(x => x != null).ToList();
                 _unitOfWork.CarDocuments.Delete(_mapper.Map<IEnumerable<CarDocuments>>(doc));
-                _fileService.DeleteFileFormApi(doc.Where(x => x != null).Select(x => x.TechnicalPassport));
+                _fileService.DeleteFilesFormApi(doc.Where(x => x != null).Select(x => x.TechnicalPassport));
             }
 
             return await _unitOfWork.SaveAsync(currentUserId);
@@ -152,7 +152,8 @@ namespace BlaBlaCar.BL.Services.TripServices
         public async Task<bool> DeleteCarAsync(Guid carId, Guid userId)
         {
             var car = await _unitOfWork.Cars.GetAsync(x=>
-            x.Include(x=>x.Seats).ThenInclude(x=>x.AvailableSeats).Include(x=>x.Trips), x => x.Id == carId);
+            x.Include(x=>x.Seats).ThenInclude(x=>x.AvailableSeats).Include(x=>x.Trips).Include(x=>x.CarDocuments)
+                , x => x.Id == carId);
 
             var trips = await _unitOfWork.Trips.GetAsync(null, null, 
                 x => x.CarId == car.Id
@@ -160,7 +161,10 @@ namespace BlaBlaCar.BL.Services.TripServices
             if (trips.Any()) throw new Exception("You need to complete trips with this car");
 
             _unitOfWork.Cars.Delete(car);
-            return await _unitOfWork.SaveAsync(userId);
+            var result = await _unitOfWork.SaveAsync(userId);
+
+            _fileService.DeleteFilesFormApi(car.CarDocuments.Select(x=>x.TechnicalPassport));
+            return result;
         }
     }
 }

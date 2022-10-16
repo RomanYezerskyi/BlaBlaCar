@@ -1,7 +1,9 @@
 <div class="wrapper">
     <div [ngClass]="isSpinner ? 'hide-spinner': ''"></div>
     <mat-progress-spinner mode="indeterminate" *ngIf="isSpinner"></mat-progress-spinner>
-
+    <div class="no-data" *ngIf="noData">
+        <p>You don't have any trips yet</p>
+    </div>
     <div class="container" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
         (scrolled)="getUserTrips();" [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false"
         style="height: 84.9vh;overflow: auto;">

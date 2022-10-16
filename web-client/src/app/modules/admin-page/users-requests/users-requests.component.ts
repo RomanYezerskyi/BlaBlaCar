@@ -27,6 +27,7 @@ export class UsersRequestsComponent implements OnInit, OnDestroy {
   isFullListDisplayed: boolean = false;
   displayedColumns: string[] = ['Img', 'CreatedAt', 'Name', 'Phone', 'Email', 'User documents', 'Cars',];
   isSpinner: boolean = false;
+  noData = false;
   constructor(
     private sanitizeImgService: ImgSanitizerService,
     private router: Router,
@@ -56,6 +57,11 @@ export class UsersRequestsComponent implements OnInit, OnDestroy {
 
             if (this.totalRequests == 0)
               this.totalRequests = response.totalRequests!;
+
+            this.noData = false;
+          }
+          else {
+            if (this.totalRequests === 0) this.noData = true;
           }
           this.isSpinner = false;
         },

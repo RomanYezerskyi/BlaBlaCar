@@ -26,6 +26,7 @@ export class UserTripsComponent implements OnInit, OnDestroy {
   private Skip: number = 0;
   private Take: number = 5;
   isSpinner: boolean = true;
+  noData = false;
   constructor(private _snackBar: MatSnackBar,
     private imgSanitaze: ImgSanitizerService, private router: Router,
     private tripService: TripService, private chatService: ChatService, private mapsService: MapsService) { }
@@ -61,6 +62,11 @@ export class UserTripsComponent implements OnInit, OnDestroy {
             console.log(this.totalTrips);
             if (this.totalTrips == 0)
               this.totalTrips = response.totalTrips!;
+
+            this.noData = false;
+          }
+          else {
+            if (this.totalTrips == 0) this.noData = true;
           }
           this.isSpinner = false;
         },

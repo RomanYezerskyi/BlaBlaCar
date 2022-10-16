@@ -79,7 +79,7 @@ namespace BlaBlaCar.API.Controllers
         {
            
             var link = await _userService.UpdateUserImgAsync(userProfileImage, UserId);
-            return Ok(link);
+            return Ok(new {link});
         }
     }
 }

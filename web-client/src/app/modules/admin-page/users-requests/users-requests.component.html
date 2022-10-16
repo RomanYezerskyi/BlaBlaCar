@@ -14,6 +14,9 @@
 <div class="wrapper">
     <div [ngClass]="isSpinner ? 'hide-spinner': ''"></div>
     <mat-progress-spinner mode="indeterminate" *ngIf="isSpinner"></mat-progress-spinner>
+    <div class="no-data" *ngIf="noData">
+        <p>There is no data</p>
+    </div>
     <table mat-table [dataSource]="requests.users" class="example-table-container" infiniteScroll
         [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="getRequests();"
         [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false" *ngIf="totalRequests > 0">

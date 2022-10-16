@@ -82,7 +82,7 @@ export class RequestDrivingLicenseComponent implements OnInit, OnDestroy {
     this.uploadFile();
     this.userService.addDrivingLicense(this.formData).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        console.log(response);
+        this.fileToUpload = [];
         this.openSnackBar("Documents saved!");
       },
       (error: HttpErrorResponse) => { console.error(error.error); this.openSnackBar(error.error) }

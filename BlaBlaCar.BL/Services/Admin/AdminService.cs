@@ -54,6 +54,11 @@ namespace BlaBlaCar.BL.Services.Admin
             var usersCount = await _unitOfWork.Users.GetCountAsync(x=>x.UserStatus == (Status)status 
                                                                 || x.Cars.Any(c => c.CarStatus == (Status)status));
 
+            users = users.Select(u =>
+            {
+                if (u.UserImg != null) u.UserImg = _hostSettings.CurrentHost + u.UserImg;
+                return u;
+            });
             var result = new UserRequestsDTO()
             {
                 Users = users,

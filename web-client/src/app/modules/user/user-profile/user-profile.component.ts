@@ -12,6 +12,7 @@ import { PasswordValidatorService } from 'src/app/core/services/password-validat
 import { UserService } from 'src/app/core/services/user-service/user.service';
 import { RequestDrivingLicenseComponent } from './request-driving-license/request-driving-license.component';
 import { EditModalDialogComponent } from './edit-modal-dialog/edit-modal-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 Chart.register(...registerables);
 @Component({
   selector: 'app-user-profile',
@@ -27,6 +28,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   private formData = new FormData();
   isSpinner: boolean = false;
   constructor(
+    private _snackBar: MatSnackBar,
     private dialog: MatDialog,
     private imgSanitaze: ImgSanitizerService,
     private userService: UserService) {
@@ -68,8 +70,10 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   updateUserPhoto() {
     this.userService.updateUserPhoto(this.formData).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
-        this.ngOnInit();
-        console.log(response)
+        this.user.userImg = response.link;
+        this.updateUserInNav();
+        this.openSnackBar("Profile photo changed!");
+        this.changeUserPhoto = false;
       },
       (error: HttpErrorResponse) => { console.log(error.error); }
     );
@@ -81,7 +85,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       this.message = "Only images are supported.";
       return;
     }
-    this.formData.append('userImg', file, file.name);
+    this.formData.append('userProfileImage', file, file.name);
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = (_event) => {
@@ -102,4 +106,15 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     );
   }
 
+  private openSnackBar(message: string) {
+    this._snackBar.open(message, "Close");
+  }
+  updateUserInNav(): void {
+    this.userService.getCurrentUser().pipe(takeUntil(this.unsubscribe$)).subscribe(
+      response => {
+        this.userService.userProfile = response;
+      },
+      (error: HttpErrorResponse) => { console.log(error.error); }
+    );;
+  }
 }

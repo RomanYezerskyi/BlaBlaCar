@@ -87,7 +87,7 @@ export class EditModalDialogComponent implements OnInit, OnDestroy {
         this.getUser();
         this.openSnackBar("Changes saved");
       },
-      (error: HttpErrorResponse) => { console.log(error.error); this.openSnackBar(error.error); }
+      (error: HttpErrorResponse) => { console.log(error.error); this.openSnackBar(error.error.error); }
     );
   }
   private openSnackBar(message: string) {

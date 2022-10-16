@@ -1,4 +1,7 @@
-﻿using IdentityServerJWT.API.Interfaces;
+﻿using System.Data;
+using System.Security.Claims;
+using IdentityModel;
+using IdentityServerJWT.API.Interfaces;
 using IdentityServerJWT.API.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -57,7 +60,10 @@ namespace IdentityServerJWT.API.Services
             var allRoles = _roleManager.Roles.Where(x => x.Name != roleModel.RoleName);
             var role = await _roleManager.FindByNameAsync(roleModel.RoleName);
             await _userManager.AddToRoleAsync(user, role.Name);
-           return await _userManager.RemoveFromRoleAsync(user, allRoles.First().Name);
+            var claims =await _userManager.GetClaimsAsync(user);
+            await _userManager.ReplaceClaimAsync(user, claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role),
+                new Claim(JwtClaimTypes.Role, role.Name));
+            return await _userManager.RemoveFromRoleAsync(user, allRoles.First().Name);
 
         }
 
@@ -70,6 +76,16 @@ namespace IdentityServerJWT.API.Services
             user.FirstName = userModel.FirstName;
             user.Email = userModel.Email;
             user.PhoneNumber = userModel.PhoneNumber;
+
+            var claims = await _userManager.GetClaimsAsync(user);
+            await _userManager.ReplaceClaimAsync(user, claims.FirstOrDefault(x => x.Type == ClaimTypes.GivenName),
+                new Claim(ClaimTypes.GivenName, user.FirstName));
+            await _userManager.ReplaceClaimAsync(user, claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Name),
+                new Claim(JwtClaimTypes.Name, user.Email));
+            await _userManager.ReplaceClaimAsync(user, claims.FirstOrDefault(x => x.Type == ClaimTypes.Email),
+                new Claim(ClaimTypes.Email, user.Email));
+            await _userManager.ReplaceClaimAsync(user, claims.FirstOrDefault(x => x.Type == JwtClaimTypes.PhoneNumber),
+                new Claim(JwtClaimTypes.PhoneNumber, user.PhoneNumber));
 
             var result = await _userManager.UpdateAsync(user);
             return result;

@@ -101,8 +101,6 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
             var endPlace = await _mapService.GetPlaceInformation(trip.EndLocation.X, trip.EndLocation.Y);
             if (startPlace == null || endPlace == null) throw new Exception("Places not found!");
 
-           
-            
             var result = await _unitOfWork.SaveAsync(currentUser.Id);
            
             if (result)
