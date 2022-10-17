@@ -14,7 +14,6 @@ using BlaBlaCar.BL.DTOs.UserDTOs;
 using BlaBlaCar.BL.Exceptions;
 using Hangfire;
 using NetTopologySuite.Geometries;
-using BlaBlaCar.BL.Extensions;
 using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
@@ -62,7 +61,7 @@ namespace BlaBlaCar.BL.Services.TripServices
             if (trip is null)
                 throw new NotFoundException("Trip");
 
-            trip.AvailableSeats.Select(x =>
+            trip.AvailableSeats = trip.AvailableSeats.Select(x =>
             {
                 if (usersBookedTrip.Any(y => y.SeatId == x.SeatId))
                 {
@@ -91,7 +90,7 @@ namespace BlaBlaCar.BL.Services.TripServices
             Guid currentUserId)
         {
             var trips = _mapper.Map<IEnumerable<TripDTO>>
-                (await _unitOfWork.Trips.GetAsync(orderBy:x=>x.OrderByDescending(x=>x.EndTime), 
+                (await _unitOfWork.Trips.GetAsync(orderBy:x=>x.OrderByDescending(x=>x.StartTime).ThenByDescending(x=>x.EndTime), 
                     includes:x=>x.Include(i=>i.Car)
                         .Include(x=>x.AvailableSeats)
                         .Include(i=>i.TripUsers).ThenInclude(i=>i.User)
@@ -159,7 +158,7 @@ namespace BlaBlaCar.BL.Services.TripServices
                 _ => trip => trip.OrderBy(t => t.StartTime)
             };
 
-            var radius = 50000;
+            var radius = 80000;
 
             var startLocationLat = model.StartLat.ToString(CultureInfo.InvariantCulture);
             var startLocationLon = model.StartLon.ToString(CultureInfo.InvariantCulture);
@@ -167,8 +166,8 @@ namespace BlaBlaCar.BL.Services.TripServices
             var endLocationLon = model.EndLon.ToString(CultureInfo.InvariantCulture);
 
             var sqlRaw = $"SELECT * FROM [Trips] AS [t]" +
-                         $"WHERE (CONVERT(date, [t].[StartTime]) = '{model.StartTime.Date:yyyy-MM-dd}') AND" +
-                         $"([t].StartLocation.STDistance(geography::STGeomFromText('POINT({startLocationLat} {startLocationLon})', 4326)) < {radius}) " +
+                         $"WHERE (CONVERT(date, [t].[StartTime]) = '{model.StartTime.Date:yyyy-MM-dd}') AND ([t].[StartTime]) >= '{DateTimeOffset.Now.DateTime:yyyy-MM-dd HH:mm:ss zz:00}' AND" +
+                         $"  ([t].StartLocation.STDistance(geography::STGeomFromText('POINT({startLocationLat} {startLocationLon})', 4326)) < {radius}) " +
                          $" AND ([t].EndLocation.STDistance(geography::STGeomFromText('POINT({endLocationLat} {endLocationLon})', 4326)) < {radius})  AND" +
                          $" ((SELECT COUNT(*)FROM [AvailableSeats] AS [a] WHERE ([t].[Id] = [a].[TripId]) AND NOT EXISTS (SELECT 1 FROM [TripUsers] AS [t0]" +
                          $" WHERE ([t].[Id] = [t0].[TripId]) AND (([t0].[SeatId] = [a].[SeatId]) AND ([t0].[SeatId] IS NOT NULL)))) >= {model.CountOfSeats})";
@@ -193,10 +192,6 @@ namespace BlaBlaCar.BL.Services.TripServices
             {
                 Trips = _mapper.Map<IEnumerable<Trip>, IEnumerable<TripDTO>>(trips),
             };
-            //if (model.Skip == 0)
-            //{
-            //    result.TotalTrips = 10; //await _unitOfWork.Trips.GetCountAsync(tripFilter);
-            //}
             return result;
         }
 
@@ -208,7 +203,6 @@ namespace BlaBlaCar.BL.Services.TripServices
             var trip = _mapper.Map<TripDTO, Trip>(tripModel);
             trip.StartLocation = new Point(newTripModel.StartLat, newTripModel.StartLon) { SRID = 4326 };
             trip.EndLocation = new Point(newTripModel.EndLat, newTripModel.EndLon) { SRID = 4326 };
-            //var distanceInMeters = seattle.ProjectTo(2855).Distance(trip.Location.ProjectTo(2855));
 
             await _unitOfWork.Trips.InsertAsync(trip);
             var res =  await _unitOfWork.SaveAsync(currentUserId);
@@ -217,7 +211,7 @@ namespace BlaBlaCar.BL.Services.TripServices
                     trip.EndTime);
             return res;
 
-        }
+         }
 
         public async Task<bool> DeleteTripAsync(Guid id, Guid currentUserId)
         {
@@ -227,22 +221,22 @@ namespace BlaBlaCar.BL.Services.TripServices
             if (trip is null)
                 throw new NotFoundException(nameof(TripDTO));
 
+            _unitOfWork.Trips.Delete(trip);
+            var result = await _unitOfWork.SaveAsync(currentUserId);
+
             var startPlace = await _mapService.GetPlaceInformation(trip.StartLocation.X, trip.StartLocation.Y);
             var endPlace = await _mapService.GetPlaceInformation(trip.EndLocation.X, trip.EndLocation.Y);
-            trip.TripUsers.ToList().ForEach(u =>
+
+            trip.TripUsers.GroupBy(x => x.UserId).Select(x => x.FirstOrDefault()).ToList().ForEach(u =>
             {
                 _notificationService.GenerateNotificationAsync(new CreateNotificationDTO()
                 {
                     UserId = u.UserId,
                     NotificationStatus = NotificationStatusDTO.SpecificUser,
                     Text = $"The trip {startPlace?.FeaturesList.First().Properties.Formatted} - {endPlace?.FeaturesList.First().Properties.Formatted} was cancelled!"
-                });
+                }, currentUserId);
             });
-
-            //if (tripUsers != null) _unitOfWork.TripUser.Delete(tripUsers);
-            _unitOfWork.Trips.Delete(trip);
-
-            return await _unitOfWork.SaveAsync(currentUserId);
+            return result;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace BlaBlaCar.BL.Interfaces
     {
         Task<List<string>> GetFilesDbPathAsync(IEnumerable<IFormFile> collection);
         Task<string> GetFileDbPathAsync(IFormFile file);
-        void DeleteFileFormApi(IEnumerable<string> files);
+        void DeleteFilesFormApi(IEnumerable<string> files);
+        void DeleteFilesFormApi(string file);
     }
 }

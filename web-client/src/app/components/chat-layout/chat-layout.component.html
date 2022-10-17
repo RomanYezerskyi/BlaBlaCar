@@ -1,9 +1,0 @@
-<div class="container">
-    <app-chat-list [currentUserId]="currentUserId" [role]="role"></app-chat-list>
-    <app-chat *ngIf="isChatSelected;else elseBlock" [currentUserId]="currentUserId"></app-chat>
-    <ng-template #elseBlock>
-        <div class="no-selected-chat">
-            <h4>Select a chat to starting messaging.</h4>
-        </div>
-    </ng-template>
-</div>

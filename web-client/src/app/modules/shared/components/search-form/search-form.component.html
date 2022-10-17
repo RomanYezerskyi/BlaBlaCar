@@ -1,0 +1,51 @@
+<div class="container">
+    <form #searchForm="ngForm" class="form" (ngSubmit)="search()">
+        <!-- <mat-form-field class="input__item" appearance="standard">
+           
+            <input type="text" matInput placeholder="Start place" id="startPlace" name="startPlace"
+                [(ngModel)]="trip.startPlace">
+            <mat-icon matSuffix>my_location</mat-icon>
+        </mat-form-field> -->
+        <app-maps-autocomplete [place]="trip.startPlace" (locationChange)="startPlaceChanged($event)">
+        </app-maps-autocomplete>
+        <!-- <mat-form-field class="input__item" appearance="standard">
+            <input type="text" matInput placeholder="End place" id="endPlace" name="endPlace"
+                [(ngModel)]="trip.endPlace">
+            <mat-icon matSuffix> place</mat-icon>
+        </mat-form-field> -->
+        <app-maps-autocomplete [place]="trip.endPlace" (locationChange)="endPlaceChanged($event)">
+        </app-maps-autocomplete>
+
+
+        <mat-form-field class="input__item date" appearance="standard">
+            <!-- <mat-label>Choose a date</mat-label> -->
+            <input matInput [min]="dateNow" [matDatepicker]="picker" placeholder="Choose a date"
+                [(ngModel)]="trip.startTime" id="startTime" name="startTime">
+            <mat-datepicker-toggle matSuffix [for]="picker">
+                <mat-icon matDatepickerToggleIcon>calendar_month</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="input__item count__item" appearance="standard">
+
+            <input type="number" matInput [(ngModel)]="trip.countOfSeats" name="countOfSeats" [disabled]="true"
+                required>
+            <mat-icon matSuffix (click)="counterAcive()">person_outline</mat-icon>
+            <div class="input__counter " [ngClass]="{'': !counterActive, 'counter_active': counterActive}">
+                <p *ngIf="trip.countOfSeats > 1" class="text">Passengers</p>
+                <p *ngIf="trip.countOfSeats == 1" class="text">Passenger</p>
+                <div class="counter">
+                    <mat-icon class="icon" (click)="counterRemove()">remove</mat-icon>
+                    <p class="counter_value">{{trip.countOfSeats}}</p>
+                    <mat-icon class="icon" (click)="counterAdd()">add</mat-icon>
+                </div>
+            </div>
+        </mat-form-field>
+
+        <button type="submit" class="btn" [disabled]="!searchForm.valid">
+            <!-- <mat-icon>search</mat-icon> -->
+            Search
+        </button>
+    </form>
+</div>

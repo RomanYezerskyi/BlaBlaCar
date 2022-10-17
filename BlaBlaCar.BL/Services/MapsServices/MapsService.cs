@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using BlaBlaCar.BL.DTOs.MapDTOs;
 using BlaBlaCar.BL.Interfaces;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 
@@ -14,6 +15,12 @@ namespace BlaBlaCar.BL.Services.MapsServices
 {
     public class MapsService:IMapService
     {
+        private readonly HostSettings _hostSettings;
+
+        public MapsService(IOptionsSnapshot<HostSettings> hostSettings)
+        {
+            _hostSettings = hostSettings.Value;
+        }
 
         public async Task<MapRequestResult?> GetPlaceInformation(double latitude, double longitude)
         {
@@ -21,7 +28,7 @@ namespace BlaBlaCar.BL.Services.MapsServices
             var locationLongitude = longitude.ToString(CultureInfo.InvariantCulture);
             using var httpClient = new HttpClient();
             using var response = await httpClient.GetAsync(
-                $"https://api.geoapify.com/v1/geocode/reverse?lat={locationLatitude}&lon={locationLongitude}&apiKey=32849d6b3d3b480c9a60be1ce5891252");
+                $"{_hostSettings.GeoapifyApiUrl}lat={locationLatitude}&lon={locationLongitude}&{_hostSettings.GeoapifyApiKey}");
             if (response.IsSuccessStatusCode)
             {
                 var jsonData = await response.Content.ReadAsStringAsync();

@@ -46,11 +46,19 @@ namespace BlaBlaCar.BL.Services.Admin
                         x.Include(x=> x.Cars.Where(x=>x.CarStatus == (Status)status))
                             .ThenInclude(x => x.CarDocuments),
                 filter:x=>x.UserStatus == (Status)status || x.Cars.Any(c=>c.CarStatus == (Status)status)));
+           
+            
+            
             if (!users.Any())
                 return null;
             var usersCount = await _unitOfWork.Users.GetCountAsync(x=>x.UserStatus == (Status)status 
                                                                 || x.Cars.Any(c => c.CarStatus == (Status)status));
 
+            users = users.Select(u =>
+            {
+                if (u.UserImg != null) u.UserImg = _hostSettings.CurrentHost + u.UserImg;
+                return u;
+            });
             var result = new UserRequestsDTO()
             {
                 Users = users,
@@ -71,14 +79,15 @@ namespace BlaBlaCar.BL.Services.Admin
 
             _unitOfWork.Users.Update(_mapper.Map<ApplicationUser>(user));
 
+            var result = await _unitOfWork.SaveAsync(currentUserId);
             await _notificationService.GenerateNotificationAsync(
                 new CreateNotificationDTO()
                 {
                     NotificationStatus = NotificationStatusDTO.SpecificUser,
                     Text = $"Your driving license status changed - {user.UserStatus}",
                     UserId = user.Id
-                });
-            return await _unitOfWork.SaveAsync(currentUserId);
+                }, currentUserId);
+            return result;
         }
         public async Task<bool> ChangeCarStatusAsync(ChangeCarStatus changeCarStatus, Guid currentUserId)
         {
@@ -90,14 +99,15 @@ namespace BlaBlaCar.BL.Services.Admin
 
             _unitOfWork.Cars.Update(_mapper.Map<Car>(car));
 
+            var result = await _unitOfWork.SaveAsync(currentUserId);
             await _notificationService.GenerateNotificationAsync(
                 new CreateNotificationDTO()
                 {
                     NotificationStatus = NotificationStatusDTO.SpecificUser,
                     Text = $"Your car {car.RegistrationNumber} status changed - {car.CarStatus}",
                     UserId = car.UserId,
-                });
-            return await _unitOfWork.SaveAsync(currentUserId);
+                }, currentUserId);
+            return result;
         }
 
         public async Task<AdminStatisticsDTO> GetStatisticsDataAsync(DateTimeOffset searchDate)
@@ -123,7 +133,7 @@ namespace BlaBlaCar.BL.Services.Admin
           
             var res = new AdminStatisticsDTO()
             {
-                UsersStatisticsCount = groupedUsers.Select(x=>x.ToList().Count()),
+                UsersStatisticsCount = groupedUsers.Select(x=>x.ToList().Count),
                 UsersDateTime = groupedUsers.Select(x=>x.Key),
 
                 CarsStatisticsCount = groupedCars.Select(x=>x.ToList().Count),
@@ -154,9 +164,9 @@ namespace BlaBlaCar.BL.Services.Admin
             return statistics;
         }
 
-        public  DateTimeOffset GetDayOfWeek(DateTimeOffset currentDate, DayOfWeek day)
+        public DateTimeOffset GetDayOfWeek(DateTimeOffset currentDate, DayOfWeek day)
         {
-            int diff = (7 + (currentDate.DayOfWeek - day)) % 7;
+            var diff = (7 + (currentDate.DayOfWeek - day)) % 7;
             return DateTimeOffset.Now.AddDays(-1 * diff).Date;
         }
         public async Task<IEnumerable<UsersStatisticsDTO>> GetTopUsersListAsync(int take, int skip, UsersListOrderByType orderBy)

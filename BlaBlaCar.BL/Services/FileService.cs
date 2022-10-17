@@ -42,12 +42,16 @@ namespace BlaBlaCar.BL.Services
             return dbPath;
         }
 
-        public void DeleteFileFormApi(IEnumerable<string> files)
+        public void DeleteFilesFormApi(IEnumerable<string> files)
         {
             foreach (var file in files)
             {
                 File.Delete(file);
             }
+        }
+        public void DeleteFilesFormApi(string file)
+        {
+            File.Delete(file);
         }
     }
 }

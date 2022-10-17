@@ -1,0 +1,45 @@
+<div class="container">
+
+    <div class="overview">
+        <div class="info__item info_first">
+            <div class="head__item">
+                <i class="material-icons">perm_identity</i>
+                <div class="head__title">
+                    <p class="count">{{shortStatistics.usersCount}}</p>
+                    <p class="title">users</p>
+                </div>
+            </div>
+        </div>
+        <div class="info__item">
+            <div class="head__item">
+                <i class="material-icons">directions_car</i>
+                <div class="head__title">
+                    <p class="count">{{shortStatistics.carsCount}}</p>
+                    <p class="title">cars</p>
+                </div>
+            </div>
+        </div>
+        <div class="info__item  info_third">
+            <div class="head__item">
+
+                <i class="material-icons">calendar_month</i>
+                <div class="head__title">
+                    <p class="count">{{shortStatistics.weekTripsCount}}</p>
+                    <p class="title">this week trips</p>
+                </div>
+            </div>
+        </div>
+        <div class="info__item info_fourth">
+            <div class="head__item">
+                <i class="material-icons">where_to_vote</i>
+                <div class="head__title">
+                    <p class="count">{{shortStatistics.tripsCount}}</p>
+                    <p class="title">trips</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-top-users-list></app-top-users-list>
+
+    <app-admin-notifications></app-admin-notifications>
+</div>

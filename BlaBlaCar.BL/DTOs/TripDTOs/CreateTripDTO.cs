@@ -21,6 +21,7 @@ namespace BlaBlaCar.BL.DTOs.TripDTOs
         [Required]
         public int PricePerSeat { get; set; }
         public string? Description { get; set; }
+        [Required]
         public int CountOfSeats { get; set; }
         [Required]
         public Guid CarId { get; set; }

@@ -102,6 +102,27 @@ namespace IdentityServerJWT.API.Migrations
                         .HasFilter("[PhoneNumber] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "7eebc6ce-8980-4050-8f9f-a3d271c27cdd",
+                            Email = "admin@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "admin",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@GMAIL.COM",
+                            NormalizedUserName = "ADMIN@GMAIL.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHB/ECWGtBKZm3E3RFXmkWOs2es/siVa2At+ZWHP1Lrbkot2h6fbHoaSiODnpt2WKQ==",
+                            PhoneNumber = "+380999999999",
+                            PhoneNumberConfirmed = false,
+                            RefreshTokenExpiryTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            SecurityStamp = "f391339f-4ced-47e2-8abc-fb845ec7f56d",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@gmail.com"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -129,6 +150,22 @@ namespace IdentityServerJWT.API.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "e23e7753-c716-40d0-b91a-ca49b10e304a",
+                            ConcurrencyStamp = "dab52546-dffd-4f80-bdc4-6f3e899e1ab6",
+                            Name = "blablacar.admin",
+                            NormalizedName = "BLABLACAR.ADMIN"
+                        },
+                        new
+                        {
+                            Id = "fe0d6a7a-c600-4026-a77c-f26a9c307390",
+                            ConcurrencyStamp = "0fb230b3-952d-4bae-b80a-8bc8d948e350",
+                            Name = "blablacar.user",
+                            NormalizedName = "BLABLACAR.USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -179,6 +216,50 @@ namespace IdentityServerJWT.API.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("AspNetUserClaims", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ClaimType = "name",
+                            ClaimValue = "admin@gmail.com",
+                            UserId = "8e445865-a24d-4543-a6c6-9443d048cdb9"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ClaimType = "id",
+                            ClaimValue = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                            UserId = "8e445865-a24d-4543-a6c6-9443d048cdb9"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
+                            ClaimValue = "admin@gmail.com",
+                            UserId = "8e445865-a24d-4543-a6c6-9443d048cdb9"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname",
+                            ClaimValue = "admin",
+                            UserId = "8e445865-a24d-4543-a6c6-9443d048cdb9"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            ClaimType = "phone_number",
+                            ClaimValue = "+380999999999",
+                            UserId = "8e445865-a24d-4543-a6c6-9443d048cdb9"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ClaimType = "role",
+                            ClaimValue = "blablacar.admin",
+                            UserId = "8e445865-a24d-4543-a6c6-9443d048cdb9"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -216,6 +297,13 @@ namespace IdentityServerJWT.API.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                            RoleId = "e23e7753-c716-40d0-b91a-ca49b10e304a"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

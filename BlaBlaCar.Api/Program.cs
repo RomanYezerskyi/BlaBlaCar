@@ -12,6 +12,7 @@ using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.BL;
 using BlaBlaCar.BL.ExceptionHandler;
 using BlaBlaCar.BL.Hubs;
+using BlaBlaCar.BL.Logger;
 using BlaBlaCar.BL.Services.Admin;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -22,6 +23,7 @@ using BlaBlaCar.BL.Services.ChatServices;
 using BlaBlaCar.BL.Services.MapsServices;
 using BlaBlaCar.BL.Services.NotificationServices;
 using BlaBlaCar.BL.Services.TripServices;
+using EmailService.Models;
 using Hangfire;
 using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Http.Features;
@@ -29,8 +31,17 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Builder;
+using NLog;
+using EmailService.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
+
+LogManager.LoadConfiguration(String.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
+var emailConfig = builder.Configuration
+    .GetSection("EmailConfiguration")
+    .Get<EmailConfiguration>();
+builder.Services.AddSingleton(emailConfig);
 // Add services to the container.
 builder.Services.AddControllers()
     .AddNewtonsoftJson(options =>
@@ -42,6 +53,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(
                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
                    sqlOption =>
                        sqlOption.UseNetTopologySuite()));
+
+
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddHangfire(configuration => configuration
@@ -66,10 +79,12 @@ builder.Services.Configure<FormOptions>(o =>
     o.MultipartBodyLengthLimit = int.MaxValue;
     o.MemoryBufferThreshold = int.MaxValue;
 });
+
+
+
+
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
-
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ITripService, TripService>();
 builder.Services.AddScoped<IBookedTripsService, BookedTripsService>();
@@ -82,7 +97,8 @@ builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IChatHubService, ChatHubService>();
 builder.Services.AddScoped<IMapService, MapsService>();
-
+builder.Services.AddSingleton<ILog, NLogger>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
 builder.Services.AddAuthentication(opt => {
@@ -111,14 +127,13 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()
-            .WithOrigins("http://localhost:4200");
+            .WithOrigins(jwtSettings.WebClientUrl);
     });
 });
 
+
 builder.Services.AddSignalR();
-//app.UseCors(builder => builder.WithOrigins("https://localhost:44321")
-//    .AllowAnyHeader()
-//    .AllowAnyMethod());
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -127,6 +142,10 @@ builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
+
+await using var scope = app.Services.CreateAsyncScope();
+await using var db = scope.ServiceProvider.GetService<ApplicationDbContext>();
+await db.Database.MigrateAsync();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -1,0 +1,57 @@
+<div class="container">
+    <div class="search_info">
+        <div class="date">
+            <h4>
+                {{trip.startTime | date}}
+            </h4>
+        </div>
+        <div class="header">
+            <div class="time">
+                <p>{{trip.startTime | date:'MMM d, y, h:mm a'}}</p>
+                <p>{{trip.endTime | date:'MMM d, y, h:mm a'}}</p>
+            </div>
+            <div class="line">
+            </div>
+            <div class="price_item">
+                <div class="cities">
+                    <div class="start">
+                        <mat-icon class="item_icon">gps_fixed</mat-icon>
+                        <p>{{trip.startPlace}}</p>
+                    </div>
+                    <div class="destination">
+                        <mat-icon class="item_icon"> place</mat-icon>
+                        <p>{{trip.endPlace}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="horizontal_line"></div>
+    <div class="price">
+        <p>For {{requestedSeats}} passangers</p>
+        <p>{{trip.pricePerSeat*requestedSeats | currency:"UAH":"symbol"}}</p>
+    </div>
+    <div class="horizontal_line"></div>
+    <div class="owner-info"
+        *ngIf="trip.userPermission == userPermission.canSeeTheOwnersData || trip.userPermission == userPermission.owner">
+        <p>Tel:{{trip.user?.phoneNumber}}</p>
+        <!-- <div class="chat">
+            <p>Chat with {{trip.user?.firstName}}</p>
+            <i class="material-icons">chat</i>
+        </div> -->
+    </div>
+    <!-- <div class="owner-info" *ngIf="trip.userPermission == userPermission.owner">
+        <p>{{trip.user?.phoneNumber}}</p>
+    </div> -->
+    <div class="horizontal_line"></div>
+    <div class="user">
+        <i class="material-icons" *ngIf="trip.userPermission == userPermission.canSeeTheOwnersData "
+            (click)="getChat(trip.user!.id)">chat</i>
+        <div class="user_img">
+            <img [src]="sanitizeUserImg(trip.user?.userImg!)" alt="" class="img">
+        </div>
+        <p>{{trip.user?.firstName}}</p>
+    </div>
+    <div class="horizontal_line"></div>
+    <button mat-button (click)="openDialog()" class="btn_continue">Continue</button>
+</div>

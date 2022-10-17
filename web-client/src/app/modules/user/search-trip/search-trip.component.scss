@@ -1,0 +1,252 @@
+body {
+    overflow: hidden;
+}
+
+.container {
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.search-form {
+    // border: 1px #000 solid;
+    height: 40px;
+    overflow-y: auto;
+    width: 100%;
+    position: relative;
+
+    .form {
+        // width: 97%;
+        box-sizing: border-box;
+        position: fixed;
+        top: 70px;
+        // height: 50px;
+        // width: 99%;
+        // left: -0.1%;
+        padding-top: 20px;
+        width: 100%;
+        // background-color: #fff;
+    }
+}
+
+.title {
+    text-align: center;
+    margin-top: 30px;
+
+    h2 {
+        color: #04333b;
+        font-size: 40px;
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+.is-params {
+    .form {
+        top: 100px;
+        margin-top: 100px;
+        padding-top: 0;
+    }
+}
+
+.main-line {
+    width: 100%;
+    background-color: #000;
+}
+
+.no-content {
+    display: flex;
+    flex-flow: column;
+    margin: auto;
+    margin-top: 50px;
+
+    img,
+    h3 {
+        margin: auto;
+    }
+
+    img {
+        width: 256px;
+        margin: auto;
+    }
+
+    h3 {
+        margin-top: 20px;
+        font-size: 30px;
+        font-weight: 500;
+        color: #04333b;
+    }
+}
+
+/**/
+
+.search_results {
+    width: 60%;
+    margin: auto;
+    margin-top: 40px;
+    // min-height: 57.5vh;
+    // border: #000 1px solid;
+    padding: 49px 40px;
+    padding-bottom: 70px;
+    border-radius: 10px;
+    display: flex;
+    flex-flow: row wrap;
+
+    // box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%) !important;
+    // justify-content: space-between;
+}
+
+.filters {
+    // border: #000 1px solid;
+    width: 40%;
+    padding: 20px;
+    // background-color: white;
+    border-radius: 10px;
+    // box-shadow: rgb(0 0 0 / 16%) 0px 1pt 4pt, rgb(0 0 0 / 8%) 0px 2pt 8pt;
+    // position: relative;
+
+    margin-right: 10px;
+
+}
+
+.none {
+    display: none;
+}
+
+.trips {
+    // margin-left: 10px;
+    min-width: 52%;
+    flex: auto // width: 300px;
+        // background-color: #04333b;
+}
+
+// .items {
+//     // border: #000 1px solid;
+//     // width: 68%;
+//     margin-left: 10px;
+//     flex: auto;
+//     // background-color: white;
+//     border-radius: 10px;
+//     // box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 20%) !important;
+// }
+
+// .search_item {
+//     font-weight: 600;
+//     // box-shadow: 0 0 15px 0 rgb(0 0 0 / 20%), 0 17px 50px 0 rgb(0 0 0 / 20%);
+//     margin-top: 10px;
+//     cursor: pointer;
+//     border-radius: 10px;
+//     box-shadow: rgb(0 0 0 / 16%) 0px 1pt 4pt, rgb(0 0 0 / 8%) 0px 2pt 8pt;
+//     transition: box-shadow 200ms ease-in 0s;
+//     background-color: rgb(255, 255, 255);
+//     flex: 1 1 0%;
+//     // border: #000 1px solid;
+
+// }
+
+// .search_item:first-child {
+//     margin-top: 0;
+// }
+
+// .search_item:hover {
+//     box-shadow: rgb(0 0 0 / 8%) 0px 2pt 8pt, rgb(0 0 0 / 8%) 0px 2pt 16pt;
+// }
+
+// .header {
+//     display: flex;
+
+//     .time,
+//     .cities {
+//         display: flex;
+//         flex-flow: column;
+//         justify-content: space-between;
+//     }
+
+//     .line {
+//         border: 1px #000 solid;
+//         margin: 10px;
+//         height: 80px;
+//         padding: 0;
+//         background-color: #000;
+//         margin-left: 10px;
+//         margin-right: 10px;
+//     }
+
+//     .start,
+//     .destination {
+//         display: flex;
+//         flex-flow: raw wrap;
+//     }
+
+//     .start p,
+//     .destination p {
+//         margin: 0;
+//         font-size: 18px;
+//     }
+
+//     .start p {
+//         font-size: 18px;
+//     }
+
+//     .item_icon {
+//         font-size: 20px;
+//     }
+
+//     .time {
+//         margin: 10px;
+//         margin-right: 0;
+//     }
+
+//     .cities {
+//         margin: 10px;
+//         margin-left: 0;
+//     }
+
+//     .price {
+//         margin: 10px;
+
+//         p {
+//             margin: 0;
+//             font-size: 20px;
+//         }
+//     }
+
+//     .time p {
+//         margin: 0;
+//     }
+
+//     .price_item {
+//         display: flex;
+//         flex-flow: raw wrap;
+//         justify-content: space-between;
+//         width: 100%;
+//     }
+// }
+
+// .body {
+//     display: flex;
+
+
+//     .profile_img {
+//         width: 50px;
+//         height: 50px;
+//         overflow: hidden;
+//         border-radius: 50%;
+//         margin-top: 10px;
+//         margin-left: 15px;
+//         margin-right: 10px;
+//         margin-bottom: 10px;
+//     }
+
+//     .img {
+//         width: 100%;
+//         height: 100%;
+//         object-fit: cover;
+//     }
+
+//     p {
+//         display: block;
+//         margin: auto 20px;
+//     }
+// }

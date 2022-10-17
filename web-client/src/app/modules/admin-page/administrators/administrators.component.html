@@ -1,0 +1,91 @@
+<div class="container">
+    <form #searchForm="ngForm" class="form" (ngSubmit)="getUser(searchForm)">
+        <mat-form-field class="example-full-width" appearance="standard">
+            <input type="email" matInput placeholder="Search users here ..." id="email" name="email"
+                [(ngModel)]="userEmail">
+
+        </mat-form-field>
+        <button type="submit" [disabled]="!searchForm.valid"><i class="material-icons" matSuffix>search</i></button>
+    </form>
+
+    <div class="users-list admins" *ngIf="searchUser.email != undefined">
+        <div class="head">
+            Users
+        </div>
+        <div class="title">
+            <h4 class="userId"><i class="material-icons" (click)=" getChat(searchUser.id)">chat</i></h4>
+            <h4>Avatar</h4>
+            <h4>Name</h4>
+            <h4>Email</h4>
+            <h4>Phone</h4>
+            <h4>Role</h4>
+            <h4> - </h4>
+
+        </div>
+        <div class="user__item">
+            <p class="userId">#</p>
+            <div class="img">
+                <p class="user_avatar">
+                    <img [src]="sanitizeImg(searchUser.userImg!)" alt="">
+                </p>
+            </div>
+
+            <p>{{searchUser.firstName}}</p>
+            <p>{{searchUser.email}}</p>
+            <p>{{searchUser.phoneNumber}}</p>
+            <!-- <p>{{searchUser.roles[0].name}}</p> -->
+            <mat-form-field class="form-item" appearance="standard">
+                <mat-label>{{searchUser.roles[0].name}}</mat-label>
+                <mat-select name="role" id="role" [(ngModel)]="searchUser.newRole">
+                    <mat-option [value]="role.name" *ngFor="let role of rolesList">
+                        {{role.name}}
+                    </mat-option>
+                </mat-select>
+                <!-- <mat-icon matSuffix *ngIf="newCar.carType == carType.Sedan">drive_eta</mat-icon>
+                <mat-icon matSuffix *ngIf="newCar.carType == carType.Bus">airport_shuttle</mat-icon> -->
+            </mat-form-field>
+            <p><button [disabled]="searchUser.roles[0].name === searchUser.newRole"
+                    (click)="changeRole(searchUser.newRole!, searchUser.id)">save</button></p>
+        </div>
+    </div>
+    <div class="users-list admins">
+        <div class="head">
+            Admins
+        </div>
+        <div class="title">
+            <h4 class="userId">#</h4>
+            <h4>Avatar</h4>
+            <h4>Name</h4>
+            <h4>Email</h4>
+            <h4>Phone</h4>
+            <h4>Role</h4>
+            <h4> - </h4>
+
+        </div>
+        <div class="user__item" *ngFor="let user of admins;let i = index;">
+            <p class="userId"><i class="material-icons" (click)=" getChat(user.id)">chat</i></p>
+            <div class="img">
+                <p class="user_avatar">
+                    <img [src]="sanitizeImg(user.userImg!)" alt="">
+                </p>
+            </div>
+
+            <p>{{user.firstName}}</p>
+            <p>{{user.email}}</p>
+            <p>{{user.phoneNumber}}</p>
+            <!-- <p>{{user.roles[0].name}}</p> -->
+            <mat-form-field class="form-item" appearance="standard">
+                <mat-label>{{user.roles[0].name}}</mat-label>
+                <mat-select name="role" id="role" [(ngModel)]="user.newRole">
+                    <mat-option [value]="role.name" *ngFor=" let role of rolesList">
+                        {{role.name}}
+                    </mat-option>
+                </mat-select>
+                <!-- <mat-icon matSuffix *ngIf="newCar.carType == carType.Sedan">drive_eta</mat-icon>
+                <mat-icon matSuffix *ngIf="newCar.carType == carType.Bus">airport_shuttle</mat-icon> -->
+            </mat-form-field>
+            <p><button [disabled]="user.roles[0].name === user.newRole"
+                    (click)="changeRole(user.newRole!, user.id)">save</button></p>
+        </div>
+    </div>
+</div>

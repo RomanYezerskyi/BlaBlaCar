@@ -1,0 +1,21 @@
+<div class="col1">
+    <div class="chats__list">
+        <h3 class="title">Chat list</h3>
+        <!-- search -->
+        <h3 class="no-chat-title" *ngIf="chats.length == 0">No chats</h3>
+        <ul class="chats">
+            <li class="chat__item" *ngFor="let chat of chats" (click)=" goToChat(chat.id!)">
+                <p class="unread-messages" *ngIf="checkIfChatHasUnreadMessages(chat.id!)">
+                </p>
+                <div class="user__img">
+                    <img [src]="sanitizeImg(chat.users![0].user!.userImg!)" alt="">
+                </div>
+                <div class="data">
+                    <h4 class="user-name">{{chat.users![0].user!.firstName}}</h4>
+                    <p class="date"> {{chat.lastMessage?.createdAt| date}}</p>
+                    <p class="message">{{chat.lastMessage?.text}}</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

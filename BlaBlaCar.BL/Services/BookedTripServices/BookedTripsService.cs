@@ -13,6 +13,9 @@ using BlaBlaCar.DAL.Interfaces;
 using IdentityModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using EmailService.Models;
+using EmailService.Services;
+using BlaBlaCar.DAL.Entities.CarEntities;
 
 namespace BlaBlaCar.BL.Services.BookedTripServices
 {
@@ -23,18 +26,21 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
         private readonly HostSettings _hostSettings;
         private readonly INotificationService _notificationService;
         private readonly IMapService _mapService;
+        private readonly IEmailSender _emailSender;
         public BookedTripsService(
             IUnitOfWork unitOfWork, 
             IMapper mapper,
             IOptionsSnapshot<HostSettings> hostSettings, 
             INotificationService notificationService, 
-            IMapService mapService)
+            IMapService mapService, IEmailSender emailSender)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _notificationService = notificationService;
             _mapService = mapService;
+            _emailSender = emailSender;
             _hostSettings = hostSettings.Value;
+            
         }
 
         public async Task<UserBookedTripsDTO> GetUserBookedTripsAsync(int take, int skip, Guid currentUserId)
@@ -71,7 +77,7 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
             return result;
         }
 
-        public async Task<bool> AddBookedTripAsync(NewBookTripModel tripModel, Guid currentUserId, string userName)
+        public async Task<bool> AddBookedTripAsync(NewBookTripModel tripModel, UserDTO currentUser)
         {
             var usersBookedTrip = await _unitOfWork.TripUser
                 .GetAsync(null, null, x => x.TripId == tripModel.TripId);
@@ -83,28 +89,42 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
             {
                 var userTripModel = _mapper.Map<NewBookTripModel, TripUserDTO>(tripModel);
 
-                userTripModel.UserId = currentUserId;
+                userTripModel.UserId = currentUser.Id;
                 userTripModel.SeatId = tripModel.BookedSeats.ElementAt(i).Id;
                 listOfSeats.Add(userTripModel);
             }
             await _unitOfWork.TripUser.InsertRangeAsync(_mapper.Map<IEnumerable<TripUser>>(listOfSeats));
 
-            var trip = await _unitOfWork.Trips.GetAsync(null, x => x.Id == tripModel.TripId);
+            var trip = await _unitOfWork.Trips.GetAsync(x=>x.Include(x=>x.User), x => x.Id == tripModel.TripId);
 
             var startPlace = await _mapService.GetPlaceInformation(trip.StartLocation.X, trip.StartLocation.Y);
             var endPlace = await _mapService.GetPlaceInformation(trip.EndLocation.X, trip.EndLocation.Y);
             if (startPlace == null || endPlace == null) throw new Exception("Places not found!");
 
-            await _notificationService.GenerateNotificationAsync(
-                new CreateNotificationDTO()
-                {
-                    NotificationStatus = NotificationStatusDTO.SpecificUser,
-                    Text = $"{startPlace?.FeaturesList.First().Properties.Formatted} - {endPlace?.FeaturesList.First().Properties.Formatted}" +
-                           $"\n{userName} joined your trip",
-                    UserId = trip.UserId,
-                });
+            var result = await _unitOfWork.SaveAsync(currentUser.Id);
+           
+            if (result)
+            {
+                await _notificationService.GenerateNotificationAsync(
+                    new CreateNotificationDTO()
+                    {
+                        NotificationStatus = NotificationStatusDTO.SpecificUser,
+                        Text = $"{startPlace?.FeaturesList.First().Properties.City} - {endPlace?.FeaturesList.First().Properties.City}" +
+                               $"\n{currentUser.FirstName} joined your trip",
+                        UserId = trip.UserId,
+                    }, currentUser.Id);
 
-            return await _unitOfWork.SaveAsync(currentUserId);
+                var user = await 
+                    _unitOfWork.Users.GetAsync(null, x => x.Id == currentUser.Id);
+                var message = new Message(new string[] { user.Email },
+                    "Order confirmation", $"{startPlace?.FeaturesList.First().Properties.Formatted}" +
+                                          $" - {endPlace?.FeaturesList.First().Properties.Formatted}" +
+                                          $"\n This is your confirmation, show it to the driver - {trip.User.FirstName} " +
+                                          $"on {trip.StartTime}");
+                await _emailSender.SendEmailAsync(message);
+            }
+
+            return result;
         }
 
         public async Task<bool> DeleteBookedTripAsync(DeleteTripUserDTO tripModel, Guid currentUserId, string userName)
@@ -115,6 +135,7 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
                 throw new NotFoundException(nameof(TripUserDTO));
             _unitOfWork.TripUser.Delete(_mapper.Map<IEnumerable<TripUser>>(trip));
 
+            var result = await _unitOfWork.SaveAsync(currentUserId);
             await _notificationService.GenerateNotificationAsync(
                 new CreateNotificationDTO()
                 {
@@ -122,9 +143,9 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
                     Text = $"{tripModel.StartPlace} - {tripModel.EndPlace} " +
                            $"The {userName} canceled all reservations",
                     UserId = tripModel.UserId,
-                });
+                }, currentUserId);
 
-            return await _unitOfWork.SaveAsync(currentUserId);
+            return result;
         }
 
         public async Task<bool> DeleteBookedSeatAsync(UpdateTripUserDTO tripUserModel, Guid currentUserId, string userName)
@@ -135,6 +156,7 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
                 throw new NotFoundException(nameof(TripUserDTO));
             _unitOfWork.TripUser.Delete(_mapper.Map<TripUser>(userTrip));
 
+            var result = await _unitOfWork.SaveAsync(currentUserId);
             var trip = _mapper.Map<TripDTO>(
                 await _unitOfWork.Trips.GetAsync(
                     null,
@@ -148,22 +170,41 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
                 new CreateNotificationDTO()
                 {
                     NotificationStatus = NotificationStatusDTO.SpecificUser,
-                    Text = $"{startPlace?.FeaturesList.First().Properties.Formatted} - {endPlace?.FeaturesList.First().Properties.Formatted} " +
+                    Text = $"{startPlace?.FeaturesList.First().Properties.City} - {endPlace?.FeaturesList.First().Properties.City} " +
                            $"The {userName} canceled the reservation seat {seat.SeatNumber} ",
                     UserId = trip.UserId,
-                });
-            return await _unitOfWork.SaveAsync(currentUserId);
+                }, currentUserId);
+
+            return result;
         }
 
         public async Task<bool> DeleteUserFromTripAsync(UpdateTripUserDTO tripUserModel, Guid currentUserId)
         {
-            var trip = _mapper.Map<IEnumerable<TripUserDTO>>(await _unitOfWork.TripUser.GetAsync(null,null, x =>
+            var tripUsers = _mapper.Map<IEnumerable<TripUserDTO>>(await _unitOfWork.TripUser.GetAsync(null,null, x =>
                 x.TripId == tripUserModel.TripId && x.UserId == tripUserModel.UserId && x.TripId == tripUserModel.TripId));
-            if (trip is null)
+            if (tripUsers is null)
                 throw new NotFoundException(nameof(TripUserDTO));
-            _unitOfWork.TripUser.Delete(_mapper.Map<IEnumerable<TripUser>>(trip));
+            _unitOfWork.TripUser.Delete(_mapper.Map<IEnumerable<TripUser>>(tripUsers));
+            var result = await _unitOfWork.SaveAsync(currentUserId);
 
-            return await _unitOfWork.SaveAsync(currentUserId);
+            var trip = _mapper.Map<TripDTO>(
+                await _unitOfWork.Trips.GetAsync(
+                    x=>x.Include(x=>x.User),
+                    x => x.Id == tripUserModel.TripId));
+            var startPlace = await _mapService.GetPlaceInformation(trip.StartLocation.X, trip.StartLocation.Y);
+            var endPlace = await _mapService.GetPlaceInformation(trip.EndLocation.X, trip.EndLocation.Y);
+            foreach (var tripUser in tripUsers.GroupBy(x=>x.UserId).Select(x=>x.FirstOrDefault()))
+            {
+                await _notificationService.GenerateNotificationAsync(
+                    new CreateNotificationDTO()
+                    {
+                        NotificationStatus = NotificationStatusDTO.SpecificUser,
+                        Text = $"{startPlace?.FeaturesList.First().Properties.City} - {endPlace?.FeaturesList.First().Properties.City} " +
+                               $"The {trip.User.FirstName} canceled the trip !",
+                        UserId = tripUser.UserId,
+                    }, currentUserId);
+            }
+            return result;
         }
     }
     

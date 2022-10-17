@@ -1,0 +1,12 @@
+<div class="alerts">
+    <div class="alert alert-success" *ngFor="let message of successMessages">
+        <button mat-button (click)="hideSuccessMessages()" class="close-btn"><i
+                class="material-icons">highlight_remove</i></button>
+        <strong>Success!</strong> {{message}}.
+    </div>
+    <div class="alert alert-error" *ngFor="let message of errorMessages">
+        <button mat-button (click)="hideErrorMessages()" class="close-btn"><i
+                class="material-icons">highlight_remove</i></button>
+        <strong>Error!</strong> {{message}}.
+    </div>
+</div>

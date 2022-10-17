@@ -1,0 +1,33 @@
+::ng-deep.mat-dialog-container {
+    position: relative !important;
+}
+
+.btn-close {
+    position: absolute;
+    right: 0;
+    top: 18px;
+
+}
+
+.upload {
+    font-weight: bold;
+    color: #28a745;
+    margin-left: 15px;
+    line-height: 36px;
+}
+
+.btn-save {
+    border-radius: 5px;
+    padding: 10px 30px;
+    text-transform: uppercase;
+    display: block;
+    margin: auto;
+    font-size: 15px;
+    color: #fff;
+    background: #808080;
+    border: none;
+}
+
+.btn-save:hover {
+    background: #393939;
+}

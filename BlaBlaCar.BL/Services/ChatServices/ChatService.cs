@@ -53,8 +53,8 @@ namespace BlaBlaCar.BL.Services.ChatServices
             {
                 foreach (var chat in chats)
                 {
-                    if (chat.Messages.FirstOrDefault().ChatId == dto.Id)
-                        dto.LastMessage = _mapper.Map<MessageDTO>(chat.Messages.FirstOrDefault());
+                    if (chat.Messages.Any() && chat.Messages.FirstOrDefault().ChatId == dto.Id)
+                            dto.LastMessage = _mapper.Map<MessageDTO>(chat.Messages.FirstOrDefault());
                 }
                 if (dto.LastMessage != null)
                 {
@@ -75,7 +75,8 @@ namespace BlaBlaCar.BL.Services.ChatServices
                 }).ToList();
                 return c;
             });
-            return chatsDTOs.OrderByDescending(x=>x.LastMessage.CreatedAt).ThenBy(x=> x.LastMessage.Status == MessageStatus.Read);
+           
+            return chatsDTOs.OrderByDescending(x=>x.LastMessage).ThenByDescending(x=>x.LastMessage?.CreatedAt).ThenBy(x=>x.LastMessage?.Status == MessageStatus.Read);
         }
 
         public async Task<int> IsUnreadMessagesAsync(Guid currentUserId)
