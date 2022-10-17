@@ -44,7 +44,6 @@ export class UsersManagementComponent implements OnInit, OnDestroy {
           this.openSnackBar("No users found!");
           this.users = [];
         }
-        console.log(response);
 
       },
       (error: HttpErrorResponse) => { console.error(error.error); }

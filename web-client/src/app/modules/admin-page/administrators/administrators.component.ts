@@ -43,7 +43,6 @@ export class AdministratorsComponent implements OnInit, OnDestroy {
     this.adminService.getAdmins().pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         if (response != null) {
-          console.log(response);
           this.admins = response;
           this.admins.forEach(x => x.newRole = x.roles[0].name);
           this.getAllRoles();
@@ -59,7 +58,6 @@ export class AdministratorsComponent implements OnInit, OnDestroy {
         if (response != null) {
           this.searchUser = response;
           this.searchUser.newRole = response.roles[0].name;
-          console.log(response);
         }
         else {
           this.openSnackBar("No users found!");
@@ -77,7 +75,6 @@ export class AdministratorsComponent implements OnInit, OnDestroy {
             chatId: response
           }
         });
-        console.log(response);
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );
@@ -86,7 +83,6 @@ export class AdministratorsComponent implements OnInit, OnDestroy {
     this.adminService.getRoles().pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         this.rolesList = response;
-        console.log(response);
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
     );

@@ -51,7 +51,6 @@ export class UsersRequestsComponent implements OnInit, OnDestroy {
       this.isSpinner = true;
       this.adminService.getUserRequests(this.requestsId, this.Take, this.Skip).subscribe(
         response => {
-          console.log(response);
           if (response != null) {
             this.requests.users = this.requests.users.concat(response.users);
 

@@ -49,8 +49,6 @@ export class ChartsComponent implements OnInit, OnDestroy {
     this.adminService.getStatistics(this.searchDate.toDateString()).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
         this.statistics = response;
-        console.log(response)
-        console.log(this.statistics.usersStatisticsCount)
         this.createChart();
       },
       (error: HttpErrorResponse) => { console.error(error.error); }

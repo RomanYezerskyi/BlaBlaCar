@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { AdminPageRoutingModule } from './admin-page-routing.module';
 import { AdminPageComponent } from './admin-page.component';
-import { RolesComponent } from './roles/roles.component';
 import { UsersRequestsComponent } from './users-requests/users-requests.component';
 import { UserRequestInfoComponent } from './user-request-info/user-request-info.component';
 import { MainComponent } from './main/main.component';
@@ -39,7 +38,6 @@ import { MatTableModule } from '@angular/material/table';
 @NgModule({
   declarations: [
     AdminPageComponent,
-    RolesComponent,
     UsersRequestsComponent,
     UserRequestInfoComponent,
     MainComponent,
