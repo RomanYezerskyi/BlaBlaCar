@@ -68,7 +68,6 @@ export class NotificationsComponent implements OnInit, OnDestroy {
           this.notifications = response;
           this.Skip = this.notifications.length;
           this.checkIfNotRead();
-          console.log(response);
         }
       },
       (error: HttpErrorResponse) => { console.error(error.error); }
@@ -82,7 +81,6 @@ export class NotificationsComponent implements OnInit, OnDestroy {
           if (response != null) {
             this.notifications = this.notifications.concat(response);
             this.checkIfNotRead();
-            console.log(response);
           }
         },
         (error: HttpErrorResponse) => { console.error(error.error); }

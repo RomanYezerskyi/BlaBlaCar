@@ -44,7 +44,6 @@ export class UserTripsComponent implements OnInit, OnDestroy {
     return this.imgSanitaze.sanitiizeUserImg(img);
   }
   getUserTrips(): void {
-    console.log(this.Skip);
     if (this.Skip <= this.totalTrips) {
       this.isSpinner = true;
       this.tripService.getUserTrips(this.Take, this.Skip).pipe(takeUntil(this.unsubscribe$)).subscribe(
@@ -58,8 +57,6 @@ export class UserTripsComponent implements OnInit, OnDestroy {
               }
             )
             this.trips.trips = this.trips.trips.concat(response.trips);
-            console.log(response.totalTrips);
-            console.log(this.totalTrips);
             if (this.totalTrips == 0)
               this.totalTrips = response.totalTrips!;
 

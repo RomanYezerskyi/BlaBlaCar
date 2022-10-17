@@ -96,10 +96,10 @@
                 <input matInput type="number" id="pricePerSeat" name="pricePerSeat" min="1"
                     [(ngModel)]="trip.pricePerSeat" placeholder="Ex. 4" required>
                 <mat-icon matSuffix>airline_seat_recline_normal</mat-icon>
-                <!-- <mat-error *ngIf="CarFormControl.hasError('required')">
-                      Count of seats is <strong>required</strong>
-                    </mat-error> -->
             </mat-form-field>
+            <div class="count-seats-selected">
+                <p>Available seats: {{trip.availableSeats.length}}</p>
+            </div>
             <div class="box">
                 <div class="seats">
                     <div class="wheel">
