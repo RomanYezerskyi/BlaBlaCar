@@ -45,7 +45,6 @@ export class ImagesGalleryComponent implements OnInit, OnDestroy {
 
   ngAfterViewChecked(): void {
     if (this.needRefresh) {
-      console.log("refresh");
       this.lightGallery.refresh();
       this.needRefresh = false;
     }
@@ -60,7 +59,6 @@ export class ImagesGalleryComponent implements OnInit, OnDestroy {
     }
     else {
       this.images = this.images.filter(x => x != img);
-      console.log(this.images);
       this.removeImg.emit(img);
     }
     this.needRefresh = true;

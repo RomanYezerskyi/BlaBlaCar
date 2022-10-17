@@ -95,7 +95,6 @@ export class ChatListComponent implements OnInit, OnDestroy {
             }
           });
         }
-        console.log(response);
         if (response != null)
           this.connectToSignalRChatHub();
       },

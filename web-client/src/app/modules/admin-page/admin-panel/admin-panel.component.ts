@@ -25,29 +25,9 @@ export class AdminPanelComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // this.route.queryParams.subscribe(params => {
-    //   if (params['chatId']) {
-    //     this.chatId = params['chatId'];
-    //   }
-    // });
-    // console.log("aaaa");
-    // this.connectToChatMessagesSignalRHub()
+
   }
-  // setSignalRUrls(): void {
-  //   const currentUserId = this.jwtHelper.decodeToken(this.token!).id;
-  //   this.signal.setConnectionUrl = "https://localhost:6001/chatHub";
-  //   this.signal.setHubMethod = 'JoinToChatMessagesNotifications';
-  //   this.signal.setHubMethodParams = currentUserId;
-  //   this.signal.setHandlerMethod = "BroadcastMessagesFromChats";
-  // }
-  // connectToChatMessagesSignalRHub(): void {
-  //   this.signal.getDataStream<string>().subscribe(message => {
-  //     console.log(message.data);
-  //     if (this.chatId == '' || this.chatId != message.data) {
-  //       this.unreadMessages += 1;
-  //     }
-  //   });
-  // }
+
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

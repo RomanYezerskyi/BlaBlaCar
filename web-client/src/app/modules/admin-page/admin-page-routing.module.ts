@@ -8,7 +8,6 @@ import { AdminPageComponent } from './admin-page.component';
 import { AdministratorsComponent } from './administrators/administrators.component';
 import { ChartsComponent } from './charts/charts.component';
 import { MainComponent } from './main/main.component';
-import { RolesComponent } from './roles/roles.component';
 import { UserRequestInfoComponent } from './user-request-info/user-request-info.component';
 import { UsersManagementComponent } from './users-management/users-management.component';
 import { UsersRequestsComponent } from './users-requests/users-requests.component';
@@ -19,7 +18,6 @@ const routes: Routes = [
     path: '', component: AdminPageComponent,
     children: [
       { path: '', redirectTo: '/admin/main-info', pathMatch: 'full' },
-      { path: 'roles', component: RolesComponent, canActivate: [AuthGuard, UserGuard] },
       { path: 'requests/:id', component: UsersRequestsComponent, canActivate: [AuthGuard, UserGuard], },
       { path: 'requests-info/:id', component: UserRequestInfoComponent, canActivate: [AuthGuard, UserGuard] },
       { path: 'main-info', component: MainComponent, canActivate: [AuthGuard, UserGuard] },

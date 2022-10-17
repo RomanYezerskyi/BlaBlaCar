@@ -43,7 +43,6 @@ export class CreateNotificationDialogComponent implements OnInit, OnDestroy {
 
   createNotification(form: NgForm): void {
     if (!form.valid) return;
-    console.log(this.notification);
     if (this.notification.notificationStatus == NotificationStatus.Global || this.notification.notificationStatus == NotificationStatus.SpecificUser) {
       this.notificationsService.createNotification(this.notification).pipe(takeUntil(this.unsubscribe$)).subscribe(
         response => {
@@ -59,7 +58,6 @@ export class CreateNotificationDialogComponent implements OnInit, OnDestroy {
       this.feedback.userId = this.notification.userId;
       this.notificationsService.addFeedBack(this.feedback).pipe(takeUntil(this.unsubscribe$)).subscribe(
         response => {
-          console.log(response);
           this.onSubmitReason.emit();
           this.openSnackBar("Feedback sent!");
           this.closeWithTimeOut();

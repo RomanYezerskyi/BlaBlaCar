@@ -8,14 +8,6 @@ import { MapsService } from 'src/app/core/services/maps-service/maps.service';
 import { SearchTripModel } from 'src/app/core/models/trip-models/search-trip-model';
 import { GeocodingFeatureProperties, PlaceSuggestionModel } from 'src/app/core/models/autocomplete-models/place-suggestion-model';
 
-
-// export interface PlaceSuggestion {
-//   shortAddress: string;
-//   fullAddress: string;
-//   data: GeocodingFeatureProperties;
-// }
-
-
 @Component({
   selector: 'app-maps-autocomplete',
   templateUrl: './maps-autocomplete.component.html',
@@ -62,7 +54,6 @@ export class MapsAutocompleteComponent implements OnInit, OnDestroy {
   }
   private generateSuggestions(text: string) {
     this.mapsService.getPlace(text).pipe(takeUntil(this.unsubscribe$)).subscribe((data: any /*GeoJSON.FeatureCollection*/) => {
-      console.log(data);
       const placeSuggestions = data.features.map((feature: { properties: GeocodingFeatureProperties; }) => {
         const properties: GeocodingFeatureProperties = (feature.properties as GeocodingFeatureProperties);
 
@@ -72,7 +63,7 @@ export class MapsAutocompleteComponent implements OnInit, OnDestroy {
           data: properties
         }
       });
-      console.log(placeSuggestions);
+
       this.searchOptions.next(placeSuggestions.length ? placeSuggestions : null);
     }, err => {
       console.log(err);
