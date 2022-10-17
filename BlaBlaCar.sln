@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlaBlaCar.Api", "BlaBlaCar.Api\BlaBlaCar.Api.csproj", "{DC2C6023-AD5D-4812-AF61-13CF75082BFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlaBlaCar.API", "BlaBlaCar.Api\BlaBlaCar.API.csproj", "{DC2C6023-AD5D-4812-AF61-13CF75082BFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer.Api", "IdentityServer.Api\IdentityServer.Api.csproj", "{ABB769E9-BF8F-4961-86C7-578B5C093F5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlaBlaCar.BL", "BlaBlaCar.BL\BlaBlaCar.BL.csproj", "{CC745050-5BA3-445D-B446-ABB9D58BF495}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlaBlaCar.BL", "BlaBlaCar.BL\BlaBlaCar.BL.csproj", "{CC745050-5BA3-445D-B446-ABB9D58BF495}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlaBlaCar.DAL", "BlaBlaCar.DAL\BlaBlaCar.DAL.csproj", "{2E9A9050-6EF7-4EB9-9BFD-75EF3568DEDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlaBlaCar.DAL", "BlaBlaCar.DAL\BlaBlaCar.DAL.csproj", "{2E9A9050-6EF7-4EB9-9BFD-75EF3568DEDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServerJWT.API", "IdentityServerJWT.API\IdentityServerJWT.API.csproj", "{7AD76077-535A-4068-870A-90DC56662E6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailService", "EmailService\EmailService.csproj", "{CD9073EA-6E98-4CB8-9BA4-49176A813F44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +23,6 @@ Global
 		{DC2C6023-AD5D-4812-AF61-13CF75082BFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC2C6023-AD5D-4812-AF61-13CF75082BFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC2C6023-AD5D-4812-AF61-13CF75082BFE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ABB769E9-BF8F-4961-86C7-578B5C093F5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ABB769E9-BF8F-4961-86C7-578B5C093F5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ABB769E9-BF8F-4961-86C7-578B5C093F5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ABB769E9-BF8F-4961-86C7-578B5C093F5F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CC745050-5BA3-445D-B446-ABB9D58BF495}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CC745050-5BA3-445D-B446-ABB9D58BF495}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC745050-5BA3-445D-B446-ABB9D58BF495}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +31,14 @@ Global
 		{2E9A9050-6EF7-4EB9-9BFD-75EF3568DEDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E9A9050-6EF7-4EB9-9BFD-75EF3568DEDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E9A9050-6EF7-4EB9-9BFD-75EF3568DEDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AD76077-535A-4068-870A-90DC56662E6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AD76077-535A-4068-870A-90DC56662E6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AD76077-535A-4068-870A-90DC56662E6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AD76077-535A-4068-870A-90DC56662E6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD9073EA-6E98-4CB8-9BA4-49176A813F44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD9073EA-6E98-4CB8-9BA4-49176A813F44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD9073EA-6E98-4CB8-9BA4-49176A813F44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD9073EA-6E98-4CB8-9BA4-49176A813F44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

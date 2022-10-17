@@ -1,0 +1,144 @@
+mat-progress-spinner {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 50%;
+
+    right: 50%;
+    transform: translate(50%, -50%);
+    z-index: 3;
+}
+
+.wrapper {
+    position: relative;
+}
+
+.hide-spinner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    z-index: 2;
+}
+
+.active {
+    color: #ccc;
+}
+
+.container {
+    padding: 15px 15px;
+    display: flex;
+}
+
+.user-block {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.title {
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.user-info,
+.title {
+    p {
+        height: 40px;
+        margin: auto;
+        border: 1px solid rgba(0, 0, 0, .12);
+        padding: 8px;
+
+        .material-icons {
+            margin: auto;
+        }
+    }
+}
+
+.user-info {
+    p {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+.img {
+    width: 100%;
+
+    .user_avatar {
+        width: 100px;
+        height: 100px;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+}
+
+.user__documents {
+    margin-top: 112px;
+    border: 1px solid rgba(0, 0, 0, .12);
+    flex: 1;
+    // display: flex;
+    // flex-direction: column;
+    // justify-content: center;
+
+    .title {
+        padding-top: 10px;
+        text-align: center;
+    }
+
+    .list {
+        // border: 1px solid rgba(0, 0, 0, .12);
+        height: 90%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .documents__item {
+            // border: 1px solid rgba(0, 0, 0, .12);
+            width: 100%;
+            display: flex;
+
+            app-images-gallery {
+                width: 100%;
+                margin: auto;
+            }
+
+
+            // flex-flow: row wrap;
+            justify-content: center;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            padding: 5px;
+            margin-bottom: 10px;
+
+            .material-icons {
+                font-size: 40px;
+                margin: 5px 10px;
+                cursor: pointer;
+            }
+
+
+
+            // border: 1px solid rgba(0, 0, 0, .12);
+        }
+    }
+}
+
+.car_documents {
+    margin-top: 0;
+
+    .actions {
+        margin-bottom: 20px;
+    }
+}
+
+::ng-deep.mat-tab-body-content {
+    overflow: hidden !important;
+}

@@ -1,0 +1,31 @@
+<div class="wrapper">
+    <div class="container">
+        <div class="title">
+            <h2>Your cars</h2>
+        </div>
+        <div class="add-car-btn" [routerLink]="'/user/add-car'">
+            <i class="material-icons">add_circle_outline</i>
+            <p>Add car</p>
+        </div>
+        <hr />
+        <div class="car-item" *ngFor="let car of cars">
+            <div class="car-item">
+                <mat-icon class="car_icon" *ngIf="car.carType == carType.Sedan">drive_eta</mat-icon>
+                <mat-icon class="car_icon" *ngIf="car.carType == carType.Bus">airport_shuttle</mat-icon>
+                <div class="car_info">
+                    <div class="car_model">
+                        <h3>{{car.modelName}}</h3>
+                    </div>
+                    <div class="car_num">
+                        <p>{{car.registrationNumber}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="actions">
+                <i class="material-icons actions_btn" (click)="edit(car.id)">edit</i>
+                <i class="material-icons  actions_btn" (click)="deleteCar(car.id)">delete</i>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,143 @@
+<div class="conatiner">
+    <div *ngIf="showError" class="alert alert-danger" role="alert">
+        <span [innerHTML]="errorMessage"></span>
+    </div>
+    <div *ngIf="showSuccess" class="alert alert-success" role="alert">
+        The trip is saved <a [routerLink]="['/user/user-information']"> click here to see. </a>
+        <br />
+        Or <a (click)=" reload('/user/add-trip')"> post new trip </a>
+    </div>
+</div>
+<mat-stepper [linear]="true" #stepper *ngIf="!showSuccess && !showError">
+    <mat-step [stepControl]="firstFormGroup">
+        <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Start Place</ng-template>
+            <div class="inputs">
+
+                <div class="selacted-place">
+                    <app-maps-autocomplete (locationChange)="startPlaceChanged($event)"></app-maps-autocomplete>
+                    <p *ngIf="startPlaceIs!= null"><strong>Selected: </strong> <input matInput type="text"
+                            formControlName="startPlace" [(ngModel)]="startPlaceIs" [disabled]="true" required></p>
+                </div>
+                <div class="map-block">
+                    <div id="map"></div>
+                </div>
+            </div>
+            <div class="buttons">
+                <button mat-button matStepperNext [disabled]="startPlaceIs== null">Next</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+        <form [formGroup]="secondFormGroup">
+            <ng-template matStepLabel>End Place</ng-template>
+            <div class="inputs">
+
+                <div class="selacted-place">
+                    <app-maps-autocomplete (locationChange)="endPlaceChanged($event)"></app-maps-autocomplete>
+                    <p *ngIf="endPlaceIs!= null"><strong>Selected: </strong> <input matInput type="text"
+                            formControlName="endPlace" [(ngModel)]="endPlaceIs" [disabled]="true" required></p>
+                </div>
+                <div class="map-block">
+                    <div id="map-end"></div>
+                </div>
+            </div>
+            <div class="buttons">
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button matStepperNext [disabled]="endPlaceIs== null">Next</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step>
+        <form class="information main-form" #infoForm="ngForm">
+            <ng-template matStepLabel>Information</ng-template>
+
+            <mat-form-field class="date">
+                <input matInput [ngxMatDatetimePicker]="picker" placeholder="Choose a start time" [min]="dateNow"
+                    [(ngModel)]="trip.startTime" name="startTime" id="startTime" required>
+                <mat-datepicker-toggle matSuffix [for]=" $any(picker)"></mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #picker>
+                </ngx-mat-datetime-picker>
+            </mat-form-field>
+            <mat-form-field class="date">
+                <input matInput [ngxMatDatetimePicker]="picker1" placeholder="Choose a end time" [min]="dateNow"
+                    id="endTime" name="endTime" [(ngModel)]="trip.endTime" required>
+                <mat-datepicker-toggle matSuffix [for]="$any(picker1)"></mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #picker1>
+                </ngx-mat-datetime-picker>
+            </mat-form-field>
+            <mat-form-field class="price" appearance="legacy">
+                <mat-label>Car</mat-label>
+                <mat-select name="carId" id="carId" [(ngModel)]="trip.carId" (ngModelChange)="setSelectedCar($event)"
+                    required>
+                    <mat-option *ngFor="let car of userCars" [value]="car.id">
+                        {{car.modelName}}
+                    </mat-option>
+                </mat-select>
+                <mat-icon matSuffix>drive_eta</mat-icon>
+            </mat-form-field>
+            <mat-form-field class="description" appearance="legacy">
+                <mat-label>Description (optionally)</mat-label>
+                <textarea matInput id="description" name="description" rows="10" [(ngModel)]="trip.description">
+                          </textarea>
+            </mat-form-field>
+
+            <div class="buttons">
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button matStepperNext [disabled]="!infoForm.valid">Next</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step>
+        <form class="information info-seats" #seatsForm="ngForm">
+            <ng-template matStepLabel>Seats</ng-template>
+            <mat-form-field appearance="legacy" class="price-input">
+                <mat-label>Price per seat</mat-label>
+                <input matInput type="number" id="pricePerSeat" name="pricePerSeat" min="1"
+                    [(ngModel)]="trip.pricePerSeat" placeholder="Ex. 4" required>
+                <mat-icon matSuffix>airline_seat_recline_normal</mat-icon>
+            </mat-form-field>
+            <div class="count-seats-selected">
+                <p>Available seats: {{trip.availableSeats.length}}</p>
+            </div>
+            <div class="box">
+                <div class="seats">
+                    <div class="wheel">
+                        <img src="../../../../assets/images/wheel.png" class="img__wheel" alt="">
+                    </div>
+                    <div class="seats_list">
+                        <div *ngFor="let car of userCars">
+                            <div class="seats_list" *ngIf="trip.carId == car.id">
+                                <div class="seat_item" *ngFor="let seat of car.seats">
+                                    <div class="btn seat booked" (click)="addSeat(seat.id)"
+                                        *ngIf="!seat.isSelected; else elseBlock">
+                                        <p>{{seat.seatNumber}} </p>
+                                    </div>
+                                    <ng-template #elseBlock>
+                                        <div class="btn seat" (click)="addSeat(seat.id)">
+                                            <p>{{seat.seatNumber}} </p>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button matStepperNext
+                    [disabled]="this.trip.availableSeats.length == 0 || !seatsForm.valid">Next</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Done</ng-template>
+        <p class="lastMessage">Are you sure you want to save?</p>
+        <div class="buttons">
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="addTrip()">Save</button>
+        </div>
+    </mat-step>
+</mat-stepper>

@@ -1,0 +1,20 @@
+<div class="notifications">
+    <div class="global__notifications">
+        <div class="title">
+            <div class="title__text">
+                <i class="material-icons">calendar_month</i>
+                <h3>Global notifcations</h3>
+                <button class="btn btn-add-notification" (click)="addGlobalNotitfication()">+</button>
+            </div>
+        </div>
+        <div class="notifcations_items">
+            <div class="notifications__list" *ngFor="let notifi of globalNotifications">
+                <p>{{notifi.text}}</p>
+                <h4>{{notifi.createdAt| date}}</h4>
+            </div>
+        </div>
+        <div class="actions">
+            <button class="btn btn-load-more" (click)="getGlobalNotitifications()">load more</button>
+        </div>
+    </div>
+</div>

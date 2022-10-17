@@ -1,0 +1,39 @@
+<div class="navbar">
+    <ul class="navbar__list">
+        <li class="list__item">
+            <i class="material-icons">dashboard</i>
+            <a class="btn btn-link" [routerLink]="['main-info']">Dashboard</a>
+
+        </li>
+        <li class="list__item">
+            <i class="material-icons">insert_chart_outlined</i>
+            <a class="btn btn-link" [routerLink]="['charts']">Charts</a>
+
+        </li>
+        <li class="list__item submenu">
+            <div class="links">
+                <i class="material-icons">question_mark</i>
+                <a class="btn btn-link">Requests</a>
+            </div>
+            <ul class="sub__navbar">
+                <li class="list__item" [routerLink]="['/admin/requests/', userStatus.Pending]">Pending</li>
+                <li class="list__item" [routerLink]="['/admin/requests/', userStatus.Confirmed]">Confirmed</li>
+                <li class="list__item" [routerLink]="['/admin/requests/', userStatus.Rejected]">Rejected</li>
+                <li class="list__item" [routerLink]="['/admin/requests/', userStatus.NeedMoreData]">Need more data</li>
+            </ul>
+        </li>
+        <li class="list__item">
+            <i class="material-icons">person_search</i>
+            <a class="btn btn-link" [routerLink]="['users']">Users</a>
+        </li>
+        <li class="list__item">
+            <i class="material-icons">admin_panel_settings</i>
+            <a class="btn btn-link" [routerLink]="['admins']">Admins</a>
+        </li>
+        <!-- <li class="list__item chat-item">
+            <p class="messages-count" *ngIf="unreadMessages > 0">{{unreadMessages}}</p>
+            <i class="material-icons">chat</i>
+            <a class="btn btn-link" [routerLink]="['chat']"> Chats</a>
+        </li> -->
+    </ul>
+</div>

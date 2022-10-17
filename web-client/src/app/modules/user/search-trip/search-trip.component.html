@@ -1,0 +1,17 @@
+<div class="container" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+  (scrolled)="onScroll();" [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false"
+  style="height: 88.9vh; overflow-y:auto;">
+  <div class="" [ngClass]="{'hidden': isParams, 'title': !isParams}">
+    <h2>
+      Where do you want to go?
+    </h2>
+  </div>
+  <div class="search-form" [ngClass]="{'': isParams, 'is-params': !isParams}">
+    <app-search-form class="form" [trip]="trip"></app-search-form>
+  </div>
+  <div class="search_results">
+    <div class="trips">
+      <app-trips></app-trips>
+    </div>
+  </div>
+</div>

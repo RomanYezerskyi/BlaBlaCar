@@ -1,0 +1,34 @@
+<div class="col2">
+    <div class="chat">
+        <div #scrollMe infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scroll)="scroll()"
+            [infiniteScrollDisabled]="isFullListDisplayed" [scrollWindow]="false" class="messages__list">
+            <div class="message__item" [ngClass]="{'active': message.userId == currentUserId}"
+                *ngFor="let message of chat.messages;let i = index">
+                <p #newMessages class="unread-messages-line" *ngIf="i == getUnreadMessageIndex()">New</p>
+                <div class="message-user">
+                    <div class="user__img" *ngIf="message.userId != currentUserId">
+                        <img [src]="sanitizeImg(message.user!.userImg!)" alt="">
+                    </div>
+                    <div class="data">
+                        <h4 class="user-name" *ngIf="message.userId != currentUserId">{{message.user.firstName}}</h4>
+                        <p class="date">{{message?.createdAt |date}}</p>
+                    </div>
+                    <div class="message">
+                        <p class="text">{{message.text}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="write-message-box">
+            <form #notifiForm="ngForm" class="form">
+                <mat-form-field class="field" appearance="outline">
+
+                    <input type="text" matInput placeholder="Write your message" id="text" name="text"
+                        [(ngModel)]="text">
+                </mat-form-field>
+
+                <button class="btn btn-send" type="submit" (click)="sendMessage()">Send</button>
+            </form>
+        </div>
+    </div>
+</div>

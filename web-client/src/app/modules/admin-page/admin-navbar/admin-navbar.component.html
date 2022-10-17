@@ -1,0 +1,93 @@
+<div class="container">
+    <nav>
+        <a class="navbar-brand">BlaBlaCar</a>
+        <div class="menu" [ngClass]="{'': toggle, 'menu_active': !toggle}">
+            <div class="navbar-section-main">
+                <ul class="navbar-nav ">
+                    <li class="nav-item active main_nav" [routerLink]="['main-info']">
+                        <i class="material-icons">dashboard</i>
+                        <a class="btn btn-link">Dashboard</a>
+                    </li>
+                    <li class="nav-item main_nav" [routerLink]="['charts']">
+                        <i class="material-icons">insert_chart_outlined</i>
+                        <a class="btn btn-link">Charts</a>
+                    </li>
+                    <li class="nav-item main_nav sub_menu">
+
+                        <i class="material-icons">question_mark</i>
+                        <a class="btn btn-link">Requests</a>
+
+                        <ul class="sub__navbar">
+                            <li class="list__item" [routerLink]="['/admin/requests/', userStatus.Pending]">Pending</li>
+                            <li class="list__item" [routerLink]="['/admin/requests/', userStatus.Confirmed]">Confirmed
+                            </li>
+                            <li class="list__item" [routerLink]="['/admin/requests/', userStatus.Rejected]">Rejected
+                            </li>
+                            <li class="list__item" [routerLink]="['/admin/requests/', userStatus.NeedMoreData]">Need
+                                more data</li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <div class="navbar-section-main actions">
+            <ul class="navbar-nav">
+                <li class="nav-item notification" [routerLink]="'chat'">
+                    <p class="notifi__count" *ngIf=" unreadMessages > 0">{{ unreadMessages}}</p>
+                    <i class="material-icons">chat</i>
+                </li>
+                <li class="nav-item user-profile">
+                    <div class="profile-menu">
+                        <div class="profile-img">
+                            <img [src]="sanitizaImg(userService.userProfile.userImg!)" alt="">
+                        </div>
+                        <p class="user-name">{{userService.userProfile.firstName}}</p>
+                        <i class="material-icons">arrow_forward_ios</i>
+                    </div>
+                    <div class="user-profile-submenu">
+                        <div class="user-info">
+                            <div class="profile-img">
+                                <img [src]="sanitizaImg(userService.userProfile.userImg!)" alt="">
+                            </div>
+                            <div class="info">
+                                <h4 class="user-name">{{userService.userProfile.firstName}}</h4>
+                                <p class="user-email">{{userService.userProfile.email}}</p>
+                            </div>
+                        </div>
+                        <ul>
+                            <!-- <li>
+                                <a [routerLink]="'user'" class="submenu_item">
+                                    <i class="material-icons">person</i>
+                                    <a class="submenu_text">Account</a>
+                                </a>
+                            </li> -->
+                            <li>
+                                <a [routerLink]="['users']" class="submenu_item">
+                                    <i class="material-icons">person_search</i>
+                                    <a class="submenu_text">Users</a>
+                                </a>
+                            </li>
+                            <li>
+                                <a [routerLink]="['admins']" class="submenu_item">
+                                    <!-- <i class="material-icons">card_travel</i>
+                                    <a class="submenu_text">Booked trips</a> -->
+                                    <i class="material-icons">admin_panel_settings</i>
+                                    <a class="submenu_text">Admins</a>
+                                </a>
+                            </li>
+                            <li class="logout">
+                                <a (click)="logOut()" class="submenu_item">
+                                    <i class="material-icons">logout</i>
+                                    <a class="submenu_text">Logout</a>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item toggler" (click)="change()"><button class="btn btn-toggler"><i
+                            class="material-icons">density_medium</i></button></li>
+            </ul>
+        </div>
+    </nav>
+</div>

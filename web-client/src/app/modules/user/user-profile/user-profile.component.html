@@ -1,0 +1,62 @@
+<div class="wrapper">
+    <div [ngClass]="isSpinner ? 'hide-spinner': ''"></div>
+    <mat-progress-spinner mode="indeterminate" *ngIf="isSpinner"></mat-progress-spinner>
+    <div class="body">
+        <!-- <img src="../../../../assets/close.png" class="close_btn" alt=""> -->
+
+        <div class="row">
+            <div class="body_data">
+                <div class="head">
+                    <div class="user">
+                        <h4>{{user.firstName}}</h4>
+                    </div>
+                    <div class="img">
+                        <img [src]="sanitizeUserImg(user.userImg!)" alt="" class="profile_img"
+                            *ngIf="imagePath == null; else elseImg">
+                        <ng-template #elseImg><img [src]="imagePath" alt="" class="profile_img">
+                        </ng-template>
+                    </div>
+                </div>
+                <hr>
+                <div class="actions">
+                    <input style="display: none" type="file" (change)="onFileChanged($event)" #fileInput>
+                    <button class="btn btn-change-photo" type="button" (click)="fileInput.click(); changePhoto()"
+                        *ngIf="!changeUserPhoto; else elsePhoto">
+                        <i class="material-icons">portrait</i>
+                        <p>Change profile photo</p>
+                    </button>
+                    <ng-template #elsePhoto>
+                        <div class="change">
+                            <button class="btn btn-change-photo" type="button" (click)="updateUserPhoto()">
+                                <i class="material-icons">check_circle_outline</i>
+                                <p>Save</p>
+                            </button>
+                            <button class="btn btn-change-photo" type="button" (click)="changePhoto()">
+                                <i class="material-icons">delete_outline</i>
+                                <p>Cancle</p>
+                            </button>
+                        </div>
+                    </ng-template>
+                </div>
+                <hr>
+                <div class="actions">
+                    <button class="btn btn-change-photo" type="button" (click)="editData()">
+                        <i class="material-icons">fact_check</i>
+                        <p>Edit profile data</p>
+                    </button>
+                </div>
+                <hr>
+                <div class="actions">
+                    <button class="btn btn-change-photo" type="button" (click)="editDocuments()">
+                        <i class="material-icons">summarize</i>
+                        <p>Edit user documents</p>
+                    </button>
+                </div>
+                <hr>
+                <div class="user-cars">
+                    <app-user-cars></app-user-cars>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
