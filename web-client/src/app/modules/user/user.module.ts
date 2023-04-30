@@ -77,7 +77,6 @@ import { MatTabsModule } from '@angular/material/tabs';
     CommonModule,
     UserRoutingModule,
     SharedModule,
-
     FormsModule,
     ReactiveFormsModule,
     MatDialogModule,
@@ -97,16 +96,12 @@ import { MatTabsModule } from '@angular/material/tabs';
     LightgalleryModule,
     MatAutocompleteModule,
     MatTooltipModule,
-
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
     NgxMatNativeDateModule,
-
     MatStepperModule,
-
     MatSnackBarModule,
     MatTabsModule
-
   ]
 })
 export class UserModule { }

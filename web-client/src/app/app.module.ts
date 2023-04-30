@@ -67,7 +67,6 @@ export function tokenGetter() {
     LightgalleryModule,
     MatAutocompleteModule,
     MatTooltipModule
-
   ],
   providers: [AuthGuard, AdminGuard, PageAccessGuard, UserGuard, UserService,
   ],
