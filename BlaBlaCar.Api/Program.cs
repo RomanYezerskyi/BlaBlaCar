@@ -127,7 +127,7 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()
-            .WithOrigins(jwtSettings.WebClientUrl);
+            .WithOrigins(jwtSettings.WebClientUrl, jwtSettings.MobileClientUrl);
     });
 });
 

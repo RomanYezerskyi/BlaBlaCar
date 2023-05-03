@@ -59,8 +59,8 @@ export class AddTripLayoutComponent implements OnInit, OnDestroy, AfterViewInit 
   ngAfterViewInit() {
     this.createStartMap();
     this.createEndMap();
-
   }
+
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
@@ -72,6 +72,7 @@ export class AddTripLayoutComponent implements OnInit, OnDestroy, AfterViewInit 
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(this.startMap);
   }
+
   private createEndMap(): void {
     this.endMap = L.map('map-end').setView([51.505, -0.09], 15);
     L.tileLayer(`${environment.geoapifyTileLayer}${environment.geoapifyFirstApiKey}`, {
@@ -79,6 +80,7 @@ export class AddTripLayoutComponent implements OnInit, OnDestroy, AfterViewInit 
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(this.endMap);
   }
+
   startPlaceChanged(value: PlaceSuggestionModel): void {
     this.trip.startLat = value.data.lat;
     this.trip.startLon = value.data.lon;
