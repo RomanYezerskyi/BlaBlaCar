@@ -171,10 +171,12 @@ namespace BlaBlaCar.BL.Services.TripServices
                          $" AND ([t].EndLocation.STDistance(geography::STGeomFromText('POINT({endLocationLat} {endLocationLon})', 4326)) < {radius})  AND" +
                          $" ((SELECT COUNT(*)FROM [AvailableSeats] AS [a] WHERE ([t].[Id] = [a].[TripId]) AND NOT EXISTS (SELECT 1 FROM [TripUsers] AS [t0]" +
                          $" WHERE ([t].[Id] = [t0].[TripId]) AND (([t0].[SeatId] = [a].[SeatId]) AND ([t0].[SeatId] IS NOT NULL)))) >= {model.CountOfSeats})";
+            
             var trips = await _unitOfWork.Trips.GetFromSqlRowAsync(sqlRaw: sqlRaw,
                 includes: x => x.Include(x => x.User)
                                                 .Include(x=>x.AvailableSeats)
-                                                .Include(x=>x.TripUsers), 
+                                                .Include(x=>x.TripUsers)
+                                                .Include(x=>x.Car), 
                 orderBy:orderBy,
                 skip: model.Skip,
                 take: model.Take);
@@ -203,15 +205,41 @@ namespace BlaBlaCar.BL.Services.TripServices
             var trip = _mapper.Map<TripDTO, Trip>(tripModel);
             trip.StartLocation = new Point(newTripModel.StartLat, newTripModel.StartLon) { SRID = 4326 };
             trip.EndLocation = new Point(newTripModel.EndLat, newTripModel.EndLon) { SRID = 4326 };
+            trip.AutoTripStatus = AutoTripStatus.New;
 
             await _unitOfWork.Trips.InsertAsync(trip);
             var res =  await _unitOfWork.SaveAsync(currentUserId);
-            if (res)
+            
+            if (res){
+                // send request for FEEDBACK
                 _backgroundJobs.Schedule((() => _notificationService.GenerateFeedBackNotificationAsync(trip.Id)),
                     trip.EndTime);
+                
+                // change status to Started
+                _backgroundJobs.Schedule((() => ChangeTripStatus(trip.Id, AutoTripStatus.Started)),
+                    trip.StartTime);
+                
+                // change status to COMPLETED
+                _backgroundJobs.Schedule((() => ChangeTripStatus(trip.Id, AutoTripStatus.Completed)),
+                    trip.EndTime);
+            }
+            
             return res;
 
          }
+
+        private async Task ChangeTripStatus(Guid tripId, AutoTripStatus autoTripStatus)
+        {
+            var trip = await _unitOfWork.Trips
+                .GetAsync( x=>x.Include(x=>x.TripUsers)
+                    .Include(x=>x.User), x => x.Id == tripId);
+            if (trip == null) throw new NotFoundException($"Trips with id {tripId}");
+
+            trip.AutoTripStatus = autoTripStatus;
+            await _unitOfWork.SaveAsync(trip.UserId);
+            
+            //add signalR message That trip status changed and you cannot track the trip! 
+        }
 
         public async Task<bool> DeleteTripAsync(Guid id, Guid currentUserId)
         {

@@ -18,6 +18,7 @@ namespace BlaBlaCar.DAL.Entities.TripEntities
         public Car? Car { get; set; }
         public ICollection<TripUser> TripUsers { get; set; }
         public ICollection<AvailableSeats> AvailableSeats { get; set; }
+        public AutoTripStatus AutoTripStatus { get; set; }
 
         [NotMapped]
         public TimeSpan TripTime => EndTime - StartTime;

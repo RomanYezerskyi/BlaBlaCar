@@ -35,14 +35,7 @@
     <div class="owner-info"
         *ngIf="trip.userPermission == userPermission.canSeeTheOwnersData || trip.userPermission == userPermission.owner">
         <p>Tel:{{trip.user?.phoneNumber}}</p>
-        <!-- <div class="chat">
-            <p>Chat with {{trip.user?.firstName}}</p>
-            <i class="material-icons">chat</i>
-        </div> -->
     </div>
-    <!-- <div class="owner-info" *ngIf="trip.userPermission == userPermission.owner">
-        <p>{{trip.user?.phoneNumber}}</p>
-    </div> -->
     <div class="horizontal_line"></div>
     <div class="user">
         <i class="material-icons" *ngIf="trip.userPermission == userPermission.canSeeTheOwnersData "
