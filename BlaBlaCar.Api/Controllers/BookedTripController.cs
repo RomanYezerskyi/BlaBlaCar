@@ -31,6 +31,13 @@ namespace BlaBlaCar.API.Controllers
             var res = await _tripService.GetUserBookedTripsAsync(take, skip, UserId);
             return Ok(res);
         }
+        [HttpGet("started")]
+        public async Task<IActionResult> GerStartedTrips([FromQuery] int take,[FromQuery] int skip)
+        {
+            
+            var res = await _tripService.GetUserStartedTripAsync(take, skip, UserId);
+            return Ok(res);
+        }
         [HttpDelete("trip")]
         public async Task<IActionResult> DeleteBookedTrip(DeleteTripUserDTO trip)
         {

@@ -8,16 +8,13 @@ using BlaBlaCar.BL.Services;
 using BlaBlaCar.DAL;
 using BlaBlaCar.DAL.Data;
 using BlaBlaCar.DAL.Interfaces;
-using BlaBlaCar.DAL.Entities;
 using BlaBlaCar.BL;
 using BlaBlaCar.BL.ExceptionHandler;
 using BlaBlaCar.BL.Hubs;
 using BlaBlaCar.BL.Logger;
 using BlaBlaCar.BL.Services.Admin;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authentication;
 using BlaBlaCar.BL.Services.BookedTripServices;
 using BlaBlaCar.BL.Services.ChatServices;
 using BlaBlaCar.BL.Services.MapsServices;
@@ -27,15 +24,11 @@ using EmailService.Models;
 using Hangfire;
 using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.Builder;
 using NLog;
 using EmailService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 LogManager.LoadConfiguration(String.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 var emailConfig = builder.Configuration
@@ -47,14 +40,11 @@ builder.Services.AddControllers()
     .AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-
 builder.Services.AddDbContext<ApplicationDbContext>(
     options =>
                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
                    sqlOption =>
                        sqlOption.UseNetTopologySuite()));
-
-
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddHangfire(configuration => configuration
@@ -79,9 +69,6 @@ builder.Services.Configure<FormOptions>(o =>
     o.MultipartBodyLengthLimit = int.MaxValue;
     o.MemoryBufferThreshold = int.MaxValue;
 });
-
-
-
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
@@ -138,9 +125,6 @@ builder.Services.AddSignalR();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-
-
 var app = builder.Build();
 
 await using var scope = app.Services.CreateAsyncScope();
@@ -170,13 +154,13 @@ app.UseCors("EnableCORS");
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.MapHub<NotificationHub>("/notify");
 app.MapHub<ChatHub>("/chatHub");
+app.MapHub<MapHub>("/mapHub");
 app.UseHangfireDashboard();
-//BackgroundJob.Enqueue(() => Console.WriteLine("Hello world from Hangfire!"));
 
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
     endpoints.MapHangfireDashboard();
-});//.RequireAuthorization("ApiScope");
+});
 
 app.Run();

@@ -45,8 +45,6 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
 
         public async Task<UserBookedTripsDTO> GetUserBookedTripsAsync(int take, int skip, Guid currentUserId)
         {
-            
-
             var trips = _mapper.Map<IEnumerable<TripDTO>>(
                 await _unitOfWork.Trips.GetAsync(
                     orderBy:x => x.OrderByDescending(x => x.StartTime), 
@@ -76,6 +74,39 @@ namespace BlaBlaCar.BL.Services.BookedTripServices
             };
             return result;
         }
+        
+        public async Task<UserBookedTripsDTO> GetUserStartedTripAsync(int take, int skip, Guid currentUserId)
+        {
+            var trips = _mapper.Map<IEnumerable<TripDTO>>(
+                await _unitOfWork.Trips.GetAsync(
+                    orderBy:x => x.OrderByDescending(x => x.StartTime), 
+                    includes:x =>
+                        x.Include(x => x.TripUsers.Where(x => x.UserId == currentUserId))
+                            .ThenInclude( x=> x.Seat)
+                            .Include(x=>x.User),
+                    filter:x => x.TripUsers
+                        .Any(user => user.UserId == currentUserId) && x.AutoTripStatus == AutoTripStatus.Started,
+                    take:take,
+                    skip:skip));
+
+            if (!trips.Any()) return null;
+            var tripsCount = await _unitOfWork.Trips.GetCountAsync(x => x.TripUsers
+                .Any(user => user.UserId == currentUserId));
+
+            trips = trips.Select(t =>
+            {
+                if(t.User?.UserImg != null)
+                    t.User.UserImg = _hostSettings.CurrentHost + t.User.UserImg;
+                return t;
+            });
+            var result = new UserBookedTripsDTO()
+            {
+                TotalTrips = tripsCount,
+                Trips = trips
+            };
+            return result;
+        }
+
 
         public async Task<bool> AddBookedTripAsync(NewBookTripModel tripModel, UserDTO currentUser)
         {

@@ -228,7 +228,7 @@ namespace BlaBlaCar.BL.Services.TripServices
 
          }
 
-        private async Task ChangeTripStatus(Guid tripId, AutoTripStatus autoTripStatus)
+        public async Task ChangeTripStatus(Guid tripId, AutoTripStatus autoTripStatus)
         {
             var trip = await _unitOfWork.Trips
                 .GetAsync( x=>x.Include(x=>x.TripUsers)
