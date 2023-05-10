@@ -11,7 +11,7 @@ namespace BlaBlaCar.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class MapsController : ControllerBase
+    public class MapsController : CustomBaseController
     {
         private readonly IHubContext<MapHub, IMapHubClient> _hubContext;
 
@@ -21,7 +21,7 @@ namespace BlaBlaCar.API.Controllers
         }
 
         [HttpPut("user-location")]
-        public async Task<IActionResult> ReadChatMessages([FromBody] UserLocation location)
+        public async Task<IActionResult> SendLocation([FromBody] UserLocation location)
         {
             await _hubContext.Clients.Groups(location.TripId.ToString()).BroadcastLocation(location);
             return NoContent();

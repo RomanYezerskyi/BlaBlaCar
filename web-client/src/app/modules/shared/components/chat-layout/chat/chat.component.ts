@@ -76,7 +76,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       return
     }
     this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
-
   }
   connectToSignalRChatHub(): void {
     this.signal.getDataStream<MessageModel>().pipe(takeUntil(this.unsubscribe$)).subscribe(message => {
