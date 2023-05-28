@@ -25,7 +25,11 @@ mat-progress-spinner {
 
 .wrapper {
     position: relative;
-    height: 91vh;
+    height: 80vh;
+    width: 70vw;
+    margin: 10px auto auto;
+    background-color: #fff;
+    border-radius: 10px;
 }
 
 .hide-spinner {

@@ -1,18 +1,20 @@
-<mat-tab-group mat-align-tabs="center">
+<div class="container">
+  <mat-tab-group mat-align-tabs="center">
     <mat-tab>
-        <ng-template mat-tab-label>
-            <i class="material-icons">location_on</i>
-            My Trips
-        </ng-template>
-        <app-user-trips></app-user-trips>
+      <ng-template mat-tab-label>
+        <i class="material-icons">location_on</i>
+        My Trips
+      </ng-template>
+      <app-user-trips></app-user-trips>
     </mat-tab>
 
     <mat-tab>
-        <ng-template mat-tab-label>
-            <i class="material-icons">card_travel</i>
-            Booked trips
-        </ng-template>
-        <app-user-booked-trips></app-user-booked-trips>
+      <ng-template mat-tab-label>
+        <i class="material-icons">card_travel</i>
+        Booked trips
+      </ng-template>
+      <app-user-booked-trips></app-user-booked-trips>
     </mat-tab>
-</mat-tab-group>
+  </mat-tab-group>
+</div>
 <!-- <app-user-trips></app-user-trips> -->

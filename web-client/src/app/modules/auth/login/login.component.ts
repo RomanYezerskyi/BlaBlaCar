@@ -39,7 +39,8 @@ export class LoginComponent implements OnInit, OnDestroy {
             if (this.returnUrl)
               this.router.navigateByUrl(this.returnUrl!);
           },
-          (error: HttpErrorResponse) => { this.openSnackBar(error.error); }
+          (error: HttpErrorResponse) => { this.openSnackBar("Something went wrong! Try again later!");
+            console.log(error) }
         )
     }
   }

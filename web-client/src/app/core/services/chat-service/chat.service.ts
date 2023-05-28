@@ -12,7 +12,6 @@ import { environment } from 'src/environments/environment';
 export class ChatService {
   private baseApiUrl = environment.baseApiUrl;
   constructor(private http: HttpClient) { }
-
   getUserChats(): Observable<ChatModel[]> {
     const url = this.baseApiUrl + 'Chat/';
     return this.http.get<ChatModel[]>(url);

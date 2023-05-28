@@ -11,13 +11,18 @@ li {
 }
 
 .container {
+    width: 70vw;
+    height: 85vh;
+    margin: 10px auto auto;
+    background-color: #fff;
+
+    border-radius: 10px;
 
     app-chat-list {
         margin-right: 15px;
     }
 
-    padding: 15px;
-    padding-bottom: 0;
+    padding: 15px 15px 0;
     display: flex;
     justify-content: center;
     font-family: "Rajdhani",
