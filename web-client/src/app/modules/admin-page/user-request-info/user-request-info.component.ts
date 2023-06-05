@@ -90,7 +90,10 @@ export class UserRequestInfoComponent implements OnInit, OnDestroy, OnChanges {
     this.isSpinner = true;
     this.userService.getUserFromApi(userId).pipe(takeUntil(this.unsubscribe$)).subscribe(
       response => {
+        this.selectedUser = {} as UserModel;
+        this.selectedUser.userDocuments = [];
         this.selectedUser = response;
+        this.userDocs = [];
         this.selectedUser.userDocuments.forEach(x => this.userDocs.push(x.drivingLicense));
         this.isSpinner = false;
       },
