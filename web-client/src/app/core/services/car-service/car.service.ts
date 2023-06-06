@@ -14,22 +14,22 @@ export class CarService {
   constructor(private http: HttpClient) { }
   getUserCars(): Observable<CarModel[]> {
     const url = this.baseApiUrl + 'Car/';
-    return this.http.get<CarModel[]>(url);
+    return this.http.get<CarModel[]>(url, {headers: { "ngrok-skip-browser-warning":"any"}});
   }
   addCar(formData: FormData): Observable<any> {
     const url = this.baseApiUrl + 'Car/';
-    return this.http.post(url, formData)
+    return this.http.post(url, formData, {headers: { "ngrok-skip-browser-warning":"any"}})
   }
   updateCar(updateCarModel: FormData): Observable<any> {
     const url = this.baseApiUrl + 'Car/';
-    return this.http.put<any>(url, updateCarModel);
+    return this.http.put<any>(url, updateCarModel, {headers: { "ngrok-skip-browser-warning":"any"}});
   }
   updateCarDocuments(carModel: any): Observable<any> {
     const url = this.baseApiUrl + 'Car/update-doc/';
-    return this.http.put<any>(url, carModel);
+    return this.http.put<any>(url, carModel , {headers: { "ngrok-skip-browser-warning":"any"}});
   }
   deleteCar(carId: number): Observable<any> {
     const url = this.baseApiUrl + 'Car/';
-    return this.http.delete(url + carId)
+    return this.http.delete(url + carId, {headers: { "ngrok-skip-browser-warning":"any"}})
   }
 }

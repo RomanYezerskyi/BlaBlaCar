@@ -26,45 +26,46 @@ export class AdminService {
           take: request.take,
           skip: request.skip,
           orderBy: request.orderBy
-        }
+        },
+        headers: { "ngrok-skip-browser-warning":"any"}
       });
   }
   getStatistics(searchDate: string): Observable<AdminStatisticsModel> {
     const url = this.baseApiUrl + 'Admin/statistics';
-    return this.http.get<AdminStatisticsModel>(url, { params: { searchDate: searchDate } });
+    return this.http.get<AdminStatisticsModel>(url, { params: { searchDate: searchDate }, headers: { "ngrok-skip-browser-warning":"any"} });
   }
   getShortStatistics(): Observable<ShortStatisticsModel> {
     const url = this.baseApiUrl + 'Admin/short-statistics';
-    return this.http.get<ShortStatisticsModel>(url);
+    return this.http.get<ShortStatisticsModel>(url, {headers: { "ngrok-skip-browser-warning":"any"}});
   }
   //
   getRoles(): Observable<RoleModel[]> {
     const url = this.baseIdentityServerUrl + 'User/roles';
-    return this.http.get<RoleModel[]>(url);
+    return this.http.get<RoleModel[]>(url, {headers: { "ngrok-skip-browser-warning":"any"}});
   }
   getAdmins(): Observable<UserModel[]> {
     const url = this.baseIdentityServerUrl + 'User/admins';
-    return this.http.get<UserModel[]>(url);
+    return this.http.get<UserModel[]>(url, {headers: { "ngrok-skip-browser-warning":"any"}});
   }
   changeUserRole(data: { roleName: string, userId: string }): Observable<any> {
     const url = this.baseIdentityServerUrl + 'User/';
-    return this.http.post(url, data);
+    return this.http.post(url, data , {headers: { "ngrok-skip-browser-warning":"any"}});
   }
   getUserByEmail(email: string): Observable<UserModel> {
     const url = this.baseIdentityServerUrl + 'User/'
-    return this.http.get<UserModel>(url + email);
+    return this.http.get<UserModel>(url + email, {headers: { "ngrok-skip-browser-warning":"any"}});
   }
   getUserRequests(status: UserStatus, take: number, skip: number): Observable<UserRequestResponseModel> {
     const url = this.baseApiUrl + 'Admin/requests';
-    return this.http.get<UserRequestResponseModel>(url, { params: { take: take, skip: skip, status: status } });
+    return this.http.get<UserRequestResponseModel>(url, { params: { take: take, skip: skip, status: status }, headers: { "ngrok-skip-browser-warning":"any"} });
   }
 
   changeUserDrivingLicenseStatus(newStatus: { status: UserStatus, userId: string }): Observable<any> {
     const url = this.baseApiUrl + 'Admin/user/status';
-    return this.http.patch(url, newStatus);
+    return this.http.patch(url, newStatus,  {headers: { "ngrok-skip-browser-warning":"any"}});
   }
   changeCarDocumentsStatus(newStatus: { status: CarStatus, carId: number, }): Observable<any> {
     const url = this.baseApiUrl + 'Admin/car/status';
-    return this.http.patch(url, newStatus);
+    return this.http.patch(url, newStatus, {headers: { "ngrok-skip-browser-warning":"any"}});
   }
 }

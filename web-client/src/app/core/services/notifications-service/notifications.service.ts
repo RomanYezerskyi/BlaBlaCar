@@ -16,38 +16,38 @@ export class NotificationsService {
   }
   getGlobalNotifications(take: number, skip: number): Observable<NotificationsModel[]> {
     const url = this.baseApiUrl + 'Notification/global';
-    return this.http.get<NotificationsModel[]>(url, { params: { take: take, skip: skip } });
+    return this.http.get<NotificationsModel[]>(url, { params: { take: take, skip: skip }, headers: { "ngrok-skip-browser-warning":"any"} });
   }
   getUsersNotifications(take: number, skip: number): Observable<NotificationsModel[]> {
     const url = this.baseApiUrl + 'Notification/last-notifications';
-    return this.http.get<NotificationsModel[]>(url, { params: { take: take, skip: skip } });
+    return this.http.get<NotificationsModel[]>(url, { params: { take: take, skip: skip }, headers: { "ngrok-skip-browser-warning":"any"} });
   }
   createNotification(notification: NotificationsModel): Observable<any> {
     const url = this.baseApiUrl + 'Notification/create';
-    return this.http.post(url, notification)
+    return this.http.post(url, notification, {headers: { "ngrok-skip-browser-warning":"any"}})
   }
   //
   getUserNotifications(take: number = 0, skip: number = 0): Observable<NotificationsModel[]> {
     let url = this.baseApiUrl + 'Notification';
     if (take != 0 || skip != 0) {
-      return this.http.get<NotificationsModel[]>(url, { params: { take: take, skip: skip } });
+      return this.http.get<NotificationsModel[]>(url, { params: { take: take, skip: skip }, headers: { "ngrok-skip-browser-warning":"any"} });
     }
     return this.http.get<NotificationsModel[]>(url);
   }
   getUserUnreadNotifications(): Observable<NotificationsModel[]> {
     let url = this.baseApiUrl + 'Notification/unread';
-    return this.http.get<NotificationsModel[]>(url);
+    return this.http.get<NotificationsModel[]>(url , {headers: { "ngrok-skip-browser-warning":"any"}});
   }
   readNotifications(notifications: NotificationsModel[]): Observable<any> {
     const url = this.baseApiUrl + 'Notification/'
-    return this.http.put(url, notifications);
+    return this.http.put(url, notifications, {headers: { "ngrok-skip-browser-warning":"any"}});
   }
   addFeedBack(feedback: FeedBackModel): Observable<any> {
     const url = this.baseApiUrl + 'Notification/feedback'
-    return this.http.post(url, feedback);
+    return this.http.post(url, feedback, {headers: { "ngrok-skip-browser-warning":"any"}});
   }
   getUserFeedBacks(take: number = 0, skip: number = 0): Observable<FeedBackModel[]> {
     const url = this.baseApiUrl + 'Notification/user-feedbacks'
-    return this.http.get<FeedBackModel[]>(url, { params: { take: take, skip: skip } });
+    return this.http.get<FeedBackModel[]>(url, { params: { take: take, skip: skip }, headers: { "ngrok-skip-browser-warning":"any"} });
   }
 }
