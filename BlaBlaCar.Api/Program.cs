@@ -96,6 +96,7 @@ builder.Services.AddAuthentication(opt => {
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
+
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
@@ -111,10 +112,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("EnableCORS", builder =>
     {
         builder.AllowAnyOrigin()
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials()
-            .WithOrigins(jwtSettings.WebClientUrl, jwtSettings.MobileClientUrl);
+           .AllowAnyHeader()
+           .AllowAnyMethod();
     });
 });
 
@@ -150,13 +149,15 @@ app.UseRouting();
 app.UseAuthentication(); 
 app.UseAuthorization();
 
-app.UseCors("EnableCORS");
+
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.MapHub<NotificationHub>("/notify");
 app.MapHub<ChatHub>("/chatHub");
 app.MapHub<MapHub>("/mapHub");
 app.UseHangfireDashboard();
 
+
+app.UseCors("EnableCORS");
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();

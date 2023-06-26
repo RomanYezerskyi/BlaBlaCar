@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="BlaBlaCar.DAL.Entities.ChatEntities.Chat">
+    <Position X="5.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAACAAAAAAAAAAAAAAAEAAAAAAAQAAAQAAAAA=</HashCode>
+      <FileName>Entities\ChatEntities\Chat.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BlaBlaCar.DAL.Entities.ChatEntities.ChatParticipant">
+    <Position X="7.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAEAAAAAgAAAAAAAgAAAAAAAAAAAQ=</HashCode>
+      <FileName>Entities\ChatEntities\ChatParticipant.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BlaBlaCar.DAL.Entities.ChatEntities.Message">
+    <Position X="5.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAAAgAAAAAAAgAAAAACAAAAAQ=</HashCode>
+      <FileName>Entities\ChatEntities\Message.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BlaBlaCar.DAL.Entities.ChatEntities.ReadMessages">
+    <Position X="7.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAAAgAAAAAAAgEAAAAIAAAAAQ=</HashCode>
+      <FileName>Entities\ChatEntities\ReadMessages.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BlaBlaCar.DAL.Entities.ApplicationUser">
+    <Position X="9" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEACQCAgCAAAAQAAQBAQAAAAAAAAAAAACACAAAA=</HashCode>
+      <FileName>Entities\ApplicationUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BlaBlaCar.DAL.Entities.CarEntities.Car">
+    <Position X="10.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABBAAACAAACAAAAgAAAAgAAAEAAEAAAAAAAAgAAAA=</HashCode>
+      <FileName>Entities\CarEntities\Car.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BlaBlaCar.DAL.Entities.CarEntities.CarDocuments">
+    <Position X="12.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAQAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\CarEntities\CarDocuments.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BlaBlaCar.DAL.Entities.CarEntities.Seat">
+    <Position X="14.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAAAgAAAACQAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\CarEntities\Seat.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BlaBlaCar.DAL.Entities.TripEntities.AvailableSeats">
+    <Position X="16" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAAAAAIAQAAAAAAAAAAAAIAAAAAAAAA=</HashCode>
+      <FileName>Entities\TripEntities\AvailableSeats.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BlaBlaCar.DAL.Entities.TripEntities.Trip">
+    <Position X="17.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABBAQAAAAQgAAAAAgAAEAiQIAAgAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Entities\TripEntities\Trip.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BlaBlaCar.DAL.Entities.TripEntities.TripUser">
+    <Position X="16" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAEAAAAAAAAAIAQAgAAAAAAAAAAIAAAAAAAAA=</HashCode>
+      <FileName>Entities\TripEntities\TripUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BlaBlaCar.DAL.Entities.BaseEntity">
+    <Position X="9.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACEAAAAAAACAAAACAAAAAAAAAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Entities\BaseEntity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BlaBlaCar.DAL.Entities.FeedBack">
+    <Position X="11.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAABAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>Entities\FeedBack.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BlaBlaCar.DAL.Entities.UserDocuments">
+    <Position X="13.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAABAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\UserDocuments.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="BlaBlaCar.DAL.Entities.ChatEntities.ChatType">
+    <Position X="5.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAABAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\ChatEntities\ChatType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="BlaBlaCar.DAL.Entities.ChatEntities.UserRoleInChatType">
+    <Position X="7.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\ChatEntities\UserRoleInChatType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="BlaBlaCar.DAL.Entities.CarEntities.CarStatus" Collapsed="true">
+    <Position X="10.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAQAAAAAAAAAAAAAAAAAAAAAAAAgIAAAAAA=</HashCode>
+      <FileName>Entities\CarEntities\CarStatus.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="BlaBlaCar.DAL.Entities.CarEntities.CarType">
+    <Position X="12.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\CarEntities\CarType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="BlaBlaCar.DAL.Entities.TripEntities.AutoTripStatus">
+    <Position X="14.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACIAAAAAAAAAAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\TripEntities\AutoTripStatus.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

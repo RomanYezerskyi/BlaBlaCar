@@ -9,7 +9,7 @@ namespace BlaBlaCar.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = Constants.AdminOrUser)]
+    // [Authorize(Roles = Constants.AdminOrUser)]
     public class BookedTripController : CustomBaseController
     {
         private readonly IBookedTripsService _tripService;
@@ -31,10 +31,12 @@ namespace BlaBlaCar.API.Controllers
             var res = await _tripService.GetUserBookedTripsAsync(take, skip, UserId);
             return Ok(res);
         }
+        [AllowAnonymous]
         [HttpGet("started")]
         public async Task<IActionResult> GerStartedTrips([FromQuery] int take,[FromQuery] int skip)
         {
-            
+
+            var x = User;
             var res = await _tripService.GetUserStartedTripAsync(take, skip, UserId);
             return Ok(res);
         }

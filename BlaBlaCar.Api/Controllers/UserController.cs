@@ -14,7 +14,7 @@ namespace BlaBlaCar.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = Constants.AdminOrUser)]
+    //[Authorize(Roles = Constants.AdminOrUser)]
 
     public class UserController : CustomBaseController
     {
